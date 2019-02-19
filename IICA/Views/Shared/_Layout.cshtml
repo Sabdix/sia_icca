@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+    <title>@ViewBag.Title</title>
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    <link href="~/Content/assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/Content/assets/plugins/bootstrapv3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/bootstrapv3/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/assets/plugins/animate.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+    <div class="header navbar navbar-inverse ">
+        <div class="navbar-inner">
+            <div class="header-seperation">
+                <ul class="nav pull-left notifcation-center visible-xs visible-sm">
+                    <li class="dropdown">
+                        <a href="#main-menu" data-webarch="toggle-left-side">
+                            <i class="material-icons">menu</i>
+                        </a>
+                    </li>
+                </ul>
+                <a href="@Url.Action("Index","Home")">
+                    <img src="~/Content/assets/img/logo_iica.png" class="logo" alt="" data-src="../Content/assets/img/logo_iica.png" data-src-retina="../Content/assets/img/logo2x.png" width="106" height="21" />
+                </a>
+                <ul class="nav pull-right notifcation-center">
+                    <li class="dropdown hidden-xs hidden-sm">
+                        <a href="@Url.Action("Index","Home")" class="dropdown-toggle active" data-toggle="">
+                            <i class="material-icons">home</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="header-quick-nav">
+                <div class="pull-left">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a href="#" class="" id="layout-condensed-toggle">
+                                <i class="material-icons">menu</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pull-right">
+                    <ul class="nav quick-section ">
+                        <li class="quicklinks">
+                            <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
+                                <i class="material-icons">tune</i>
+                            </a>
+                            <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                <li>
+                                    <a href="login.html"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="quicklinks"> <span class="h-seperate"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container row-fluid">
+        <div class="page-sidebar " id="main-menu">
+            <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
+                <div class="user-info-wrapper sm">
+                    <div class="profile-wrapper sm">
+                        <img src="~/Content/assets/img/profiles/avatar.jpg" alt="" data-src="../Content/assets/img/profiles/avatar.jpg" data-src-retina="../Content/assets/img/profiles/avatar2x.jpg" width="69" height="69" />
+                        <div class="availability-bubble online"></div>
+                    </div>
+                    <div class="user-info sm">
+                        <div class="username">Admin <span class="semi-bold">Admin</span></div>
+                        <div class="status">IICA - PVI</div>
+                    </div>
+                </div>
+
+                <p class="menu-title sm">Menu</p>
+                <ul>
+                    <li class="start ">
+                        <a href="@Url.Action("Index","Home")">
+                            <i class="material-icons">home</i> <span class="title">Dashboard</span> <span class="selected"></span>
+                        </a>
+                    </li>
+                    <!--    PERMISO S-->
+                    <li>
+                        <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Permisos</span> <span class=" arrow"></span> </a>
+                        <ul class="sub-menu">
+                            <li> <a href="theme_coporate.html">Coporate </a> </li>
+                            <li> <a href="theme_simple.html">Simple</a> </li>
+                            <li> <a href="theme_elegant.html">Elegant</a> </li>
+                        </ul>
+                    </li>
+                    <!--    VACACIONES    -->
+                    <li>
+                        <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Vacaciones</span> <span class=" arrow"></span> </a>
+                        <ul class="sub-menu">
+                            <li> <a href="theme_coporate.html">Coporate </a> </li>
+                            <li> <a href="theme_simple.html">Simple</a> </li>
+                            <li> <a href="theme_elegant.html">Elegant</a> </li>
+                        </ul>
+                    </li>
+                    <!--    INCAPACIDADES    -->
+                    <li>
+                        <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Incapacidades</span> <span class=" arrow"></span> </a>
+                        <ul class="sub-menu">
+                            <li> <a href="theme_coporate.html">Coporate </a> </li>
+                            <li> <a href="theme_simple.html">Simple</a> </li>
+                            <li> <a href="theme_elegant.html">Elegant</a> </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <a href="#" class="scrollup">Scroll</a>
+        <div class="footer-widget">
+            <div class="progress transparent progress-small no-radius no-margin">
+                <div class="progress-bar progress-bar-success animate-progress-bar" data-percentage="79%" style="width: 79%;"></div>
+            </div>
+            <div class="pull-right">
+                <div class="details-status"> <span class="animate-number" data-value="86" data-animation-duration="560">86</span>% </div>
+                <a href="lockscreen.html"><i class="material-icons">power_settings_new</i></a>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div id="portlet-config" class="modal hide">
+                <div class="modal-header">
+                    <button data-dismiss="modal" class="close" type="button"></button>
+                    <h3>Widget Settings</h3>
+                </div>
+                <div class="modal-body"> Widget settings form goes here </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/Content/assets/plugins/pace/pace.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/bootstrapv3/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-block-ui/jqueryblockui.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-unveil/jquery.unveil.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-scrollbar/jquery.scrollbar.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-numberAnimate/jquery.animateNumbers.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js" type="text/javascript"></script>
+
+    <script src="~/Content/webarch//js/webarch.js" type="text/javascript"></script>
+    <script src="~/Content/assets/js/chat.js" type="text/javascript"></script>
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>
