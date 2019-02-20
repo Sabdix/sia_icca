@@ -967,6 +967,244 @@ GO
 GRANT EXECUTE ON DT_SP_OBTENER_PERMISOS_USUARIO TO public;  
 GO
 
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_VACACIONES_USUARIO')
+BEGIN
+	DROP PROCEDURE DT_SP_OBTENER_VACACIONES_USUARIO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Christian Peña Romero>
+-- Description:	<COnsultar los registros segun el usuario>
+-- =============================================
+CREATE PROCEDURE DT_SP_OBTENER_VACACIONES_USUARIO
+	-- Add the parameters for the stored procedure here
+	@Em_Cve_Empleado VARCHAR(100)=NULL,
+	@Em_Cve_Empleado_Autoriza VARCHAR(100)=NULL
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE
+		@query nvarchar(max)
+
+	IF (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza IS NOT NULL)
+	 OR (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza='') 
+	 OR (@Em_Cve_Empleado='' AND @Em_Cve_Empleado_Autoriza IS NOT NULL)
+	 OR (@Em_Cve_Empleado='' AND @Em_Cve_Empleado_Autoriza='')
+		select 0 STATUS, 'ERROR, NÚMERO DE PARAMETROS INCORRECTO' MENSAJE
+	ELSE
+	BEGIN
+		IF @Em_Cve_Empleado IS NOT NULL
+		BEGIN
+			select
+				1 STATUS,
+				'' MENSAJE,
+				Periodo_Anterior,
+				Proporcional,
+				Total_Dias_Saldo_Vacacional,
+				Fecha_Solicitud,
+				Fecha_Inicio,
+				Fecha_Fin,
+				Total_Dias,
+				Motivo_Vacaciones,
+				a.Id_Status_Solicitud,
+				b.Descripcion_Status_Solicitud,
+				Motivo_Rechazo,
+				Em_Cve_Empleado,
+				Em_Cve_Empleado_Autoriza,
+				COALESCE(Fecha_Actualizacion,'') Fecha_Revision
+			from
+				DT_TBL_VACACIONES a
+			inner join DT_CAT_STATUS_SOLICITUD b on a.Id_Status_Solicitud=b.Id_Status_Solicitud
+			WHERE a.Em_Cve_Empleado=@Em_Cve_Empleado
+		END
+		IF @Em_Cve_Empleado_Autoriza IS NOT NULL
+		BEGIN
+			select
+				d.Id_Vacaciones,
+				Em_nombre,
+				Em_Apellido_Paterno,
+				Em_Apellido_Materno,
+				CONVERT (VARCHAR,Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
+				b.Sc_Descripcion Programa,
+				COALESCE(NULL,c.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
+				CONVERT (VARCHAR,d.Fecha_Solicitud,103)Fecha_Alta,
+				d.Total_Dias_Saldo_Vacacional,
+				CONVERT (VARCHAR,d.Fecha_Inicio,103)Fecha_Inicio,
+				CONVERT (VARCHAR,d.Fecha_Fin,103)Fecha_Fin,
+				d.Total_Dias,
+				CONVERT (VARCHAR,DATEADD(DD,1,d.Fecha_Fin),103) Reanudar_Labores,
+				d.Motivo_Vacaciones
+			from Empleado a
+			left join IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			INNER JOIN DT_TBL_VACACIONES d ON a.Em_Cve_Empleado=d.Em_Cve_Empleado
+			WHERE d.Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
+		END
+
+	END	
+	
+END
+GO
+
+GRANT EXECUTE ON DT_SP_OBTENER_VACACIONES_USUARIO TO public;  
+GO
+
+--========================SP para el inicio de sesión
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_INICIAR_SESION')
+BEGIN
+	DROP PROCEDURE DT_SP_INICIAR_SESION
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_INICIAR_SESION
+	-- Add the parameters for the stored procedure here
+	@Numero_Usuario VARCHAR(100),
+	@Password VARCHAR(100)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	DECLARE
+		@Status int=0,
+		@Mensaje varchar(500)='OK',
+		@Id_Tipo_Usuario int=0,
+		@Rol_Usuario varchar(100),
+		@Query nvarchar(max)
+
+
+    -- Insert statements for procedure here
+
+	IF @Numero_Usuario='ADMIN' AND @Password='ADMIN'
+	BEGIN
+		SET @Status=1
+		SET @Id_Tipo_Usuario=1
+		SET @Rol_Usuario='ADMINISTRADOR'
+
+		set @Query='
+		SELECT '+
+			CONVERT(varchar,@Status)+' STATUS,'''+
+			@Mensaje+''' MENSAJE,'+
+			CONVERT(varchar,@Id_Tipo_Usuario)+' Id_Tipo_Usuario,'''+
+			@Rol_Usuario+''' Rol_Usuario,'+'
+			''Administrador'' Em_nombre,
+			''Administrador'' Em_Apellido_Paterno,
+			''Administrador'' Em_Apellido_Materno,
+			''SIN PROGRAMA'' Programa,
+			''SIN DEPARTAMENTO'' Departamento'
+		GOTO Exit_
+	END
+
+	IF NOT EXISTS(SELECT 1 FROM Empleado WHERE Em_UserDef_1=@Numero_Usuario and Em_UserDef_2=@Password)
+	BEGIN
+		SET @Mensaje='EL USUARIO O LA CONTRASEÑA SON INCORRECTAS.'
+		set @Query='
+		SELECT '+
+			CONVERT(varchar,@Status)+' STATUS,'''+
+			@Mensaje+''' MENSAJE'
+		GOTO Exit_
+	END
+	ELSE
+	BEGIN
+		IF EXISTS(SELECT 1 FROM IICA_COMPRAS.dbo.Viaticos_Autorizadores WHERE Em_UserDef_1=@Numero_Usuario)
+		BEGIN
+			SET @Status=1
+			SET @Id_Tipo_Usuario=3--usuario autorizador
+			SET @Rol_Usuario='AUTORIZADOR'
+
+			set @Query='
+			SELECT '+
+				CONVERT(varchar,@Status)+' STATUS,'''+
+				@Mensaje+''' MENSAJE,'+
+				CONVERT(varchar,@Id_Tipo_Usuario)+' Id_Tipo_Usuario,'''+
+				@Rol_Usuario+''' Rol_Usuario,'+'
+				Em_nombre,
+				Em_Apellido_Paterno,
+				Em_Apellido_Materno,
+				b.Sc_Descripcion Programa,
+				COALESCE(NULL,c.Dp_Descripcion,''SIN DEPARTAMENTO'') Departamento
+			FROM Empleado a
+			LEFT JOIN IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			WHERE Em_UserDef_1='''+@Numero_Usuario +''' and Em_UserDef_2='''+@Password+''''
+			GOTO Exit_
+		END
+		ELSE
+		BEGIN
+			SET @Status=1
+			SET @Id_Tipo_Usuario=2--usuario empleado
+			SET @Rol_Usuario='AUTORIZADOR'
+
+			set @Query='
+			SELECT '+
+				CONVERT(varchar,@Status)+' STATUS,'''+
+				@Mensaje+''' MENSAJE,'+
+				CONVERT(varchar,@Id_Tipo_Usuario)+' Id_Tipo_Usuario,'''+
+				@Rol_Usuario+''' Rol_Usuario,'+'
+				Em_nombre,
+				Em_Apellido_Paterno,
+				Em_Apellido_Materno,
+				b.Sc_Descripcion Programa,
+				COALESCE(NULL,c.Dp_Descripcion,''SIN DEPARTAMENTO'') Departamento
+			FROM Empleado a
+			LEFT JOIN IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			WHERE Em_UserDef_1='''+@Numero_Usuario +''' and Em_UserDef_2='''+@Password+''''
+			GOTO Exit_
+		END
+	END
+
+	Exit_:
+			print(@Query)
+			EXEC SP_EXECUTESQL @Query
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_INICIAR_SESION TO public;  
+GO
+
 /*
 Pruebas Christian
 
@@ -976,5 +1214,12 @@ exec DT_SP_ACTUALIZAR_PERMISO NULL,'20190215','12:00 P.M.','04:00 P.M.',4,'Atend
 exec DT_SP_OBTENER_PERMISOS_USUARIO null,'0000003272'
 
 exec DT_SP_OBTENER_PERMISOS_USUARIO '0000000001',null
+
+exec DT_SP_ACTUALIZAR_VACACIONES NULL,4,5,9,'20190219','20190211','20190213',3,'VACACIONES',1,NULL,'0000000001'
+
+exec DT_SP_OBTENER_VACACIONES_USUARIO '0000000001',null
+
+exec DT_SP_INICIAR_SESION '0000000001','Q180001'
+exec DT_SP_INICIAR_SESION '0000003272','Q183272'
 
 */
