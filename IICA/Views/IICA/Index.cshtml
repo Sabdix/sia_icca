@@ -2,6 +2,7 @@
 @{
     Layout = null;
 }
+@model IICA.Models.Entidades.Usuario
 
 <!DOCTYPE html>
 
@@ -10,7 +11,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta charset="utf-8" />
-    <title>Webarch - Responsive Admin Dashboard</title>
+    <title>IICA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta content="" name="description" />
     <meta content="" name="author" />
@@ -26,6 +27,17 @@
 </head>
 
 <body class="error-body no-top">
+    <script>
+        function rootUrl(url) {
+            var _rootUrl = '@Url.Content("~")';
+            var x = url;
+            if (url.indexOf(_rootUrl) != 0) {
+                x = _rootUrl + "/" + url;
+                x = x.replace(/\/\//g, "/").replace(/\/\//g, "/");
+            }
+            return x;
+        };
+    </script>
     <div class="container">
         <div class="row login-container column-seperation">
             <div class="col-md-5 col-md-offset-1">
@@ -43,34 +55,43 @@
             </div>
             <div class="col-md-5">
                 <br>
-                <form action="http://webarch.revox.io/3.0/html/index.html" class="login-form validate" id="login-form" method="post" name="login-form">
+                @using (Ajax.BeginForm("IniciarSesion", "Sesion",
+                    new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBeginIniciarSesion", OnSuccess = "OnSuccesIniciarSesion", OnFailure = "ControlErrores" },
+                    new { @class = "login-form validate", id = "login-form" }))
+                {
                     <div class="row">
                         <div class="form-group col-md-10">
                             <label class="form-label">No. de empleado</label>
-                            <input class="form-control" id="txtusername" name="txtusername" type="email" required>
+                            @Html.TextBoxFor(x => x.emCveEmpleado, new { @class = "form-control", placeholder = "Usuario", maxlength = "15" })
+                            @Html.ValidationMessageFor(x => x.emCveEmpleado, "", new { @class = "error" })
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-10">
-                            <label class="form-label">Contraseña</label> <span class="help"></span>
-                            <input class="form-control" id="txtpassword" name="txtpassword" type="password" required>
+                            <label class="form-label">Contraseña</label>
+                            @Html.TextBoxFor(x => x.emCveEmpleado, new { @class = "form-control", type = "password" ,placeholder = "Contraseña", maxlength = "20" })
+                            @Html.ValidationMessageFor(x => x.emCveEmpleado, "", new { @class = "error" })
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-10">
-                            <button class="btn btn-info btn-cons pull-right" type="submit">Login</button>
+                            <button class="btn btn-info btn-cons pull-right" type="submit">Iniciar sesión</button>
                         </div>
                     </div>
-                </form>
+                }
             </div>
         </div>
     </div>
     <script src="~/Content/assets/plugins/pace/pace.min.js" type="text/javascript"></script>
     <script src="~/Content/assets/plugins/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="~/Content/assets/plugins/bootstrapv3/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="~/Content/assets/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
     <script src="~/Content/webarch/js/webarch.js" type="text/javascript"></script>
+    <script src="~/Content/assets/js/Evt/HttpStatusCode.js"></script>
+    <script src="~/Content/assets/js/Evt/evtSesion.js"></script>
 </body>
-<!-- Mirrored from webarch.revox.io/3.0/html/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Feb 2019 17:00:17 GMT -->
 </html>

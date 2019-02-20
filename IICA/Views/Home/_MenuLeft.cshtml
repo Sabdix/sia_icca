@@ -1,0 +1,49 @@
+﻿
+<div class="page-sidebar " id="main-menu">
+    <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
+        <div class="user-info-wrapper sm">
+            <div class="profile-wrapper sm">
+                <img src="~/Content/assets/img/profiles/avatar.jpg" alt="" data-src="../Content/assets/img/profiles/avatar.jpg" data-src-retina="../Content/assets/img/profiles/avatar2x.jpg" width="69" height="69" />
+                <div class="availability-bubble online"></div>
+            </div>
+            <div class="user-info sm">
+                <div class="username">Admin <span class="semi-bold">Admin</span></div>
+                <div class="status">IICA - PVI</div>
+            </div>
+        </div>
+
+        <p class="menu-title sm">Menu</p>
+        <ul>
+            <li class="start ">
+                <a href="@Url.Action("Index","Home")">
+                    <i class="material-icons">home</i> <span class="title">Dashboard</span> <span class="selected"></span>
+                </a>
+            </li>
+            <!--    PERMISO S-->
+            <li>
+                <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Permisos</span> <span class=" arrow"></span> </a>
+                <ul class="sub-menu">
+                    <li> <a href="@Url.Action("NuevaSolicitud","Permiso")">Nueva solicitud </a> </li>
+                    <li> <a href="@Url.Action("MisPermisos","Permiso")">Mis Permisos</a> </li>
+                </ul>
+            </li>
+            <!--    VACACIONES    -->
+            <li>
+                <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Vacaciones</span> <span class=" arrow"></span> </a>
+                <ul class="sub-menu">
+                    <li> <a href="@Url.Action("NuevaSolicitud","Vacacion")">Nueva solicitud </a> </li>
+                    <li> <a href="@Url.Action("MisVacaciones","Vacacion")">Mis Vacaciones</a> </li>
+                </ul>
+            </li>
+            <!--    INCAPACIDADES    -->
+            <li>
+                <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Incapacidades</span> <span class=" arrow"></span> </a>
+                <ul class="sub-menu">
+                    <li> <a href="@Url.Action("NuevaSolicitud","Incapacidad")">Nueva solicitud </a> </li>
+                    <li> <a href="@Url.Action("MisIncapacidades","Incapacidad")">Mis Incapacidades</a> </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>

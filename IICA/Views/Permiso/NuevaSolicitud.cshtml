@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Registar solicitud de permiso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IICA.Models.Entidades.PVI.Permiso
+
+<ul class="breadcrumb">
+    <li>
+        <p>PERMISOS</p>
+    </li>
+    <li><a href="#" class="active">Registro de Solicitud</a> </li>
+</ul>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="grid simple">
+            <div class="grid-title no-border">
+                <h4>Ingrese los <span class="semi-bold">datos solicitados</span></h4>
+            </div>
+            <div class="grid-body no-border">
+                <br>
+                <div class="row">
+                    <div class="col-md-8 col-sm-8 col-xs-8 col-vlg-offset-2">
+                        <div class="row form-row">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha de permiso</label>
+                                <input type="text" class="form-control" placeholder="First Name">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Hora de salida</label>
+                                <input name="form3LastName"  type="text" class="form-control" placeholder="Last Name">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Hora de llegada</label>
+                                <input name="form3LastName"  type="text" class="form-control" placeholder="Last Name">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Total de horas</label>
+                                <input name="form3LastName"  type="text" class="form-control" placeholder="Last Name">
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-8">
+                                <label class="form-label">Motivo de permiso</label>
+                                <textarea class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+

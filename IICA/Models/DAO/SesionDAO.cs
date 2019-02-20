@@ -20,7 +20,7 @@ namespace IICA.Models.DAO
                 {
                     dbManager.Open();
                     dbManager.CreateParameters(2);
-                    dbManager.AddParameters(0, "usuario", usuario.id);
+                    dbManager.AddParameters(0, "usuario", usuario.emCveEmpleado);
                     dbManager.AddParameters(1, "contrasena", usuario.contrasena);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "SP_RESTAURANT_INICIAR_SESION");
                     if (dbManager.DataReader.Read())

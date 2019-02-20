@@ -13,6 +13,16 @@ namespace IICA.Controllers
             return View();
         }
 
-       
+        public ActionResult _MenuLeft()
+        {
+            try
+            {
+                return PartialView();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
