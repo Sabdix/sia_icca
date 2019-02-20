@@ -1,15 +1,15 @@
 --Se agregan los indices para las tablas a las que se realizan busquedas por los id's
---USE IICA_COMPRAS
---GO
+USE IICA_COMPRAS
+GO
 
---CREATE INDEX IDX_IICA_COMPRAS_SUCURSAL
---ON Sucursal (Sc_Cve_Sucursal);
---GO
+CREATE INDEX IDX_IICA_COMPRAS_SUCURSAL
+ON Sucursal (Sc_Cve_Sucursal);
+GO
 
 
---CREATE INDEX IDX_IICA_COMPRAS_DEPARTAMENTO
---ON Departamento (Dp_Cve_Departamento);
---GO
+CREATE INDEX IDX_IICA_COMPRAS_DEPARTAMENTO
+ON Departamento (Dp_Cve_Departamento);
+GO
 
 USE IICA_1
 GO
@@ -966,3 +966,15 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_PERMISOS_USUARIO TO public;  
 GO
+
+/*
+Pruebas Christian
+
+insert into IICA_COMPRAS.dbo.viaticos_autorizadores values('0000007','ING. MIGUEL ALBERTO ABIACA LEE','miguel.abiaca','perc9004@gmail.com','MF','D','AC','0000003272','0000003272','Q183615')
+exec DT_SP_ACTUALIZAR_PERMISO NULL,'20190215','12:00 P.M.','04:00 P.M.',4,'Atender asuntos personales',1,null,'0000000001'
+
+exec DT_SP_OBTENER_PERMISOS_USUARIO null,'0000003272'
+
+exec DT_SP_OBTENER_PERMISOS_USUARIO '0000000001',null
+
+*/
