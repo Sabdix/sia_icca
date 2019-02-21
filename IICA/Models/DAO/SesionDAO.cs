@@ -11,8 +11,9 @@ namespace IICA.Models.DAO
     {
 
         private DBManager dbManager;
-        public Usuario IniciarSesion(Usuario usuario)
+        public Result IniciarSesion(Usuario usuario)
         {
+            Result result = new Result();
             Usuario usuarioSesion = null;
             try
             {
@@ -20,19 +21,26 @@ namespace IICA.Models.DAO
                 {
                     dbManager.Open();
                     dbManager.CreateParameters(2);
-                    dbManager.AddParameters(0, "usuario", usuario.emCveEmpleado);
-                    dbManager.AddParameters(1, "contrasena", usuario.contrasena);
-                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "SP_RESTAURANT_INICIAR_SESION");
+                    dbManager.AddParameters(0, "Numero_Usuario", usuario.emCveEmpleado);
+                    dbManager.AddParameters(1, "Password", usuario.contrasena);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_INICIAR_SESION");
                     if (dbManager.DataReader.Read())
                     {
-                        usuarioSesion = new Usuario();
-                        //usuarioSesion.idUsuario = dbManager.DataReader["id_usuario"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["id_usuario"].ToString());
-                        //usuarioSesion.usuario = dbManager.DataReader["usuario"] == DBNull.Value ? "" : dbManager.DataReader["usuario"].ToString();
-                        //usuarioSesion.fechaAlta = dbManager.DataReader["fecha_alta"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["fecha_alta"].ToString());
-                        //usuarioSesion.contrasena = dbManager.DataReader["contrasena"] == DBNull.Value ? "" : dbManager.DataReader["contrasena"].ToString();
-                        //usuarioSesion.activo = dbManager.DataReader["activo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["activo"].ToString());
-                        //usuarioSesion.tipoUsuario.idTipoUsuario = dbManager.DataReader["id_tipo_usuario"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["id_tipo_usuario"].ToString());
-                        //usuarioSesion.tipoUsuario.descripcion = dbManager.DataReader["puesto"] == DBNull.Value ? "" : dbManager.DataReader["puesto"].ToString();
+                        result.mensaje = usuario.programa = dbManager.DataReader["MENSAJE"] == DBNull.Value ? "" : dbManager.DataReader["MENSAJE"].ToString();
+                        if (Convert.ToInt32(dbManager.DataReader["STATUS"])==1)
+                        {
+                            usuarioSesion = new Usuario();
+                            usuarioSesion.emCveEmpleado = usuario.emCveEmpleado;
+                            usuario.tipoUsuario = dbManager.DataReader["Id_Tipo_Usuario"] == DBNull.Value ? EnumTipoUsuario.EMPLEADO : (EnumTipoUsuario)Convert.ToInt32(dbManager.DataReader["Id_Tipo_Usuario"].ToString());
+                            usuario.rolUsuario = dbManager.DataReader["Rol_Usuario"] == DBNull.Value ? "" : dbManager.DataReader["Rol_Usuario"].ToString();
+                            usuario.nombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
+                            usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
+                            usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
+                            usuario.departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
+                            usuario.programa = dbManager.DataReader["Programa"] == DBNull.Value ? "" : dbManager.DataReader["Programa"].ToString();
+                            result.objeto = usuario;
+                            result.status = true;
+                        }
                     }
                 }
             }
@@ -40,7 +48,7 @@ namespace IICA.Models.DAO
             {
                 throw ex;
             }
-            return usuarioSesion;
+            return result;
         }
     }
 }

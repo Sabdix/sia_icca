@@ -1,4 +1,5 @@
-﻿
+﻿@model IICA.Models.Entidades.Usuario
+
 <div class="page-sidebar " id="main-menu">
     <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
         <div class="user-info-wrapper sm">
@@ -7,8 +8,8 @@
                 <div class="availability-bubble online"></div>
             </div>
             <div class="user-info sm">
-                <div class="username">Admin <span class="semi-bold">Admin</span></div>
-                <div class="status">IICA - PVI</div>
+                <div class="username">@Model.nombre <span class="semi-bold">@Model.apellidoPaterno</span></div>
+                <div class="status">@Model.rolUsuario - @Model.departamento</div>
             </div>
         </div>
 

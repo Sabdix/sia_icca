@@ -1,4 +1,5 @@
 ﻿using IICA.Models.DAO.PVI;
+using IICA.Models.Entidades;
 using IICA.Models.Entidades.PVI;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,16 @@ namespace IICA.Controllers.PVI
             try
             {
                 permisoDAO = new PermisoDAO();
-                return Json(permisoDAO.ActualizarPermiso(permiso_), JsonRequestBehavior.AllowGet);
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                if (usuarioSesion != null)
+                {
+                    permiso_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                    return Json(permisoDAO.ActualizarPermiso(permiso_), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    throw new HttpException(460, "Su sesión ha vencido");
+                }
             }
             catch (Exception ex)
             {

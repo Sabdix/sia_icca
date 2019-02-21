@@ -17,5 +17,8 @@ namespace IICA.Models.Entidades
         public string contrasena { get; set; }
         public string email { get; set; }
         public EnumTipoUsuario tipoUsuario { get; set; }
+        public string rolUsuario { get; set; }
+        public string programa { get; set; }
+        public string departamento { get; set; }
     }
 }

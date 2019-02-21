@@ -465,6 +465,7 @@
     <Content Include="Views\Home\_MenuLeft.cshtml" />
     <Content Include="Views\Permiso\MisPermisos.cshtml" />
     <Content Include="Views\Vacacion\NuevaSolicitud.cshtml" />
+    <Content Include="Views\IICA\Sistemas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

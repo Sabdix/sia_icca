@@ -16,7 +16,6 @@ $(document).ready(function () {
 
     $('#horaInicio').clockpicker({
         autoclose: true,
-        twelvehour: true,
         afterDone: function () {
             //if ($('#horaInicio').val() > $('#horaFin').val())
             //    $('#horaFin').val("");
@@ -27,7 +26,6 @@ $(document).ready(function () {
     });
     $('#horaFin').clockpicker({
         autoclose: true,
-        twelvehour: true,
         afterDone: function () {
             if ($('#horaInicio').val() != "")
                 CalcularTotalHoras();
@@ -49,44 +47,16 @@ function OnSuccesRegistrarSolicitud(data) {
 function CalcularTotalHoras() {
     var inicio = moment($('#horaInicio').val(), 'HH:mm');
     var fin = moment($('#horaFin').val(), 'HH:mm');
-    var s = (fin - inicio);
 
-    var horas = moment.duration(fin - inicio).hours();
-    var minutos = moment.duration(fin - inicio).minutes();//.humanize();
-
-    //console.log(moment.duration(fin - inicio).humanize() + ' tiempo de diferencia');
-    var secs = Math.round(s / 1000);
-    var modsecs = ((Math.round(s / 1000)) % 60); //remaining secs if not even
-    var mins = Math.round(s / 1000 / 60);
-    var modmins = ((Math.round(s / 1000 / 60)) % 60); //mins remaining if not even
-    modmins = (modmins < 9 ? "0" + modmins : modmins);
-    var modhrs = ((Math.round(s / 1000 / 60 / 60)) % 24); //mins remaining if not even
-
-    var hrs = Math.round(s / 1000 / 60 / 60);
-    if (modmins >= 30) {
-        modhrs = modhrs - 1;
-    }
-
-    var enddiff = [
-        modhrs
-    ];
-    var arr = jQuery.map(enddiff, function (modhrs) {
-        return modhrs + "." + modmins;
-    });
-
-    if (horas > 0) {
-        $('#totalHoras').val(horas + "." + minutos);
+    var horas = 0;
+    var minutos = 0;
+    if (moment.duration(fin.diff(inicio)).hours() < 0) {
+        horas = moment.duration(inicio.diff(fin)).hours();//moment.duration(inicio - fin).hours();
+        minutos = moment.duration(inicio.diff(fin)).minutes();//moment.duration(inicio - fin).minutes();//.humanize();
     } else {
-        $('#totalHoras').val("");
+        horas = moment.duration(fin.diff(inicio)).hours();//moment.duration(fin - inicio).hours();
+        minutos = moment.duration(fin.diff(inicio)).minutes();//moment.duration(fin - inicio).minutes();//.humanize();
     }
-
-    /*
-    if (!arr[0].includes("-")) {
-        $('#totalHoras').val(arr);
-    } else {
-        $('#totalHoras').val("");
-    }
-    */
     
-
+    $('#totalHoras').val(horas + "." + minutos);
 }
