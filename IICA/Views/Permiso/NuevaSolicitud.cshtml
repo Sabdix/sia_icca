@@ -21,34 +21,73 @@
             <div class="grid-body no-border">
                 <br>
                 <div class="row">
-                    <div class="col-md-8 col-sm-8 col-xs-8 col-vlg-offset-2">
-                        <div class="row form-row">
-                            <div class="col-md-4">
-                                <label class="form-label">Fecha de permiso</label>
-                                <input type="text" class="form-control" placeholder="First Name">
+                    <div class="col-md-8 col-sm-8 col-md-8">
+                        @using (Ajax.BeginForm("RegistrarSolicitud", "Permiso",
+new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" },new { autocomplete = "off" }))
+                        {
+                            <div class="row form-row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha del permiso</label>
+                                    @Html.TextBoxFor(x => x.fechaPermiso, new { @class = "form-control"})
+                                    @Html.ValidationMessageFor(x => x.fechaPermiso, "", new { @class = "error" })
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Hora de salida</label>
-                                <input name="form3LastName"  type="text" class="form-control" placeholder="Last Name">
+                            <div class="row form-row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Hora de salida</label>
+                                    @Html.TextBoxFor(x => x.horaInicio, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.horaInicio, "", new { @class = "error" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Hora de llegada</label>
+                                    @Html.TextBoxFor(x => x.horaFin, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.horaFin, "", new { @class = "error" })
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Hora de llegada</label>
-                                <input name="form3LastName"  type="text" class="form-control" placeholder="Last Name">
+                            <div class="row form-row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Total de horas</label>
+                                    @Html.TextBoxFor(x => x.totalHoras, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.totalHoras, "", new { @class = "error" })
+                                </div>
                             </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Total de horas</label>
-                                <input name="form3LastName"  type="text" class="form-control" placeholder="Last Name">
+                            <div class="row form-row">
+                                <div class="col-md-8">
+                                    <label class="form-label">Motivo de permiso</label>
+                                    @Html.TextAreaFor(x => x.motivoPermiso, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.fechaPermiso, "", new { @class = "error" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-row">
-                            <div class="col-md-8">
-                                <label class="form-label">Motivo de permiso</label>
-                                <textarea class="form-control"></textarea>
+                            <div class="row form-row">
+                                <div class="col-md-10">
+                                    <button class="btn btn-info btn-cons" type="submit">Iniciar sesión</button>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+@section scripts {
+
+    <link href="~/Content/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/boostrap-clockpicker/bootstrap-clockpicker.min.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="~/Content/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/boostrap-clockpicker/bootstrap-clockpicker.min.js" type="text/javascript"></script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+
+    <script src="~/Content/assets/js/Evt/evtNuevaSolPermiso.js"></script>
+}
 

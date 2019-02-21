@@ -5,20 +5,23 @@
 function ControlErrores(xhr, status, error) {
     //OcultarLoading();
     if (xhr.status === 404) {
-        swal('Mensaje!', error, 'warning');
+        Messenger().post({message: error, type: 'warning',showCloseButton: true,extraClasses: 'messenger-fixed messenger-on-top'});
+        //swal('Mensaje!', error, 'warning');
         ////$.jGrowl(xhr.statusText, { sticky: false, position: 'bottom-right', theme: 'growl-error', life: 3000 });
         var newDoc = document.open("text/html", "replace");
         newDoc.write(xhr.responseText);
         newDoc.close();
     }
     if (xhr.status === 500) {
-        swal('Mensaje!', error, 'error');
+        //swal('Mensaje!', error, 'error');
+        Messenger().post({ message: error, type: 'warning', showCloseButton: true, extraClasses: 'messenger-fixed messenger-on-top' });
         var newDoc = document.open("text/html", "replace");
         newDoc.write(xhr.responseText);
         newDoc.close();
     }
     if (xhr.status === HttpCodeStatus.SessionVencida.code) {
-        swal('Mensaje!', 'Su sesión ha vencido.', 'warning');
+        Messenger().post({ message: 'Su sesión ha vencido.', type: 'warning', showCloseButton: true, extraClasses: 'messenger-fixed messenger-on-top' });
+        //swal('Mensaje!', 'Su sesión ha vencido.', 'warning');
         //new PNotify({
         //    title: "Advertencia.",
         //    text: "Su sesión ha vencido.",

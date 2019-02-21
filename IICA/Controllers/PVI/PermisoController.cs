@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IICA.Models.DAO.PVI;
+using IICA.Models.Entidades.PVI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +10,9 @@ namespace IICA.Controllers.PVI
 {
     public class PermisoController : Controller
     {
+
+        PermisoDAO permisoDAO;
+
         // GET: Permiso
         public ActionResult Index()
         {
@@ -27,11 +32,12 @@ namespace IICA.Controllers.PVI
         }
 
         [HttpPost]
-        public ActionResult RegistrarSolicitud()
+        public ActionResult RegistrarSolicitud(Permiso permiso_)
         {
             try
             {
-                return View();
+                permisoDAO = new PermisoDAO();
+                return Json(permisoDAO.ActualizarPermiso(permiso_), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

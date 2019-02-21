@@ -151,6 +151,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
     <Compile Include="Models\Entidades\Conexion.cs" />
     <Compile Include="Models\Entidades\Enumeraciones.cs" />
@@ -202,8 +203,10 @@
     <Content Include="Content\assets\js\dashboard_v2.js" />
     <Content Include="Content\assets\js\datatables.js" />
     <Content Include="Content\assets\js\email_comman.js" />
+    <Content Include="Content\assets\js\Evt\evtNuevaSolPermiso.js" />
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
+    <Content Include="Content\assets\js\Evt\Utils.js" />
     <Content Include="Content\assets\js\form_elements.js" />
     <Content Include="Content\assets\js\form_validations.js" />
     <Content Include="Content\assets\js\google_maps.js" />
@@ -366,6 +369,7 @@
     <Content Include="Content\assets\plugins\Mapplic\mapplic\mapplic.css" />
     <Content Include="Content\assets\plugins\Mapplic\mapplic\mapplic.js" />
     <Content Include="Content\assets\plugins\modernizr.js" />
+    <Content Include="Content\assets\plugins\moment\moment.min.js" />
     <Content Include="Content\assets\plugins\owl-carousel\AjaxLoader.gif" />
     <Content Include="Content\assets\plugins\owl-carousel\grabbing.png" />
     <Content Include="Content\assets\plugins\owl-carousel\owl.carousel.css" />
@@ -460,7 +464,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\DAO\PVI\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
