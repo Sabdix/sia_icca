@@ -3,7 +3,7 @@
 };
 
 function ControlErrores(xhr, status, error) {
-    //OcultarLoading();
+    OcultarLoading();
     if (xhr.status === 404) {
         Messenger().post({message: error, type: 'warning',showCloseButton: true,extraClasses: 'messenger-fixed messenger-on-top'});
         //swal('Mensaje!', error, 'warning');

@@ -5,6 +5,7 @@ $(document).ready(function () {
 
     $('#fechaPermiso').datepicker({
         startView: 1,
+        format: 'mm/dd/yyyy',
         startDate: "today",
         autoclose: true,
         todayHighlight: true
@@ -49,6 +50,10 @@ function CalcularTotalHoras() {
     var inicio = moment($('#horaInicio').val(), 'HH:mm');
     var fin = moment($('#horaFin').val(), 'HH:mm');
     var s = (fin - inicio);
+
+    var horas = moment.duration(fin - inicio).hours();
+    var minutos = moment.duration(fin - inicio).minutes();//.humanize();
+
     //console.log(moment.duration(fin - inicio).humanize() + ' tiempo de diferencia');
     var secs = Math.round(s / 1000);
     var modsecs = ((Math.round(s / 1000)) % 60); //remaining secs if not even
@@ -66,15 +71,22 @@ function CalcularTotalHoras() {
         modhrs
     ];
     var arr = jQuery.map(enddiff, function (modhrs) {
-        return modhrs + ":" + modmins;
+        return modhrs + "." + modmins;
     });
 
+    if (horas > 0) {
+        $('#totalHoras').val(horas + "." + minutos);
+    } else {
+        $('#totalHoras').val("");
+    }
+
+    /*
     if (!arr[0].includes("-")) {
         $('#totalHoras').val(arr);
     } else {
         $('#totalHoras').val("");
     }
-
+    */
     
 
 }
