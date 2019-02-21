@@ -14,7 +14,7 @@ namespace IICA.Models.DAO.PVI
 
         private DBManager dbManager;
 
-        public Result ActualizarPermiso(Vacacion vacacion)
+        public Result ActualizarVacacion(Vacacion vacacion)
         {
             Result result = new Result();
             try
@@ -22,22 +22,20 @@ namespace IICA.Models.DAO.PVI
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(9);
-                    //dbManager.AddParameters(0, "Id_Permiso", permiso.idPermiso);
-                    //dbManager.AddParameters(1, "Fecha_Permiso", permiso.fechaPermiso);
-                    //dbManager.AddParameters(2, "Hora_inicio", permiso.horaInicio);
-                    //dbManager.AddParameters(3, "Hora_fin", permiso.horaFin);
-                    //dbManager.AddParameters(4, "Total_Horas", permiso.totalHoras);
-                    //dbManager.AddParameters(5, "Motivo_Permiso", permiso.motivoPermiso);
-                    //dbManager.AddParameters(6, "Id_Status_Solicitud", permiso.idStatusSolicitud);
-                    //dbManager.AddParameters(7, "Motivo_Rechazo", permiso.motivoRechazo);
-                    //dbManager.AddParameters(8, "Em_Cve_Empleado", permiso.emCveEmpleado);
-                    dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_PERMISO");
+                    dbManager.CreateParameters(7);
+                    dbManager.AddParameters(0, "Fecha_Solicitud", vacacion.fechaSolicitud);
+                    dbManager.AddParameters(1, "Fecha_Inicio", vacacion.fechaInicio);
+                    dbManager.AddParameters(2, "Fecha_Fin", vacacion.fechaFin);
+                    dbManager.AddParameters(3, "Total_Dias", vacacion.totalDias);
+                    dbManager.AddParameters(4, "Motivo_Vacaciones", vacacion.motivoVacaciones);
+                    dbManager.AddParameters(5, "Id_Status_Solicitud", vacacion.idStatusSolicitud);
+                    dbManager.AddParameters(6, "Motivo_Rechazo",vacacion.motivoRechazo);
+                    dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_VACACIONES");
                     if (dbManager.DataReader.Read())
                     {
                         result.mensaje = dbManager.DataReader["mensaje"].ToString();
                         result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
-                        result.id = dbManager.DataReader["ID_PERMISO"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_PERMISO"].ToString());
+                        result.id = dbManager.DataReader["ID_VACACIONES"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_PERMISO"].ToString());
                     }
                 }
             }

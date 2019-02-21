@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Registar solicitud de vaciones";
+    ViewBag.Title = "Registar solicitud de vacaciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model IICA.Models.Entidades.PVI.Vacacion
@@ -27,33 +27,33 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                         {
                             <div class="row form-row">
                                 <div class="col-md-6">
-                                    <label class="form-label">Fecha del permiso</label>
+                                    <label class="form-label">Fecha de la solicitud</label>
                                     @Html.TextBoxFor(x=> x.fechaSolicitud , new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.fechaSolicitud, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-4">
-                                    <label class="form-label">Hora de salida</label>
+                                    <label class="form-label">Fecha inicio</label>
                                     @Html.TextBoxFor(x => x.fechaInicio, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.fechaInicio, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Hora de llegada</label>
+                                    <label class="form-label">Fecha fin</label>
                                     @Html.TextBoxFor(x => x.fechaFin, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.fechaFin, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-4">
-                                    <label class="form-label">Total de horas</label>
-                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control" })
+                                    <label class="form-label">Total de dias</label>
+                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control",disabled="disabled" })
                                     @Html.ValidationMessageFor(x => x.totalDias, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-8">
-                                    <label class="form-label">Motivo de permiso</label>
+                                    <label class="form-label">Motivo de vacaciones</label>
                                     @Html.TextAreaFor(x => x.motivoVacaciones, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.motivoVacaciones, "", new { @class = "error" })
                                 </div>
@@ -81,6 +81,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
     <script src="~/Content/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
     <script src="~/Content/assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
     <script src="~/Content/assets/plugins/boostrap-clockpicker/bootstrap-clockpicker.min.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

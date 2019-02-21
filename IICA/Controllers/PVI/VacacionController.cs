@@ -33,7 +33,19 @@ namespace IICA.Controllers.PVI
             try
             {
                 vacacionDAO = new VacacionDAO();
-                return Json(vacacionDAO.ActualizarPermiso(vacacion_), JsonRequestBehavior.AllowGet);
+                return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ActionResult MisVacaciones()
+        {
+            try
+            {
+                return View();
             }
             catch (Exception ex)
             {
