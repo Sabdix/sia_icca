@@ -21,7 +21,7 @@ $(document).ready(function () {
         autoclose: true,
         todayHighlight: true
     }).on('changeDate', function (e) {
-        if ($('#fechaFin').val() <> "")
+        if ($('#fechaFin').val() != "")
             CalcularTotalDias();
     });
 
@@ -36,20 +36,20 @@ $(document).ready(function () {
         var startDate = new Date(selected.date.valueOf());
         startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
         $('#fechaFin').datepicker('setStartDate', startDate);
-        if ($('#fechaInicio').val() != "")
+        if ($('#fechaInicio').val() <> "")
             CalcularTotalDias();
     });
-    
+
     $("#fechaInicio").datepicker('setDate', moment().toDate());
     $("#fechaFin").datepicker('setDate', moment().toDate());
-   
+
 });
 
 function OnSuccesRegistrarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Vacacion/MisVacaciones"); }, 3000);
+        setTimeout(function () { window.location = rootUrl("/Incapacidad/MisIncapacidades"); }, 3000);
     } else {
         alert(data.mensaje);
     }
@@ -58,14 +58,12 @@ function OnSuccesRegistrarSolicitud(data) {
 function CalcularTotalDias() {
     var fecha1 = moment($("#fechaInicio").val());
     var fecha2 = moment($("#fechaFin").val());
-    var diasVacaciones = moment.duration(fecha2.diff(fecha1)).days(); //fecha2.diff(fecha1, 'days');
+    var diasVacaciones = moment.duration(fecha2.diff(fecha1)).days(); 
 
-    if (diasVacaciones > 0)
-    {
+    if (diasVacaciones > 0) {
         $('#totalDias').val(diasVacaciones);
     }
-    else
-    {
+    else {
         $('#totalDias').val(0);
     }
     console.log($('#totalDias').val());
