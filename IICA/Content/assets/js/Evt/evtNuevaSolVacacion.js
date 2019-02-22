@@ -49,6 +49,7 @@ function OnSuccesRegistrarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
+        ImprimirFormatoVacacion(data.id);
         setTimeout(function () { window.location = rootUrl("/Vacacion/MisVacaciones"); }, 3000);
     } else {
         alert(data.mensaje);
@@ -68,4 +69,28 @@ function CalcularTotalDias() {
     {
         $('#totalDias').val(0);
     }
+}
+
+
+function ImprimirFormatoVacacion(id) {
+    $.ajax({
+        data: { id: id },
+        url: rootUrl("/Vacacion/_ImprimirFormatoVacacion"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
 }

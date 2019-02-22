@@ -31,6 +31,7 @@ $(document).ready(function () {
                 CalcularTotalHoras();
         }
     });
+    
 
 });
 
@@ -38,6 +39,7 @@ function OnSuccesRegistrarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
+        ImprimirFormatoPermiso(data.id);
         setTimeout(function () { window.location = rootUrl("/Permiso/MisPermisos"); }, 3000);
     } else {
         MostrarNotificacionLoad("warning", data.mensaje, 3000);
@@ -61,4 +63,27 @@ function CalcularTotalHoras() {
     }
     
     $('#totalHoras').val(horas + "." + minutos);
+}
+
+function ImprimirFormatoPermiso(id) {
+    $.ajax({
+        data: {id: id },
+        url: rootUrl("/Permiso/_ImprimirFormatoPermiso"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
 }

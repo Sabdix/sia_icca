@@ -83,5 +83,45 @@ namespace IICA.Models.DAO.PVI
             }
             return permisos; ;
         }
+
+        public FormatoSolicitud ObtenerFormatoSolicitud(int id)
+        {
+            FormatoSolicitud formatoSolicitud=null;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Id_Permiso", id);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_INFORMACION_FORMATO_PERMISO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        formatoSolicitud = new FormatoSolicitud();
+                        formatoSolicitud.emNombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
+                        formatoSolicitud.emApellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
+                        formatoSolicitud.emApellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
+                        formatoSolicitud.emFechaIngreso = dbManager.DataReader["Em_Fecha_Ingreso"] == DBNull.Value ? "" : dbManager.DataReader["Em_Fecha_Ingreso"].ToString();
+                        formatoSolicitud.scUserDef2 = dbManager.DataReader["Sc_UserDef_2"] == DBNull.Value ? "" : dbManager.DataReader["Sc_UserDef_2"].ToString();
+                        formatoSolicitud.programa = dbManager.DataReader["Programa"] == DBNull.Value ? "" : dbManager.DataReader["Programa"].ToString();
+                        formatoSolicitud.departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
+                        formatoSolicitud.fechaPermiso = dbManager.DataReader["Fecha_Permiso"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Permiso"].ToString();
+                        formatoSolicitud.fechaAlta = dbManager.DataReader["Fecha_Alta"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Alta"].ToString();
+                        formatoSolicitud.horaInicio = dbManager.DataReader["Hora_Inicio"] == DBNull.Value ? "" : dbManager.DataReader["Hora_Inicio"].ToString();
+                        formatoSolicitud.horaFin = dbManager.DataReader["Hora_Fin"] == DBNull.Value ? "" : dbManager.DataReader["Hora_Fin"].ToString();
+                        formatoSolicitud.totalHoras = dbManager.DataReader["Total_Horas"] == DBNull.Value ? "" : dbManager.DataReader["Total_Horas"].ToString();
+                        formatoSolicitud.motivoPermiso = dbManager.DataReader["Motivo_Permiso"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Permiso"].ToString();
+                    }
+                    else{
+                        throw new Exception("No se encontro ningun formato referente a la solicitud");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return formatoSolicitud; ;
+        }
     }
 }

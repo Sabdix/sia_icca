@@ -82,5 +82,45 @@ namespace IICA.Models.DAO.PVI
             }
             return vacaciones;
         }
+
+        public FormatoVacacion ObtenerFormatoVacacion(int id)
+        {
+            FormatoVacacion formatoVacacion = null;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Id_Vacaciones", id);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_INFORMACION_FORMATO_VACACIONES");
+                    if (dbManager.DataReader.Read())
+                    {
+                        formatoVacacion = new FormatoVacacion();
+                        formatoVacacion.emNombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
+                        formatoVacacion.emApellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
+                        formatoVacacion.emApellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
+                        formatoVacacion.emFechaIngreso = dbManager.DataReader["Em_Fecha_Ingreso"] == DBNull.Value ? "" : dbManager.DataReader["Em_Fecha_Ingreso"].ToString();
+                        formatoVacacion.scUserDef2 = dbManager.DataReader["Sc_UserDef_2"] == DBNull.Value ? "" : dbManager.DataReader["Sc_UserDef_2"].ToString();
+                        formatoVacacion.programa = dbManager.DataReader["Programa"] == DBNull.Value ? "" : dbManager.DataReader["Programa"].ToString();
+                        formatoVacacion.departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
+                        formatoVacacion.fechaAlta = dbManager.DataReader["Fecha_Alta"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Alta"].ToString();
+                        formatoVacacion.fechaInicio = dbManager.DataReader["Fecha_Inicio"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Inicio"].ToString();
+                        formatoVacacion.fechaFin = dbManager.DataReader["Fecha_Fin"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Fin"].ToString();
+                        formatoVacacion.totalDias = dbManager.DataReader["Total_Dias"] == DBNull.Value ? "" : dbManager.DataReader["Total_Dias"].ToString();
+                        formatoVacacion.motivoVacaciones = dbManager.DataReader["Motivo_Vacaciones"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Vacaciones"].ToString();
+                    }
+                    else
+                    {
+                        throw new Exception("No se encontro ningun formato referente a la solicitud");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return formatoVacacion; ;
+        }
     }
 }
