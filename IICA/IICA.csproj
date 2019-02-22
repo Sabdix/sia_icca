@@ -162,6 +162,8 @@
     <Compile Include="Models\Entidades\PVI\EstatusIncapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\EstatusPermiso.cs" />
     <Compile Include="Models\Entidades\PVI\EstatusVacacion.cs" />
+    <Compile Include="Models\Entidades\PVI\FormatoSolicitud.cs" />
+    <Compile Include="Models\Entidades\PVI\FormatoVacacion.cs" />
     <Compile Include="Models\Entidades\PVI\Incapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\Permiso.cs" />
     <Compile Include="Models\Entidades\PVI\TipoIncapacidad.cs" />
@@ -389,6 +391,7 @@
     <Content Include="Content\assets\plugins\owl-carousel\owl.theme.css" />
     <Content Include="Content\assets\plugins\pace\pace-theme-flash.css" />
     <Content Include="Content\assets\plugins\pace\pace.min.js" />
+    <Content Include="Content\assets\plugins\printThis\printThis.js" />
     <Content Include="Content\assets\plugins\shape-hover\css\component.css" />
     <Content Include="Content\assets\plugins\shape-hover\css\demo.css" />
     <Content Include="Content\assets\plugins\shape-hover\fonts\codropsicons\codropsicons.svg" />
@@ -477,6 +480,8 @@
     <Content Include="Views\Vacacion\NuevaSolicitud.cshtml" />
     <Content Include="Views\IICA\Sistemas.cshtml" />
     <Content Include="Views\Vacacion\MisVacaciones.cshtml" />
+    <Content Include="Views\Permiso\_ImprimirFormatoPermiso.cshtml" />
+    <Content Include="Views\Vacacion\_ImprimirFormatoVacacion.cshtml" />
     <Content Include="Views\Incapacidad\NuevaSolicitud.cshtml" />
     <Content Include="Views\Incapacidad\MisIncapacidades.cshtml" />
   </ItemGroup>

@@ -44,7 +44,7 @@ namespace IICA.Controllers.PVI
             }
             catch (Exception ex)
             {
-                throw ex;
+                return new HttpStatusCodeResult(500, ex.Message);
             }
         }
 
@@ -60,6 +60,20 @@ namespace IICA.Controllers.PVI
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult _ImprimirFormatoPermiso(int id)
+        {
+            try
+            {
+                permisoDAO = new PermisoDAO();
+                return PartialView(permisoDAO.ObtenerFormatoSolicitud(id));
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500,ex.Message);
             }
         }
     }
