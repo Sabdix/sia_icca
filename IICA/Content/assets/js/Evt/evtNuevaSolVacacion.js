@@ -2,38 +2,53 @@
 
 $(document).ready(function () {
 
+    /*---------------------------------------------------------------------*/
     $("#fechaSolicitud").datepicker({
+        startView: 1,
+        format: 'yyyy/mm/dd',
+        startDate: "today",
         autoclose: true,
-        format: 'mm/dd/yyyy',
-        todayHighlight: true,
-        
+        todayHighlight: true
     });
 
     $("#fechaSolicitud").datepicker("setDate", new Date());
+    /*---------------------------------------------------------------------*/
 
-    $("#fechaInicio").datepicker({
-        autoclose: true,
-        format: 'mm/dd/yyyy',
-        todayHighlight: true,
-        afterDone: function () {
-            if ($('#fechaFin').val() != "")
-                CalcularTotalDias();
-        }
-    });
+    
+    //$("#fechaInicio").datepicker({
+    //    autoclose: true,
+    //    format: 'mm/dd/yyyy',
+    //    todayHighlight: true,
 
-    $("#fechaInicio").datepicker("setDate", new Date());
+    //});
 
     $("#fechaFin").datepicker({
+        startView: 1,
+        format: 'yyyy/mm/dd',
+        startDate: "today",
         autoclose: true,
-        format: 'mm/dd/yyyy',
-        todayHighlight: true,
+        todayHighlight: true
+    }).on('changeDate', function (e) {
+        if ($('#fechaFin').val() != "")
+            CalcularTotalDias();
     });
 
-    $("#fechaFin").datepicker("setDate", new Date());
-    alert($("$fechaFin").val());
-    //$("#fechaFin").on("dp.onChange",".date", function (e) {
-    //    alert($("$fechaFin").val());
-    //});
+    $("#fechaInicio").datepicker({
+        startView: 1,
+        format: 'yyyy/mm/dd',
+        startDate: "today",
+        autoclose: true,
+        todayHighlight: true
+
+    }).on('changeDate', function (selected) {
+        var startDate = new Date(selected.date.valueOf());
+        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+        $('#fechaFin').datepicker('setStartDate', startDate);
+    });
+    
+    $("#fechaInicio").datepicker('setDate', moment().toDate());
+    $("#fechaFin").datepicker('setDate', moment().toDate());
+   
 });
 
 function OnSuccesRegistrarSolicitud(data) {
@@ -48,7 +63,7 @@ function OnSuccesRegistrarSolicitud(data) {
 
 function CalcularTotalDias() {
     var fecha1 = moment($("#fechaInicio").val());
-    var fecha2 = moment($("$fechaFin").val());
+    var fecha2 = moment($("#fechaFin").val());
     var diasVacaciones = fecha2.diff(fecha1, 'days');
 
     if (diasVacaciones > 0)
