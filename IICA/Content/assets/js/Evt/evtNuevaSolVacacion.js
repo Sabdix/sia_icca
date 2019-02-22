@@ -14,14 +14,6 @@ $(document).ready(function () {
     $("#fechaSolicitud").datepicker("setDate", new Date());
     /*---------------------------------------------------------------------*/
 
-    
-    //$("#fechaInicio").datepicker({
-    //    autoclose: true,
-    //    format: 'mm/dd/yyyy',
-    //    todayHighlight: true,
-
-    //});
-
     $("#fechaFin").datepicker({
         startView: 1,
         format: 'yyyy/mm/dd',
@@ -44,6 +36,8 @@ $(document).ready(function () {
         var startDate = new Date(selected.date.valueOf());
         startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
         $('#fechaFin').datepicker('setStartDate', startDate);
+        if ($('#fechaInicio').val() != "")
+            CalcularTotalDias();
     });
     
     $("#fechaInicio").datepicker('setDate', moment().toDate());
@@ -64,7 +58,7 @@ function OnSuccesRegistrarSolicitud(data) {
 function CalcularTotalDias() {
     var fecha1 = moment($("#fechaInicio").val());
     var fecha2 = moment($("#fechaFin").val());
-    var diasVacaciones = fecha2.diff(fecha1, 'days');
+    var diasVacaciones = moment.duration(fecha2.diff(fecha1)).days(); //fecha2.diff(fecha1, 'days');
 
     if (diasVacaciones > 0)
     {

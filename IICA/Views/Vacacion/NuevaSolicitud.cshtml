@@ -47,7 +47,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             <div class="row form-row">
                                 <div class="col-md-4">
                                     <label class="form-label">Total de dias</label>
-                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control",disabled="disabled" })
+                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control",@readOnly="true"})
                                     @Html.ValidationMessageFor(x => x.totalDias, "", new { @class = "error" })
                                 </div>
                             </div>
@@ -60,7 +60,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-10">
-                                    <button class="btn btn-info btn-cons" type="submit">Guardar</button>
+                                    <button type="submit" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>Guardar</button>
                                 </div>
                             </div>
                         }
@@ -76,18 +76,15 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
 
     <link href="~/Content/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/assets/plugins/boostrap-clockpicker/bootstrap-clockpicker.min.css" rel="stylesheet" type="text/css" media="screen" />
 
-    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+   
     <script src="~/Content/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
-
-    <script src="~/Content/assets/plugins/boostrap-clockpicker/bootstrap-clockpicker.min.js" type="text/javascript"></script>
 
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-    
+    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
     <script src="~/Content/assets/js/Evt/evtNuevaSolVacacion.js"></script>
 }
 

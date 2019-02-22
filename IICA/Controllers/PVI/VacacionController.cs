@@ -1,4 +1,5 @@
 ﻿using IICA.Models.DAO.PVI;
+using IICA.Models.Entidades;
 using IICA.Models.Entidades.PVI;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,14 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        [HttpPost]
+        [HttpPost, SessionExpire]
         public ActionResult RegistrarSolicitud(Vacacion vacacion_)
         {
             try
             {
                 vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                vacacion_.emCveEmpleado = usuarioSesion.emCveEmpleado;
                 return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -41,11 +44,14 @@ namespace IICA.Controllers.PVI
             }
         }
 
+        [SessionExpire]
         public ActionResult MisVacaciones()
         {
             try
             {
-                return View();
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(vacacionDAO.ObtenerMisVacaciones(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {

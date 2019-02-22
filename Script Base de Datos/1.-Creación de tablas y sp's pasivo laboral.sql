@@ -1018,6 +1018,7 @@ BEGIN
 			select
 				1 STATUS,
 				'' MENSAJE,
+				Id_Vacaciones,
 				Periodo_Anterior,
 				Proporcional,
 				Total_Dias_Saldo_Vacacional,

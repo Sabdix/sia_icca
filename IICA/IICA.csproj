@@ -158,6 +158,7 @@
     <Compile Include="Models\Entidades\Conexion.cs" />
     <Compile Include="Models\Entidades\Enumeraciones.cs" />
     <Compile Include="Models\Entidades\PVI\EstatusPermiso.cs" />
+    <Compile Include="Models\Entidades\PVI\EstatusVacacion.cs" />
     <Compile Include="Models\Entidades\PVI\Incapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\Permiso.cs" />
     <Compile Include="Models\Entidades\PVI\Vacacion.cs" />
@@ -469,6 +470,7 @@
     <Content Include="Views\Permiso\MisPermisos.cshtml" />
     <Content Include="Views\Vacacion\NuevaSolicitud.cshtml" />
     <Content Include="Views\IICA\Sistemas.cshtml" />
+    <Content Include="Views\Vacacion\MisVacaciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
