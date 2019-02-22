@@ -5,13 +5,13 @@ $(document).ready(function () {
 
     $('#fechaPermiso').datepicker({
         startView: 1,
-        format: 'mm/dd/yyyy',
+        format: 'yyyy/mm/dd',
         startDate: "today",
         autoclose: true,
         todayHighlight: true
     });
 
-    $("#fechaPermiso").datepicker("setDate", new Date());
+    $("#fechaPermiso").datepicker('setDate', moment().toDate());
     //$('#fechaPermiso').val(new Date().getTime().toString());
 
     $('#horaInicio').clockpicker({
@@ -38,9 +38,9 @@ function OnSuccesRegistrarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Zona/Zonas"); }, 3000);
+        setTimeout(function () { window.location = rootUrl("/Permiso/MisPermisos"); }, 3000);
     } else {
-        alert(data.mensaje);
+        MostrarNotificacionLoad("warning", data.mensaje, 3000);
     }
 }
 
@@ -51,8 +51,10 @@ function CalcularTotalHoras() {
     var horas = 0;
     var minutos = 0;
     if (moment.duration(fin.diff(inicio)).hours() < 0) {
-        horas = moment.duration(inicio.diff(fin)).hours();//moment.duration(inicio - fin).hours();
-        minutos = moment.duration(inicio.diff(fin)).minutes();//moment.duration(inicio - fin).minutes();//.humanize();
+        $('#totalHoras').val("");
+        return;
+        //horas = moment.duration(inicio.diff(fin)).hours();//moment.duration(inicio - fin).hours();
+        //minutos = moment.duration(inicio.diff(fin)).minutes();//moment.duration(inicio - fin).minutes();//.humanize();
     } else {
         horas = moment.duration(fin.diff(inicio)).hours();//moment.duration(fin - inicio).hours();
         minutos = moment.duration(fin.diff(inicio)).minutes();//moment.duration(fin - inicio).minutes();//.humanize();

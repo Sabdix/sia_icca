@@ -3,6 +3,70 @@
     ViewBag.Title = "MisPermisos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using System.Globalization;
+@using IICA.Models.Entidades.PVI
 
-<h2>MisPermisos</h2>
+@model List<IICA.Models.Entidades.PVI.Permiso>
 
+<ul class="breadcrumb">
+    <li>
+        <p>PERMISOS</p>
+    </li>
+    <li><a href="#" class="active">Mis permisos</a> </li>
+</ul>
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="grid simple ">
+            <div class="grid-title">
+                <h4>Lista <span class="semi-bold">de solicitudes</span></h4>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"></a>
+                    <a href="#grid-config" data-toggle="modal" class="config"></a>
+                    <a href="javascript:;" class="reload"></a>
+                    <a href="javascript:;" class="remove"></a>
+                </div>
+            </div>
+            <div class="grid-body ">
+                <table class="table table-hover table-condensed" style="text-align: center;" id="example">
+                    <thead>
+                        <tr >
+                            <th style="width:2%;text-align: center;">No.</th>
+                            <th style="width:15%;text-align: center;">Motivo del permiso</th>
+                            <th style="width:10%;text-align: center;">Fecha de permiso</th>
+                            <th style="width:10%;text-align: center;">Total de tiempo solicitado</th>
+                            <th style="width:10%;text-align: center;">Fecha de Autorización</th>
+                            <th style="width:10%;text-align: center;">Estatus</th>
+                            <th style="width:10%;text-align: center;">Motivo del rechazo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Permiso permiso in Model)
+                        {
+                            
+                            string labelEstatus = (permiso.estatusPermiso.idEstatusPermiso == 1 ? "success" : "important");
+                        <tr>
+                            <td>@permiso.idPermiso</td>
+                            <td>@permiso.motivoPermiso</td>
+                            <td>
+                                <span class="muted">
+                                    @permiso.fechaPermiso.ToShortDateString()&nbsp;&nbsp;<br />
+                                    <span class="label label-info">
+                                        @(DateTime.ParseExact(permiso.horaInicio, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                                        &nbsp;&nbsp;a&nbsp;&nbsp;
+                                        @(DateTime.ParseExact(permiso.horaFin, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                                    </span>
+                                </span>
+                            </td>
+                            <td><span class="muted">@permiso.totalHoras hrs</span></td>
+                            <td><span class="muted">@(permiso.fechaAutorizacion == DateTime.MinValue ? "N/A" : permiso.fechaAutorizacion.ToShortDateString())</span></td>
+                            <td><span class="label label-@labelEstatus">@permiso.estatusPermiso.descripcion</span></td>
+                            <td><span class="muted">@permiso.motivoRechazo</span></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

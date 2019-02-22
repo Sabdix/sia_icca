@@ -32,22 +32,15 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        [HttpPost]
+        [HttpPost, SessionExpire]
         public ActionResult RegistrarSolicitud(Permiso permiso_)
         {
             try
             {
                 permisoDAO = new PermisoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                if (usuarioSesion != null)
-                {
-                    permiso_.emCveEmpleado = usuarioSesion.emCveEmpleado;
-                    return Json(permisoDAO.ActualizarPermiso(permiso_), JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    throw new HttpException(460, "Su sesión ha vencido");
-                }
+                permiso_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                return Json(permisoDAO.ActualizarPermiso(permiso_), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -55,11 +48,14 @@ namespace IICA.Controllers.PVI
             }
         }
 
+        [SessionExpire]
         public ActionResult MisPermisos()
         {
             try
             {
-                return View();
+                permisoDAO = new PermisoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(permisoDAO.ObtenerMisPermisos(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {
