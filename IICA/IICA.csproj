@@ -157,10 +157,12 @@
     <Compile Include="Models\DAO\SesionDAO.cs" />
     <Compile Include="Models\Entidades\Conexion.cs" />
     <Compile Include="Models\Entidades\Enumeraciones.cs" />
+    <Compile Include="Models\Entidades\PVI\EstatusPermiso.cs" />
     <Compile Include="Models\Entidades\PVI\Incapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\Permiso.cs" />
     <Compile Include="Models\Entidades\PVI\Vacacion.cs" />
     <Compile Include="Models\Entidades\Result.cs" />
+    <Compile Include="Models\Entidades\SessionExpire.cs" />
     <Compile Include="Models\Entidades\Usuario.cs" />
     <Compile Include="Models\Entidades\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

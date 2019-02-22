@@ -22,7 +22,7 @@ function ControlErrores(xhr, status, error) {
     if (xhr.status === HttpCodeStatus.SessionVencida.code) {
         Messenger().post({ message: 'Su sesión ha vencido.', type: 'warning', showCloseButton: true, extraClasses: 'messenger-fixed messenger-on-top' });
         setTimeout(function () {
-            location.href = rootUrl("/IICA/Index");//rootUrl(xhr.statusText);
+            location.href = rootUrl(xhr.statusText);//rootUrl("/IICA/Index");
         }, 1500);
     }
     
