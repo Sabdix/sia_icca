@@ -28,9 +28,9 @@
                 </div>
             </div>
             <div class="grid-body ">
-                <table class="table table-hover table-condensed" style="text-align: center;" id="example">
+                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-mis-permisos">
                     <thead>
-                        <tr >
+                        <tr>
                             <th style="width:2%;text-align: center;">No.</th>
                             <th style="width:15%;text-align: center;">Motivo del permiso</th>
                             <th style="width:10%;text-align: center;">Fecha de permiso</th>
@@ -43,26 +43,26 @@
                     <tbody>
                         @foreach (Permiso permiso in Model)
                         {
-                            
+
                             string labelEstatus = (permiso.estatusPermiso.idEstatusPermiso == 1 ? "success" : "important");
-                        <tr>
-                            <td>@permiso.idPermiso</td>
-                            <td>@permiso.motivoPermiso</td>
-                            <td>
-                                <span class="muted">
-                                    @permiso.fechaPermiso.ToShortDateString()&nbsp;&nbsp;<br />
-                                    <span class="label label-info">
-                                        @(DateTime.ParseExact(permiso.horaInicio, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
-                                        &nbsp;&nbsp;a&nbsp;&nbsp;
-                                        @(DateTime.ParseExact(permiso.horaFin, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                            <tr>
+                                <td>@permiso.idPermiso</td>
+                                <td>@permiso.motivoPermiso</td>
+                                <td>
+                                    <span class="muted">
+                                        @permiso.fechaPermiso.ToShortDateString()&nbsp;&nbsp;<br />
+                                        <span class="label label-info">
+                                            @(DateTime.ParseExact(permiso.horaInicio, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                                            &nbsp;&nbsp;a&nbsp;&nbsp;
+                                            @(DateTime.ParseExact(permiso.horaFin, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                                        </span>
                                     </span>
-                                </span>
-                            </td>
-                            <td><span class="muted">@permiso.totalHoras hrs</span></td>
-                            <td><span class="muted">@(permiso.fechaAutorizacion == DateTime.MinValue ? "N/A" : permiso.fechaAutorizacion.ToShortDateString())</span></td>
-                            <td><span class="label label-@labelEstatus">@permiso.estatusPermiso.descripcion</span></td>
-                            <td><span class="muted">@permiso.motivoRechazo</span></td>
-                        </tr>
+                                </td>
+                                <td><span class="muted">@permiso.totalHoras hrs</span></td>
+                                <td><span class="muted">@(permiso.fechaAutorizacion == DateTime.MinValue ? "N/A" : permiso.fechaAutorizacion.ToShortDateString())</span></td>
+                                <td><span class="label label-@labelEstatus">@permiso.estatusPermiso.descripcion</span></td>
+                                <td><span class="muted">@permiso.motivoRechazo</span></td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -70,3 +70,23 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/extra/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
+    <script src="~/Content/assets/js/datatables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tabla-mis-permisos').dataTable()
+        });
+
+    </script>
+
+}

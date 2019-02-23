@@ -147,19 +147,27 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IICAController.cs" />
+    <Compile Include="Controllers\PVI\IncapacidadController.cs" />
     <Compile Include="Controllers\PVI\PermisoController.cs" />
     <Compile Include="Controllers\PVI\VacacionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DAO\PVI\IncapacidadDAO.cs" />
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
     <Compile Include="Models\Entidades\Conexion.cs" />
     <Compile Include="Models\Entidades\Enumeraciones.cs" />
+    <Compile Include="Models\Entidades\PVI\EstatusIncapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\EstatusPermiso.cs" />
+    <Compile Include="Models\Entidades\PVI\EstatusVacacion.cs" />
+    <Compile Include="Models\Entidades\PVI\FormatoSolicitud.cs" />
+    <Compile Include="Models\Entidades\PVI\FormatoVacacion.cs" />
     <Compile Include="Models\Entidades\PVI\Incapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\Permiso.cs" />
+    <Compile Include="Models\Entidades\PVI\TipoIncapacidad.cs" />
+    <Compile Include="Models\Entidades\PVI\TipoSeguimiento.cs" />
     <Compile Include="Models\Entidades\PVI\Vacacion.cs" />
     <Compile Include="Models\Entidades\Result.cs" />
     <Compile Include="Models\Entidades\SessionExpire.cs" />
@@ -207,6 +215,8 @@
     <Content Include="Content\assets\js\dashboard_v2.js" />
     <Content Include="Content\assets\js\datatables.js" />
     <Content Include="Content\assets\js\email_comman.js" />
+    <Content Include="Content\assets\js\Evt\evtAutSolPermiso.js" />
+    <Content Include="Content\assets\js\Evt\evtNuevaSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolPermiso.js" />
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
@@ -382,6 +392,7 @@
     <Content Include="Content\assets\plugins\owl-carousel\owl.theme.css" />
     <Content Include="Content\assets\plugins\pace\pace-theme-flash.css" />
     <Content Include="Content\assets\plugins\pace\pace.min.js" />
+    <Content Include="Content\assets\plugins\printThis\printThis.js" />
     <Content Include="Content\assets\plugins\shape-hover\css\component.css" />
     <Content Include="Content\assets\plugins\shape-hover\css\demo.css" />
     <Content Include="Content\assets\plugins\shape-hover\fonts\codropsicons\codropsicons.svg" />
@@ -469,6 +480,12 @@
     <Content Include="Views\Permiso\MisPermisos.cshtml" />
     <Content Include="Views\Vacacion\NuevaSolicitud.cshtml" />
     <Content Include="Views\IICA\Sistemas.cshtml" />
+    <Content Include="Views\Vacacion\MisVacaciones.cshtml" />
+    <Content Include="Views\Permiso\_ImprimirFormatoPermiso.cshtml" />
+    <Content Include="Views\Vacacion\_ImprimirFormatoVacacion.cshtml" />
+    <Content Include="Views\Permiso\PermisosPorAutorizar.cshtml" />
+    <Content Include="Views\Incapacidad\NuevaSolicitud.cshtml" />
+    <Content Include="Views\Incapacidad\MisIncapacidades.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

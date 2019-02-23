@@ -11,6 +11,25 @@ CREATE INDEX IDX_IICA_COMPRAS_DEPARTAMENTO
 ON Departamento (Dp_Cve_Departamento);
 GO
 
+
+-- Borramos el Trigger si existise
+IF OBJECT_ID ('AgregaAutorizadorPVITrigger', 'TR') IS NOT NULL
+BEGIN
+   DROP TRIGGER AgregaAutorizadorPVITrigger;
+END;
+ 
+GO -- Necesario
+ 
+-- Cremamos un Trigger sobre la tabla Viaticos_Autorizadores
+CREATE TRIGGER AgregaAutorizadorPVITrigger
+ON Viaticos_Autorizadores
+ AFTER INSERT AS 
+	--Por terminar
+	--INSERT INTO expStatusHistory  (code, state) (SELECT code, state FROM deleted WHERE code=deleted.code);
+
+ GO
+
+
 USE IICA_1
 GO
 
@@ -152,8 +171,8 @@ BEGIN
 				Fecha_Alta,
 				Id_Status_Solicitud,
 				Motivo_Rechazo,
-				Em_Cve_Empleado,
-				Em_Cve_Empleado_Autoriza
+				Em_Cve_Empleado
+				--,Em_Cve_Empleado_Autoriza
 			)
 			VALUES (
 				@Fecha_Permiso,
@@ -164,8 +183,8 @@ BEGIN
 				GETDATE(),
 				1,
 				'',
-				@Em_Cve_Empleado,
-				@Em_Cve_Empleado_Autoriza
+				@Em_Cve_Empleado
+				--,@Em_Cve_Empleado_Autoriza
 			)
 
 			IF @@ERROR<>0
@@ -400,8 +419,8 @@ BEGIN
 				Motivo_Vacaciones,
 				Id_Status_Solicitud,
 				Motivo_Rechazo,
-				Em_Cve_Empleado,
-				Em_Cve_Empleado_Autoriza
+				Em_Cve_Empleado
+				--,Em_Cve_Empleado_Autoriza
 			)
 			VALUES (
 				@Periodo_Anterior,
@@ -414,8 +433,8 @@ BEGIN
 				@Motivo_Vacaciones,
 				1,
 				'',
-				@Em_Cve_Empleado,
-				@Em_Cve_Empleado_Autoriza
+				@Em_Cve_Empleado
+				--,@Em_Cve_Empleado_Autoriza
 			)
 
 			IF @@ERROR<>0
@@ -538,7 +557,8 @@ BEGIN
 	CREATE TABLE DT_CAT_TIPO_INCAPACIDAD
 	(
 		Id_Tipo_Incapacidad INT IDENTITY (1,1),
-		Descripcion_Tipo_Incapacidad VARCHAR (100)
+		Descripcion_Tipo_Incapacidad VARCHAR (100),
+		Activo int default 1
 	)
 	TRUNCATE TABLE DT_CAT_TIPO_INCAPACIDAD
 	INSERT INTO DT_CAT_TIPO_INCAPACIDAD(Descripcion_Tipo_Incapacidad) VALUES('ENFERMEDAD GENERAL')
@@ -559,7 +579,8 @@ BEGIN
 	CREATE TABLE DT_CAT_TIPO_SEGUIMIENTO
 	(
 		Id_Tipo_Seguimiento INT IDENTITY (1,1),
-		Descripcion_Tipo_Seguimiento VARCHAR (100)
+		Descripcion_Tipo_Seguimiento VARCHAR (100),
+		Activo int default 1
 	)
 	TRUNCATE TABLE DT_CAT_TIPO_SEGUIMIENTO
 	INSERT INTO DT_CAT_TIPO_SEGUIMIENTO(Descripcion_Tipo_Seguimiento) VALUES('INICIAL')
@@ -639,6 +660,7 @@ BEGIN
 	select
 		*
 	from DT_CAT_TIPO_INCAPACIDAD
+	where Activo=1
 	
 END
 GO
@@ -684,6 +706,7 @@ BEGIN
 	select
 		*
 	from DT_CAT_TIPO_SEGUIMIENTO
+	where Activo=1
 	
 END
 GO
@@ -802,7 +825,7 @@ BEGIN
 				Id_Status_Solicitud,
 				Motivo_Rechazo,
 				Em_Cve_Empleado,
-				Em_Cve_Empleado_Autoriza,
+				--Em_Cve_Empleado_Autoriza,
 				Formato_Incapacidad,
 				Formato_Adicional,
 				Formato_ST7_Calificacion_RT,
@@ -819,7 +842,7 @@ BEGIN
 				4,
 				@Motivo_Rechazo,
 				@Em_Cve_Empleado,
-				@Em_Cve_Empleado_Autoriza,
+				--@Em_Cve_Empleado_Autoriza,
 				@Formato_Incapacidad,
 				@Formato_Adicional,
 				@Formato_ST7_Calificacion_RT,
@@ -906,7 +929,8 @@ BEGIN
 
     -- Insert statements for procedure here
 	DECLARE
-		@query nvarchar(max)
+		@query nvarchar(max),
+		@Proyecto_Empleado_Autoriza varchar(10)
 
 	IF (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza IS NOT NULL)
 	 OR (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza='') 
@@ -938,6 +962,7 @@ BEGIN
 		END
 		IF @Em_Cve_Empleado_Autoriza IS NOT NULL
 		BEGIN
+
 			select
 				d.Id_Permiso,
 				Em_nombre,
@@ -953,10 +978,19 @@ BEGIN
 				d.Total_Horas,
 				d.Motivo_Permiso
 			from Empleado a
-			left join IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
-			LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			--LEFT JOIN IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			--LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			LEFT JOIN Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			LEFT JOIN Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
 			INNER JOIN DT_TBL_PERMISO d ON a.Em_Cve_Empleado=d.Em_Cve_Empleado
-			WHERE d.Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
+			--WHERE d.Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
+			WHERE b.Sc_UserDef_2 IN (
+				select aut_proyecto
+				from IICA_COMPRAS.dbo.Viaticos_Autorizadores
+				where Em_Cve_Empleado=@Em_Cve_Empleado_Autoriza
+				and aut_nivel='D'
+				group by aut_proyecto
+			)
 		END
 
 	END	
@@ -1018,6 +1052,7 @@ BEGIN
 			select
 				1 STATUS,
 				'' MENSAJE,
+				Id_Vacaciones,
 				Periodo_Anterior,
 				Proporcional,
 				Total_Dias_Saldo_Vacacional,
@@ -1055,10 +1090,19 @@ BEGIN
 				CONVERT (VARCHAR,DATEADD(DD,1,d.Fecha_Fin),103) Reanudar_Labores,
 				d.Motivo_Vacaciones
 			from Empleado a
-			left join IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
-			LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			--LEFT JOIN IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			--LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			LEFT JOIN Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			LEFT JOIN Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
 			INNER JOIN DT_TBL_VACACIONES d ON a.Em_Cve_Empleado=d.Em_Cve_Empleado
-			WHERE d.Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
+			--WHERE d.Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
+			WHERE b.Sc_UserDef_2 IN (
+				select aut_proyecto
+				from IICA_COMPRAS.dbo.Viaticos_Autorizadores
+				where Em_Cve_Empleado=@Em_Cve_Empleado_Autoriza
+				and aut_nivel='D'
+				group by aut_proyecto
+			)
 		END
 
 	END	
@@ -1067,6 +1111,122 @@ END
 GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_VACACIONES_USUARIO TO public;  
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_INCAPACIDADES_USUARIO')
+BEGIN
+	DROP PROCEDURE DT_SP_OBTENER_INCAPACIDADES_USUARIO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Christian Peña Romero>
+-- Description:	<COnsultar los registros segun el usuario>
+-- =============================================
+CREATE PROCEDURE DT_SP_OBTENER_INCAPACIDADES_USUARIO
+	-- Add the parameters for the stored procedure here
+	@Em_Cve_Empleado VARCHAR(100)=NULL,
+	@Em_Cve_Empleado_Autoriza VARCHAR(100)=NULL
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE
+		@query nvarchar(max)
+
+	IF (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza IS NOT NULL)
+	 OR (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza='') 
+	 OR (@Em_Cve_Empleado='' AND @Em_Cve_Empleado_Autoriza IS NOT NULL)
+	 OR (@Em_Cve_Empleado='' AND @Em_Cve_Empleado_Autoriza='')
+		select 0 STATUS, 'ERROR, NÚMERO DE PARAMETROS INCORRECTO' MENSAJE
+	ELSE
+	BEGIN
+		IF @Em_Cve_Empleado IS NOT NULL
+		BEGIN
+			select
+				1 STATUS,
+				'' MENSAJE,
+				Id_Incapacidad,
+				Fecha_Ingreso_Labores,
+				Fecha_Solicitud,
+				Fecha_Inicio,
+				Fecha_Fin,
+				Total_Dias,
+				a.Id_Status_Solicitud,
+				b.Descripcion_Status_Solicitud,
+				Motivo_Rechazo,
+				Em_Cve_Empleado,
+				Em_Cve_Empleado_Autoriza,
+				COALESCE(Fecha_Actualizacion,'') Fecha_Revision,
+				a.Id_Tipo_Seguimiento,
+				d.Descripcion_Tipo_Seguimiento,
+				a.Id_Tipo_Incapacidad,
+				c.Descripcion_Tipo_Incapacidad
+			from
+				DT_TBL_INCAPACIDAD a
+			inner join DT_CAT_STATUS_SOLICITUD b on a.Id_Status_Solicitud=b.Id_Status_Solicitud
+			join DT_CAT_TIPO_INCAPACIDAD c on a.Id_Tipo_Incapacidad=c.Id_Tipo_Incapacidad
+			join DT_CAT_TIPO_SEGUIMIENTO d on a.Id_Tipo_Seguimiento=d.Id_Tipo_Seguimiento
+			WHERE a.Em_Cve_Empleado=@Em_Cve_Empleado
+		END
+		IF @Em_Cve_Empleado_Autoriza IS NOT NULL
+		BEGIN
+			select
+				d.Id_Incapacidad,
+				Em_nombre,
+				Em_Apellido_Paterno,
+				Em_Apellido_Materno,
+				CONVERT (VARCHAR,Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
+				b.Sc_Descripcion Programa,
+				COALESCE(NULL,c.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
+				CONVERT (VARCHAR,d.Fecha_Solicitud,103)Fecha_Alta,
+				d.Id_Tipo_Incapacidad,
+				CONVERT (VARCHAR,d.Fecha_Inicio,103)Fecha_Inicio,
+				CONVERT (VARCHAR,d.Fecha_Fin,103)Fecha_Fin,
+				d.Total_Dias,
+				CONVERT (VARCHAR,DATEADD(DD,1,d.Fecha_Fin),103) Reanudar_Labores,
+				d.Motivo_Rechazo,
+				d.Id_Tipo_Seguimiento
+			from Empleado a
+			--LEFT JOIN IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			--LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			LEFT JOIN Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			LEFT JOIN Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			INNER JOIN DT_TBL_INCAPACIDAD d ON a.Em_Cve_Empleado=d.Em_Cve_Empleado
+			--WHERE d.Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
+			WHERE b.Sc_UserDef_2 IN (
+				select aut_proyecto
+				from IICA_COMPRAS.dbo.Viaticos_Autorizadores
+				where Em_Cve_Empleado=@Em_Cve_Empleado_Autoriza
+				and aut_nivel='D'
+				group by aut_proyecto
+			)
+		END
+
+	END	
+	
+END
+GO
+
+GRANT EXECUTE ON DT_SP_OBTENER_INCAPACIDADES_USUARIO TO public;  
 GO
 
 --========================SP para el inicio de sesión
