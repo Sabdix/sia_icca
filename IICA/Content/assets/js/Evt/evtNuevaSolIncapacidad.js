@@ -2,6 +2,8 @@
 
 $(document).ready(function () {
 
+    $(".select").select2();
+
     /*---------------------------------------------------------------------*/
     $("#fechaSolicitud").datepicker({
         startView: 1,
@@ -36,7 +38,7 @@ $(document).ready(function () {
         var startDate = new Date(selected.date.valueOf());
         startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
         $('#fechaFin').datepicker('setStartDate', startDate);
-        if ($('#fechaInicio').val() <> "")
+        if ($('#fechaInicio').val() !== "")
             CalcularTotalDias();
     });
 
