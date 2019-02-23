@@ -8,7 +8,12 @@ namespace IICA.Models.Entidades.PVI
 {
     public class Permiso
     {
-        
+        public Permiso()
+        {
+            estatusPermiso = new EstatusPermiso();
+            usuario = new Usuario();
+        }
+
         public Int64 idPermiso { get; set; }
         [Required(ErrorMessage ="Es necesario capturar la fecha de permiso")]
         public DateTime fechaPermiso { get; set; }
@@ -20,11 +25,14 @@ namespace IICA.Models.Entidades.PVI
         [Required(ErrorMessage = "Es necesario capturar el motivo del permiso")]
         public string motivoPermiso { get; set; }
         public DateTime fechaAlta { get; set; }
-        public int idStatusSolicitud { get; set; }
+        public EstatusPermiso estatusPermiso { get; set; }
         [Required(ErrorMessage = "Es necesario capturar el motivo de rechazo del permiso")]
         public string motivoRechazo { get; set; }
         public string emCveEmpleado { get; set; }
         public string emCveEmpleadoAutoriza { get; set; }
         public DateTime fechaAutorizacion { get; set; }
+
+        /*------------------------------------------------*/
+        public Usuario usuario { get; set; }
     }
 }

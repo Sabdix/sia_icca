@@ -1,12 +1,12 @@
 ﻿
-function OnBeginIniciarSesion() {
-    //$('body').fullscreen();
-}
-
 function OnSuccesIniciarSesion(data) {
     if (data.status === true) {
-        window.location = rootUrl("/Home/Index");
+        window.location = rootUrl("/IICA/Sistemas");
     } else {
-        alert(data.mensaje);
+        Messenger().post({
+            message: data.mensaje,
+            type: 'error',
+            showCloseButton: true
+        });
     }
 }

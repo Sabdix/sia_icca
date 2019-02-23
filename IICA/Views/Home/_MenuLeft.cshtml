@@ -1,4 +1,5 @@
-﻿
+﻿@model IICA.Models.Entidades.Usuario
+
 <div class="page-sidebar " id="main-menu">
     <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
         <div class="user-info-wrapper sm">
@@ -7,8 +8,8 @@
                 <div class="availability-bubble online"></div>
             </div>
             <div class="user-info sm">
-                <div class="username">Admin <span class="semi-bold">Admin</span></div>
-                <div class="status">IICA - PVI</div>
+                <div class="username">@Model.nombre <span class="semi-bold">@Model.apellidoPaterno</span></div>
+                <div class="status">@Model.rolUsuario - @Model.departamento</div>
             </div>
         </div>
 
@@ -21,23 +22,31 @@
             </li>
             <!--    PERMISO S-->
             <li>
-                <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Permisos</span> <span class=" arrow"></span> </a>
+                <a href="javascript:;"> <i class="material-icons">assignment_ind</i> <span class="title">Permisos</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
                     <li> <a href="@Url.Action("NuevaSolicitud","Permiso")">Nueva solicitud </a> </li>
                     <li> <a href="@Url.Action("MisPermisos","Permiso")">Mis Permisos</a> </li>
+                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
+                    {
+                        <li> <a href="@Url.Action("PermisosPorAutorizar", "Permiso")">Permisos por autorizar</a> </li>
+                    }
                 </ul>
             </li>
             <!--    VACACIONES    -->
             <li>
-                <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Vacaciones</span> <span class=" arrow"></span> </a>
+                <a href="javascript:;"> <i class="material-icons">flight_takeoff</i> <span class="title">Vacaciones</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
                     <li> <a href="@Url.Action("NuevaSolicitud","Vacacion")">Nueva solicitud </a> </li>
                     <li> <a href="@Url.Action("MisVacaciones","Vacacion")">Mis Vacaciones</a> </li>
+                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
+                    {
+                        <li> <a href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
+                    }
                 </ul>
             </li>
             <!--    INCAPACIDADES    -->
             <li>
-                <a href="javascript:;"> <i class="material-icons">invert_colors</i> <span class="title">Incapacidades</span> <span class=" arrow"></span> </a>
+                <a href="javascript:;"> <i class="material-icons">local_hospital</i> <span class="title">Incapacidades</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
                     <li> <a href="@Url.Action("NuevaSolicitud","Incapacidad")">Nueva solicitud </a> </li>
                     <li> <a href="@Url.Action("MisIncapacidades","Incapacidad")">Mis Incapacidades</a> </li>

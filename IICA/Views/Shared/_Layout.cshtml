@@ -15,8 +15,11 @@
     <link href="~/Content/assets/plugins/bootstrapv3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/plugins/bootstrapv3/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/plugins/animate.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/jquery-notifications/css/messenger-theme-flat.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/Content/assets/plugins/jquery-notifications/css/location-sel.css" rel="stylesheet" type="text/css" media="screen" />
 
     <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
 
@@ -48,7 +51,7 @@
                 </a>
                 <ul class="nav pull-right notifcation-center">
                     <li class="dropdown hidden-xs hidden-sm">
-                        <a href="@Url.Action("Index","Home")" class="dropdown-toggle active" data-toggle="">
+                        <a href="@Url.Action("Sistemas","IICA")" class="dropdown-toggle active" data-toggle="">
                             <i class="material-icons">home</i>
                         </a>
                     </li>
@@ -119,8 +122,12 @@
     <script src="~/Content/assets/plugins/jquery-unveil/jquery.unveil.min.js" type="text/javascript"></script>
     <script src="~/Content/assets/plugins/jquery-scrollbar/jquery.scrollbar.min.js" type="text/javascript"></script>
     <script src="~/Content/assets/plugins/jquery-numberAnimate/jquery.animateNumbers.js" type="text/javascript"></script>
-    <script src="~/Content/assets/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
-    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js" type="text/javascript"></script>
+
+
+    <script src="~/Content/assets/plugins/jquery-notifications/js/messenger.min.js"></script>
+    <script src="~/Content/assets/plugins/jquery-notifications/js/messenger-theme-future.js"></script>
+
+    <script type="text/javascript" src="/Content/assets/plugins/jquery-notifications/js/demo/demo.js"></script>
 
     <script src="~/Content/webarch//js/webarch.js" type="text/javascript"></script>
     <script src="~/Content/assets/js/Evt/Utils.js"></script>
@@ -134,6 +141,8 @@
             <div class="mdl-spinner mdl-spinner--cyan-color mdl-js-spinner is-active"></div>
             <H4>Cargando...</H4>
         </div>
+    </div>
+    <div id="content-impresion">
     </div>
     <style>
         #loading-layout {
@@ -157,6 +166,10 @@
                 color: white;
                 left: -15px;
             }
+
+        #content-impresion {
+            display: none;
+        }
     </style>
 </body>
 </html>

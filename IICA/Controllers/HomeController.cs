@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IICA.Models.Entidades;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,7 +18,11 @@ namespace IICA.Controllers
         {
             try
             {
-                return PartialView();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                if (usuarioSesion != null)
+                    return PartialView(usuarioSesion);
+                else
+                    return RedirectToAction("Index","IICA");
             }
             catch (Exception ex)
             {

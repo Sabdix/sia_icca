@@ -24,23 +24,31 @@ namespace IICA.Controllers
             try
             {
                 sesionDAO = new SesionDAO();
-                Result result = new Result();
-                result.status = true;
-                result.mensaje = "Inicio de sesión correcto.";
-
-                //Usuario usuarioSesion = sesionDAO.IniciarSesion(usuario_);
-                //if (usuarioSesion != null)
-                //{
-                //    Session["usuarioSesion"] = usuarioSesion;
-                //    result.status = true;
-                //    result.mensaje = "Inicio de sesión correcto.";
-                //}
-                //else
-                //{
-                //    result.status = false;
-                //    result.mensaje = "Credenciales incorrectas.";
-                //}
+                Result result = sesionDAO.IniciarSesion(usuario_);
+                if (result.status)
+                {
+                    Session["usuarioSesion"] = (Usuario)result.objeto;
+                    result.mensaje = "Inicio de sesión correcto.";
+                }
+                else
+                    result.mensaje = "Credenciales incorrectas.";
                 return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ActionResult Sistemas()
+        {
+            try
+            {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                if (usuarioSesion != null)
+                    return View(usuarioSesion);
+                else
+                    return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

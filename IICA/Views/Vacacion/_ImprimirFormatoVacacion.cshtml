@@ -1,0 +1,178 @@
+﻿<script src="~/Content/assets/plugins/printThis/printThis.js"></script>
+@model IICA.Models.Entidades.PVI.FormatoVacacion
+<style>
+    .md-100 {
+        width: 100%;
+        margin: auto;
+    }
+
+    .md-90 {
+        width: 90%;
+        margin: auto;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .border-solid {
+        border: 1px solid #000;
+    }
+
+    /*------------------------------------*/
+    #content-principal {
+        width: 100%;
+        margin: auto;
+    }
+    /*------------------------------------*/
+    #content-header {
+        height: 130px;
+    }
+
+        #content-header img {
+            width: 265px;
+            height: 115px;
+        }
+    /*------------------------------------*/
+    #content-fecha-header {
+        display: flex;
+        justify-content: flex-end;
+        text-align: center;
+    }
+
+        #content-fecha-header label {
+            float: right;
+            font-weight: 900;
+            border: 1px solid #595959;
+            padding: 5px 50px 5px 50px;
+        }
+    /*------------------------------------*/
+    #content-titulo {
+        text-align: center;
+    }
+    /*------------------------------------*/
+    #content-datos-empleado {
+        margin-bottom: 20px;
+    }
+
+        #content-datos-empleado table {
+            color: #595959;
+            font-size: 20px;
+        }
+    /*------------------------------------*/
+    #content-datos-solicitud {
+        margin-bottom: 20px;
+    }
+
+        #content-datos-solicitud table {
+            width: 100%;
+            color: #595959;
+            font-size: 18px;
+            border: 1px solid #595959;
+        }
+
+            #content-datos-solicitud table tbody {
+                width: 90%;
+                margin: auto;
+                display: block;
+            }
+
+                #content-datos-solicitud table tbody tr td {
+                    padding-bottom: 3px;
+                    padding-top: 3px;
+                }
+
+    .label-dato {
+        width: 100%;
+        display: block;
+        border: 1px solid #595959;
+    }
+</style>
+<div id="content-principal">
+
+    <div id="content-header" class="md-90">
+        <img src="http://localhost:59791/Content/assets/img/logo_iica.png" />
+    </div>
+
+    <div class="md-90" id="content-fecha-header">
+        <div>
+            <p>Fecha de Solicitud</p>
+            <p><label>@Model.fechaAlta</label></p>
+        </div>
+    </div>
+
+    <div id="content-titulo" class="md-90">
+        <h2>Formato de solicitud vacaciones</h2>
+    </div>
+
+    <div id="content-datos-empleado" class="md-90">
+        <table class="md-100">
+            <tr>
+                <td><label style="font-weight:900;">Nombre Completo:</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@Model.nombreCompleto</label></td>
+            </tr>
+            <tr>
+                <td><label style="font-weight:900;">Fecha de Ingreso:</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@Model.emFechaIngreso</label></td>
+            </tr>
+            <tr>
+                <td><label style="font-weight:900;">Programa:</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@Model.programa</label></td>
+            </tr>
+            <tr>
+                <td><label style="font-weight:900;">Departamento:</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@Model.departamento</label></td>
+            </tr>
+            <tr>
+                <td><label style="font-weight:900;">Saldo de vacaciones:</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@Model.totalDiasSaldoVacacional</label></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="content-datos-solicitud" class="md-90">
+        <div class="md-100 border-solid text-center">
+            <label style="font-weight:900; font-size: 20px; line-height:30px;">Vacaciones</label>
+        </div>
+        <table>
+            <tbody>
+                <tr>
+                    <td><label style="font-weight:900;">No. De días</label></td>
+                    <td class="text-center" colspan="2">
+                        <label class="label-dato">@Model.totalDias</label>
+                    </td>
+                    <td><label style="font-weight:900;">hábiles</label></td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;"><label style="font-weight:900;">A partir del día</label></td>
+                    <td class="text-center">
+                        <label class="label-dato">@Model.fechaInicio hrs.</label>
+                    </td>
+                    <td class="text-center"><label style="font-weight:900;">al día</label></td>
+                    <td class="text-center">
+                        <label class="label-dato">@Model.fechaFin hrs.</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label style="font-weight:900;">Reanudando labores el día</label></td>
+                    <td class="text-center" colspan="3">
+                        <label class="label-dato">@Model.emFechaIngreso hrs.</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label style="font-weight:900;">Día de descanso según el rol</label></td>
+                    <td class="text-center" colspan="2">
+                        <label class="label-dato">Falta</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label style="font-weight:900;">Día de vacaciones restantes</label></td>
+                    <td class="text-center" colspan="3">
+                        <label class="label-dato">Falta</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

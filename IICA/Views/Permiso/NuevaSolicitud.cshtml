@@ -23,12 +23,12 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-8 col-md-8">
                         @using (Ajax.BeginForm("RegistrarSolicitud", "Permiso",
-new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" },new { autocomplete = "off" }))
+new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" }, new { autocomplete = "off" }))
                         {
                             <div class="row form-row">
                                 <div class="col-md-6">
                                     <label class="form-label">Fecha del permiso</label>
-                                    @Html.TextBoxFor(x => x.fechaPermiso, new { @class = "form-control"})
+                                    @Html.TextBoxFor(x => x.fechaPermiso, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.fechaPermiso, "", new { @class = "error" })
                                 </div>
                             </div>
@@ -47,7 +47,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             <div class="row form-row">
                                 <div class="col-md-4">
                                     <label class="form-label">Total de horas</label>
-                                    @Html.TextBoxFor(x => x.totalHoras, new { @class = "form-control" })
+                                    @Html.TextBoxFor(x => x.totalHoras, new { @class = "form-control", @readonly = "true" })
                                     @Html.ValidationMessageFor(x => x.totalHoras, "", new { @class = "error" })
                                 </div>
                             </div>
@@ -60,7 +60,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-10">
-                                    <button class="btn btn-info btn-cons" type="submit">Iniciar sesión</button>
+                                    <button type="submit" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>&nbsp;Guardar</button>
                                 </div>
                             </div>
                         }
@@ -87,7 +87,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
-
+    
     <script src="~/Content/assets/js/Evt/evtNuevaSolPermiso.js"></script>
 }
 

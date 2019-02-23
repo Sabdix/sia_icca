@@ -5,17 +5,17 @@ $(document).ready(function () {
 
     $('#fechaPermiso').datepicker({
         startView: 1,
+        format: 'yyyy/mm/dd',
         startDate: "today",
         autoclose: true,
         todayHighlight: true
     });
 
-    $("#fechaPermiso").datepicker("setDate", new Date());
+    $("#fechaPermiso").datepicker('setDate', moment().toDate());
     //$('#fechaPermiso').val(new Date().getTime().toString());
 
     $('#horaInicio').clockpicker({
         autoclose: true,
-        twelvehour: true,
         afterDone: function () {
             //if ($('#horaInicio').val() > $('#horaFin').val())
             //    $('#horaFin').val("");
@@ -26,12 +26,12 @@ $(document).ready(function () {
     });
     $('#horaFin').clockpicker({
         autoclose: true,
-        twelvehour: true,
         afterDone: function () {
             if ($('#horaInicio').val() != "")
                 CalcularTotalHoras();
         }
     });
+    
 
 });
 
@@ -39,42 +39,51 @@ function OnSuccesRegistrarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Zona/Zonas"); }, 3000);
+        ImprimirFormatoPermiso(data.id);
+        setTimeout(function () { window.location = rootUrl("/Permiso/MisPermisos"); }, 3000);
     } else {
-        alert(data.mensaje);
+        MostrarNotificacionLoad("warning", data.mensaje, 3000);
     }
 }
 
 function CalcularTotalHoras() {
     var inicio = moment($('#horaInicio').val(), 'HH:mm');
     var fin = moment($('#horaFin').val(), 'HH:mm');
-    var s = (fin - inicio);
-    //console.log(moment.duration(fin - inicio).humanize() + ' tiempo de diferencia');
-    var secs = Math.round(s / 1000);
-    var modsecs = ((Math.round(s / 1000)) % 60); //remaining secs if not even
-    var mins = Math.round(s / 1000 / 60);
-    var modmins = ((Math.round(s / 1000 / 60)) % 60); //mins remaining if not even
-    modmins = (modmins < 9 ? "0" + modmins : modmins);
-    var modhrs = ((Math.round(s / 1000 / 60 / 60)) % 24); //mins remaining if not even
 
-    var hrs = Math.round(s / 1000 / 60 / 60);
-    if (modmins >= 30) {
-        modhrs = modhrs - 1;
-    }
-
-    var enddiff = [
-        modhrs
-    ];
-    var arr = jQuery.map(enddiff, function (modhrs) {
-        return modhrs + ":" + modmins;
-    });
-
-    if (!arr[0].includes("-")) {
-        $('#totalHoras').val(arr);
-    } else {
+    var horas = 0;
+    var minutos = 0;
+    if (moment.duration(fin.diff(inicio)).hours() < 0) {
         $('#totalHoras').val("");
+        return;
+        //horas = moment.duration(inicio.diff(fin)).hours();//moment.duration(inicio - fin).hours();
+        //minutos = moment.duration(inicio.diff(fin)).minutes();//moment.duration(inicio - fin).minutes();//.humanize();
+    } else {
+        horas = moment.duration(fin.diff(inicio)).hours();//moment.duration(fin - inicio).hours();
+        minutos = moment.duration(fin.diff(inicio)).minutes();//moment.duration(fin - inicio).minutes();//.humanize();
     }
-
     
+    $('#totalHoras').val(horas + "." + minutos);
+}
 
+function ImprimirFormatoPermiso(id) {
+    $.ajax({
+        data: {id: id },
+        url: rootUrl("/Permiso/_ImprimirFormatoPermiso"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
 }

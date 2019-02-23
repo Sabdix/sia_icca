@@ -1,4 +1,5 @@
 ﻿using IICA.Models.DAO.PVI;
+using IICA.Models.Entidades;
 using IICA.Models.Entidades.PVI;
 using System;
 using System.Collections.Generic;
@@ -31,13 +32,30 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        [HttpPost]
+        [HttpPost, SessionExpire]
         public ActionResult RegistrarSolicitud(Permiso permiso_)
         {
             try
             {
                 permisoDAO = new PermisoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                permiso_.emCveEmpleado = usuarioSesion.emCveEmpleado;
                 return Json(permisoDAO.ActualizarPermiso(permiso_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult MisPermisos()
+        {
+            try
+            {
+                permisoDAO = new PermisoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(permisoDAO.ObtenerMisPermisos(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {
@@ -45,11 +63,28 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        public ActionResult MisPermisos()
+        [HttpPost]
+        public ActionResult _ImprimirFormatoPermiso(int id)
         {
             try
             {
-                return View();
+                permisoDAO = new PermisoDAO();
+                return PartialView(permisoDAO.ObtenerFormatoSolicitud(id));
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500,ex.Message);
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult PermisosPorAutorizar()
+        {
+            try
+            {
+                permisoDAO = new PermisoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(permisoDAO.ObtenerPermisosPorAutorizar(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {
