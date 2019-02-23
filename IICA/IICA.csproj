@@ -210,6 +210,7 @@
     <Content Include="Content\assets\js\dashboard_v2.js" />
     <Content Include="Content\assets\js\datatables.js" />
     <Content Include="Content\assets\js\email_comman.js" />
+    <Content Include="Content\assets\js\Evt\evtAutSolPermiso.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolPermiso.js" />
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
@@ -476,6 +477,7 @@
     <Content Include="Views\Vacacion\MisVacaciones.cshtml" />
     <Content Include="Views\Permiso\_ImprimirFormatoPermiso.cshtml" />
     <Content Include="Views\Vacacion\_ImprimirFormatoVacacion.cshtml" />
+    <Content Include="Views\Permiso\PermisosPorAutorizar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

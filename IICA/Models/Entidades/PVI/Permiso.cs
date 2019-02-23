@@ -11,6 +11,7 @@ namespace IICA.Models.Entidades.PVI
         public Permiso()
         {
             estatusPermiso = new EstatusPermiso();
+            usuario = new Usuario();
         }
 
         public Int64 idPermiso { get; set; }
@@ -30,5 +31,8 @@ namespace IICA.Models.Entidades.PVI
         public string emCveEmpleado { get; set; }
         public string emCveEmpleadoAutoriza { get; set; }
         public DateTime fechaAutorizacion { get; set; }
+
+        /*------------------------------------------------*/
+        public Usuario usuario { get; set; }
     }
 }

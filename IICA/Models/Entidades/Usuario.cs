@@ -20,5 +20,8 @@ namespace IICA.Models.Entidades
         public string rolUsuario { get; set; }
         public string programa { get; set; }
         public string departamento { get; set; }
+        public string fechaIngreso { get; set; }
+
+        public string nombreCompleto => $"{nombre + " " + (string.IsNullOrEmpty(apellidoPaterno) ? "" : apellidoPaterno) + " " + (string.IsNullOrEmpty(apellidoMaterno) ? "" : apellidoMaterno)}";
     }
 }

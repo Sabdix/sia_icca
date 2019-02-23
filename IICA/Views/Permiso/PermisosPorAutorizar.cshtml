@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Permisos Por Autorizar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using System.Globalization;
+@using System.Web.Script.Serialization;
+@using IICA.Models.Entidades.PVI
+
+@model List<IICA.Models.Entidades.PVI.Permiso>
+
+<ul class="breadcrumb">
+    <li>
+        <p>PERMISOS</p>
+    </li>
+    <li><a href="#" class="active">Solicitudes de permisos por autorizar</a> </li>
+</ul>
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="grid simple ">
+            <div class="grid-title">
+                <h4>Lista <span class="semi-bold">de solicitudes</span></h4>
+            </div>
+            <div class="grid-body ">
+                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-solicitud-permisos">
+                    <thead>
+                        <tr>
+                            <th style="width:2%;text-align: center;">No.</th>
+                            <th style="width:15%;text-align: center;">Empleado</th>
+                            <th style="width:10%;text-align: center;">Programa</th>
+                            <th style="width:10%;text-align: center;">Departamento</th>
+                            <th style="width:10%;text-align: center;">Fecha de Alta</th>
+                            <th style="width:10%;text-align: center;">Fecha del Permiso</th>
+                            <th style="width:10%;text-align: center;">Motivo del permiso</th>
+                            <th style="width:10%;text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Permiso permiso in Model)
+                        {
+                            <tr>
+                                <td>@permiso.idPermiso</td>
+                                <td>@(permiso.usuario.nombreCompleto)</td>
+                                <td><span class="muted">@permiso.usuario.programa</span></td>
+                                <td><span>@permiso.usuario.departamento</span></td>
+                                <td><span class="muted">@permiso.fechaAlta.ToShortDateString()</span></td>
+                                <td>
+                                    <span class="muted">
+                                        @permiso.fechaPermiso.ToShortDateString()&nbsp;&nbsp;<br />
+                                        <span class="label label-info">
+                                            @(DateTime.ParseExact(permiso.horaInicio, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                                            &nbsp;&nbsp;a&nbsp;&nbsp;
+                                            @(DateTime.ParseExact(permiso.horaFin, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                                        </span>
+                                    </span>
+                                </td>
+                                <td><span class="muted">@permiso.motivoPermiso</span></td>
+                                <td>
+                                    <span data-toggle="modal" data-target="#modal-autorizar" onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(permiso)))">
+                                        <button data-toggle="tooltip" title="Autorizar" class="btn btn-info btn-mini">
+                                            <i class="fa fa-check-square-o"></i>
+                                        </button>
+                                    </span>
+                                    <span data-toggle="modal" data-target="#myModal">
+                                        <button data-toggle="tooltip" title="Cancelar" class="btn btn-warning btn-mini">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-autorizar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br>
+                <i class="fa fa-question-circle fa-7x"></i>
+                <h4 id="myModalLabel" class="semi-bold">Realmente desea autiorizar la siguiente solicitud.</h4>
+                <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
+                <br>
+            </div>
+            <div class="modal-body">
+                <div class="row form-row">
+                    <div class="col-md-8">
+                        <label class="form-label">Nombre:</label>
+                        <input id="modal-aut-nombre" type="text" class="form-control" placeholder="Nombre">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Programa:</label>
+                        <input id="modal-aut-programa" type="text" class="form-control" placeholder="Programa">
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <label class="form-label">Motivo del permiso:</label>
+                        <input id="modal-aut-motivo" type="text" class="form-control" placeholder="Motivo del permiso">
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-6">
+                        <label class="form-label">Hora de inicio:</label>
+                        <input id="modal-aut-horaIni" type="text" class="form-control" placeholder="Hora de inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Hora de fin:</label>
+                        <input id="modal-aut-horaFin" type="text" class="form-control" placeholder="Hora de fin">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Autorizar</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@section scripts{
+    <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/extra/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
+    <script src="~/Content/assets/js/datatables.js"></script>
+
+    <script src="~/Content/assets/js/Evt/evtAutSolPermiso.js"></script>
+}
+

@@ -76,5 +76,20 @@ namespace IICA.Controllers.PVI
                 return new HttpStatusCodeResult(500,ex.Message);
             }
         }
+
+        [SessionExpire]
+        public ActionResult PermisosPorAutorizar()
+        {
+            try
+            {
+                permisoDAO = new PermisoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(permisoDAO.ObtenerPermisosPorAutorizar(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
