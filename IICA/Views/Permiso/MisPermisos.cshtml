@@ -5,6 +5,7 @@
 }
 @using System.Globalization;
 @using IICA.Models.Entidades.PVI
+@using IICA.Models.Entidades
 
 @model List<IICA.Models.Entidades.PVI.Permiso>
 
@@ -43,8 +44,23 @@
                     <tbody>
                         @foreach (Permiso permiso in Model)
                         {
-
-                            string labelEstatus = (permiso.estatusPermiso.idEstatusPermiso == 1 ? "success" : "important");
+                            string labelEstatus;
+                            switch ((EstatusSolicitud)permiso.estatusPermiso.idEstatusPermiso)
+                            {
+                                case EstatusSolicitud.SOLICITUD_ENVIADA:
+                                case EstatusSolicitud.SOLICITUD_APROBADA:
+                                    labelEstatus = "success";
+                                    break;
+                                case EstatusSolicitud.SOLICITUD_CANCELADA:
+                                    labelEstatus = "important";
+                                    break;
+                                case EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR:
+                                    labelEstatus = "info";
+                                    break;
+                                default:
+                                    labelEstatus = "success";
+                                    break;
+                            }
                             <tr>
                                 <td>@permiso.idPermiso</td>
                                 <td>@permiso.motivoPermiso</td>

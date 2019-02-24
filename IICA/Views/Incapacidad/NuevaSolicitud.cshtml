@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-8 col-md-8">
                         @using (Ajax.BeginForm("RegistrarSolicitud", "Incapacidad",
-new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" }, new { autocomplete = "off" }))
+new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" }, new { autocomplete = "off", id = "form-nuevaSol" }))
                         {
                             <div class="row form-row">
                                 <div class="col-md-6">
@@ -44,13 +44,13 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                                     @Html.ValidationMessageFor(x => x.fechaFin, "", new { @class = "error" })
                                 </div>
                             </div>
-                       
+
                             <div class="row form-row">
                                 <div class="col-md-5">
                                     <label class="form-label">Tipo de incapacidad:</label>
-                                        @Html.DropDownListFor(x=> x.tipoIncapacidad.Id_Tipo_Incapacidad, (IEnumerable<SelectListItem>)ViewBag.TiposIncapacidad, "SELECCIONE TIPO DE INCAPACIDAD",
-                                new { @class = "select required"})
-                                        @Html.ValidationMessageFor(x => x.tipoIncapacidad.Id_Tipo_Incapacidad, "SELECCIONE TIPO DE INCAPACIDAD", new { @class = "error" })
+                                    @Html.DropDownListFor(x=> x.tipoIncapacidad.Id_Tipo_Incapacidad, (IEnumerable<SelectListItem>)ViewBag.TiposIncapacidad, "SELECCIONE TIPO DE INCAPACIDAD",
+                            new { @class = "select required"})
+                                    @Html.ValidationMessageFor(x => x.tipoIncapacidad.Id_Tipo_Incapacidad, "SELECCIONE TIPO DE INCAPACIDAD", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">
@@ -70,7 +70,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-10">
-                                    <button type="submit" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>Guardar</button>
+                                    <button type="button" id="btn-guardar-sol" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>Guardar</button>
                                 </div>
                             </div>
                         }
@@ -94,6 +94,9 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <link href="~/Content/assets/plugins/sweet-alert/sweetalert.min.css" rel="stylesheet" />
+    <script src="~/Content/assets/plugins/sweet-alert/sweetalert.min.js"></script>
 
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
     <script src="~/Content/assets/js/Evt/evtNuevaSolIncapacidad.js"></script>

@@ -215,6 +215,7 @@
     <Content Include="Content\assets\js\dashboard_v2.js" />
     <Content Include="Content\assets\js\datatables.js" />
     <Content Include="Content\assets\js\email_comman.js" />
+    <Content Include="Content\assets\js\Evt\evtAutSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtAutSolPermiso.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolVacacion.js" />
@@ -398,6 +399,8 @@
     <Content Include="Content\assets\plugins\shape-hover\fonts\codropsicons\codropsicons.svg" />
     <Content Include="Content\assets\plugins\shape-hover\js\snap.svg-min.js" />
     <Content Include="Content\assets\plugins\skycons\skycons.js" />
+    <Content Include="Content\assets\plugins\sweet-alert\sweetalert.min.css" />
+    <Content Include="Content\assets\plugins\sweet-alert\sweetalert.min.js" />
     <Content Include="Content\webarch\css\%40{base-img-url}\icon\portlet-tray.html" />
     <Content Include="Content\webarch\css\img\icon\portlet-tray.html" />
     <Content Include="Content\webarch\css\img\notification-alert.html" />
@@ -486,6 +489,7 @@
     <Content Include="Views\Permiso\PermisosPorAutorizar.cshtml" />
     <Content Include="Views\Incapacidad\NuevaSolicitud.cshtml" />
     <Content Include="Views\Incapacidad\MisIncapacidades.cshtml" />
+    <Content Include="Views\Vacacion\VacacionesPorAutorizar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

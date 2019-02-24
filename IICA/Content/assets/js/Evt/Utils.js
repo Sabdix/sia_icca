@@ -25,6 +25,5 @@ function MostrarNotificacionLoad(tipoNotificacion, mensaje, tiempo) {
         message: mensaje,
         type: tipoNotificacion,
         showCloseButton: true,
-        extraClasses: 'messenger-fixed messenger-on-top'
     });
 }

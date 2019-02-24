@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
 
-    $('#tabla-solicitud-permisos').dataTable();
+    $('#tabla-solicitud-vacaciones').dataTable();
 
 });
 
@@ -10,15 +10,15 @@ $(document).ready(function () {
 /*=====================================     CANCELACION DE SOLICITUD    ====================================*/
 /*==========================================================================================================*/
 
-function MostrarModalAutSol(permiso) {
-    solSeleccionada = permiso;
-    ObtenerFechasJsonSolSeleccionada(permiso);
+function MostrarModalAutSol(vacacion) {
+    solSeleccionada = vacacion;
+    ObtenerFechasJsonSolSeleccionada(vacacion);
 
-    $("#modal-aut-nombre").val(permiso.usuario.nombreCompleto);
-    $("#modal-aut-programa").val(permiso.usuario.programa);
-    $("#modal-aut-motivo").val(permiso.motivoPermiso);
-    $("#modal-aut-horaIni").val(permiso.horaInicio + " hrs.");
-    $("#modal-aut-horaFin").val(permiso.horaFin + " hrs.");
+    $("#modal-aut-nombre").val(vacacion.usuario.nombreCompleto);
+    $("#modal-aut-programa").val(vacacion.usuario.programa);
+    $("#modal-aut-motivo").val(vacacion.motivoVacaciones);
+    $("#modal-aut-fechaIni").val(vacacion.fechaInicio);
+    $("#modal-aut-fechaFin").val(vacacion.fechaFin);
 }
 
 function AutorizarSol() {
@@ -27,8 +27,8 @@ function AutorizarSol() {
         return;
     }
     $.ajax({
-        data: { permiso_: solSeleccionada },
-        url: rootUrl("/Permiso/AutorizarPermiso"),
+        data: { vacacion_: solSeleccionada },
+        url: rootUrl("/Vacacion/Autorizarvacacion"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
@@ -48,24 +48,25 @@ function OnSuccesAutorizarSol(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Permiso/PermisosPorAutorizar"); }, 2000);
+        setTimeout(function () { window.location = rootUrl("/Vacacion/VacacionesPorAutorizar"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
 }
+
 /*==========================================================================================================*/
 /*=====================================     CANCELACION DE SOLICITUD    ====================================*/
 /*==========================================================================================================*/
 
-function MostrarModalCanSol(permiso) {
-    solSeleccionada = permiso;
-    ObtenerFechasJsonSolSeleccionada(permiso);
+function MostrarModalCanSol(vacacion) {
+    solSeleccionada = vacacion;
+    ObtenerFechasJsonSolSeleccionada(vacacion);
 
-    $("#modal-can-nombre").val(permiso.usuario.nombreCompleto);
-    $("#modal-can-programa").val(permiso.usuario.programa);
-    $("#modal-can-motivo").val(permiso.motivoPermiso);
-    $("#modal-can-horaIni").val(permiso.horaInicio + " hrs.");
-    $("#modal-can-horaFin").val(permiso.horaFin + " hrs.");
+    $("#modal-can-nombre").val(vacacion.usuario.nombreCompleto);
+    $("#modal-can-programa").val(vacacion.usuario.programa);
+    $("#modal-can-motivo").val(vacacion.motivoVacaciones);
+    $("#modal-can-fechaIni").val(vacacion.fechaInicio);
+    $("#modal-can-fechaFin").val(vacacion.fechaFin);
 }
 
 function CancelarSol() {
@@ -83,8 +84,8 @@ function CancelarSol() {
     }
 
     $.ajax({
-        data: { permiso_: solSeleccionada },
-        url: rootUrl("/Permiso/CancelarPermiso"),
+        data: { vacacion_: solSeleccionada },
+        url: rootUrl("/vacacion/Cancelarvacacion"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
@@ -104,7 +105,7 @@ function OnSuccesCancelarSol(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Permiso/PermisosPorAutorizar"); }, 2000);
+        setTimeout(function () { window.location = rootUrl("/Vacacion/VacacionesPorAutorizar"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
@@ -114,13 +115,13 @@ function OnSuccesCancelarSol(data) {
 /*======================================       FUNCIONES GENERALES     =====================================*/
 /*==========================================================================================================*/
 
-function ObtenerFechasJsonSolSeleccionada(permiso) {
-    var fechaPermiso = convertDate(new Date(parseInt(permiso.fechaPermiso.substr(6))));
-    var fechaAlta = convertDate(new Date(parseInt(permiso.fechaAlta.substr(6))));
-    var fechaAutorizacion = convertDate(new Date(parseInt(permiso.fechaAutorizacion.substr(6))));
-    solSeleccionada.fechaPermiso = fechaPermiso;
-    solSeleccionada.fechaAlta = fechaAlta;
-    solSeleccionada.fechaAutorizacion = fechaAutorizacion;
+function ObtenerFechasJsonSolSeleccionada(vacacion) {
+    var fechaSolicitud = convertDate(new Date(parseInt(vacacion.fechaSolicitud.substr(6))));
+    var fechaInicio = convertDate(new Date(parseInt(vacacion.fechaInicio.substr(6))));
+    var fechaFin = convertDate(new Date(parseInt(vacacion.fechaFin.substr(6))));
+    solSeleccionada.fechaSolicitud = fechaSolicitud;
+    solSeleccionada.fechaInicio = fechaInicio;
+    solSeleccionada.fechaFin = fechaFin;
 }
 
 function convertDate(inputFormat) {
