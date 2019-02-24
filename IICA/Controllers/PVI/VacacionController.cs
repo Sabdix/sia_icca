@@ -15,6 +15,7 @@ namespace IICA.Controllers.PVI
         VacacionDAO vacacionDAO;
 
         // GET: Vacacion
+        [SessionExpire]
         public ActionResult NuevaSolicitud()
         {
             try
@@ -66,6 +67,55 @@ namespace IICA.Controllers.PVI
             {
                 vacacionDAO = new VacacionDAO();
                 return PartialView(vacacionDAO.ObtenerFormatoVacacion(id));
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult VacacionesPorAutorizar()
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(vacacionDAO.ObtenerVacacionesPorAutorizar(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult AutorizarVacacion(Vacacion vacacion_)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                vacacion_.emCveEmpleadoAutoriza = usuarioSesion.emCveEmpleado;
+                vacacion_.estatusVacacion.idEstatusVacacion = (int)EstatusSolicitud.SOLICITUD_APROBADA;
+                return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CancelarVacacion(Vacacion vacacion_)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                vacacion_.emCveEmpleadoAutoriza = usuarioSesion.emCveEmpleado;
+                vacacion_.estatusVacacion.idEstatusVacacion = (int)EstatusSolicitud.SOLICITUD_CANCELADA;
+                return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

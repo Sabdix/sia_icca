@@ -13,6 +13,7 @@ namespace IICA.Controllers.PVI
     {
         IncapacidadDAO incapacidadDAO;
         // GET: Incapacidad
+        [SessionExpire]
         public ActionResult NuevaSolicitud()
         {
             incapacidadDAO = new IncapacidadDAO();

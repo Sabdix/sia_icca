@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Permisos Por Autorizar";
+    ViewBag.Title = "VacacionesPorAutorizar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,13 +9,13 @@
 @using System.Web.Script.Serialization;
 @using IICA.Models.Entidades.PVI
 
-@model List<IICA.Models.Entidades.PVI.Permiso>
+@model List<IICA.Models.Entidades.PVI.Vacacion>
 
 <ul class="breadcrumb">
     <li>
-        <p>PERMISOS</p>
+        <p>VACACIONES</p>
     </li>
-    <li><a href="#" class="active">Solicitudes de permisos por autorizar</a> </li>
+    <li><a href="#" class="active">Solicitudes de vacaciones por autorizar</a> </li>
 </ul>
 
 <div class="row-fluid">
@@ -33,38 +33,37 @@
                             <th style="width:10%;text-align: center;">Programa</th>
                             <th style="width:10%;text-align: center;">Departamento</th>
                             <th style="width:10%;text-align: center;">Fecha de Alta</th>
-                            <th style="width:10%;text-align: center;">Fecha del Permiso</th>
-                            <th style="width:10%;text-align: center;">Motivo del permiso</th>
+                            <th style="width:10%;text-align: center;">Periodo de las vacaciones</th>
+                            <th style="width:10%;text-align: center;">Motivo de las vacaciones</th>
                             <th style="width:10%;text-align: center;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (Permiso permiso in Model)
+                        @foreach (Vacacion vacacion in Model)
                         {
                             <tr>
-                                <td>@permiso.idPermiso</td>
-                                <td>@(permiso.usuario.nombreCompleto)</td>
-                                <td><span class="muted">@permiso.usuario.programa</span></td>
-                                <td><span>@permiso.usuario.departamento</span></td>
-                                <td><span class="muted">@permiso.fechaAlta.ToShortDateString()</span></td>
+                                <td>@vacacion.idVacacion</td>
+                                <td>@(vacacion.usuario.nombreCompleto)</td>
+                                <td><span class="muted">@vacacion.usuario.programa</span></td>
+                                <td><span>@vacacion.usuario.departamento</span></td>
+                                <td><span class="muted">@vacacion.fechaSolicitud.ToShortDateString()</span></td>
                                 <td>
                                     <span class="muted">
-                                        @permiso.fechaPermiso.ToShortDateString()&nbsp;&nbsp;<br />
                                         <span class="label label-info">
-                                            @(DateTime.ParseExact(permiso.horaInicio, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
-                                            &nbsp;&nbsp;a&nbsp;&nbsp;
-                                            @(DateTime.ParseExact(permiso.horaFin, "HH:mm", CultureInfo.InvariantCulture).ToString("HH:mm tt"))
+                                            @vacacion.fechaInicio.ToShortDateString()
+                                            &nbsp;&nbsp;al día&nbsp;&nbsp;
+                                            @vacacion.fechaFin.ToShortDateString()
                                         </span>
                                     </span>
                                 </td>
-                                <td><span class="muted">@permiso.motivoPermiso</span></td>
+                                <td><span class="muted">@vacacion.motivoVacaciones</span></td>
                                 <td>
-                                    <span data-toggle="modal" data-target="#modal-autorizar" onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(permiso)))">
+                                    <span data-toggle="modal" data-target="#modal-autorizar" onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(vacacion)))">
                                         <button data-toggle="tooltip" title="Autorizar" class="btn btn-info btn-mini">
                                             <i class="fa fa-check-square-o"></i>
                                         </button>
                                     </span>
-                                    <span data-toggle="modal" data-target="#modal-cancelar" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(permiso)))">
+                                    <span data-toggle="modal" data-target="#modal-cancelar" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(vacacion)))">
                                         <button data-toggle="tooltip" title="Cancelar" class="btn btn-warning btn-mini">
                                             <i class="fa fa-close"></i>
                                         </button>
@@ -103,18 +102,18 @@
                 </div>
                 <div class="row form-row">
                     <div class="col-md-12">
-                        <label class="form-label">Motivo del permiso:</label>
-                        <input id="modal-aut-motivo" type="text" class="form-control" placeholder="Motivo del permiso" readonly>
+                        <label class="form-label">Motivo de las vacaciones:</label>
+                        <input id="modal-aut-motivo" type="text" class="form-control" placeholder="Motivo de las vacaciones" readonly>
                     </div>
                 </div>
                 <div class="row form-row">
                     <div class="col-md-6">
-                        <label class="form-label">Hora de inicio:</label>
-                        <input id="modal-aut-horaIni" type="text" class="form-control" placeholder="Hora de inicio" readonly>
+                        <label class="form-label">Fecha de inicio:</label>
+                        <input id="modal-aut-fechaIni" type="text" class="form-control" placeholder="Fecha de inicio" readonly>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Hora de fin:</label>
-                        <input id="modal-aut-horaFin" type="text" class="form-control" placeholder="Hora de fin" readonly>
+                        <label class="form-label">Fecha de termino de vacaciones:</label>
+                        <input id="modal-aut-fechaFin" type="text" class="form-control" placeholder="Fecha de termino de vacaciones" readonly>
                     </div>
                 </div>
             </div>
@@ -152,27 +151,27 @@
                 </div>
                 <div class="row form-row">
                     <div class="col-md-12">
-                        <label class="form-label">Motivo del permiso:</label>
-                        <input id="modal-can-motivo" type="text" class="form-control" placeholder="Motivo del permiso" readonly>
+                        <label class="form-label">Motivo de las vacaciones:</label>
+                        <input id="modal-can-motivo" type="text" class="form-control" placeholder="Motivo de las vacaciones" readonly>
                     </div>
                 </div>
                 <div class="row form-row">
                     <div class="col-md-6">
-                        <label class="form-label">Hora de inicio:</label>
-                        <input id="modal-can-horaIni" type="text" class="form-control" placeholder="Hora de inicio" readonly>
+                        <label class="form-label">Fecha de inicio:</label>
+                        <input id="modal-can-fechaIni" type="text" class="form-control" placeholder="Fecha de inicio" readonly>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Hora de fin:</label>
-                        <input id="modal-can-horaFin" type="text" class="form-control" placeholder="Hora de fin" readonly>
+                        <label class="form-label">Fecha de termino de vacaciones:</label>
+                        <input id="modal-can-fechaFin" type="text" class="form-control" placeholder="Fecha de termino de vacaciones" readonly>
                     </div>
                 </div>
-                    <div class="row form-row">
-                        <div class="col-md-12">
-                            <label class="form-label">Motivo del rechazo:</label>
-                            <textarea id="modal-can-motivoRechazo" type="text" class="form-control" placeholder="Motivo del rechazo" required> </textarea>
-                            <span class="error" id="error-motivoRechazo" style="display:none">Es necesario capturar el motivo del rechazo (por lo menos 10 caracteres)</span>
-                        </div>
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <label class="form-label">Motivo del rechazo:</label>
+                        <textarea id="modal-can-motivoRechazo" type="text" class="form-control" placeholder="Motivo del rechazo" required> </textarea>
+                        <span class="error" id="error-motivoRechazo" style="display:none">Es necesario capturar el motivo del rechazo (por lo menos 10 caracteres)</span>
                     </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -196,6 +195,6 @@
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <script src="~/Content/assets/js/datatables.js"></script>
 
-    <script src="~/Content/assets/js/Evt/evtAutSolPermiso.js"></script>
+    <script src="~/Content/assets/js/Evt/evtAutSolVacacion.js"></script>
 }
 

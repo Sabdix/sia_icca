@@ -5,6 +5,7 @@
 }
 @using System.Globalization;
 @using IICA.Models.Entidades.PVI
+@using IICA.Models.Entidades
 
 @model List<IICA.Models.Entidades.PVI.Vacacion>
 
@@ -28,7 +29,7 @@
                 </div>
             </div>
             <div class="grid-body ">
-                <table class="table table-hover table-condensed" style="text-align: center;" id="example">
+                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-mis-vacaciones">
                     <thead>
                         <tr>
                             <th style="width:2%;text-align: center;">No.</th>
@@ -44,14 +45,29 @@
                     <tbody>
                         @foreach (Vacacion vacacion in Model)
                         {
-
-                            string labelEstatus = (vacacion.estatusVacacion.idEstatusVacacion == 1 ? "success" : "important");
+                            string labelEstatus;
+                            switch ((EstatusSolicitud)vacacion.estatusVacacion.idEstatusVacacion)
+                            {
+                                case EstatusSolicitud.SOLICITUD_ENVIADA:
+                                case EstatusSolicitud.SOLICITUD_APROBADA:
+                                    labelEstatus = "success";
+                                    break;
+                                case EstatusSolicitud.SOLICITUD_CANCELADA:
+                                    labelEstatus = "important";
+                                    break;
+                                case EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR:
+                                    labelEstatus = "info";
+                                    break;
+                                default:
+                                    labelEstatus = "success";
+                                    break;
+                            }
                             <tr>
                                 <td>@vacacion.idVacacion</td>
                                 <td>@vacacion.motivoVacaciones</td>
                                 <td>
                                     <span class="muted">
-                                        @(vacacion.fechaInicio==DateTime.MinValue ? "N/A": vacacion.fechaInicio.ToShortDateString())
+                                        @(vacacion.fechaInicio == DateTime.MinValue ? "N/A" : vacacion.fechaInicio.ToShortDateString())
                                     </span>
                                 </td>
                                 <td>
@@ -71,3 +87,23 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/extra/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
+    <script src="~/Content/assets/js/datatables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tabla-mis-vacaciones').dataTable()
+        });
+
+    </script>
+
+}

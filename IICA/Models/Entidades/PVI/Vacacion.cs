@@ -11,6 +11,7 @@ namespace IICA.Models.Entidades.PVI
         public Vacacion()
         {
             estatusVacacion = new EstatusVacacion();
+            usuario = new Usuario();
         }
         public Int64 idVacacion { get; set; }
         public int periodoAnterior { get; set; }
@@ -25,13 +26,15 @@ namespace IICA.Models.Entidades.PVI
         public int totalDias { get; set; }
         [Required(ErrorMessage = "Es necesario capturar el motivo de las vacaciones")]
         public string motivoVacaciones { get; set; }
-        public int idStatusSolicitud { get; set; }
         [Required(ErrorMessage = "Es necesario capturar el motivo de rechazo del permiso")]
         public string motivoRechazo { get; set; }
         public string emCveEmpleado { get; set; }
         public string emCveEmpleadoAutoriza { get; set; }
         public DateTime fechaAutorizacion { get; set; }
-
+        public string reanudarLabores { get; set; }
         public EstatusVacacion estatusVacacion { get; set; }
+
+        /*------------------------------------------------*/
+        public Usuario usuario { get; set; }
     }
 }
