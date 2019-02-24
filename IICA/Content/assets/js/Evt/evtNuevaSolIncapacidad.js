@@ -2,18 +2,11 @@
 
 $(document).ready(function () {
 
-    $(".select").select2();
+    $(".select-iica").select2();
+    
 
     /*---------------------------------------------------------------------*/
-    $("#fechaSolicitud").datepicker({
-        startView: 1,
-        format: 'yyyy/mm/dd',
-        startDate: "today",
-        autoclose: true,
-        todayHighlight: true
-    });
-
-    $("#fechaSolicitud").datepicker("setDate", new Date());
+    $("#fechaSolicitud").val(moment().format("YYYY/MM/DD"));
     /*---------------------------------------------------------------------*/
 
     $("#fechaFin").datepicker({
@@ -23,7 +16,7 @@ $(document).ready(function () {
         autoclose: true,
         todayHighlight: true
     }).on('changeDate', function (e) {
-        if ($('#fechaFin').val() != "")
+        if ($('#fechaFin').val() !== "")
             CalcularTotalDias();
     });
 
@@ -43,13 +36,15 @@ $(document).ready(function () {
     });
 
     $("#fechaInicio").datepicker('setDate', moment().toDate());
-    $("#fechaFin").datepicker('setDate', moment().toDate());
+    $("#fechaFin").datepicker('setDate', moment().add('days', 1).toDate());
 
     $("#btn-guardar-sol").click(function (e) {
         if ($("#form-nuevaSol").valid()) {
             ConfirmarEnviarSolicitud();
         }
     });
+
+    CalcularTotalDias();
 
 });
 
@@ -81,6 +76,7 @@ function OnSuccesRegistrarSolicitud(data) {
         setTimeout(function () { window.location = rootUrl("/Incapacidad/MisIncapacidades"); }, 3000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
+    }
 }
 
 function CalcularTotalDias() {
