@@ -2,36 +2,123 @@
 USE IICA_COMPRAS
 GO
 
-CREATE INDEX IDX_IICA_COMPRAS_SUCURSAL
-ON Sucursal (Sc_Cve_Sucursal);
-GO
-
-
-CREATE INDEX IDX_IICA_COMPRAS_DEPARTAMENTO
-ON Departamento (Dp_Cve_Departamento);
-GO
-
-
--- Borramos el Trigger si existise
-IF OBJECT_ID ('AgregaAutorizadorPVITrigger', 'TR') IS NOT NULL
+IF NOT EXISTS( SELECT * FROM sys.indexes WHERE name='IDX_IICA_COMPRAS_SUCURSAL' AND object_id = OBJECT_ID('Schema.Sucursal'))
 BEGIN
-   DROP TRIGGER AgregaAutorizadorPVITrigger;
-END;
- 
-GO -- Necesario
+	CREATE INDEX IDX_IICA_COMPRAS_SUCURSAL
+	ON Sucursal (Sc_Cve_Sucursal);
+END
+GO
+
+IF NOT EXISTS( SELECT * FROM sys.indexes WHERE name='IDX_IICA_COMPRAS_DEPARTAMENTO' AND object_id = OBJECT_ID('Schema.Departamento'))
+BEGIN
+	CREATE INDEX IDX_IICA_COMPRAS_DEPARTAMENTO
+	ON Departamento (Dp_Cve_Departamento);
+END
+GO
+
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'AgregaAutorizadorPVITrigger'))
+	DROP TRIGGER AgregaAutorizadorPVITrigger
+GO
+GO
  
 -- Cremamos un Trigger sobre la tabla Viaticos_Autorizadores
 CREATE TRIGGER AgregaAutorizadorPVITrigger
 ON Viaticos_Autorizadores
  AFTER INSERT AS 
-	--Por terminar
-	--INSERT INTO expStatusHistory  (code, state) (SELECT code, state FROM deleted WHERE code=deleted.code);
+	
+	DECLARE
+		@Id_Ultimo_Autorizador VARCHAR(100),
+		@Em_Cve_Empleado_Ultimo_Autorizador VARCHAR(100),
+		@Proyecto_Ultimo_Autorizador VARCHAR(20)
+		
+	SELECT
+		@Id_Ultimo_Autorizador=aut_id,
+		@Em_Cve_Empleado_Ultimo_Autorizador=Em_Cve_Empleado,
+		@Proyecto_Ultimo_Autorizador=aut_proyecto
+	FROM Viaticos_Autorizadores
+	WHERE aut_id=(SELECT MAX(aut_id) FROM Viaticos_Autorizadores)
+	
+	IF NOT EXISTS(SELECT 1 FROM Viaticos_Autorizadores WHERE Em_Cve_Empleado=@Em_Cve_Empleado_Ultimo_Autorizador and aut_proyecto=@Proyecto_Ultimo_Autorizador and aut_nivel='D')
+	BEGIN
+		INSERT
+			INTO Viaticos_Autorizadores 
+					(
+					aut_id,
+					aut_nombre,
+					aut_username,
+					aut_correo,
+					aut_proyecto,
+					aut_nivel,
+					Es_Cve_Estado,
+					Em_Cve_Empleado,
+					Em_UserDef_1,
+					Em_UserDef_2
+				)
+			SELECT 
+				RIGHT('00000' + Ltrim(Rtrim(1+CONVERT(INT,@Id_Ultimo_Autorizador))),7),--Nuevo Id
+				aut_nombre,
+				aut_username,
+				aut_correo,
+				aut_proyecto,
+				'D',
+				Es_Cve_Estado,
+				Em_Cve_Empleado,
+				Em_UserDef_1,
+				Em_UserDef_2
+			FROM
+				Viaticos_Autorizadores
+			WHERE
+				aut_id=@Id_Ultimo_Autorizador
+	END
 
  GO
 
-
 USE IICA_1
 GO
+
+/****** Object:  UserDefinedFunction [dbo].[FN_DSI_DIFERENCIA_FECHAS]    Script Date: 23/02/2019 05:02:46 p. m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*
+
+AUTOR			CHRISTIAN PEÑA ROMERO
+OBJETIVO		OBTENER LA DIFERENCIA EN DIAS, MESES Y AÑOS ENTRE 2 FECHAS
+
+*/
+
+IF EXISTS (SELECT * FROM   sys.objects WHERE  object_id = OBJECT_ID(N'[dbo].[foo]') AND type IN ( N'FN', N'IF', N'TF', N'FS', N'FT' ))
+  DROP FUNCTION [dbo].[foo]
+GO 
+
+
+CREATE FUNCTION [dbo].[FN_DSI_DIFERENCIA_FECHAS](@FECHA_INICIAL AS DATETIME, @FECHA_FIN AS DATETIME) RETURNS @CALCULO TABLE(ANIOS INT, MESES INT, DIAS INT)
+AS
+BEGIN
+	DECLARE @AÑOS INT, @MESES INT, @DIAS INT
+	SET @años = datediff(yy, @FECHA_INICIAL, @FECHA_FIN)
+	if dateadd(yy, @años, @FECHA_INICIAL) > @FECHA_FIN 
+		set @años = @años - 1 
+
+	set @FECHA_INICIAL = dateadd(yy, @años, @FECHA_INICIAL) 
+	set @meses = datediff(mm, @FECHA_INICIAL, @FECHA_FIN) 
+	if dateadd(mm, @meses, @FECHA_INICIAL) > @FECHA_FIN 
+		set @meses = @meses - 1 
+
+	set @FECHA_INICIAL = dateadd(mm, @meses, @FECHA_INICIAL) 
+	set @dias = datediff(dd, @FECHA_INICIAL, @FECHA_FIN) 
+	set @FECHA_INICIAL = dateadd(dd, @dias, @FECHA_INICIAL)
+
+	INSERT INTO @CALCULO VALUES(@AÑOS,@MESES,@DIAS)
+
+	RETURN
+END
+GO
+
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE 'DT_CAT_STATUS_SOLICITUD')
 BEGIN
@@ -116,7 +203,8 @@ CREATE PROCEDURE DT_SP_ACTUALIZAR_PERMISO
 		@Motivo_Permiso VARCHAR(1000)=NULL,
 		@Id_Status_Solicitud INT=NULL,
 		@Motivo_Rechazo VARCHAR(1000)=NULL,
-		@Em_Cve_Empleado varchar(100)=NULL
+		@Em_Cve_Empleado varchar(100)=NULL,
+		@Em_Cve_Empleado_Autoriza varchar(100)=NULL
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -127,8 +215,7 @@ BEGIN
 	DECLARE 
 		@status int=0,
 		@mensaje varchar(250)='',
-		@proyecto_empleado varchar (10),
-		@Em_Cve_Empleado_Autoriza varchar (100)
+		@proyecto_empleado varchar (10)
 
 
 	IF(@Id_Permiso is null or @Id_Permiso=0)
@@ -193,7 +280,7 @@ BEGIN
 				GOTO EXIT_
 			END
 
-			SELECT @Id_Permiso=MAX(Id_Status_Solicitud)
+			SELECT @Id_Permiso=MAX(Id_Permiso)
 			FROM DT_TBL_PERMISO
 			WHERE Em_Cve_Empleado=@Em_Cve_Empleado
 
@@ -208,7 +295,8 @@ BEGIN
 		UPDATE DT_TBL_PERMISO
 		SET Id_Status_Solicitud=@Id_Status_Solicitud,
 		Fecha_Actualizacion=GETDATE(),
-		Motivo_Rechazo=@Motivo_Rechazo
+		Motivo_Rechazo=@Motivo_Rechazo,
+		Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
 		WHERE Id_Permiso=@Id_Permiso
 
 		IF @@ERROR<>0
@@ -277,6 +365,7 @@ BEGIN
 		d.Hora_Inicio,
 		d.Hora_Fin,
 		d.Total_Horas,
+		d.Hora_Fin Hora_Raunuda_Labores,
 		d.Motivo_Permiso
 	from Empleado a
 	left join IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
@@ -291,6 +380,164 @@ GO
 GRANT EXECUTE ON DT_SP_OBTENER_INFORMACION_FORMATO_PERMISO TO public;  
 
 --=========================
+--SALDOS VACACIONALES
+--========================
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE 'DT_CAT_DIAS_VACACIONES')
+BEGIN
+	DROP TABLE DT_CAT_DIAS_VACACIONES
+END
+GO
+
+CREATE TABLE DT_CAT_DIAS_VACACIONES
+(
+	Id_Dias_Vacaciones INT IDENTITY (1,1),
+	Dias_Vacaciones INT,
+	Anios INT
+)
+GO
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (0,0)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (8,1)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (10,2)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (12,3)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (14,4)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (16,5)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (16,6)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (17,7)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (17,8)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,9)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,10)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,11)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,12)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,13)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,14)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,15)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,16)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,17)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,18)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,19)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,20)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,21)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,22)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,23)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,24)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,25)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,26)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,27)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,28)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,29)
+INSERT INTO DT_CAT_DIAS_VACACIONES (Dias_Vacaciones,Anios) VALUES (18,30)
+GO
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE 'DT_TBL_PERIODO_VACACIONAL_EMPLEADO')
+BEGIN
+	DROP TABLE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+END
+GO
+
+CREATE TABLE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+(
+	Contador INT IDENTITY (1,1),
+	Em_Cve_Empleado VARCHAR(100),
+	Anios INT,
+	Fecha_Inicio_Periodo DATETIME,
+	Fecha_Fin_Periodo DATETIME,
+	Saldo_Anterior INT,
+	Saldo_Actual INT,
+	Saldo_Correspondiente INT,
+	Fecha_Actualizacion DATETIME,
+	Activo INT
+)
+GO
+--Se llena por unica ocación la tabla
+
+
+DECLARE
+	@Anios int,
+	@Hoy varchar(50),
+	@Contador int=1,
+	@Tope int,
+	@Id_Temp int,
+	@Fecha_Ingreso DATETIME
+
+SET @Hoy=CONVERT(VARCHAR,GETDATE())
+
+CREATE TABLE #TASK1
+(
+	Id_Temp int,
+	Em_Cve_Empleado VARCHAR(100),
+	Em_Fecha_Ingreso DATETIME,
+	Anios INT
+)
+
+INSERT 
+	INTO #TASK1 (Id_Temp,Em_Cve_Empleado,Em_Fecha_Ingreso)
+	SELECT
+		convert(int,Em_Cve_Empleado) id_temp,
+		Em_Cve_Empleado,
+		Em_Fecha_Ingreso
+	FROM Empleado
+
+SELECT @Tope=COUNT(*) FROM Empleado
+
+WHILE @Contador<=@Tope
+begin
+	
+	SELECT
+		@Fecha_Ingreso=Em_Fecha_Ingreso
+	FROM #TASK1
+	WHERE id_temp=@Contador
+	
+	SELECT
+		@Anios=ANIOS
+	FROM FN_DSI_DIFERENCIA_FECHAS (@Fecha_Ingreso,@Hoy)
+
+	UPDATE #TASK1
+	SET Anios=@Anios
+	WHERE id_temp=@Contador
+
+	SET @Contador=@Contador+1
+
+end
+
+SELECT *
+FROM #TASK1
+
+INSERT 
+	INTO DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+	(
+	Em_Cve_Empleado,
+	Anios,
+	Fecha_Inicio_Periodo,
+	Fecha_Fin_Periodo,
+	Saldo_Anterior,
+	Saldo_Actual,
+	Saldo_Correspondiente,
+	Fecha_Actualizacion,
+	Activo
+	)
+SELECT
+	b.Em_Cve_Empleado,
+	c.Anios,
+	DATEADD(yy,a.Anios,b.Em_Fecha_Ingreso) Fecha_Inicio_Periodo,
+	DATEADD(yy,a.Anios+1,b.Em_Fecha_Ingreso) Fecha_Fin_Periodo,
+	c.Dias_Vacaciones Saldo_Anterior,
+	c.Dias_Vacaciones Saldo_Actual,
+	c.Dias_Vacaciones Saldo_Correspondiente,
+	GETDATE() Fecha_Actualizacion,
+	1
+FROM #TASK1 A
+LEFT JOIN Empleado B ON a.Em_Cve_Empleado=b.Em_Cve_Empleado
+LEFT JOIN DT_CAT_DIAS_VACACIONES c on a.Anios=c.Anios
+order by a.Anios desc
+
+GO
+
+--===================================
+--Fin de los periodos vacacionales
+--===================================
+
+--=========================
 --VACACIONES
 --========================
 
@@ -299,6 +546,24 @@ BEGIN
 	DROP TABLE DT_TBL_VACACIONES
 END
 GO
+
+CREATE TABLE DT_TBL_VACACIONES
+	(
+		Id_Vacaciones INT IDENTITY (1,1),
+		Periodo_Anterior INT,
+		Proporcional INT,
+		Total_Dias_Saldo_Vacacional INT,
+		Fecha_Solicitud DATETIME,
+		Fecha_Inicio DATE,
+		Fecha_Fin DATE,
+		Total_Dias INT,
+		Motivo_Vacaciones VARCHAR(1000),
+		Id_Status_Solicitud INT,
+		Motivo_Rechazo VARCHAR(1000),
+		Em_Cve_Empleado varchar(100),
+		Em_Cve_Empleado_Autoriza VARCHAR(100),
+		Fecha_Actualizacion DATETIME NULL
+	)
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE 'DT_TBL_VACACIONES')
 BEGIN
@@ -316,8 +581,8 @@ BEGIN
 		Id_Status_Solicitud INT,
 		Motivo_Rechazo VARCHAR(1000),
 		Em_Cve_Empleado varchar(100),
-		Em_Cve_Empleado_Autoriza varchar(100),
-		Fecha_Actualizacion DATETIME null
+		Em_Cve_Empleado_Autoriza VARCHAR(100),
+		Fecha_Actualizacion DATETIME NULL
 	)
 END
 GO
@@ -362,7 +627,8 @@ CREATE PROCEDURE DT_SP_ACTUALIZAR_VACACIONES
 		@Motivo_Vacaciones VARCHAR(1000)=null,
 		@Id_Status_Solicitud INT=null,
 		@Motivo_Rechazo VARCHAR(1000)=null,
-		@Em_Cve_Empleado varchar(100)=null
+		@Em_Cve_Empleado varchar(100)=null,
+		@Em_Cve_Empleado_Autoriza varchar(100)=NULL
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -373,8 +639,7 @@ BEGIN
 	DECLARE 
 		@status int=0,
 		@mensaje varchar(250)='',
-		@proyecto_empleado varchar (10),
-		@Em_Cve_Empleado_Autoriza varchar (100)
+		@proyecto_empleado varchar (10)
 
 
 	IF(@Id_Vacaciones is null or @Id_Vacaciones=0)
@@ -458,7 +723,8 @@ BEGIN
 		UPDATE DT_TBL_VACACIONES
 		SET Id_Status_Solicitud=@Id_Status_Solicitud,
 		Fecha_Actualizacion=GETDATE(),
-		Motivo_Rechazo=@Motivo_Rechazo
+		Motivo_Rechazo=@Motivo_Rechazo,
+		Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
 		WHERE Id_Vacaciones=@Id_Vacaciones
 
 		IF @@ERROR<>0
@@ -713,8 +979,6 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_TIPO_SEGUIMIENTO TO public;
 
---====se inserta la incapacidad NO EJECUTAR
-
 
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_ACTUALIZAR_INCAPACIDAD')
 BEGIN
@@ -757,7 +1021,8 @@ CREATE PROCEDURE DT_SP_ACTUALIZAR_INCAPACIDAD
 		@Formato_Incapacidad varchar(400)=NULL,
 		@Formato_Adicional varchar(400)=NULL,
 		@Formato_ST7_Calificacion_RT varchar(400)=NULL,
-		@Formato_ST7_Alta_RT varchar(400)=NULL
+		@Formato_ST7_Alta_RT varchar(400)=NULL,
+		@Em_Cve_Empleado_Autoriza varchar(100)=NULL
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -768,8 +1033,7 @@ BEGIN
 	DECLARE 
 		@status int=0,
 		@mensaje varchar(250)='',
-		@proyecto_empleado varchar (10),
-		@Em_Cve_Empleado_Autoriza varchar (100)
+		@proyecto_empleado varchar (10)
 
 
 	IF(@Id_Incapacidad is null or @Id_Incapacidad=0)
@@ -870,7 +1134,8 @@ BEGIN
 		UPDATE DT_TBL_INCAPACIDAD
 		SET Id_Status_Solicitud=@Id_Status,
 		Fecha_Actualizacion=GETDATE(),
-		Motivo_Rechazo=@Motivo_Rechazo
+		Motivo_Rechazo=@Motivo_Rechazo,
+		Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
 		WHERE Id_Incapacidad=@Id_Incapacidad
 
 		IF @@ERROR<>0
@@ -991,6 +1256,7 @@ BEGIN
 				and aut_nivel='D'
 				group by aut_proyecto
 			)
+			and Id_Status_Solicitud=1
 		END
 
 	END	
@@ -1103,6 +1369,7 @@ BEGIN
 				and aut_nivel='D'
 				group by aut_proyecto
 			)
+			and Id_Status_Solicitud=1
 		END
 
 	END	
@@ -1219,6 +1486,7 @@ BEGIN
 				and aut_nivel='D'
 				group by aut_proyecto
 			)
+			and Id_Status_Solicitud=1
 		END
 
 	END	
@@ -1334,7 +1602,7 @@ BEGIN
 		BEGIN
 			SET @Status=1
 			SET @Id_Tipo_Usuario=2--usuario empleado
-			SET @Rol_Usuario='AUTORIZADOR'
+			SET @Rol_Usuario='EMPLEADO'
 
 			set @Query='
 			SELECT '+
