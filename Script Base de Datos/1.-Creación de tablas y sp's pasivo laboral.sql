@@ -2,14 +2,14 @@
 USE IICA_COMPRAS
 GO
 
-IF NOT EXISTS( SELECT * FROM sys.indexes WHERE name='IDX_IICA_COMPRAS_SUCURSAL' AND object_id = OBJECT_ID('Schema.Sucursal'))
+IF NOT EXISTS( SELECT * FROM sys.indexes WHERE name='IDX_IICA_COMPRAS_SUCURSAL' AND object_id = OBJECT_ID('dbo.Sucursal'))
 BEGIN
 	CREATE INDEX IDX_IICA_COMPRAS_SUCURSAL
 	ON Sucursal (Sc_Cve_Sucursal);
 END
 GO
 
-IF NOT EXISTS( SELECT * FROM sys.indexes WHERE name='IDX_IICA_COMPRAS_DEPARTAMENTO' AND object_id = OBJECT_ID('Schema.Departamento'))
+IF NOT EXISTS( SELECT * FROM sys.indexes WHERE name='IDX_IICA_COMPRAS_DEPARTAMENTO' AND object_id = OBJECT_ID('dbo.Departamento'))
 BEGIN
 	CREATE INDEX IDX_IICA_COMPRAS_DEPARTAMENTO
 	ON Departamento (Dp_Cve_Departamento);
@@ -91,8 +91,8 @@ OBJETIVO		OBTENER LA DIFERENCIA EN DIAS, MESES Y AÑOS ENTRE 2 FECHAS
 
 */
 
-IF EXISTS (SELECT * FROM   sys.objects WHERE  object_id = OBJECT_ID(N'[dbo].[foo]') AND type IN ( N'FN', N'IF', N'TF', N'FS', N'FT' ))
-  DROP FUNCTION [dbo].[foo]
+IF EXISTS (SELECT * FROM   sys.objects WHERE  object_id = OBJECT_ID(N'[dbo].[FN_DSI_DIFERENCIA_FECHAS]') AND type IN ( N'FN', N'IF', N'TF', N'FS', N'FT' ))
+  DROP FUNCTION [dbo].[FN_DSI_DIFERENCIA_FECHAS]
 GO 
 
 
@@ -325,7 +325,7 @@ GO
 
 -- ================================================
 -- Template generated from Template Explorer using:
--- Create Procedure (New Menu).SQL
+-- Create Procedure (#taskNew Menu).SQL
 --
 -- Use the Specify Values for Template Parameters 
 -- command (Ctrl-Shift-M) to fill in the parameter 
@@ -442,8 +442,9 @@ CREATE TABLE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 	Anios INT,
 	Fecha_Inicio_Periodo DATETIME,
 	Fecha_Fin_Periodo DATETIME,
-	Saldo_Anterior INT,
-	Saldo_Actual INT,
+	Saldo_Periodo_Anterior INT,
+	Saldo_Actual_Proporcional INT,
+	Saldo_Actual_Utilizado INT,
 	Saldo_Correspondiente INT,
 	Fecha_Actualizacion DATETIME,
 	Activo INT
@@ -500,9 +501,6 @@ begin
 
 end
 
-SELECT *
-FROM #TASK1
-
 INSERT 
 	INTO DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 	(
@@ -510,8 +508,9 @@ INSERT
 	Anios,
 	Fecha_Inicio_Periodo,
 	Fecha_Fin_Periodo,
-	Saldo_Anterior,
-	Saldo_Actual,
+	Saldo_Periodo_Anterior,
+	Saldo_Actual_Proporcional,
+	Saldo_Actual_Utilizado,
 	Saldo_Correspondiente,
 	Fecha_Actualizacion,
 	Activo
@@ -521,8 +520,9 @@ SELECT
 	c.Anios,
 	DATEADD(yy,a.Anios,b.Em_Fecha_Ingreso) Fecha_Inicio_Periodo,
 	DATEADD(yy,a.Anios+1,b.Em_Fecha_Ingreso) Fecha_Fin_Periodo,
-	c.Dias_Vacaciones Saldo_Anterior,
-	c.Dias_Vacaciones Saldo_Actual,
+	0 Saldo_Anterior,
+	((DATEDIFF(DD,DATEADD(yy,a.Anios,b.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365 Saldo_Proporcional,
+	0 Saldo_Tomado,
 	c.Dias_Vacaciones Saldo_Correspondiente,
 	GETDATE() Fecha_Actualizacion,
 	1
@@ -531,6 +531,62 @@ LEFT JOIN Empleado B ON a.Em_Cve_Empleado=b.Em_Cve_Empleado
 LEFT JOIN DT_CAT_DIAS_VACACIONES c on a.Anios=c.Anios
 order by a.Anios desc
 
+GO
+
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_SALDO_VACACIONAL')
+BEGIN
+	DROP PROCEDURE DT_SP_OBTENER_SALDO_VACACIONAL
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_OBTENER_SALDO_VACACIONAL
+	-- Add the parameters for the stored procedure here
+	@Em_Cve_Empleado VARCHAR(30)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT 
+		Fecha_Inicio_Periodo,
+		Fecha_Fin_Periodo,
+		Saldo_Periodo_Anterior,
+		Saldo_Actual_Proporcional,
+		Saldo_Actual_Utilizado,
+		Saldo_Correspondiente
+	FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+	WHERE Em_Cve_Empleado=@Em_Cve_Empleado
+	AND Activo=1
+
+
+END
+GO
+
+
+GRANT EXECUTE ON DT_SP_OBTENER_SALDO_VACACIONAL TO public;  
 GO
 
 --===================================
@@ -565,27 +621,7 @@ CREATE TABLE DT_TBL_VACACIONES
 		Fecha_Actualizacion DATETIME NULL
 	)
 
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE 'DT_TBL_VACACIONES')
-BEGIN
-	CREATE TABLE DT_TBL_VACACIONES
-	(
-		Id_Vacaciones INT IDENTITY (1,1),
-		Periodo_Anterior INT,
-		Proporcional INT,
-		Total_Dias_Saldo_Vacacional INT,
-		Fecha_Solicitud DATETIME,
-		Fecha_Inicio DATE,
-		Fecha_Fin DATE,
-		Total_Dias INT,
-		Motivo_Vacaciones VARCHAR(1000),
-		Id_Status_Solicitud INT,
-		Motivo_Rechazo VARCHAR(1000),
-		Em_Cve_Empleado varchar(100),
-		Em_Cve_Empleado_Autoriza VARCHAR(100),
-		Fecha_Actualizacion DATETIME NULL
-	)
-END
-GO
+
 
 
 
@@ -669,6 +705,12 @@ BEGIN
 			SET @mensaje='NO EXISTEN AUTORIZADORES PARA EL PROYECTO, CONTACTE A SOPORTE TÉCNICO.'
 			GOTO EXIT_
 		END
+		--Se valida el saldo vacacional
+		IF @Total_Dias>(SELECT (Saldo_Periodo_Anterior + Saldo_Actual_Proporcional)-Saldo_Actual_Utilizado FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO WHERE Em_Cve_Empleado=@Em_Cve_Empleado AND Activo=1)
+		BEGIN
+			SET @mensaje='SU SALDO VACACIONAL ES MENOR A LOS DÍAS SOLICITADOS, CONTACTE A UN ADMINISTRADOR.'
+			GOTO EXIT_
+		END
 
 		--3.-SE TERMINAN LAS VALIDACIONES, PROCEDEMOS A REALIZAR EL INSERT
 
@@ -708,6 +750,32 @@ BEGIN
 				GOTO EXIT_
 			END
 
+			/**/
+			DECLARE
+				@Saldo_Periodo_Anterior int,
+				@Saldo_Actual_Disponible int
+
+			SELECT
+				@Saldo_Periodo_Anterior=@Saldo_Periodo_Anterior,
+				@Saldo_Actual_Disponible=Saldo_Actual_Proporcional-Saldo_Actual_Utilizado
+			FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+			WHERE Em_Cve_Empleado=@Em_Cve_Empleado
+			AND Activo=1
+			
+			IF @Saldo_Periodo_Anterior>=@Total_Dias
+				SET @Saldo_Periodo_Anterior=@Saldo_Periodo_Anterior-@Total_Dias
+			ELSE
+			BEGIN
+				SET @Saldo_Periodo_Anterior=0
+				SET @Saldo_Actual_Disponible= (@Saldo_Actual_Disponible+@Saldo_Periodo_Anterior)-@Total_Dias
+			END
+
+			UPDATE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+			SET Saldo_Actual_Utilizado=Saldo_Actual_Utilizado+@Total_Dias,
+			Saldo_Periodo_Anterior=@Saldo_Periodo_Anterior
+
+			/**/
+
 			SELECT @Id_Vacaciones=MAX(Id_Vacaciones)
 			FROM DT_TBL_VACACIONES
 			WHERE Em_Cve_Empleado=@Em_Cve_Empleado
@@ -720,6 +788,15 @@ BEGIN
 	ELSE
 	BEGIN
 		--4.- SE TRATA DE UNA ACTUALIZACION DE LAS VACACIONES
+
+		--4.1 VALIDAMOS QUE EL SALDO VACACIONAL ESTE DISPONIBLE
+
+		IF (SELECT Total_Dias FROM DT_TBL_VACACIONES WHERE Id_Vacaciones=@Id_Vacaciones )>(select (Saldo_Periodo_Anterior + Saldo_Actual_Proporcional)-Saldo_Actual_Utilizado from DT_TBL_PERIODO_VACACIONAL_EMPLEADO where Em_Cve_Empleado=@Em_Cve_Empleado AND Activo=1)
+		BEGIN
+			SET @mensaje='EL EMPLEADO YA NO DISPONE DE SALDO VACACIONAL, CONTACTE A SOPORTE TÉCNICO.'
+			GOTO EXIT_
+		END
+
 		UPDATE DT_TBL_VACACIONES
 		SET Id_Status_Solicitud=@Id_Status_Solicitud,
 		Fecha_Actualizacion=GETDATE(),
