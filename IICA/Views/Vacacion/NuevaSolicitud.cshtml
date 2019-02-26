@@ -32,8 +32,32 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             <div class="row form-row">
                                 <div class="col-md-6">
                                     <label class="form-label">Fecha de la solicitud</label>
-                                    @Html.TextBoxFor(x => x.fechaSolicitud, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.TextBoxFor(x => x.fechaSolicitud , new { @class = "form-control", @readonly = "readonly"})
                                     @Html.ValidationMessageFor(x => x.fechaSolicitud, "", new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Dias periodo anterior</label>
+                                    @Html.TextBoxFor(x => x.periodoAnterior, new {@class = "form-control", @readonly = "readonly",
+                                   @Value = (Model == null) ? "0" : Model.periodoAnterior.ToString()})
+                                    @Html.ValidationMessageFor(x => x.periodoAnterior, "", new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Dias proporcional</label>
+                                    @Html.TextBoxFor(x => x.proporcional, new { @class = "form-control", @readonly = "readonly",
+                                   @Value = (Model == null) ? "0" : Model.proporcional.ToString()})
+                                    @Html.ValidationMessageFor(x => x.proporcional, "", new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Dias saldo vacacional</label>
+                                    @Html.TextBoxFor(x => x.totalDiasSaldoVacacional, new { @class = "form-control", @readonly = "readonly",
+                                   @Value = (Model == null) ? "0" : Model.totalDiasSaldoVacacional.ToString()})
+                                    @Html.ValidationMessageFor(x => x.totalDiasSaldoVacacional, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">

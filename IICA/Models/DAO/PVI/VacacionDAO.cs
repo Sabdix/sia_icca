@@ -39,7 +39,7 @@ namespace IICA.Models.DAO.PVI
                         result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
                         result.id = dbManager.DataReader["ID_VACACIONES"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["Id_Vacaciones"].ToString());
                         if (result.status)
-                            Email.NotificacionFinProceso(vacacion.emCveEmpleado,"Notificación de la solicitud de vacaciones","Creación de una solicitud de vacaciones","Se finaliza la solicitud de las vacaciones");
+                            Email.NotificacionFinProceso(vacacion.emCveEmpleado,Constants.notificacionVacacion,Constants.procesoVacacion,Constants.especificacionVacacion);
                     }
                 }
             }
@@ -164,6 +164,33 @@ namespace IICA.Models.DAO.PVI
                 throw ex;
             }
             return vacaciones;
+        }
+
+        public Vacacion ObtenerSaldoVacacional(string emCveEmpleado)
+        {
+            Vacacion vacacion=null;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Em_Cve_Empleado", emCveEmpleado);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_VACACIONES_USUARIO");
+                    while (dbManager.DataReader.Read())
+                    {
+                        vacacion = new Vacacion();
+                        vacacion.periodoAnterior = dbManager.DataReader["periodo_anterior"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["periodo_anterior"].ToString());
+                        vacacion.proporcional = dbManager.DataReader["proporcional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["proporcional"].ToString());
+                        vacacion.totalDiasSaldoVacacional = dbManager.DataReader["total_dias_saldo_vacacional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["total_dias_saldo_vacacional"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return vacacion;
         }
     }
 }

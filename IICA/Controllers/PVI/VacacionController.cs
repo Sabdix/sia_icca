@@ -20,7 +20,9 @@ namespace IICA.Controllers.PVI
         {
             try
             {
-                return View();
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(vacacionDAO.ObtenerSaldoVacacional(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {
