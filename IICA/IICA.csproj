@@ -218,6 +218,7 @@
     <Content Include="Content\assets\js\Evt\evtAutSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtAutSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtAutSolPermiso.js" />
+    <Content Include="Content\assets\js\Evt\evtMisIncapacidades.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolPermiso.js" />
