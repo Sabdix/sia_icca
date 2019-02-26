@@ -47,11 +47,14 @@
                     </li>
                 </ul>
                 <a href="@Url.Action("Index","Home")">
-                    <img src="~/Content/assets/img/logo_iica.png" class="logo" alt="" data-src="../Content/assets/img/logo_iica.png" data-src-retina="../Content/assets/img/logo2x.png" width="106" height="21" />
+                    <img src="~/Content/assets/img/logo_iica.png" class="logo" alt=""
+                         data-src="../Content/assets/img/logo_iica.png" 
+                         data-src-retina="../Content/assets/img/logo_iica.png" width="150" height="60" 
+                         style="margin-top: 0px;" />
                 </a>
                 <ul class="nav pull-right notifcation-center">
                     <li class="dropdown hidden-xs hidden-sm">
-                        <a href="@Url.Action("Sistemas","IICA")" class="dropdown-toggle active" data-toggle="">
+                        <a href="@Url.Action("Sistemas","IICA")" class="dropdown-toggle" data-toggle="">
                             <i class="material-icons">home</i>
                         </a>
                     </li>
@@ -75,7 +78,7 @@
                             </a>
                             <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
                                 <li>
-                                    <a href="login.html"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
+                                    <a href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
                                 </li>
                             </ul>
                         </li>
@@ -88,7 +91,7 @@
 
     <div class="page-container row-fluid">
         @Html.Action("_MenuLeft", "Home")
-        <a href="#" class="scrollup">Scroll</a>
+        @*<a href="#" class="scrollup">Scroll</a>
         <div class="footer-widget">
             <div class="progress transparent progress-small no-radius no-margin">
                 <div class="progress-bar progress-bar-success animate-progress-bar" data-percentage="79%" style="width: 79%;"></div>
@@ -97,7 +100,7 @@
                 <div class="details-status"> <span class="animate-number" data-value="86" data-animation-duration="560">86</span>% </div>
                 <a href="lockscreen.html"><i class="material-icons">power_settings_new</i></a>
             </div>
-        </div>
+        </div>*@
 
         <div class="page-content">
             <div id="portlet-config" class="modal hide">
@@ -128,6 +131,8 @@
     <script src="~/Content/assets/plugins/jquery-notifications/js/messenger-theme-future.js"></script>
 
     <script type="text/javascript" src="/Content/assets/plugins/jquery-notifications/js/demo/demo.js"></script>
+    <link href="~/Content/assets/plugins/sweet-alert/sweetalert.min.css" rel="stylesheet" />
+    <script src="~/Content/assets/plugins/sweet-alert/sweetalert.min.js"></script>
 
     <script src="~/Content/webarch//js/webarch.js" type="text/javascript"></script>
     <script src="~/Content/assets/js/Evt/Utils.js"></script>
@@ -169,6 +174,12 @@
 
         #content-impresion {
             display: none;
+        }
+
+        .a-submenu {
+            color: #fff !important;
+            font-weight: 900 !important;
+            background-color: rgba(255,255,255,.2) !important;
         }
     </style>
 </body>

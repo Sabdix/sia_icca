@@ -1,7 +1,11 @@
 ﻿
 @{
-    ViewBag.Title = "MisIncapacidades";
+    ViewBag.Title = "Mis Incapacidades";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <script>
+        nodoMenu = "incapacidades";
+        submenu = "misIncapacidades";
+    </script>
 }
 @using System.Globalization;
 @using System.Web.Script.Serialization;
@@ -85,38 +89,44 @@
                                 <td><span class="label label-@labelEstatus">@incapacidad.estatusIncapacidad.descripcion</span></td>
                                 <td><span class="muted">@incapacidad.motivoRechazo</span></td>
                                 <td>
-                                    <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="1" data-incapacidad="@incapacidad.idIncapacidad">
-                                        <button data-toggle="tooltip" title="Formato de Incapacidad" class="btn btn-primary btn-mini">
-                                            <i class="fa fa-stethoscope"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2" data-incapacidad="@incapacidad.idIncapacidad">
-                                        <button data-toggle="tooltip" title="Formato Adicional" class="btn btn-warning btn-mini">
-                                            <i class="fa fa-medkit"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3" data-incapacidad="@incapacidad.idIncapacidad">
-                                        <button data-toggle="tooltip" title="Formato de ST7 calificacion RT" class="btn btn-info btn-mini">
-                                            <i class="fa fa-wheelchair"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="4" data-incapacidad="@incapacidad.idIncapacidad">
-                                        <button data-toggle="tooltip" title="Formato ST7 alta RT" class="btn btn-danger btn-mini">
-                                            <i class="fa fa-ambulance"></i>
-                                        </button>
-                                    </span>
+                                    @if (incapacidad.estatusIncapacidad.idEstatusIncapacidad == (int)EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR)
+                                    {
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="1" data-incapacidad="@incapacidad.idIncapacidad">
+                                            <button data-toggle="tooltip" title="Formato de Incapacidad" class="btn btn-primary btn-mini">
+                                                <i class="fa fa-stethoscope"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2" data-incapacidad="@incapacidad.idIncapacidad">
+                                            <button data-toggle="tooltip" title="Formato Adicional" class="btn btn-warning btn-mini">
+                                                <i class="fa fa-medkit"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3" data-incapacidad="@incapacidad.idIncapacidad">
+                                            <button data-toggle="tooltip" title="Formato de ST7 calificacion RT" class="btn btn-info btn-mini">
+                                                <i class="fa fa-wheelchair"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="4" data-incapacidad="@incapacidad.idIncapacidad">
+                                            <button data-toggle="tooltip" title="Formato ST7 alta RT" class="btn btn-danger btn-mini">
+                                                <i class="fa fa-ambulance"></i>
+                                            </button>
+                                        </span>
+                                    }
                                 </td>
                                 <td>
-                                    <span data-toggle="modal" data-target="#modal-enviar" onclick="MostrarModalEnvSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
-                                        <button data-toggle="tooltip" title="Enviar solicitud" class="btn btn-info btn-mini">
-                                            <i class="fa fa-check-square-o"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-cancelar" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
-                                        <button data-toggle="tooltip" title="Cancelar solicitud" class="btn btn-warning btn-mini">
-                                            <i class="fa fa-close"></i>
-                                        </button>
-                                    </span>
+                                    @if (incapacidad.estatusIncapacidad.idEstatusIncapacidad == (int)EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR)
+                                    {
+                                        <span data-toggle="modal" data-target="#modal-enviar" onclick="MostrarModalEnvSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
+                                            <button data-toggle="tooltip" title="Enviar solicitud" class="btn btn-info btn-mini">
+                                                <i class="fa fa-check-square-o"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modal-cancelar" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
+                                            <button data-toggle="tooltip" title="Cancelar solicitud" class="btn btn-warning btn-mini">
+                                                <i class="fa fa-close"></i>
+                                            </button>
+                                        </span>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -273,9 +283,6 @@
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <script src="~/Content/assets/js/datatables.js"></script>
     <script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
-
-    <link href="~/Content/assets/plugins/sweet-alert/sweetalert.min.css" rel="stylesheet" />
-    <script src="~/Content/assets/plugins/sweet-alert/sweetalert.min.js"></script>
 
     <script src="~/Content/assets/js/Evt/evtMisIncapacidades.js"></script>
 

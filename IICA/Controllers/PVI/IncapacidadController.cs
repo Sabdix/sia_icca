@@ -55,6 +55,41 @@ namespace IICA.Controllers.PVI
             }
         }
 
+
+        [HttpPost, SessionExpire]
+        public ActionResult EnviarIncapacidad(Incapacidad incapacidad_)
+        {
+            try
+            {
+                incapacidadDAO = new IncapacidadDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                incapacidad_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                incapacidad_.estatusIncapacidad.idEstatusIncapacidad = (int)EstatusSolicitud.SOLICITUD_ENVIADA;
+                return Json(incapacidadDAO.ActualizarIncapacidad(incapacidad_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CancelarIncapacidadUsuario(Incapacidad incapacidad_)
+        {
+            try
+            {
+                incapacidadDAO = new IncapacidadDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                incapacidad_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                incapacidad_.estatusIncapacidad.idEstatusIncapacidad = (int)EstatusSolicitud.SOLICITUD_CANCELADA;
+                return Json(incapacidadDAO.ActualizarIncapacidad(incapacidad_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
         [SessionExpire]
         public ActionResult IncapacidadesPorAutorizar()
         {

@@ -208,6 +208,7 @@
     <Content Include="Content\assets\img\profiles\e.jpg" />
     <Content Include="Content\assets\img\profiles\e2x.jpg" />
     <Content Include="Content\assets\img\profiles\h.jpg" />
+    <Content Include="Content\assets\img\user.png" />
     <Content Include="Content\assets\img\Webarch_thumb.jpg" />
     <Content Include="Content\assets\img\work.jpg" />
     <Content Include="Content\assets\js\calender.js" />

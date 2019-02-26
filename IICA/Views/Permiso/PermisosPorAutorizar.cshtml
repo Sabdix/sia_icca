@@ -2,6 +2,10 @@
 @{
     ViewBag.Title = "Permisos Por Autorizar";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <script>
+        nodoMenu = "permisos";
+        submenu = "permisosPorAut";
+    </script>
 }
 
 
@@ -166,13 +170,13 @@
                         <input id="modal-can-horaFin" type="text" class="form-control" placeholder="Hora de fin" readonly>
                     </div>
                 </div>
-                    <div class="row form-row">
-                        <div class="col-md-12">
-                            <label class="form-label">Motivo del rechazo:</label>
-                            <textarea id="modal-can-motivoRechazo" type="text" class="form-control" placeholder="Motivo del rechazo" required> </textarea>
-                            <span class="error" id="error-motivoRechazo" style="display:none">Es necesario capturar el motivo del rechazo (por lo menos 10 caracteres)</span>
-                        </div>
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <label class="form-label">Motivo del rechazo:</label>
+                        <textarea id="modal-can-motivoRechazo" type="text" class="form-control" placeholder="Motivo del rechazo" required> </textarea>
+                        <span class="error" id="error-motivoRechazo" style="display:none">Es necesario capturar el motivo del rechazo (por lo menos 10 caracteres)</span>
                     </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

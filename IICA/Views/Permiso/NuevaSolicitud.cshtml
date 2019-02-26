@@ -2,6 +2,10 @@
 @{
     ViewBag.Title = "Registar solicitud de permiso";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <script>
+        nodoMenu = "permisos";
+        submenu = "nvsolPermi";
+    </script>
 }
 @model IICA.Models.Entidades.PVI.Permiso
 
@@ -89,8 +93,6 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
 
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
 
-    <link href="~/Content/assets/plugins/sweet-alert/sweetalert.min.css" rel="stylesheet" />
-    <script src="~/Content/assets/plugins/sweet-alert/sweetalert.min.js"></script>
 
     <script src="~/Content/assets/js/Evt/evtNuevaSolPermiso.js"></script>
 }
