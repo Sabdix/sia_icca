@@ -153,11 +153,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DAO\EmailDAO.cs" />
     <Compile Include="Models\DAO\PVI\IncapacidadDAO.cs" />
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
     <Compile Include="Models\Entidades\Conexion.cs" />
+    <Compile Include="Models\Entidades\Email.cs" />
     <Compile Include="Models\Entidades\Enumeraciones.cs" />
     <Compile Include="Models\Entidades\PVI\EstatusIncapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\EstatusPermiso.cs" />
