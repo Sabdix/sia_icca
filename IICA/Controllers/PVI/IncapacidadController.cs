@@ -173,8 +173,9 @@ namespace IICA.Controllers.PVI
                         var file = httpRequestBase.Files[i];
                         if (file != null && file.ContentLength > 0)
                         {
-                            //Server.MapPath("~" + path+"/"+ usuario+"/");
-                            string pathGeneral = WebConfigurationManager.AppSettings["pathFormatosIncapacidades"].ToString() + @"\" + usuario + @"\";
+                            string pathFormatosIncapacidades = WebConfigurationManager.AppSettings["pathFormatosIncapacidades"].ToString();
+                            //string pathGeneral = pathFormatosIncapacidades + @"\" + usuario + @"\";
+                            string pathGeneral = Server.MapPath("~" + pathFormatosIncapacidades + "/" + usuario + "/");
                             if (!System.IO.Directory.Exists(pathGeneral))
                                 System.IO.Directory.CreateDirectory(pathGeneral);
 

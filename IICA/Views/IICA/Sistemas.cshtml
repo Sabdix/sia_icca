@@ -84,7 +84,12 @@
     </div>
 
     <div class="page-container row-fluid">
-        
+        <div class="footer-widget">
+            <div class="pull-right">
+                <div class="details-status"> No. de empleado: @Model.emCveEmpleado</div>
+                <a data-toggle="tooltip" title="Cerrar sesión" href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i></a>
+            </div>
+        </div>
 
         <div class="page-content">
             <div class="clearfix"></div>
@@ -102,7 +107,7 @@
                         <p>
                             Es un sistema en donde encontrara todo lo referente a su perfil profesional como empleado.
                         </p>
-                        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Ingresar &raquo;</a></p>
+                        <p><a class="btn btn-default" href="http://localhost:8084/IICADocumentos_/pages/login/loginRoot.jsp?email=@(Model.emCveEmpleado)&password=@(Model.contrasena)">Ingresar &raquo;</a></p>
                     </div>
                     <div class="col-md-4">
                         <h3>IICA - VIATICOS</h3>
