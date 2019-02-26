@@ -177,5 +177,33 @@ namespace IICA.Models.DAO.PVI
             }
             return incapacidades;
         }
+
+        public Result ActualizarFormatoIncapacidad(int idIncapacidad,FormatosIncapacidad formatoIncapacidad,string pathFormato)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(3);
+                    dbManager.AddParameters(0, "Id_Incapacidad", idIncapacidad);
+                    dbManager.AddParameters(1, "path_formato", pathFormato);
+                    dbManager.AddParameters(2, "tipo_formato", formatoIncapacidad);
+                    dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_FORMATO_INCAPACIDAD");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["mensaje"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                        //result.id = dbManager.DataReader["ID_VACACIONES"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["Id_Vacaciones"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
     }
 }

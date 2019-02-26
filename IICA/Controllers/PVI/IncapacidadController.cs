@@ -3,8 +3,10 @@ using IICA.Models.Entidades;
 using IICA.Models.Entidades.PVI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace IICA.Controllers.PVI
@@ -101,5 +103,61 @@ namespace IICA.Controllers.PVI
                 return new HttpStatusCodeResult(500, ex.Message);
             }
         }
+
+        [HttpPost,SessionExpire]
+        public ActionResult SubirDocumento(int idIncapacidad,FormatosIncapacidad formato)
+        {
+            try
+            {
+                incapacidadDAO = new IncapacidadDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                Result result = new Result();
+                string pathFormato= ObtenerFormatoHttpPost(Request, idIncapacidad, formato.ToString(), usuarioSesion.emCveEmpleado);
+                if (!string.IsNullOrEmpty(pathFormato))
+                {
+                    result = incapacidadDAO.ActualizarFormatoIncapacidad(idIncapacidad, formato, pathFormato);
+                }
+                else
+                    result.mensaje ="No se logro subir el formato, intente mas tarde.";
+                return Json(result,JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private string ObtenerFormatoHttpPost(HttpRequestBase httpRequestBase,int idIncapacidad,string formato,string usuario)
+        {
+            try
+            {
+                if (httpRequestBase.Files.Count > 0)
+                {
+                    for (int i = 0; i < httpRequestBase.Files.Count; i++)
+                    {
+                        var file = httpRequestBase.Files[i];
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            //Server.MapPath("~" + path+"/"+ usuario+"/");
+                            string pathGeneral = WebConfigurationManager.AppSettings["pathFormatosIncapacidades"].ToString() + @"\" + usuario + @"\";
+                            if (!System.IO.Directory.Exists(pathGeneral))
+                                System.IO.Directory.CreateDirectory(pathGeneral);
+
+                            string nombre = Path.GetFileName(idIncapacidad + "_" + formato+""+Path.GetExtension(file.FileName));
+                            string pathFormato = Path.Combine(pathGeneral, nombre);
+
+                            file.SaveAs(pathFormato);
+                            return pathFormato;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return string.Empty;
+        }
+        
     }
 }
