@@ -12,6 +12,7 @@ namespace IICA.Models.Entidades.PVI
             tipoIncapacidad = new TipoIncapacidad();
             tipoSeguimiento = new TipoSeguimiento();
             estatusIncapacidad = new EstatusIncapacidad();
+            usuario = new Usuario();
         }
         public Int64 idIncapacidad { get; set; }
         public DateTime fechaInicio { get; set; }
@@ -33,7 +34,8 @@ namespace IICA.Models.Entidades.PVI
         public TipoSeguimiento tipoSeguimiento { get; set; }
 
         public EstatusIncapacidad estatusIncapacidad { get; set; }
-
+        /*------------------------------------------------*/
+        public Usuario usuario { get; set; }
 
     }
 }
