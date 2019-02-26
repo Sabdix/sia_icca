@@ -72,7 +72,7 @@
                 </div>
                 <div class="pull-right">
                     <ul class="nav quick-section ">
-                        <li class="quicklinks">
+                        <li class="quicklinks" data-toggle="tooltip" title="Configuración" data-placement="left">
                             <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
                                 <i class="material-icons">tune</i>
                             </a>
@@ -91,6 +91,7 @@
 
     <div class="page-container row-fluid">
         @Html.Action("_MenuLeft", "Home")
+        
         @*<a href="#" class="scrollup">Scroll</a>
         <div class="footer-widget">
             <div class="progress transparent progress-small no-radius no-margin">
@@ -178,9 +179,10 @@
 
         .a-submenu {
             color: #fff !important;
-            font-weight: 900 !important;
+            font-weight: 800 !important;
             background-color: rgba(255,255,255,.2) !important;
         }
+
     </style>
 </body>
 </html>

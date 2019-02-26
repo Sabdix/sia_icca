@@ -28,9 +28,9 @@
                     <li> <a id="submenu-nvsolPermi" href="@Url.Action("NuevaSolicitud","Permiso")">Nueva solicitud </a> </li>
                     <li> <a id="submenu-misPermisos" href="@Url.Action("MisPermisos","Permiso")">Mis Permisos</a> </li>
                     @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
-                    {
-                        <li> <a id="submenu-permisosPorAut" href="@Url.Action("PermisosPorAutorizar", "Permiso")">Permisos por autorizar</a> </li>
-                    }
+                {
+                    <li> <a id="submenu-permisosPorAut" href="@Url.Action("PermisosPorAutorizar", "Permiso")">Permisos por autorizar</a> </li>
+            }
                 </ul>
             </li>
             <!--    VACACIONES    -->
@@ -40,9 +40,9 @@
                     <li> <a id="submenu-nvsolVaca" href="@Url.Action("NuevaSolicitud","Vacacion")">Nueva solicitud </a> </li>
                     <li> <a id="submenu-misVacaciones" href="@Url.Action("MisVacaciones","Vacacion")">Mis Vacaciones</a> </li>
                     @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
-                    {
-                        <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
-                    }
+                {
+                    <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
+            }
                 </ul>
             </li>
             <!--    INCAPACIDADES    -->
@@ -52,12 +52,18 @@
                     <li> <a id="submenu-nvsolInca" href="@Url.Action("NuevaSolicitud","Incapacidad")">Nueva solicitud </a> </li>
                     <li> <a id="submenu-misIncapacidades" href="@Url.Action("MisIncapacidades","Incapacidad")">Mis Incapacidades</a> </li>
                     @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
-                    {
-                        <li> <a id="submenu-incaPorAut" href="@Url.Action("IncapacidadesPorAutorizar", "Incapacidad")">Incapacidades por autorizar</a> </li>
-                    }
+                {
+                    <li> <a id="submenu-incaPorAut" href="@Url.Action("IncapacidadesPorAutorizar", "Incapacidad")">Incapacidades por autorizar</a> </li>
+            }
                 </ul>
             </li>
         </ul>
         <div class="clearfix"></div>
+        <div class="footer-widget">
+            <div class="pull-right">
+                <div class="details-status"> No. de empleado: @Model.emCveEmpleado</div>
+                <a data-toggle="tooltip" title="Cerrar sesión" href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i></a>
+            </div>
+        </div>
     </div>
 </div>
