@@ -50,6 +50,10 @@
                 <ul class="sub-menu">
                     <li> <a href="@Url.Action("NuevaSolicitud","Incapacidad")">Nueva solicitud </a> </li>
                     <li> <a href="@Url.Action("MisIncapacidades","Incapacidad")">Mis Incapacidades</a> </li>
+                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
+                    {
+                        <li> <a href="@Url.Action("IncapacidadesPorAutorizar", "Incapacidad")">Incapacidades por autorizar</a> </li>
+                    }
                 </ul>
             </li>
         </ul>
