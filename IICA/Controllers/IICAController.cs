@@ -40,6 +40,7 @@ namespace IICA.Controllers
             }
         }
 
+        [SessionExpire]
         public ActionResult Sistemas()
         {
             try

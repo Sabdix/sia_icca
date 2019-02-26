@@ -1,4 +1,5 @@
 ﻿using IICA.Models.DAO.PVI;
+using IICA.Models.Entidades;
 using IICA.Models.Entidades.PVI;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace IICA.Controllers.PVI
         VacacionDAO vacacionDAO;
 
         // GET: Vacacion
+        [SessionExpire]
         public ActionResult NuevaSolicitud()
         {
             try
@@ -27,12 +29,14 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        [HttpPost]
+        [HttpPost, SessionExpire]
         public ActionResult RegistrarSolicitud(Vacacion vacacion_)
         {
             try
             {
                 vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                vacacion_.emCveEmpleado = usuarioSesion.emCveEmpleado;
                 return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -41,15 +45,81 @@ namespace IICA.Controllers.PVI
             }
         }
 
+        [SessionExpire]
         public ActionResult MisVacaciones()
         {
             try
             {
-                return View();
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(vacacionDAO.ObtenerMisVacaciones(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult _ImprimirFormatoVacacion(int id)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                return PartialView(vacacionDAO.ObtenerFormatoVacacion(id));
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult VacacionesPorAutorizar()
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(vacacionDAO.ObtenerVacacionesPorAutorizar(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult AutorizarVacacion(Vacacion vacacion_)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                vacacion_.emCveEmpleadoAutoriza = usuarioSesion.emCveEmpleado;
+                vacacion_.estatusVacacion.idEstatusVacacion = (int)EstatusSolicitud.SOLICITUD_APROBADA;
+                return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CancelarVacacion(Vacacion vacacion_)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                vacacion_.emCveEmpleadoAutoriza = usuarioSesion.emCveEmpleado;
+                vacacion_.estatusVacacion.idEstatusVacacion = (int)EstatusSolicitud.SOLICITUD_CANCELADA;
+                return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
             }
         }
 

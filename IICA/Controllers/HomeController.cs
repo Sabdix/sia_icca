@@ -9,11 +9,13 @@ namespace IICA.Controllers
 {
     public class HomeController : Controller
     {
+        [SessionExpire]
         public ActionResult Index()
         {
             return View();
         }
 
+        [SessionExpire]
         public ActionResult _MenuLeft()
         {
             try

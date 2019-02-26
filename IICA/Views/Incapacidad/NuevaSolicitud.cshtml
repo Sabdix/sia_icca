@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Registar solicitud de incapacidades";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IICA.Models.Entidades.PVI.Incapacidad
+
+<ul class="breadcrumb">
+    <li>
+        <p>INCAPACIDADES</p>
+    </li>
+    <li><a href="#" class="active">Registro de Solicitud</a> </li>
+</ul>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="grid simple">
+            <div class="grid-title no-border">
+                <h4>Ingrese los <span class="semi-bold">datos solicitados</span></h4>
+            </div>
+            <div class="grid-body no-border">
+                <br>
+                <div class="row">
+                    <div class="col-md-8 col-sm-8 col-md-8 col-vlg-offset-4">
+                        @using (Ajax.BeginForm("RegistrarSolicitud", "Incapacidad",
+new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" }, new { autocomplete = "off", id = "form-nuevaSol" }))
+                        {
+                            <div class="row form-row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha de la solicitud</label>
+                                    @Html.TextBoxFor(x => x.fechaSolicitud, new { @class = "form-control",@readonly="readonly" })
+                                    @Html.ValidationMessageFor(x => x.fechaSolicitud, "", new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Fecha inicio</label>
+                                    @Html.TextBoxFor(x => x.fechaInicio, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.fechaInicio, "", new { @class = "error" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Fecha fin</label>
+                                    @Html.TextBoxFor(x => x.fechaFin, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.fechaFin, "", new { @class = "error" })
+                                </div>
+                            </div>
+
+                            <div class="row form-row">
+                                <div class="col-md-5">
+                                    <label class="form-label">Tipo de incapacidad:</label>
+                                    @Html.DropDownListFor(x=> x.tipoIncapacidad.Id_Tipo_Incapacidad, (IEnumerable<SelectListItem>)ViewBag.TiposIncapacidad, "SELECCIONE TIPO DE INCAPACIDAD",
+                            new { @class = "select-iica", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.tipoIncapacidad.Id_Tipo_Incapacidad,"", new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-5">
+                                    <label class="form-label">Tipo de seguimiento:</label>
+                                    @Html.DropDownListFor(x => x.tipoSeguimiento.Id_Tipo_Seguimiento, (IEnumerable<SelectListItem>)ViewBag.TiposSeguimiento, "SELECCIONE TIPO DE SEGUIMIENTO",
+                                new { @class = "select-iica",style="width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.tipoSeguimiento.Id_Tipo_Seguimiento,"", new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Total de dias</label>
+                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control", @readOnly = "true" })
+                                    @Html.ValidationMessageFor(x => x.totalDias, "", new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-10">
+                                    <button type="button" id="btn-guardar-sol" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>Guardar</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <link href="~/Content/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet" />
+
+    <script src="~/Content/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+
+    @* Son para el estilo de los select ya que estan en el layout pero no funcionan si no estan en cada vista *@
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
+
+
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <link href="~/Content/assets/plugins/sweet-alert/sweetalert.min.css" rel="stylesheet" />
+    <script src="~/Content/assets/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+    <script src="~/Content/assets/js/Evt/evtNuevaSolIncapacidad.js"></script>
+}
+
