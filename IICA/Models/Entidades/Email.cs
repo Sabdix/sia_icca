@@ -1,12 +1,15 @@
-﻿using System;
+﻿using IICA.Models.DAO;
+using IICA.Models.Entidades;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Web.Configuration;
 
-namespace ServiceAutoPolizaEntidades
+namespace IICA.Models.Entidades
 {
     public class Email
     {
@@ -18,35 +21,17 @@ namespace ServiceAutoPolizaEntidades
         private static LinkedResource imagenFirma;
         public static string cuentaCorreo;
         public static string servidor;
+        private static EmailDAO emailDAO;
 
-        private static void InicializaCorreo()
-        {
-            mail = new MailMessage();
-            client = new SmtpClient();
-            mail.BodyEncoding = Encoding.UTF8;
-            mail.IsBodyHtml = true;
-            client.Port = 25;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false; // se comenta cuando  es externo
-            client.Credentials = new NetworkCredential();
-            if (string.IsNullOrEmpty(cuentaCorreo))
-                mail.From = new MailAddress(Sesion.configuracion.correoInternoEmisor); //(ConfigurationManager.AppSettings["cuentaCorreo"].ToString());
-            if (string.IsNullOrEmpty(servidor))
-                client.Host = Sesion.configuracion.ServidorCorreoInterno;//ConfigurationManager.AppSettings["servidor"].ToString();
 
-        }
-
-        public static void NotificacionInicioProceso()
+        public static void NotificacionFinProceso(string cveEmpleado,string notificacion,string proceso,string especificaciones)
         {
             try
             {
                 string cuerpo =Cabecera();
-                cuerpo += CuerpoInicioProceso();
+                cuerpo += CuerpoFinProceso(notificacion,proceso,especificaciones);
                 cuerpo += PiePagina();
-                if (Sesion.configuracion.metodoEnvioNotificacion == MetodoEnvioNotificacion.Interno)
-                    EnviarCorreInterno("Proceso iniciado", cuerpo);
-                if (Sesion.configuracion.metodoEnvioNotificacion == MetodoEnvioNotificacion.Externo)
-                    EnviarCorreExterno("Proceso iniciado", cuerpo);
+                EnviarCorreExterno("Proceso finalizado", cuerpo, cveEmpleado);
             }
             catch (Exception ex)
             {
@@ -54,44 +39,8 @@ namespace ServiceAutoPolizaEntidades
             }
         }
 
-        public static void NotificacionFinalizacionProceso(string mensaje, List<Report> reporte)
-        {
-            try
-            {
-                string cuerpo = Cabecera();
-                cuerpo += CuerpoFinProceso(mensaje,reporte);
-                cuerpo += PiePagina();
-                if (Sesion.configuracion.metodoEnvioNotificacion == MetodoEnvioNotificacion.Interno)
-                    EnviarCorreInterno("Proceso finalizado", cuerpo);
-                if (Sesion.configuracion.metodoEnvioNotificacion == MetodoEnvioNotificacion.Externo)
-                    EnviarCorreExterno("Proceso finalizado", cuerpo);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
-        public static void NotificacionErrorEnProceso(string mensaje, List<Report> reporte)
-        {
-            try
-            {
-                string cuerpo = Cabecera();
-                cuerpo += CuerpoErrorEnProceso(mensaje, reporte);
-                cuerpo += PiePagina();
-                if (Sesion.configuracion.metodoEnvioNotificacion == MetodoEnvioNotificacion.Interno)
-                    EnviarCorreInterno("Error|Automatización de la generación de póliza", cuerpo);
-                if (Sesion.configuracion.metodoEnvioNotificacion == MetodoEnvioNotificacion.Externo)
-                    EnviarCorreExterno("Error|Automatización de la generación de póliza", cuerpo);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        private static string CuerpoInicioProceso()
+        private static string CuerpoFinProceso(string notificacion,string proceso,string especificaciones)
         {
             StringBuilder cuerpo = new StringBuilder();
             cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
@@ -103,7 +52,7 @@ namespace ServiceAutoPolizaEntidades
 						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 							            <tr>
 								            <td style='color: #153643; font-family: Arial, sans-serif; font-size: 24px;'>
-									            <b>Notificación del Proceso de migración de pólizas!</b>
+									            <b>"+notificacion+@"!</b>
 								            </td>
 							            </tr>
 							            <tr>
@@ -127,12 +76,12 @@ namespace ServiceAutoPolizaEntidades
 															            </tr>
 															            <tr>
 																            <td>
-																	            <b>Proceso:</b>Automatización de la generación de póliza 
+																	            <b>Proceso:</b>"+proceso +@"
 	                                                                        </td>
 															            </tr>
 	                                                                    <tr>
 																            <td>
-																	            <b>Especificaciones:</b> Se inicia el procesamiento de la información para la generación de la póliza de manera automática.
+																	            <b>Especificaciones:</b>"+especificaciones+@"
 	                                                                        </td>
 															            </tr>
 	                                                    	            </table>
@@ -155,7 +104,7 @@ namespace ServiceAutoPolizaEntidades
 						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 							            <tr>
 								            <td style='color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; width='75%'>
-									            &reg; Copyright © 2019 Importador de pólizas . Servicio proporcionado por <br/>
+									            &reg; Copyright © 2019 "+proceso+@". Servicio proporcionado por <br/>
 									            <a href='www.dsimorelia.com' style='color: #ffffff;'><font color='#ffffff'>Desarrollo de Soluciones Informáticas</font></a>
 								            </td>
 							            </tr>
@@ -169,230 +118,6 @@ namespace ServiceAutoPolizaEntidades
             return cuerpo.ToString();
         }
 
-        private static string CuerpoFinProceso(string detalles, List<Report> reporte)
-        {
-            StringBuilder cuerpo = new StringBuilder();
-            cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
-	            <tr>
-		            <td style='padding: 10px 0 30px 0;'>
-			            <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border: 1px solid #cccccc; border-collapse: collapse;'>
-				            <tr>
-					            <td bgcolor='#ffffff' style='padding: 40px 30px 40px 30px;'>
-						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							            <tr>
-								            <td style='color: #153643; font-family: Arial, sans-serif; font-size: 24px;'>
-									            <b>Notificación del Proceso de migración de pólizas!</b>
-								            </td>
-							            </tr>
-							            <tr>
-								            <td style='padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
-									            A quien corresponda:
-								            </td>
-							            </tr>
-							            <tr>
-								            <td>
-									            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-										            <tr>
-											            <td width='260' valign='top'>
-												            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-													            <tr>
-														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
-															            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-															            <tr>
-																            <td>
-																	            <b>Fecha: </b>" + DateTime.Now.ToString("MM/dd/yyyy h:mm tt") + @"
-																            </td>
-															            </tr>
-															            <tr>
-																            <td>
-																	            <b>Proceso:</b>Automatización de la generación de póliza.
-	                                                                        </td>
-															            </tr>
-	                                                                    <tr>
-																            <td>
-																	            <b>Especificaciones:</b>" + detalles + @".
-	                                                                        </td>
-															            </tr>
-	                                                    	            </table>
-														            </td>
-													            </tr>
-												            </table>
-											            </td>
-											            <td style='font-size: 0; line-height: 0;' width='20'>
-												            &nbsp;
-											            </td>
-										            </tr>
-									            </table>
-								            </td>
-							            </tr>
-						            </table>
-					            </td>
-				            </tr>
-                            <tr>
-					        <td style='padding: 20px 20px 20px 20px;'>
-						        <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							        <tr>
-								        <td><b>Descipción</b></td>
-								        <td><b>Proceso</b></td>
-								        <td><b>Estatus</b></td>
-							        </tr>
-                            ");
-            foreach (var item in reporte)
-            {
-                cuerpo.Append(@"<tr style='" + (item.status ? "" : "background-color: #9a0000; color: #fff; ") + @"font-size: 17px;'>
-								            <td>" + item.mensaje + @"</td>
-								            <td>" + item.progreso + @"%</td>
-								            <td>" + (item.status ? "OK" : "Error") + @"</td>
-							            </tr>");
-            }
-            cuerpo.Append(@"</table>
-					        </td>
-				        </tr>
-				            <tr>
-					            <td bgcolor='#70bbd9' style='padding: 30px 30px 30px 30px;'>
-						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							            <tr>
-								            <td style='color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; width='75%'>
-									            &reg; Copyright © 2019 Importador de pólizas . Servicio proporcionado por <br/>
-									            <a href='www.dsimorelia.com' style='color: #ffffff;'><font color='#ffffff'>Desarrollo de Soluciones Informáticas</font></a>
-								            </td>
-							            </tr>
-						            </table>
-					            </td>
-				            </tr>
-			            </table>
-		            </td>
-	            </tr>
-            </table>");
-            return cuerpo.ToString();
-        }
-
-        private static string CuerpoErrorEnProceso(string detalles, List<Report> reporte)
-        {
-            StringBuilder cuerpo = new StringBuilder();
-            cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
-	            <tr>
-		            <td style='padding: 10px 0 30px 0;'>
-			            <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border: 1px solid #cccccc; border-collapse: collapse;'>
-				            <tr>
-					            <td bgcolor='#ffffff' style='padding: 40px 30px 40px 30px;'>
-						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							            <tr>
-								            <td style='color: #153643; font-family: Arial, sans-serif; font-size: 24px;'>
-									            <b>Error en el Proceso de migración de pólizas!</b>
-								            </td>
-							            </tr>
-							            <tr>
-								            <td style='padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
-									            A quien corresponda:
-								            </td>
-							            </tr>
-							            <tr>
-								            <td>
-									            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-										            <tr>
-											            <td width='260' valign='top'>
-												            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-													            <tr>
-														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
-															            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-															            <tr>
-																            <td>
-																	            <b>Fecha: </b>" + DateTime.Now.ToString("MM/dd/yyyy h:mm tt") + @"
-																            </td>
-															            </tr>
-															            <tr>
-																            <td>
-																	            <b>Proceso:</b>Automatización de la generación de póliza.
-	                                                                        </td>
-															            </tr>
-	                                                                    <tr>
-																            <td>
-																	            <b>Especificaciones:</b>" + detalles + @".
-	                                                                        </td>
-															            </tr>
-	                                                    	            </table>
-														            </td>
-													            </tr>
-												            </table>
-											            </td>
-											            <td style='font-size: 0; line-height: 0;' width='20'>
-												            &nbsp;
-											            </td>
-										            </tr>
-									            </table>
-								            </td>
-							            </tr>
-						            </table>
-					            </td>
-				            </tr>
-                            <tr>
-					        <td style='padding: 20px 20px 20px 20px;'>
-						        <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							        <tr>
-								        <td><b>Descipción</b></td>
-								        <td><b>Proceso</b></td>
-								        <td><b>Estatus</b></td>
-							        </tr>
-                            ");
-            foreach (var item in reporte)
-            {
-                cuerpo.Append(@"<tr style='" + (item.status ? "" : "background-color: #9a0000; color: #fff; ") + @"font-size: 17px;'>
-								            <td>" + item.mensaje + @"</td>
-								            <td>" + item.progreso + @"%</td>
-								            <td>" + (item.status ? "OK" : "Error") + @"</td>
-							            </tr>");
-            }
-            cuerpo.Append(@"</table>
-					        </td>
-				        </tr>
-				            <tr>
-					            <td bgcolor='#70bbd9' style='padding: 30px 30px 30px 30px;'>
-						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							            <tr>
-								            <td style='color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; width='75%'>
-									            &reg; Copyright © 2019 Importador de pólizas . Servicio proporcionado por <br/>
-									            <a href='www.dsimorelia.com' style='color: #ffffff;'><font color='#ffffff'>Desarrollo de Soluciones Informáticas</font></a>
-								            </td>
-							            </tr>
-						            </table>
-					            </td>
-				            </tr>
-			            </table>
-		            </td>
-	            </tr>
-            </table>");
-            return cuerpo.ToString();
-        }
-
-        private static void AgregarTO()
-        {
-            try
-            {
-                List<string> TO = new List<string>();
-                if (!string.IsNullOrEmpty(Sesion.configuracion.correoInternoSalidaPara))
-                    TO.AddRange(Sesion.configuracion.correoInternoSalidaPara.Split(',').ToList());
-                foreach (string item in TO)
-                    mail.To.Add(item);
-            }
-            catch (Exception ex) { }
-
-        }
-
-        private static void AgregarCC()
-        {
-            try
-            {
-                List<string> CC = new List<string>();
-                if (!string.IsNullOrEmpty(Sesion.configuracion.correoInternoSalidaCC))
-                    CC.AddRange(Sesion.configuracion.correoInternoSalidaCC.ToString().Split(',').ToList());
-                if (CC != null)
-                    foreach (string item in CC)
-                        mail.CC.Add(item);
-            }
-            catch (Exception ex) { }
-
-        }
         public static string Cabecera()
         {
             return @"<html><body><!DOCTYPE html>
@@ -414,10 +139,6 @@ namespace ServiceAutoPolizaEntidades
         {
             StringBuilder pie = new StringBuilder();
             pie.Append("<br /><br />");
-            //pie.Append("<font face='Tahoma' SIZE=2  COLOR=gray><br/>  ACATITA DE BAJAN No. 222, COL. LOMAS DE HIDALGO <br />");
-            //pie.Append("TEL: (443) 3226-300, EXT. 2408, MORELIA, MICH.<br />");
-            //pie.Append("LADA SIN COSTO: 01 800 3000 268<br />");
-            //pie.Append("www.cajamorelia.com.mx</font>");
             pie.Append("</body>");
             pie.Append("</html>");
             return pie.ToString();
@@ -458,53 +179,30 @@ namespace ServiceAutoPolizaEntidades
             return estilos.ToString();
         }
 
-        public static void EnviarCorreInterno(string asunto, string cuerpo)
+        public static void EnviarCorreExterno(string asunto, string cuerpo,string cveEmpleado)
         {
             try
             {
-                InicializaCorreo();
-                AgregarTO();
-                AgregarCC();
-                mail.Subject = asunto;
-                mail.Body += cuerpo;
-                client.Send(mail);
-                mail.Attachments.Clear();
-                mail.Body = string.Empty;
-                mail.To.Clear();
-                mail.Dispose();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static void EnviarCorreExterno(string asunto, string cuerpo)
-        {
-            try
-            {
-                string correoProveedor = Sesion.configuracion.correoExternoEmisor;//"cristian.perez.garcia.54@gmail.com";
-                string contrasenaProveedor = Sesion.configuracion.contrasenaCorreoExterno;//ConfigurationManager.AppSettings["contrasenaCorreoExterno"].ToString(); //"Kaneki_54";
+                string correoProveedor = WebConfigurationManager.AppSettings["correoProveedor"].ToString();//"cristian.perez.garcia.54@gmail.com";
+                string contrasenaProveedor = WebConfigurationManager.AppSettings["contrasenaProveedor"].ToString(); //ConfigurationManager.AppSettings["contrasenaCorreoExterno"].ToString(); //"Kaneki_54";
 
                 System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
-                mmsg.To.Add(AgregarTOExterno()); // cuenta Email a la cual sera dirigido el correo
+                AgregarTOExterno(cveEmpleado, mmsg); // cuenta Email a la cual sera dirigido el correo
                 mmsg.Subject = asunto; //Asunto del correo
                 mmsg.SubjectEncoding = System.Text.Encoding.UTF8; //cambiamos el tipo de texto a UTF8
-                if (!string.IsNullOrEmpty(Sesion.configuracion.correoExternoSalidaCC))
-                    mmsg.CC.Add(AgregarCCExterno());
-                //mmsg.Bcc.Add("var901106@gmail.com"); //es para quien este dirigida una copia sobre ese correo
                 mmsg.Body = cuerpo; //Cuerpo del mensaje
                 mmsg.BodyEncoding = System.Text.Encoding.UTF8; // tambien encodear a utf8
                 mmsg.IsBodyHtml = true; // indicamos que dentro del body viene codigo HTML
                 mmsg.From = new System.Net.Mail.MailAddress(correoProveedor); // el email que enviara el correo (proveedor)
 
                 System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient(); // se realiza el cliente correo
-                cliente.Credentials = new System.Net.NetworkCredential(correoProveedor, contrasenaProveedor);  // Credenciales del correo emisor
-
+                
                 cliente.Port = 587;
                 cliente.EnableSsl = true;
-
+                cliente.UseDefaultCredentials = false;
+                cliente.DeliveryMethod = SmtpDeliveryMethod.Network;
                 cliente.Host = "smtp.gmail.com"; //mail.dominio.com
+                cliente.Credentials = new System.Net.NetworkCredential(correoProveedor, contrasenaProveedor);  // Credenciales del correo emisor
                 //smtp
                 cliente.Send(mmsg);
             }
@@ -514,14 +212,22 @@ namespace ServiceAutoPolizaEntidades
             }
         }
 
-        private static string AgregarTOExterno()
+        private static void AgregarTOExterno(string cveEmpleado, MailMessage mmsg)
         {
-            return Sesion.configuracion.correoExternoSalidaPara;// ConfigurationManager.AppSettings["correosParaExterno"].ToString();
-        }
-
-        private static string AgregarCCExterno()
-        {
-            return Sesion.configuracion.correoExternoSalidaCC;//ConfigurationManager.AppSettings["correosCcExterno"].ToString();
+            string correosEnvio = string.Empty;
+            List<string> TO = new List<string>();
+            try
+            {
+                emailDAO = new EmailDAO();
+                correosEnvio = emailDAO.ConsultarCorreosEnvio(cveEmpleado);
+                if (!string.IsNullOrEmpty(correosEnvio))
+                    TO.AddRange(correosEnvio.Split(',').ToList());
+                TO.RemoveAll(x=>x.Equals(""));
+             
+                foreach (string item in TO)
+                    mmsg.To.Add(item);
+            }
+            catch (Exception ex) { }// ConfigurationManager.AppSettings["correosParaExterno"].ToString();
         }
     }
 }

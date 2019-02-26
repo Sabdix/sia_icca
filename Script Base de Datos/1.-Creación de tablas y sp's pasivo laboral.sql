@@ -1633,6 +1633,64 @@ GO
 GRANT EXECUTE ON DT_SP_INICIAR_SESION TO public;  
 GO
 
+--========================SP para consultar los autorizadores de un proyecto en particular
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTAR_AUTORIZADORES_PROYECTO')
+BEGIN
+	DROP PROCEDURE DT_SP_CONSULTAR_AUTORIZADORES_PROYECTO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_CONSULTAR_AUTORIZADORES_PROYECTO
+	-- Add the parameters for the stored procedure here
+	@Em_Cve_Empleado VARCHAR(100)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	DECLARE
+		@proyecto_empleado varchar(500)
+
+    -- Insert statements for procedure here
+
+	--1.-Obtenemos la información del proyecto del empleado que esta generando el permiso
+		select @proyecto_empleado=Sucursal.Sc_UserDef_2
+		from Empleado emp
+		inner join Sucursal on Sucursal.Sc_Cve_Sucursal= emp.Sc_Cve_Sucursal
+		where Em_UserDef_1=@Em_Cve_Empleado
+
+		select *
+		from IICA_COMPRAS.dbo.Viaticos_Autorizadores
+		where aut_nivel='D'
+		and aut_proyecto=@proyecto_empleado
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_CONSULTAR_AUTORIZADORES_PROYECTO TO public;  
+GO
+
 /*
 Pruebas Christian
 

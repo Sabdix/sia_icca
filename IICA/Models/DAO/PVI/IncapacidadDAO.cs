@@ -82,6 +82,8 @@ namespace IICA.Models.DAO.PVI
                         result.mensaje = dbManager.DataReader["mensaje"].ToString();
                         result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
                         //result.id = dbManager.DataReader["ID_VACACIONES"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["Id_Vacaciones"].ToString());
+                        if (result.status)
+                            Email.NotificacionFinProceso(incapacidad.emCveEmpleado,"Notificación de la solicitud de una incapacidad","Creación de una solicitud de incapacidad", "Se finaliza la solicitud de la incapacidad");
                     }
                 }
             }

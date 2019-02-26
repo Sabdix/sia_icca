@@ -38,6 +38,8 @@ namespace IICA.Models.DAO.PVI
                         result.mensaje = dbManager.DataReader["mensaje"].ToString();
                         result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
                         result.id = dbManager.DataReader["ID_VACACIONES"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["Id_Vacaciones"].ToString());
+                        if (result.status)
+                            Email.NotificacionFinProceso(vacacion.emCveEmpleado,"Notificación de la solicitud de vacaciones","Creación de una solicitud de vacaciones","Se finaliza la solicitud de las vacaciones");
                     }
                 }
             }
