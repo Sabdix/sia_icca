@@ -23,4 +23,13 @@ namespace IICA.Models.Entidades
         SOLICITUD_CANCELADA = 3,
         SOLICITUD_PENDIENTE_DE_ENVIAR
     }
+
+    public enum FormatosIncapacidad
+    {
+        FORMATO_INCAPACIDAD = 1,
+        FORMATO_ADICIONAL = 2,
+        FoRMATO_ST7_CALIFICACION_RT,
+        FORMATO_ST7_ALTA_RT,
+    }
+
 }

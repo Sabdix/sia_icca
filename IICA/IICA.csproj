@@ -215,8 +215,10 @@
     <Content Include="Content\assets\js\dashboard_v2.js" />
     <Content Include="Content\assets\js\datatables.js" />
     <Content Include="Content\assets\js\email_comman.js" />
+    <Content Include="Content\assets\js\Evt\evtAutSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtAutSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtAutSolPermiso.js" />
+    <Content Include="Content\assets\js\Evt\evtMisIncapacidades.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolPermiso.js" />
@@ -490,6 +492,7 @@
     <Content Include="Views\Incapacidad\NuevaSolicitud.cshtml" />
     <Content Include="Views\Incapacidad\MisIncapacidades.cshtml" />
     <Content Include="Views\Vacacion\VacacionesPorAutorizar.cshtml" />
+    <Content Include="Views\Incapacidad\IncapacidadesPorAutorizar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
