@@ -443,7 +443,10 @@ CREATE TABLE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 	Fecha_Inicio_Periodo DATETIME,
 	Fecha_Fin_Periodo DATETIME,
 	Saldo_Periodo_Anterior INT,
-	Saldo_Actual_Proporcional INT,
+	Saldo_Periodo_Anterior_Usado INT,
+	Saldo_Proporcional_Actual INT,
+	Saldo_Proporcional_Actual_Usado INT,
+	Saldo_Actual_Disponible INT,
 	Saldo_Actual_Utilizado INT,
 	Saldo_Correspondiente INT,
 	Fecha_Actualizacion DATETIME,
@@ -462,6 +465,9 @@ DECLARE
 	@Fecha_Ingreso DATETIME
 
 SET @Hoy=CONVERT(VARCHAR,GETDATE())
+
+
+DROP TABLE #TASK1
 
 CREATE TABLE #TASK1
 (
@@ -509,7 +515,10 @@ INSERT
 	Fecha_Inicio_Periodo,
 	Fecha_Fin_Periodo,
 	Saldo_Periodo_Anterior,
-	Saldo_Actual_Proporcional,
+	Saldo_Periodo_Anterior_Usado,
+	Saldo_Proporcional_Actual,
+	Saldo_Proporcional_Actual_Usado,
+	Saldo_Actual_Disponible,
 	Saldo_Actual_Utilizado,
 	Saldo_Correspondiente,
 	Fecha_Actualizacion,
@@ -520,9 +529,12 @@ SELECT
 	c.Anios,
 	DATEADD(yy,a.Anios,b.Em_Fecha_Ingreso) Fecha_Inicio_Periodo,
 	DATEADD(yy,a.Anios+1,b.Em_Fecha_Ingreso) Fecha_Fin_Periodo,
-	0 Saldo_Anterior,
-	((DATEDIFF(DD,DATEADD(yy,a.Anios,b.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365 Saldo_Proporcional,
-	0 Saldo_Tomado,
+	0 Saldo_Periodo_Anterior,
+	0 Saldo_Periodo_Anterior_Usado,
+	((DATEDIFF(DD,DATEADD(yy,a.Anios,b.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365 Saldo_Proporcional_Actual,
+	0 Saldo_Proporcional_Actual_Usado,
+	0+((DATEDIFF(DD,DATEADD(yy,a.Anios,b.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365 Saldo_Actual_Disponible,
+	0 Saldo_Actual_Utilizado,
 	c.Dias_Vacaciones Saldo_Correspondiente,
 	GETDATE() Fecha_Actualizacion,
 	1
@@ -574,7 +586,8 @@ BEGIN
 		Fecha_Inicio_Periodo,
 		Fecha_Fin_Periodo,
 		Saldo_Periodo_Anterior,
-		Saldo_Actual_Proporcional,
+		Saldo_Proporcional_Actual,
+		(Saldo_Periodo_Anterior - Saldo_Periodo_Anterior_Usado) + (Saldo_Proporcional_Actual-Saldo_Proporcional_Actual_Usado) Saldo_Actual_Disponible ,
 		Saldo_Actual_Utilizado,
 		Saldo_Correspondiente
 	FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO
@@ -675,7 +688,13 @@ BEGIN
 	DECLARE 
 		@status int=0,
 		@mensaje varchar(250)='',
-		@proyecto_empleado varchar (10)
+		@proyecto_empleado varchar (10),
+		@Total_Dias_Solicitud INT,
+		@Saldo_Periodo_Anterior_Usado INT,
+		@Saldo_Proporcional_Actual_Usado INT,
+		@Saldo_Periodo_Anterior INT,
+		@Saldo_Proporcional_Actual INT,
+		@Saldo_Actual_Disponible int
 
 
 	IF(@Id_Vacaciones is null or @Id_Vacaciones=0)
@@ -706,7 +725,7 @@ BEGIN
 			GOTO EXIT_
 		END
 		--Se valida el saldo vacacional
-		IF @Total_Dias>(SELECT (Saldo_Periodo_Anterior + Saldo_Actual_Proporcional)-Saldo_Actual_Utilizado FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO WHERE Em_Cve_Empleado=@Em_Cve_Empleado AND Activo=1)
+		IF @Total_Dias>(SELECT (Saldo_Periodo_Anterior -  Saldo_Periodo_Anterior_Usado)+(Saldo_Proporcional_Actual-Saldo_Proporcional_Actual_Usado) FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO WHERE Em_Cve_Empleado=@Em_Cve_Empleado AND Activo=1)
 		BEGIN
 			SET @mensaje='SU SALDO VACACIONAL ES MENOR A LOS DÍAS SOLICITADOS, CONTACTE A UN ADMINISTRADOR.'
 			GOTO EXIT_
@@ -751,13 +770,10 @@ BEGIN
 			END
 
 			/**/
-			DECLARE
-				@Saldo_Periodo_Anterior int,
-				@Saldo_Actual_Disponible int
-
+			
 			SELECT
-				@Saldo_Periodo_Anterior=@Saldo_Periodo_Anterior,
-				@Saldo_Actual_Disponible=Saldo_Actual_Proporcional-Saldo_Actual_Utilizado
+				@Saldo_Periodo_Anterior=Saldo_Periodo_Anterior,
+				@Saldo_Actual_Disponible=Saldo_Actual_Disponible
 			FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 			WHERE Em_Cve_Empleado=@Em_Cve_Empleado
 			AND Activo=1
@@ -765,14 +781,14 @@ BEGIN
 			IF @Saldo_Periodo_Anterior>=@Total_Dias
 				SET @Saldo_Periodo_Anterior=@Saldo_Periodo_Anterior-@Total_Dias
 			ELSE
-			BEGIN
 				SET @Saldo_Periodo_Anterior=0
-				SET @Saldo_Actual_Disponible= (@Saldo_Actual_Disponible+@Saldo_Periodo_Anterior)-@Total_Dias
-			END
+
+			SET @Saldo_Actual_Disponible=@Saldo_Actual_Disponible-@Total_Dias
 
 			UPDATE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 			SET Saldo_Actual_Utilizado=Saldo_Actual_Utilizado+@Total_Dias,
-			Saldo_Periodo_Anterior=@Saldo_Periodo_Anterior
+			Saldo_Periodo_Anterior=@Saldo_Periodo_Anterior,
+			Saldo_Actual_Disponible=@Saldo_Actual_Disponible
 
 			/**/
 
@@ -789,14 +805,6 @@ BEGIN
 	BEGIN
 		--4.- SE TRATA DE UNA ACTUALIZACION DE LAS VACACIONES
 
-		--4.1 VALIDAMOS QUE EL SALDO VACACIONAL ESTE DISPONIBLE
-
-		IF (SELECT Total_Dias FROM DT_TBL_VACACIONES WHERE Id_Vacaciones=@Id_Vacaciones )>(select (Saldo_Periodo_Anterior + Saldo_Actual_Proporcional)-Saldo_Actual_Utilizado from DT_TBL_PERIODO_VACACIONAL_EMPLEADO where Em_Cve_Empleado=@Em_Cve_Empleado AND Activo=1)
-		BEGIN
-			SET @mensaje='EL EMPLEADO YA NO DISPONE DE SALDO VACACIONAL, CONTACTE A SOPORTE TÉCNICO.'
-			GOTO EXIT_
-		END
-
 		UPDATE DT_TBL_VACACIONES
 		SET Id_Status_Solicitud=@Id_Status_Solicitud,
 		Fecha_Actualizacion=GETDATE(),
@@ -809,6 +817,38 @@ BEGIN
 			SET @mensaje='ERROR AL ACTUALIZAR LA SOLICITUD, CONTACTE A SOPORTE TÉCNICO.'
 			GOTO EXIT_
 		END
+				
+		--4.1 SE CANCELA LA SOLICITUD
+		IF @Id_Status_Solicitud=3
+		BEGIN
+
+			SELECT @Total_Dias=Total_Dias FROM DT_TBL_VACACIONES WHERE Id_Vacaciones=@Id_Vacaciones
+
+			SELECT 
+				@Saldo_Periodo_Anterior=Saldo_Periodo_Anterior,
+				@Saldo_Periodo_Anterior_Usado=Saldo_Periodo_Anterior,
+				@Saldo_Proporcional_Actual=Saldo_Proporcional_Actual,
+				@Saldo_Proporcional_Actual_Usado=Saldo_Proporcional_Actual_Usado
+			FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+			WHERE Em_Cve_Empleado=@Em_Cve_Empleado
+
+			IF @Saldo_Proporcional_Actual_Usado<=@Total_Dias
+				SET @Saldo_Proporcional_Actual_Usado=@Saldo_Proporcional_Actual_Usado-@Total_Dias
+			ELSE
+			BEGIN
+				SET @Saldo_Periodo_Anterior_Usado=(@Saldo_Periodo_Anterior_Usado+@Saldo_Proporcional_Actual_Usado)-@Total_Dias
+				SET @Saldo_Proporcional_Actual_Usado=0
+			END
+
+			UPDATE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+			SET Saldo_Actual_Utilizado=Saldo_Actual_Disponible-@Total_Dias,
+			Saldo_Periodo_Anterior_Usado=@Saldo_Periodo_Anterior_Usado,
+			Saldo_Proporcional_Actual_Usado=@Saldo_Proporcional_Actual_Usado
+			WHERE Em_Cve_Empleado=@Em_Cve_Empleado
+			AND Activo=1
+
+		END
+
 
 		SET @status=1
 		SET @mensaje='SOLICITUD GUARDADA CON ÉXITO.'
@@ -1207,6 +1247,15 @@ BEGIN
 
 		--4.1.-SE TRATA DE UNA ACTUALIZACIÓN DE DOCUMENTOS
 		--ESTO QUEDA PENDIENTE
+
+		IF @Formato_Incapacidad IS NOT NULL
+			UPDATE DT_TBL_INCAPACIDAD SET Formato_Incapacidad=@Formato_Incapacidad WHERE Id_Incapacidad=@Id_Incapacidad
+		IF @Formato_Adicional IS NOT NULL
+			UPDATE DT_TBL_INCAPACIDAD SET Formato_Adicional=@Formato_Adicional WHERE Id_Incapacidad=@Id_Incapacidad
+		IF @Formato_ST7_Calificacion_RT IS NOT NULL
+			UPDATE DT_TBL_INCAPACIDAD SET Formato_ST7_Calificacion_RT=@Formato_ST7_Calificacion_RT WHERE Id_Incapacidad=@Id_Incapacidad
+		IF @Formato_ST7_Alta_RT IS NOT NULL
+			UPDATE DT_TBL_INCAPACIDAD SET Formato_ST7_Alta_RT=@Formato_ST7_Alta_RT WHERE Id_Incapacidad=@Id_Incapacidad
 
 		UPDATE DT_TBL_INCAPACIDAD
 		SET Id_Status_Solicitud=@Id_Status,
