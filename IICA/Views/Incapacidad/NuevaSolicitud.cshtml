@@ -2,6 +2,10 @@
 @{
     ViewBag.Title = "Registar solicitud de incapacidades";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <script>
+        nodoMenu = "incapacidades";
+        submenu = "nvsolInca";
+    </script>
 }
 @model IICA.Models.Entidades.PVI.Incapacidad
 
@@ -28,7 +32,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             <div class="row form-row">
                                 <div class="col-md-6">
                                     <label class="form-label">Fecha de la solicitud</label>
-                                    @Html.TextBoxFor(x => x.fechaSolicitud, new { @class = "form-control",@readonly="readonly" })
+                                    @Html.TextBoxFor(x => x.fechaSolicitud, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(x => x.fechaSolicitud, "", new { @class = "error" })
                                 </div>
                             </div>
@@ -48,17 +52,17 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             <div class="row form-row">
                                 <div class="col-md-5">
                                     <label class="form-label">Tipo de incapacidad:</label>
-                                    @Html.DropDownListFor(x=> x.tipoIncapacidad.Id_Tipo_Incapacidad, (IEnumerable<SelectListItem>)ViewBag.TiposIncapacidad, "SELECCIONE TIPO DE INCAPACIDAD",
-                            new { @class = "select-iica", style = "width: 100%;" })
-                                    @Html.ValidationMessageFor(x => x.tipoIncapacidad.Id_Tipo_Incapacidad,"", new { @class = "error" })
+                                    @Html.DropDownListFor(x => x.tipoIncapacidad.Id_Tipo_Incapacidad, (IEnumerable<SelectListItem>)ViewBag.TiposIncapacidad, "SELECCIONE TIPO DE INCAPACIDAD",
+                                 new { @class = "select-iica", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.tipoIncapacidad.Id_Tipo_Incapacidad, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-5">
                                     <label class="form-label">Tipo de seguimiento:</label>
                                     @Html.DropDownListFor(x => x.tipoSeguimiento.Id_Tipo_Seguimiento, (IEnumerable<SelectListItem>)ViewBag.TiposSeguimiento, "SELECCIONE TIPO DE SEGUIMIENTO",
-                                new { @class = "select-iica",style="width: 100%;" })
-                                    @Html.ValidationMessageFor(x => x.tipoSeguimiento.Id_Tipo_Seguimiento,"", new { @class = "error" })
+                                     new { @class = "select-iica", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.tipoSeguimiento.Id_Tipo_Seguimiento, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">
@@ -100,8 +104,6 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-    <link href="~/Content/assets/plugins/sweet-alert/sweetalert.min.css" rel="stylesheet" />
-    <script src="~/Content/assets/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
     <script src="~/Content/assets/js/Evt/evtNuevaSolIncapacidad.js"></script>
 }

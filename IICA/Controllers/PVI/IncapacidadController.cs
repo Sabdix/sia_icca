@@ -55,6 +55,41 @@ namespace IICA.Controllers.PVI
             }
         }
 
+
+        [HttpPost, SessionExpire]
+        public ActionResult EnviarIncapacidad(Incapacidad incapacidad_)
+        {
+            try
+            {
+                incapacidadDAO = new IncapacidadDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                incapacidad_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                incapacidad_.estatusIncapacidad.idEstatusIncapacidad = (int)EstatusSolicitud.SOLICITUD_ENVIADA;
+                return Json(incapacidadDAO.ActualizarIncapacidad(incapacidad_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CancelarIncapacidadUsuario(Incapacidad incapacidad_)
+        {
+            try
+            {
+                incapacidadDAO = new IncapacidadDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                incapacidad_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                incapacidad_.estatusIncapacidad.idEstatusIncapacidad = (int)EstatusSolicitud.SOLICITUD_CANCELADA;
+                return Json(incapacidadDAO.ActualizarIncapacidad(incapacidad_), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
         [SessionExpire]
         public ActionResult IncapacidadesPorAutorizar()
         {
@@ -138,8 +173,9 @@ namespace IICA.Controllers.PVI
                         var file = httpRequestBase.Files[i];
                         if (file != null && file.ContentLength > 0)
                         {
-                            //Server.MapPath("~" + path+"/"+ usuario+"/");
-                            string pathGeneral = WebConfigurationManager.AppSettings["pathFormatosIncapacidades"].ToString() + @"\" + usuario + @"\";
+                            string pathFormatosIncapacidades = WebConfigurationManager.AppSettings["pathFormatosIncapacidades"].ToString();
+                            //string pathGeneral = pathFormatosIncapacidades + @"\" + usuario + @"\";
+                            string pathGeneral = Server.MapPath("~" + pathFormatosIncapacidades + "/" + usuario + "/");
                             if (!System.IO.Directory.Exists(pathGeneral))
                                 System.IO.Directory.CreateDirectory(pathGeneral);
 

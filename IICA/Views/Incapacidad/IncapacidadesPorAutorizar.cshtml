@@ -1,7 +1,11 @@
 ﻿
 @{
-    ViewBag.Title = "IncapacidadesPorAutorizar";
+    ViewBag.Title = "Incapacidades Por Autorizar";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <script>
+        nodoMenu = "incapacidades";
+        submenu = "incaPorAut";
+    </script>
 }
 
 
@@ -43,36 +47,36 @@
                     <tbody>
                         @foreach (Incapacidad incapacidad in Model)
                         {
-                        <tr>
-                            <td>@incapacidad.idIncapacidad</td>
-                            <td>@(incapacidad.usuario.nombreCompleto)</td>
-                            <td><span class="muted">@incapacidad.usuario.programa</span></td>
-                            <td><span>@incapacidad.usuario.departamento</span></td>
-                            <td><span class="muted">@incapacidad.fechaSolicitud.ToShortDateString()</span></td>
-                            <td>
-                                <span class="muted">
-                                    <span class="label label-info">
-                                        @incapacidad.fechaInicio.ToShortDateString()
-                                        &nbsp;&nbsp;al día&nbsp;&nbsp;
-                                        @incapacidad.fechaFin.ToShortDateString()
+                            <tr>
+                                <td>@incapacidad.idIncapacidad</td>
+                                <td>@(incapacidad.usuario.nombreCompleto)</td>
+                                <td><span class="muted">@incapacidad.usuario.programa</span></td>
+                                <td><span>@incapacidad.usuario.departamento</span></td>
+                                <td><span class="muted">@incapacidad.fechaSolicitud.ToShortDateString()</span></td>
+                                <td>
+                                    <span class="muted">
+                                        <span class="label label-info">
+                                            @incapacidad.fechaInicio.ToShortDateString()
+                                            &nbsp;&nbsp;al día&nbsp;&nbsp;
+                                            @incapacidad.fechaFin.ToShortDateString()
+                                        </span>
                                     </span>
-                                </span>
-                            </td>
-                            <td><span class="muted">@incapacidad.totalDias</span></td>
-                            <td><span class="muted">@incapacidad.fechaIngresoLabores.ToShortDateString()</span></td>
-                            <td>
-                                <span data-toggle="modal" data-target="#modal-autorizar" onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
-                                    <button data-toggle="tooltip" title="Autorizar" class="btn btn-info btn-mini">
-                                        <i class="fa fa-check-square-o"></i>
-                                    </button>
-                                </span>
-                                <span data-toggle="modal" data-target="#modal-cancelar" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
-                                    <button data-toggle="tooltip" title="Cancelar" class="btn btn-warning btn-mini">
-                                        <i class="fa fa-close"></i>
-                                    </button>
-                                </span>
-                            </td>
-                        </tr>
+                                </td>
+                                <td><span class="muted">@incapacidad.totalDias</span></td>
+                                <td><span class="muted">@incapacidad.fechaIngresoLabores.ToShortDateString()</span></td>
+                                <td>
+                                    <span data-toggle="modal" data-target="#modal-autorizar" onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
+                                        <button data-toggle="tooltip" title="Autorizar" class="btn btn-info btn-mini">
+                                            <i class="fa fa-check-square-o"></i>
+                                        </button>
+                                    </span>
+                                    <span data-toggle="modal" data-target="#modal-cancelar" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
+                                        <button data-toggle="tooltip" title="Cancelar" class="btn btn-warning btn-mini">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

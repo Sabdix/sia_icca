@@ -56,5 +56,24 @@ namespace IICA.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public ActionResult CerrarSesion()
+        {
+            try
+            {
+                Session["usuarioSesion"] = null;
+                Result result = new Result();
+                result.mensaje = "Gracias por su visita. Hasta pronto.";
+                result.status = true;
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

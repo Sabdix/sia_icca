@@ -77,7 +77,7 @@ function EnviarSol() {
     }
     $.ajax({
         data: { incapacidad_: solSeleccionada },
-        url: rootUrl("/Incapacidad/AutorizarIncapacidad"),
+        url: rootUrl("/Incapacidad/EnviarIncapacidad"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
@@ -97,7 +97,7 @@ function OnSuccesEnviarSol(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Incapacidad/IncapacidadesPorAutorizar"); }, 2000);
+        setTimeout(function () { window.location = rootUrl("/Incapacidad/MisIncapacidades"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
@@ -123,18 +123,10 @@ function CancelarSol() {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
-    var motivoRechazo = $("#modal-can-motivoRechazo").val();
-    if (motivoRechazo === "" || motivoRechazo.length < 10) {
-        $("#error-motivoRechazo").show();
-        return;
-    } else {
-        solSeleccionada.motivoRechazo = motivoRechazo;
-        $("#error-motivoRechazo").hide();
-    }
 
     $.ajax({
         data: { incapacidad_: solSeleccionada },
-        url: rootUrl("/Incapacidad/CancelarIncapacidad"),
+        url: rootUrl("/Incapacidad/CancelarIncapacidadUsuario"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
@@ -145,6 +137,7 @@ function CancelarSol() {
             OnSuccesCancelarSol(data);
         },
         error: function (xhr, status, error) {
+            $("#modal-cancelar").modal("hide");
             ControlErrores(xhr, status, error);
         }
     });
@@ -154,7 +147,7 @@ function OnSuccesCancelarSol(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Incapacidad/IncapacidadesPorAutorizar"); }, 2000);
+        setTimeout(function () { window.location = rootUrl("/Incapacidad/MisIncapacidades"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
