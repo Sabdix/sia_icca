@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     Layout = null;
 }
 @model IICA.Models.Entidades.Usuario
@@ -107,18 +107,38 @@
                         <p>
                             Es un sistema en donde encontrara todo lo referente a su perfil profesional como empleado.
                         </p>
-                        <p><a class="btn btn-default" href="http://localhost:8084/IICADocumentos_/pages/login/loginRoot.jsp?email=@(Model.emCveEmpleado)&password=@(Model.contrasena)">Ingresar &raquo;</a></p>
+                        <p>
+                            <form action="http://localhost:8084/IICADocumentos_v2/pages/login/login_action.jsp" method="post">
+                                <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                                <input hidden name="password" value="@(Model.contrasena)" />
+                                <button type="submit" class="btn btn-default">Ingresar</button>
+                            </form>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <h3>IICA - VIATICOS</h3>
                         <p>IICA-VIATICOS le permitira llevar a cabo el proceso de la solicitud y comprobación de viaticos.</p>
-                        <p><a class="btn btn-default" href="http://localhost:8084/ViaticosIICA/faces/pages/loginRoot.xhtml?user=@(Model.emCveEmpleado)&pass=@(Model.contrasena)">Ingresar &raquo;</a></p>
+                        <p>
+                            <form action="http://localhost:8084/ViaticosIICA/faces/pages/loginRoot.xhtml" method="post">
+                                <input hidden name="user" value="@(Model.emCveEmpleado)" />
+                                <input hidden name="pass" value="@(Model.contrasena)" />
+                                <button type="submit" class="btn btn-default">Ingresar</button>
+                            </form>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <h3>IICA - PERMISOS, VACACIONES E INCAPACIDADES</h3>
                         <p>Te brindara la facilidad de tramitar y administrar tus periodos vacacionales como solicitar todos aquellos permisos o incapacidades que llegases a requerir durante tu estadia en IICA</p>
                         <p><a class="btn btn-default" href="@Url.Action("Index","Home")">Ingresar &raquo;</a></p>
                     </div>
+                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                    {
+                        <div class="col-md-4">
+                            <h3>IICA - PASIVO LABORAL</h3>
+                            <p>Sistema que le permitira realizar calculos de planeaciones respectivas al gasto salarial de la empresa.</p>
+                            <p><a class="btn btn-default" href="http://localhost:8084/ViaticosIICA/faces/pages/loginRoot.xhtml?user=@(Model.emCveEmpleado)&pass=@(Model.contrasena)">Ingresar &raquo;</a></p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
