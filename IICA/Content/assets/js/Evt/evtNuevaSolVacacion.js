@@ -90,8 +90,10 @@ function CalcularTotalDias() {
     {
         $('#totalDias').val(0);
     }
-    if ($('#totalDias').val() > $('#totalDiasSaldoVacacional').val())
+    if (diasVacaciones > $("#totalDiasSaldoVacacional").val()) {
         MostrarNotificacionLoad("error", "Saldo de dias de vacaciones insuficiente", 3000);
+        $("#fechaFin").val("");
+    }
 }
 
 

@@ -176,13 +176,13 @@ namespace IICA.Models.DAO.PVI
                     dbManager.Open();
                     dbManager.CreateParameters(1);
                     dbManager.AddParameters(0, "Em_Cve_Empleado", emCveEmpleado);
-                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_VACACIONES_USUARIO");
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_SALDO_VACACIONAL");
                     while (dbManager.DataReader.Read())
                     {
                         vacacion = new Vacacion();
-                        vacacion.periodoAnterior = dbManager.DataReader["periodo_anterior"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["periodo_anterior"].ToString());
-                        vacacion.proporcional = dbManager.DataReader["proporcional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["proporcional"].ToString());
-                        vacacion.totalDiasSaldoVacacional = dbManager.DataReader["total_dias_saldo_vacacional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["total_dias_saldo_vacacional"].ToString());
+                        vacacion.periodoAnterior = dbManager.DataReader["Saldo_Periodo_Anterior"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Saldo_Periodo_Anterior"].ToString());
+                        vacacion.proporcional = dbManager.DataReader["Saldo_Proporcional_Actual"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Saldo_Proporcional_Actual"].ToString());
+                        vacacion.totalDiasSaldoVacacional = dbManager.DataReader["Saldo_Actual_Disponible"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Saldo_Actual_Disponible"].ToString());
                     }
                 }
             }
