@@ -68,7 +68,7 @@
             </li>
         </ul>
 
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br />
         <div class="side-bar-widgets">
             <p class="menu-title sm">SIA IICA</p>
             <ul class="folders">
@@ -87,8 +87,8 @@
                         <div class="status-icon blue"></div>
                         IICA Viaticos
                         <form id="form-via" action="http://localhost:8084/ViaticosIICA/faces/pages/loginRoot.xhtml" method="post">
-                            <input hidden name="email" value="@(Model.emCveEmpleado)" />
-                            <input hidden name="password" value="@(Model.contrasena)" />
+                            <input hidden name="user" value="@(Model.emCveEmpleado)" />
+                            <input hidden name="pass" value="@(Model.contrasena)" />
                         </form>
                     </a>
                 </li>
