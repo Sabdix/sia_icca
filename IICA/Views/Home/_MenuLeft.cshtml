@@ -16,7 +16,7 @@
 
         <p class="menu-title sm">Menu</p>
         <ul>
-            <li class="start ">
+            <li class="start nodo-menu" id="nodo-dashboard">
                 <a href="@Url.Action("Index","Home")">
                     <i class="material-icons">home</i> <span class="title">Dashboard</span> <span class="selected"></span>
                 </a>
@@ -25,40 +25,88 @@
             <li class="nodo-menu" id="nodo-permisos">
                 <a href="javascript:;"> <i class="material-icons">assignment_ind</i> <span class="title">Permisos</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
-                    <li> <a id="submenu-nvsolPermi" href="@Url.Action("NuevaSolicitud","Permiso")">Nueva solicitud </a> </li>
-                    <li> <a id="submenu-misPermisos" href="@Url.Action("MisPermisos","Permiso")">Mis Permisos</a> </li>
-                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
-                {
-                    <li> <a id="submenu-permisosPorAut" href="@Url.Action("PermisosPorAutorizar", "Permiso")">Permisos por autorizar</a> </li>
-            }
+                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                    {
+                        <li> <a id="submenu-nvsolPermi" href="@Url.Action("NuevaSolicitud","Permiso")">Nueva solicitud </a> </li>
+                        <li> <a id="submenu-misPermisos" href="@Url.Action("MisPermisos","Permiso")">Mis Permisos</a> </li>
+                    }
+                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
+                    {
+                        <li> <a id="submenu-permisosPorAut" href="@Url.Action("PermisosPorAutorizar", "Permiso")">Permisos por autorizar</a> </li>
+                    }
                 </ul>
             </li>
             <!--    VACACIONES    -->
             <li class="nodo-menu" id="nodo-vacaciones">
                 <a href="javascript:;"> <i class="material-icons">flight_takeoff</i> <span class="title">Vacaciones</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
-                    <li> <a id="submenu-nvsolVaca" href="@Url.Action("NuevaSolicitud","Vacacion")">Nueva solicitud </a> </li>
-                    <li> <a id="submenu-misVacaciones" href="@Url.Action("MisVacaciones","Vacacion")">Mis Vacaciones</a> </li>
-                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
-                {
-                    <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
-            }
+                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                    {
+                        <li> <a id="submenu-nvsolVaca" href="@Url.Action("NuevaSolicitud", "Vacacion")">Nueva solicitud </a> </li>
+                        <li> <a id="submenu-misVacaciones" href="@Url.Action("MisVacaciones", "Vacacion")">Mis Vacaciones</a> </li>
+                    }
+                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
+                    {
+                        <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
+                    }
                 </ul>
             </li>
             <!--    INCAPACIDADES    -->
             <li class="nodo-menu" id="nodo-incapacidades">
                 <a href="javascript:;"> <i class="material-icons">local_hospital</i> <span class="title">Incapacidades</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
-                    <li> <a id="submenu-nvsolInca" href="@Url.Action("NuevaSolicitud","Incapacidad")">Nueva solicitud </a> </li>
-                    <li> <a id="submenu-misIncapacidades" href="@Url.Action("MisIncapacidades","Incapacidad")">Mis Incapacidades</a> </li>
-                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
-                {
-                    <li> <a id="submenu-incaPorAut" href="@Url.Action("IncapacidadesPorAutorizar", "Incapacidad")">Incapacidades por autorizar</a> </li>
-            }
+                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                    {
+                        <li> <a id="submenu-nvsolInca" href="@Url.Action("NuevaSolicitud","Incapacidad")">Nueva solicitud </a> </li>
+                        <li> <a id="submenu-misIncapacidades" href="@Url.Action("MisIncapacidades","Incapacidad")">Mis Incapacidades</a> </li>
+                    }
+                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
+                    {
+                        <li> <a id="submenu-incaPorAut" href="@Url.Action("IncapacidadesPorAutorizar", "Incapacidad")">Incapacidades por autorizar</a> </li>
+                    }
                 </ul>
             </li>
         </ul>
-        <div class="clearfix"></div>
+
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <div class="side-bar-widgets">
+            <p class="menu-title sm">SIA IICA</p>
+            <ul class="folders">
+                <li>
+                    <a href="javascript:;" onclick="document.getElementById('form-doc').submit();">
+                        <div class="status-icon green"></div>
+                        IICA Documentos
+                        <form id="form-doc" action="http://localhost:8084/IICADocumentos_v2/pages/login/login_action.jsp" method="post">
+                            <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                            <input hidden name="password" value="@(Model.contrasena)" />
+                        </form>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;" onclick="document.getElementById('form-via').submit();">
+                        <div class="status-icon blue"></div>
+                        IICA Viaticos
+                        <form id="form-via" action="http://localhost:8084/ViaticosIICA/faces/pages/loginRoot.xhtml" method="post">
+                            <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                            <input hidden name="password" value="@(Model.contrasena)" />
+                        </form>
+                    </a>
+                </li>
+                @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                {
+                    <li>
+                        <a href="http://localhost:8084/ViaticosIICA/faces/pages/loginRoot.xhtml?user=@(Model.emCveEmpleado)&pass=@(Model.contrasena)">
+                            <div class="status-icon red"></div>
+                            IICA Pasivo Laboral
+                        </a>
+                    </li>
+                }
+                <li class="folder-input" style="display:none">
+                    <input type="text" placeholder="Name of folder" class="no-boarder folder-name" name="">
+                </li>
+            </ul>
+        </div>
+
         <div class="footer-widget">
             <div class="pull-right">
                 <div class="details-status"> No. de empleado: @Model.emCveEmpleado</div>

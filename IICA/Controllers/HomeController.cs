@@ -12,7 +12,11 @@ namespace IICA.Controllers
         [SessionExpire]
         public ActionResult Index()
         {
-            return View();
+            Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+            if (usuarioSesion != null)
+                return View(usuarioSesion);
+            else
+                return RedirectToAction("Index", "IICA");
         }
 
         [SessionExpire]
