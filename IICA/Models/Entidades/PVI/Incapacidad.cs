@@ -30,6 +30,7 @@ namespace IICA.Models.Entidades.PVI
         public string formatoIncapacidad { get; set; }
         public string formatoST7CalificacionRT { get; set; }
         public string formatoST7AltaRT { get; set; }
+        public string formatoAdicional { get; set; }
         public TipoIncapacidad tipoIncapacidad { get; set; }
         public TipoSeguimiento tipoSeguimiento { get; set; }
 

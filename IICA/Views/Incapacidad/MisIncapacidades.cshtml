@@ -68,8 +68,8 @@
                                 <td>@incapacidad.idIncapacidad</td>
                                 <td>
                                     <span class="muted">
-                                        @(incapacidad.fechaInicio == DateTime.MinValue ? "N/A" : incapacidad.fechaInicio.ToShortDateString()) al
-                                        @(incapacidad.fechaFin == DateTime.MinValue ? "N/A" : incapacidad.fechaFin.ToShortDateString())
+                                        @(incapacidad.fechaInicio.ToShortDateString() == "01/01/1900" ? "N/A" : incapacidad.fechaInicio.ToShortDateString()) al
+                                        @(incapacidad.fechaFin.ToShortDateString() == "01/01/1900" ? "N/A" : incapacidad.fechaFin.ToShortDateString())
                                     </span>
                                 </td>
                                 <td>
@@ -79,7 +79,7 @@
                                 </td>
                                 <td><span class="muted">@incapacidad.tipoIncapacidad.Descripcion_Tipo_Incapacidad</span></td>
                                 <td><span class="muted">@incapacidad.tipoSeguimiento.Descripcion_Tipo_Seguimiento</span></td>
-                                <td><span class="muted">@(incapacidad.fechaAutorizacion == DateTime.MinValue ? "N/A" : incapacidad.fechaAutorizacion.ToShortDateString())</span></td>
+                                <td><span class="muted">@(incapacidad.fechaAutorizacion.ToShortDateString() == "01/01/1900" ? "Sin autorizar" : incapacidad.fechaAutorizacion.ToShortDateString())</span></td>
                                 <td><span class="label label-@labelEstatus">@incapacidad.estatusIncapacidad.descripcion</span></td>
                                 <td><span class="muted">@incapacidad.motivoRechazo</span></td>
                                 <td>

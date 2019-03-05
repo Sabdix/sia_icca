@@ -37,6 +37,7 @@
                             <th style="width:10%;text-align: center;">Fecha de Autorización</th>
                             <th style="width:10%;text-align: center;">Estatus</th>
                             <th style="width:10%;text-align: center;">Motivo del rechazo</th>
+                            <th style="width:10%;text-align: center;">Formato de permiso</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,9 +74,16 @@
                                     </span>
                                 </td>
                                 <td><span class="muted">@permiso.totalHoras hrs</span></td>
-                                <td><span class="muted">@(permiso.fechaAutorizacion == DateTime.MinValue ? "N/A" : permiso.fechaAutorizacion.ToShortDateString())</span></td>
+                                <td><span class="muted">@(permiso.fechaAutorizacion.ToShortDateString() == "01/01/1900" ? "Sin autorizar" : permiso.fechaAutorizacion.ToShortDateString())</span></td>
                                 <td><span class="label label-@labelEstatus">@permiso.estatusPermiso.descripcion</span></td>
                                 <td><span class="muted">@permiso.motivoRechazo</span></td>
+                                <td>
+                                    <span onclick="ImprimirFormatoPermiso(@(permiso.idPermiso))">
+                                        <button data-toggle="tooltip" title="Imprimir formato" class="btn btn-info btn-mini">
+                                            <i class="fa fa-print"></i>
+                                        </button>
+                                    </span>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -100,6 +108,31 @@
         $(document).ready(function () {
             $('#tabla-mis-permisos').dataTable()
         });
+
+
+        function ImprimirFormatoPermiso(id) {
+            $.ajax({
+                data: { id: id },
+                url: rootUrl("/Permiso/_ImprimirFormatoPermiso"),
+                dataType: "html",
+                method: "post",
+                beforeSend: function () {
+                    MostrarLoading();
+                },
+                success: function (data) {
+                    OcultarLoading();
+                    $("#content-impresion").html(data);
+                    $("#content-impresion").printThis({ printContainer: false });
+                    setTimeout(function () {
+                        $("#content-impresion").html("");
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    ControlErrores(xhr, status, error);
+                }
+            });
+        }
+
 
     </script>
 

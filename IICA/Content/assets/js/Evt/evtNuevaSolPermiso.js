@@ -110,4 +110,5 @@ function ImprimirFormatoPermiso(id) {
             ControlErrores(xhr, status, error);
         }
     });
+
 }

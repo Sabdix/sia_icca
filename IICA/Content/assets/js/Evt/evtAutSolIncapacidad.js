@@ -4,6 +4,11 @@ $(document).ready(function () {
 
     $('#tabla-solicitud-incapacidades').dataTable();
 
+    $(".mostrarFormato").click(function () {
+
+
+    });
+
 });
 
 /*==========================================================================================================*/
@@ -130,4 +135,13 @@ function convertDate(inputFormat) {
     function pad(s) { return (s < 10) ? '0' + s : s; }
     var d = new Date(inputFormat);
     return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
+}
+
+
+function mostrarFormato(url) {
+    url = rootUrl(url);
+    $('#content-formato').html("");
+    var iframe = $('<iframe style="width: 100%;height:600px;">');
+    iframe.attr('src', url);
+    $('#content-formato').append(iframe);
 }

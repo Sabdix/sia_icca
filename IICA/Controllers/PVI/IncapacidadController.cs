@@ -183,7 +183,7 @@ namespace IICA.Controllers.PVI
                             string pathFormato = Path.Combine(pathGeneral, nombre);
 
                             file.SaveAs(pathFormato);
-                            return pathFormato;
+                            return Path.Combine(pathFormatosIncapacidades,nombre);
                         }
                     }
                 }

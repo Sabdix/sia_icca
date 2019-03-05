@@ -41,6 +41,7 @@
                             <th style="width:10%;text-align: center;">Periodo de la incapacidad</th>
                             <th style="width:10%;text-align: center;">Total de dias</th>
                             <th style="width:10%;text-align: center;">Fecha de ingreso a laboral</th>
+                            <th style="width:10%;text-align: center;">Formatos</th>
                             <th style="width:10%;text-align: center;">Acciones</th>
                         </tr>
                     </thead>
@@ -64,6 +65,46 @@
                                 </td>
                                 <td><span class="muted">@incapacidad.totalDias</span></td>
                                 <td><span class="muted">@incapacidad.fechaIngresoLabores.ToShortDateString()</span></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" href="#"> Ver formatos <span class="caret"></span> </a>
+                                        <ul class="dropdown-menu">
+                                            @if (!string.IsNullOrEmpty(incapacidad.formatoIncapacidad))
+                                            {
+                                                <li>
+                                                    <a href="javascript:()" onclick="mostrarFormato('@incapacidad.formatoIncapacidad')" data-toggle="modal" data-target="#modal-formato">
+                                                        Incapacidad
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(incapacidad.formatoAdicional))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato('@incapacidad.formatoAdicional')" data-target="#modal-formato">
+                                                        Adicionales
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(incapacidad.formatoST7CalificacionRT))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato(@incapacidad.formatoST7CalificacionRT)" data-target="#modal-formato">
+                                                        ST7 calificacion RT
+                                                    </a>
+                                                </li>
+                                            }
+                                            <li class="divider"></li>
+                                            @if (!string.IsNullOrEmpty(incapacidad.formatoST7AltaRT))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato(@incapacidad.formatoST7AltaRT)" data-target="#modal-formato">
+                                                        ST7 alta RT
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </td>
                                 <td>
                                     <span data-toggle="modal" data-target="#modal-autorizar" onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
                                         <button data-toggle="tooltip" title="Autorizar" class="btn btn-info btn-mini">
@@ -183,6 +224,21 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" onclick="CancelarSol()">Cancelar solicitud</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="modal-formato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="content-formato">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
 

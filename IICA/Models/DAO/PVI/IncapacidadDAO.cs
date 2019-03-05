@@ -166,7 +166,10 @@ namespace IICA.Models.DAO.PVI
                         incapacidad.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
                         incapacidad.tipoSeguimiento.Id_Tipo_Seguimiento = dbManager.DataReader["Id_Tipo_Seguimiento"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Tipo_Seguimiento"].ToString());
                         //incapacidad.tipoSeguimiento.Descripcion_Tipo_Seguimiento = dbManager.DataReader["Descripcion_Tipo_Seguimiento"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Tipo_Seguimiento"].ToString();
-
+                        incapacidad.formatoIncapacidad = dbManager.DataReader["Formato_Incapacidad"] == DBNull.Value ? "" : dbManager.DataReader["Formato_Incapacidad"].ToString();
+                        incapacidad.formatoAdicional = dbManager.DataReader["Formato_Adicional"] == DBNull.Value ? "" : dbManager.DataReader["Formato_Adicional"].ToString();
+                        incapacidad.formatoST7AltaRT = dbManager.DataReader["Formato_ST7_Alta_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Alta_RT"].ToString();
+                        incapacidad.formatoST7CalificacionRT = dbManager.DataReader["Formato_ST7_Calificacion_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Calificacion_RT"].ToString();
                         incapacidades.Add(incapacidad);
                     }
                 }
