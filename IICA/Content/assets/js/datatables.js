@@ -1,4 +1,32 @@
-$.extend(true, $.fn.dataTable.defaults, { "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'p i>>", "sPaginationType": "bootstrap", "oLanguage": { "sLengthMenu": "_MENU_" } }); $.extend($.fn.dataTableExt.oStdClasses, { "sWrapper": "dataTables_wrapper form-inline" }); $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) { return { "iStart": oSettings._iDisplayStart, "iEnd": oSettings.fnDisplayEnd(), "iLength": oSettings._iDisplayLength, "iTotal": oSettings.fnRecordsTotal(), "iFilteredTotal": oSettings.fnRecordsDisplay(), "iPage": oSettings._iDisplayLength === -1 ? 0 : Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength), "iTotalPages": oSettings._iDisplayLength === -1 ? 0 : Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength) }; }; $.extend($.fn.dataTableExt.oPagination, {
+$.extend(true, $.fn.dataTable.defaults, {
+    "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'p i>>",
+    "sPaginationType": "bootstrap", 
+    "oLanguage": {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "Ningun dato disponible en esta tabla",
+        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst": "Primero",
+            "sLast": "Ultimo",
+            "sNext": "Siguiente",
+            "sPrevious": "Anterior"
+        },
+        "oAria": {
+            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+    }
+});
+$.extend($.fn.dataTableExt.oStdClasses, { "sWrapper": "dataTables_wrapper form-inline" }); $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) { return { "iStart": oSettings._iDisplayStart, "iEnd": oSettings.fnDisplayEnd(), "iLength": oSettings._iDisplayLength, "iTotal": oSettings.fnRecordsTotal(), "iFilteredTotal": oSettings.fnRecordsDisplay(), "iPage": oSettings._iDisplayLength === -1 ? 0 : Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength), "iTotalPages": oSettings._iDisplayLength === -1 ? 0 : Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength) }; }; $.extend($.fn.dataTableExt.oPagination, {
     "bootstrap": {
         "fnInit": function (oSettings, nPaging, fnDraw) {
             var oLang = oSettings.oLanguage.oPaginate; var fnClickHandler = function (e) { e.preventDefault(); if (oSettings.oApi._fnPageChange(oSettings, e.data.action)) { fnDraw(oSettings); } }; $(nPaging).addClass('pagination').append('<ul>' +

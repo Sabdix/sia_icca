@@ -38,12 +38,12 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-4">
-                                    <label class="form-label">Hora de salida</label>
+                                    <label class="form-label">Hora de inicio</label>
                                     @Html.TextBoxFor(x => x.horaInicio, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.horaInicio, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Hora de llegada</label>
+                                    <label class="form-label">Hora fin</label>
                                     @Html.TextBoxFor(x => x.horaFin, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.horaFin, "", new { @class = "error" })
                                 </div>

@@ -112,6 +112,7 @@ namespace IICA.Models.DAO.PVI
                         formatoVacacion.fechaFin = dbManager.DataReader["Fecha_Fin"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Fin"].ToString();
                         formatoVacacion.totalDias = dbManager.DataReader["Total_Dias"] == DBNull.Value ? "" : dbManager.DataReader["Total_Dias"].ToString();
                         formatoVacacion.motivoVacaciones = dbManager.DataReader["Motivo_Vacaciones"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Vacaciones"].ToString();
+                        formatoVacacion.totalDiasSaldoVacacional = dbManager.DataReader["Total_Dias_Saldo_Vacacional"] == DBNull.Value ? "" : dbManager.DataReader["Total_Dias_Saldo_Vacacional"].ToString();
                     }
                     else
                     {

@@ -87,6 +87,11 @@
         display: block;
         border: 1px solid #595959;
     }
+    /*------------------------------------*/
+    #content-firmas {
+        display: table;
+        margin-top: 80px;
+    }
 </style>
 <div id="content-principal">
 
@@ -156,23 +161,35 @@
                 <tr>
                     <td><label style="font-weight:900;">Reanudando labores el día</label></td>
                     <td class="text-center" colspan="3">
-                        <label class="label-dato">@Model.emFechaIngreso</label>
+                        <label class="label-dato">@Model.fechaFin</label>
                     </td>
                 </tr>
-                <tr>
+                @*<tr>
                     <td><label style="font-weight:900;">Día de descanso según el rol</label></td>
                     <td class="text-center" colspan="2">
                         <label class="label-dato">Falta</label>
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td><label style="font-weight:900;">Día de vacaciones restantes</label></td>
                     <td class="text-center" colspan="3">
-                        <label class="label-dato">Falta</label>
+                        <label class="label-dato">@Model.totalDiasSaldoVacacional</label>
                     </td>
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div id="content-firmas" class="md-90">
+        <div style="text-align: center; float: left;">
+            <p>________________________</p>
+            <p>@Model.nombreCompleto</p>
+        </div>
+
+        <div style="text-align: center; float: right;">
+            <p>________________________</p>
+            <p>Nombre y firma del jefe inmediato</p>
+        </div>
+
     </div>
 
 </div>
