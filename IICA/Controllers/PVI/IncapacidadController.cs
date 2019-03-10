@@ -65,7 +65,13 @@ namespace IICA.Controllers.PVI
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 incapacidad_.emCveEmpleado = usuarioSesion.emCveEmpleado;
                 incapacidad_.estatusIncapacidad.idEstatusIncapacidad = (int)EstatusSolicitud.SOLICITUD_ENVIADA;
-                return Json(incapacidadDAO.ActualizarIncapacidad(incapacidad_), JsonRequestBehavior.AllowGet);
+                Result result = incapacidadDAO.ActualizarIncapacidad(incapacidad_);
+                if (result.status)
+                {
+                    try { Email.NotificacionIncapacidad((Incapacidad)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -139,22 +145,22 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        [HttpPost,SessionExpire]
-        public ActionResult SubirDocumento(int idIncapacidad,FormatosIncapacidad formato)
+        [HttpPost, SessionExpire]
+        public ActionResult SubirDocumento(int idIncapacidad, FormatosIncapacidad formato)
         {
             try
             {
                 incapacidadDAO = new IncapacidadDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 Result result = new Result();
-                string pathFormato= ObtenerFormatoHttpPost(Request, idIncapacidad, formato.ToString(), usuarioSesion.emCveEmpleado);
+                string pathFormato = ObtenerFormatoHttpPost(Request, idIncapacidad, formato.ToString(), usuarioSesion.emCveEmpleado);
                 if (!string.IsNullOrEmpty(pathFormato))
                 {
                     result = incapacidadDAO.ActualizarFormatoIncapacidad(idIncapacidad, formato, pathFormato);
                 }
                 else
-                    result.mensaje ="No se logro subir el formato, intente mas tarde.";
-                return Json(result,JsonRequestBehavior.AllowGet);
+                    result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -162,7 +168,7 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        private string ObtenerFormatoHttpPost(HttpRequestBase httpRequestBase,int idIncapacidad,string formato,string usuario)
+        private string ObtenerFormatoHttpPost(HttpRequestBase httpRequestBase, int idIncapacidad, string formato, string usuario)
         {
             try
             {
@@ -179,11 +185,11 @@ namespace IICA.Controllers.PVI
                             if (!System.IO.Directory.Exists(pathGeneral))
                                 System.IO.Directory.CreateDirectory(pathGeneral);
 
-                            string nombre = Path.GetFileName(idIncapacidad + "_" + formato+""+Path.GetExtension(file.FileName));
+                            string nombre = Path.GetFileName(idIncapacidad + "_" + formato + "" + Path.GetExtension(file.FileName));
                             string pathFormato = Path.Combine(pathGeneral, nombre);
 
                             file.SaveAs(pathFormato);
-                            return Path.Combine(pathFormatosIncapacidades,nombre);
+                            return pathFormatosIncapacidades + "/" + usuario + "/" + nombre;
                         }
                     }
                 }
@@ -194,6 +200,6 @@ namespace IICA.Controllers.PVI
             }
             return string.Empty;
         }
-        
+
     }
 }

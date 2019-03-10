@@ -37,8 +37,8 @@ namespace IICA.Models.DAO.PVI
                         result.mensaje = dbManager.DataReader["mensaje"].ToString();
                         result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
                         result.id = dbManager.DataReader["ID_PERMISO"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_PERMISO"].ToString());
-                        if(result.status)
-                            Email.NotificacionFinProceso(permiso.emCveEmpleado,Constants.notificacionPermiso,Constants.procesoPermiso,Constants.especificacionPermiso);
+                        permiso.idPermiso = result.id;
+                        result.objeto = permiso;
                     }
                 }
             }

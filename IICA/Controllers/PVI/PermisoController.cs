@@ -41,7 +41,13 @@ namespace IICA.Controllers.PVI
                 permisoDAO = new PermisoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 permiso_.emCveEmpleado = usuarioSesion.emCveEmpleado;
-                return Json(permisoDAO.ActualizarPermiso(permiso_), JsonRequestBehavior.AllowGet);
+                Result result = permisoDAO.ActualizarPermiso(permiso_);
+                if (result.status)
+                {
+                    try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

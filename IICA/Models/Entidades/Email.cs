@@ -14,18 +14,12 @@ namespace IICA.Models.Entidades
 {
     public class Email
     {
-        private static MailMessage mail;
-        private static SmtpClient client;
-        private static Attachment at;
-        private static AlternateView htmlView;
-        private static LinkedResource imagenFondo;
-        private static LinkedResource imagenFirma;
         public static string cuentaCorreo;
         public static string servidor;
         private static EmailDAO emailDAO;
 
 
-
+        #region Notificaciones - Permisos
         public static void NotificacionPermiso(Permiso permiso)
         {
             try
@@ -41,9 +35,9 @@ namespace IICA.Models.Entidades
             }
         }
 
-
         private static string CuerpoPermiso(Permiso permiso)
         {
+            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"] + "Permiso/PermisosPorAutorizar";
             StringBuilder cuerpo = new StringBuilder();
             cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
 	            <tr>
@@ -69,22 +63,65 @@ namespace IICA.Models.Entidades
 											            <td width='260' valign='top'>
 												            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 													            <tr>
-														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
+														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 14px; line-height: 20px;'>
 															            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 															            <tr>
 																            <td>
 																	            <b>Fecha: </b>" + DateTime.Now.ToString("MM/dd/yyyy h:mm tt") + @"
 																            </td>
 															            </tr>
+															            <tr><td><br/></td></tr>
 															            <tr>
 																            <td>
-																	            <b>Proceso:</b>"+Constants.procesoPermiso+@"
+																	            <b>Proceso: </b>" + Constants.procesoPermiso + @"
 	                                                                        </td>
 															            </tr>
-	                                                                    <tr>
-																            <td>
-																	            <b>Especificaciones:</b>
+															            <tr><td><br/></td></tr>
+	                                                                    <tr style='text-align: center; height: 30px;'>
+																            <td style='background-color: #1e8e3e; color: #fff'>
+																	            <b>Especificaciones</b>
 	                                                                        </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Empleado: </b>" + Utils.usuarioSesion.nombreCompleto + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de Empleado: </b>" + permiso.emCveEmpleado + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Departamento: </b>" + Utils.usuarioSesion.departamento + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Programa: </b>" + Utils.usuarioSesion.programa + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de solicitud: </b>" + permiso.idPermiso + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr><td><br/></td></tr>
+															            <tr>
+																            <td>
+																	            <b>Motivo del permiso: </b>" + permiso.motivoPermiso + @"
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/><br/><br/></td></tr>
+															            <tr style='text-align: center;'>
+																            <td>
+										            							<a style='background-color: #1f3853; color: #fff; padding: 8px;text-decoration: none; font-size: 13px;' 
+										            							href='"+urlSolicitudes+@"'>
+										            								Click, para ver bandeja de solicitudes
+										            							</a>
+									            							</td>
 															            </tr>
 	                                                    	            </table>
 														            </td>
@@ -104,9 +141,9 @@ namespace IICA.Models.Entidades
 				            <tr>
 					            <td bgcolor='#70bbd9' style='padding: 30px 30px 30px 30px;'>
 						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							            <tr>
+							            <tr style='text-align: center;'>
 								            <td style='color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; width='75%'>
-									            &reg; Copyright © 2019 " + Constants.procesoPermiso + @". Servicio proporcionado por <br/>
+									            &reg; Copyright © 2019. Servicio proporcionado por <br/>
 									            <a href='www.dsimorelia.com' style='color: #ffffff;'><font color='#ffffff'>Desarrollo de Soluciones Informáticas</font></a>
 								            </td>
 							            </tr>
@@ -119,15 +156,17 @@ namespace IICA.Models.Entidades
             </table>");
             return cuerpo.ToString();
         }
+        #endregion Notificaciones - Permisos
 
-        public static void NotificacionFinProceso(string cveEmpleado,string notificacion,string proceso,string especificaciones)
+        #region Notificaciones - Vacaciones
+        public static void NotificacionVacacion(Vacacion vacacion)
         {
             try
             {
-                string cuerpo =Cabecera();
-                cuerpo += CuerpoFinProceso(notificacion,proceso,especificaciones);
+                string cuerpo = Cabecera();
+                cuerpo += CuerpoVacacion(vacacion);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Proceso finalizado", cuerpo, cveEmpleado);
+                EnviarCorreExterno("Sistema Integral IICA México - Permiso", cuerpo, vacacion.emCveEmpleado);
             }
             catch (Exception ex)
             {
@@ -135,9 +174,9 @@ namespace IICA.Models.Entidades
             }
         }
 
-
-        private static string CuerpoFinProceso(string notificacion,string proceso,string especificaciones)
+        private static string CuerpoVacacion(Vacacion vacacion)
         {
+            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"] + "Vacacion/VacacionesPorAutorizar";
             StringBuilder cuerpo = new StringBuilder();
             cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
 	            <tr>
@@ -148,7 +187,7 @@ namespace IICA.Models.Entidades
 						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 							            <tr>
 								            <td style='color: #153643; font-family: Arial, sans-serif; font-size: 24px;'>
-									            <b>"+notificacion+@"!</b>
+									            <b>" + Constants.notificacionVacacion + @"!</b>
 								            </td>
 							            </tr>
 							            <tr>
@@ -163,22 +202,65 @@ namespace IICA.Models.Entidades
 											            <td width='260' valign='top'>
 												            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 													            <tr>
-														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
+														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 14px; line-height: 20px;'>
 															            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 															            <tr>
 																            <td>
 																	            <b>Fecha: </b>" + DateTime.Now.ToString("MM/dd/yyyy h:mm tt") + @"
 																            </td>
 															            </tr>
+															            <tr><td><br/></td></tr>
 															            <tr>
 																            <td>
-																	            <b>Proceso:</b>"+proceso +@"
+																	            <b>Proceso: </b>" + Constants.procesoVacacion + @"
 	                                                                        </td>
 															            </tr>
-	                                                                    <tr>
-																            <td>
-																	            <b>Especificaciones:</b>"+especificaciones+@"
+															            <tr><td><br/></td></tr>
+	                                                                    <tr style='text-align: center; height: 30px;'>
+																            <td style='background-color: #1e8e3e; color: #fff'>
+																	            <b>Especificaciones</b>
 	                                                                        </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Empleado: </b>" + Utils.usuarioSesion.nombreCompleto + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de Empleado: </b>" + vacacion.emCveEmpleado + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Departamento: </b>" + Utils.usuarioSesion.departamento + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Programa: </b>" + Utils.usuarioSesion.programa + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de solicitud: </b>" + vacacion.idVacacion + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr><td><br/></td></tr>
+															            <tr>
+																            <td>
+																	            <b>Motivo del permiso: </b>" + vacacion.motivoVacaciones + @"
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/><br/><br/></td></tr>
+															            <tr style='text-align: center;'>
+																            <td>
+										            							<a style='background-color: #1f3853; color: #fff; padding: 8px;text-decoration: none; font-size: 13px;' 
+										            							href='"+urlSolicitudes+@"'>
+										            								Click, para ver bandeja de solicitudes
+										            							</a>
+									            							</td>
 															            </tr>
 	                                                    	            </table>
 														            </td>
@@ -198,9 +280,9 @@ namespace IICA.Models.Entidades
 				            <tr>
 					            <td bgcolor='#70bbd9' style='padding: 30px 30px 30px 30px;'>
 						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-							            <tr>
+							            <tr style='text-align: center;'>
 								            <td style='color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; width='75%'>
-									            &reg; Copyright © 2019 "+proceso+@". Servicio proporcionado por <br/>
+									            &reg; Copyright © 2019. Servicio proporcionado por <br/>
 									            <a href='www.dsimorelia.com' style='color: #ffffff;'><font color='#ffffff'>Desarrollo de Soluciones Informáticas</font></a>
 								            </td>
 							            </tr>
@@ -213,8 +295,143 @@ namespace IICA.Models.Entidades
             </table>");
             return cuerpo.ToString();
         }
+        #endregion Notificaciones - Vacaciones
 
-        public static string Cabecera()
+        #region Notificaciones - Incapacidades
+        public static void NotificacionIncapacidad(Incapacidad incapacidad)
+        {
+            try
+            {
+                string cuerpo = Cabecera();
+                cuerpo += CuerpoIncapacidad(incapacidad);
+                cuerpo += PiePagina();
+                EnviarCorreExterno("Sistema Integral IICA México - Permiso", cuerpo, incapacidad.emCveEmpleado);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static string CuerpoIncapacidad(Incapacidad incapacidad)
+        {
+            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"]+ "Incapacidad/IncapacidadesPorAutorizar";
+            StringBuilder cuerpo = new StringBuilder();
+            cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
+	            <tr>
+		            <td style='padding: 10px 0 30px 0;'>
+			            <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border: 1px solid #cccccc; border-collapse: collapse;'>
+				            <tr>
+					            <td bgcolor='#ffffff' style='padding: 40px 30px 40px 30px;'>
+						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+							            <tr>
+								            <td style='color: #153643; font-family: Arial, sans-serif; font-size: 24px;'>
+									            <b>" + Constants.notificacionIncapacidad + @"!</b>
+								            </td>
+							            </tr>
+							            <tr>
+								            <td style='padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
+									            A quien corresponda:
+								            </td>
+							            </tr>
+							            <tr>
+								            <td>
+									            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+										            <tr>
+											            <td width='260' valign='top'>
+												            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+													            <tr>
+														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 14px; line-height: 20px;'>
+															            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+															            <tr>
+																            <td>
+																	            <b>Fecha: </b>" + DateTime.Now.ToString("MM/dd/yyyy h:mm tt") + @"
+																            </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+															            <tr>
+																            <td>
+																	            <b>Proceso: </b>" + Constants.procesoIncapacidad + @"
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+	                                                                    <tr style='text-align: center; height: 30px;'>
+																            <td style='background-color: #1e8e3e; color: #fff'>
+																	            <b>Especificaciones</b>
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Empleado: </b>" + Utils.usuarioSesion.nombreCompleto + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de Empleado: </b>" + incapacidad.emCveEmpleado + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Departamento: </b>" + Utils.usuarioSesion.departamento + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Programa: </b>" + Utils.usuarioSesion.programa + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de solicitud: </b>" + incapacidad.idIncapacidad + @"
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/><br/><br/></td></tr>
+															            <tr style='text-align: center;'>
+																            <td>
+										            							<a style='background-color: #1f3853; color: #fff; padding: 8px;text-decoration: none; font-size: 13px;' 
+										            							href='"+ urlSolicitudes + @"'>
+										            								Click, para ver bandeja de solicitudes
+										            							</a>
+									            							</td>
+															            </tr>
+	                                                    	            </table>
+														            </td>
+													            </tr>
+												            </table>
+											            </td>
+											            <td style='font-size: 0; line-height: 0;' width='20'>
+												            &nbsp;
+											            </td>
+										            </tr>
+									            </table>
+								            </td>
+							            </tr>
+						            </table>
+					            </td>
+				            </tr>
+				            <tr>
+					            <td bgcolor='#70bbd9' style='padding: 30px 30px 30px 30px;'>
+						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+							            <tr style='text-align: center;'>
+								            <td style='color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; width='75%'>
+									            &reg; Copyright © 2019. Servicio proporcionado por <br/>
+									            <a href='www.dsimorelia.com' style='color: #ffffff;'><font color='#ffffff'>Desarrollo de Soluciones Informáticas</font></a>
+								            </td>
+							            </tr>
+						            </table>
+					            </td>
+				            </tr>
+			            </table>
+		            </td>
+	            </tr>
+            </table>");
+            return cuerpo.ToString();
+        }
+        #endregion Notificaciones - Incapacidades
+
+        #region FUNCIONES - PRIVADAS
+        private static string Cabecera()
         {
             return @"<html><body><!DOCTYPE html>
             <html>
@@ -240,42 +457,7 @@ namespace IICA.Models.Entidades
             return pie.ToString();
         }
 
-        private static string EstilosCorreo()
-        {
-            StringBuilder estilos = new StringBuilder();
-            estilos.Append(@"<style type='text/css'>
-	            #content-notificacion{
-		            width: 800px;
-		            min-height: 300px;
-		            margin: auto;
-		            background-color: #D8D8D8;
-		            border-radius: 5px;
-	            }
-
-	            #titulo-notificacion{
-		            text-align: center;
-		            background-color: #0F2027;
-		            color: #fff;
-	            }
-
-	            #content-contenido{
-		            width: 90%;
-		            margin: auto;
-		            background-color: #2C5364;
-	            }
-
-	            #content-cuerpo{
-		            text-align: center;
-	            }
-
-	            #content-cuerpo table{
-		            width: 100%;
-	            }
-            </style>");
-            return estilos.ToString();
-        }
-
-        public static void EnviarCorreExterno(string asunto, string cuerpo,string cveEmpleado)
+        private static void EnviarCorreExterno(string asunto, string cuerpo,string cveEmpleado)
         {
             try
             {
@@ -325,5 +507,6 @@ namespace IICA.Models.Entidades
             }
             catch (Exception ex) { }// ConfigurationManager.AppSettings["correosParaExterno"].ToString();
         }
+        #endregion FUNCIONES - PRIVADAS
     }
 }
