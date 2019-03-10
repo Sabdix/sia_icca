@@ -27,7 +27,7 @@ namespace IICA.Controllers
                 Result result = sesionDAO.IniciarSesion(usuario_);
                 if (result.status)
                 {
-                    Session["usuarioSesion"] = (Usuario)result.objeto;
+                    Session["usuarioSesion"] = Utils.usuarioSesion = (Usuario)result.objeto;
                     result.mensaje = "Inicio de sesión correcto.";
                 }
                 else

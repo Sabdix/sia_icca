@@ -12,6 +12,7 @@ namespace IICA.Models.Entidades
     public static class Utils
     {
         private static Conexion conexion;
+        public static Usuario usuarioSesion { get; set; }
 
         public static string ObtenerConexion()
         {

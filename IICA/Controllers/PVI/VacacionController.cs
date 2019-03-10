@@ -39,7 +39,13 @@ namespace IICA.Controllers.PVI
                 vacacionDAO = new VacacionDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 vacacion_.emCveEmpleado = usuarioSesion.emCveEmpleado;
-                return Json(vacacionDAO.ActualizarVacacion(vacacion_), JsonRequestBehavior.AllowGet);
+                Result result = vacacionDAO.ActualizarVacacion(vacacion_);
+                if (result.status)
+                {
+                    try { Email.NotificacionVacacion((Vacacion)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
