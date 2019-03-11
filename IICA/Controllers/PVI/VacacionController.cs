@@ -145,5 +145,19 @@ namespace IICA.Controllers.PVI
             }
         }
 
+        [HttpPost]
+        public ActionResult _ImprimirReporteSolicitudesVacacion()
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                return PartialView(vacacionDAO.ObtenerReporteSolicitudesVacaciones());
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
     }
 }

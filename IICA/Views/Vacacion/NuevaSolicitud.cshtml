@@ -74,7 +74,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-4">
-                                    <label class="form-label">Dias festivos</label>
+                                    <label class="form-label">Dias inhabiles</label>
                                     @Html.TextBoxFor(x => x.diasFestivos, new { @class = "form-control", value = "0" })
                                     @Html.ValidationMessageFor(x => x.diasFestivos, "", new { @class = "error" })
                                 </div>

@@ -220,7 +220,7 @@ namespace IICA.Models.DAO.PVI
                     }
                     else
                     {
-                        throw new Exception("No se encontro ningun formato referente a la solicitud");
+                        throw new Exception("No se encontro ningun reporte de vacaciones");
                     }
                 }
             }
@@ -229,6 +229,43 @@ namespace IICA.Models.DAO.PVI
                 throw ex;
             }
             return reporteVacaciones;
+        }
+
+        public List<ReporteSolicitudVacacion> ObtenerReporteSolicitudesVacaciones()
+        {
+            ReporteSolicitudVacacion reporteSolicitudVacacion = null;
+            List<ReporteSolicitudVacacion> reporteSolicitudVacaciones = new List<ReporteSolicitudVacacion>();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_GENERA_REPORTE_VACACIONES_SOLICITUDES");
+                    if (dbManager.DataReader.Read())
+                    {
+                        reporteSolicitudVacacion = new ReporteSolicitudVacacion();
+                        reporteSolicitudVacacion.emNombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
+                        reporteSolicitudVacacion.emApellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
+                        reporteSolicitudVacacion.emApellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
+                        reporteSolicitudVacacion.Proyecto = dbManager.DataReader["Programa"] == DBNull.Value ? "" : dbManager.DataReader["Programa"].ToString();
+                        reporteSolicitudVacacion.Departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
+                        reporteSolicitudVacacion.FechaSolicitud = dbManager.DataReader["Fecha_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Solicitud"].ToString();
+                        reporteSolicitudVacacion.FechaInicio = dbManager.DataReader["Fecha_Inicio"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Inicio"].ToString();
+                        reporteSolicitudVacacion.FechaFin = dbManager.DataReader["Fecha_Fin"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Fin"].ToString();
+                        reporteSolicitudVacacion.DescripcionStatusSolicitud = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
+                        reporteSolicitudVacaciones.Add(reporteSolicitudVacacion);
+                    }
+                    else
+                    {
+                        throw new Exception("No se encontro ningun reporte de vacaciones");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return reporteSolicitudVacaciones;
         }
     }
 }
