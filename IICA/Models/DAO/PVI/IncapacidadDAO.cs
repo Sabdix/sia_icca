@@ -208,5 +208,57 @@ namespace IICA.Models.DAO.PVI
             }
             return result;
         }
+
+        public Result ObtenerIncapacidad(int idIncapacidad)
+        {
+            Result result = new Result();
+            Incapacidad incapacidad;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Id_Incapacidad", idIncapacidad);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_INCAPACIDAD");
+                    if (dbManager.DataReader.Read())
+                    {
+                        if(Convert.ToInt32(dbManager.DataReader["STATUS"].ToString()) == 1)
+                        {
+                            incapacidad = new Incapacidad();
+                            incapacidad.idIncapacidad = dbManager.DataReader["Id_Incapacidad"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Incapacidad"].ToString());
+                            incapacidad.fechaSolicitud = dbManager.DataReader["Fecha_Solicitud"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Solicitud"].ToString());
+                            incapacidad.fechaInicio = dbManager.DataReader["Fecha_Inicio"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Inicio"].ToString());
+                            incapacidad.fechaFin = dbManager.DataReader["Fecha_Fin"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Fin"].ToString());
+                            incapacidad.totalDias = dbManager.DataReader["Total_Dias"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Total_Dias"].ToString());
+                            incapacidad.fechaIngresoLabores = dbManager.DataReader["Fecha_Ingreso_Labores"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Ingreso_Labores"].ToString());
+                            incapacidad.estatusIncapacidad.idEstatusIncapacidad = dbManager.DataReader["Id_Status_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Status_Solicitud"].ToString());
+                            incapacidad.estatusIncapacidad.descripcion = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
+                            incapacidad.tipoSeguimiento.Id_Tipo_Seguimiento = dbManager.DataReader["Id_Tipo_Seguimiento"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Tipo_Seguimiento"].ToString());
+                            incapacidad.tipoSeguimiento.Descripcion_Tipo_Seguimiento = dbManager.DataReader["Descripcion_Tipo_Seguimiento"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Tipo_Seguimiento"].ToString();
+                            incapacidad.tipoIncapacidad.Id_Tipo_Incapacidad = dbManager.DataReader["Id_Tipo_Incapacidad"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Tipo_Incapacidad"].ToString());
+                            incapacidad.tipoIncapacidad.Descripcion_Tipo_Incapacidad = dbManager.DataReader["Descripcion_Tipo_Incapacidad"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Tipo_Incapacidad"].ToString();
+                            incapacidad.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
+                            incapacidad.fechaAutorizacion = dbManager.DataReader["Fecha_Revision"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Revision"].ToString());
+                            incapacidad.formatoIncapacidad = dbManager.DataReader["Formato_Incapacidad"] == DBNull.Value ? "" : dbManager.DataReader["Formato_Incapacidad"].ToString();
+                            incapacidad.formatoAdicional = dbManager.DataReader["Formato_Adicional"] == DBNull.Value ? "" : dbManager.DataReader["Formato_Adicional"].ToString();
+                            incapacidad.formatoST7AltaRT = dbManager.DataReader["Formato_ST7_Alta_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Alta_RT"].ToString();
+                            incapacidad.formatoST7CalificacionRT = dbManager.DataReader["Formato_ST7_Calificacion_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Calificacion_RT"].ToString();
+                            result.status = true;
+                            result.objeto = incapacidad;
+                        }else
+                        {
+                            result.mensaje = dbManager.DataReader["mensaje"] == DBNull.Value ? "" : dbManager.DataReader["mensaje"].ToString();
+                        }
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
     }
 }

@@ -168,6 +168,21 @@ namespace IICA.Controllers.PVI
             }
         }
 
+        [HttpPost]
+        public ActionResult ObtenerIncapacidad(int id)
+        {
+            try
+            {
+                incapacidadDAO = new IncapacidadDAO();
+                return Json(incapacidadDAO.ObtenerIncapacidad(id), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #region Funciones - Generales
         private string ObtenerFormatoHttpPost(HttpRequestBase httpRequestBase, int idIncapacidad, string formato, string usuario)
         {
             try
@@ -200,6 +215,7 @@ namespace IICA.Controllers.PVI
             }
             return string.Empty;
         }
+        #endregion Funciones - Generales
 
     }
 }

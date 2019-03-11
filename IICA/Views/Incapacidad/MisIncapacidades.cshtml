@@ -85,22 +85,26 @@
                                 <td>
                                     @if (incapacidad.estatusIncapacidad.idEstatusIncapacidad == (int)EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR)
                                     {
-                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="1" data-incapacidad="@incapacidad.idIncapacidad">
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="1" data-incapacidad="@incapacidad.idIncapacidad"
+                                              data-formato-text="formatoIncapacidad">
                                             <button data-toggle="tooltip" title="Formato de Incapacidad" class="btn btn-primary btn-mini">
                                                 <i class="fa fa-stethoscope"></i>
                                             </button>
                                         </span>
-                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2" data-incapacidad="@incapacidad.idIncapacidad">
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2" data-incapacidad="@incapacidad.idIncapacidad"
+                                              data-formato-text="formatoAdicional">
                                             <button data-toggle="tooltip" title="Formato Adicional" class="btn btn-warning btn-mini">
                                                 <i class="fa fa-medkit"></i>
                                             </button>
                                         </span>
-                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3" data-incapacidad="@incapacidad.idIncapacidad">
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3" data-incapacidad="@incapacidad.idIncapacidad"
+                                              data-formato-text="formatoST7CalificacionRT">
                                             <button data-toggle="tooltip" title="Formato de ST7 calificacion RT" class="btn btn-info btn-mini">
                                                 <i class="fa fa-wheelchair"></i>
                                             </button>
                                         </span>
-                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="4" data-incapacidad="@incapacidad.idIncapacidad">
+                                        <span data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="4" data-incapacidad="@incapacidad.idIncapacidad"
+                                              data-formato-text="formatoST7AltaRT">
                                             <button data-toggle="tooltip" title="Formato ST7 alta RT" class="btn btn-danger btn-mini">
                                                 <i class="fa fa-ambulance"></i>
                                             </button>
@@ -156,15 +160,15 @@
                     </div>*@
                     <div class="col-md-12">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="active">
-                                <a href="#tab1hellowWorld" role="tab" data-toggle="tab">Subir archivo</a>
+                            <li class="active" id="item-dropzone">
+                                <a href="#tabDropzone" role="tab" data-toggle="tab">Subir archivo</a>
                             </li>
-                            <li>
+                            <li id="item-verArchivo">
                                 <a href="#tabVerArchivo" role="tab" data-toggle="tab">Visualizar archivo subido</a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab1hellowWorld">
+                            <div class="tab-pane active" id="tabDropzone">
                                 <div class="col-md-12" id="formDropZone"></div>
                             </div>
                             <div class="tab-pane" id="tabVerArchivo">
