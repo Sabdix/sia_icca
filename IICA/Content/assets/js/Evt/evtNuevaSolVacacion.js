@@ -27,7 +27,11 @@ $(document).ready(function () {
 
     }).on('changeDate', function (selected) {
         var startDate = new Date(selected.date.valueOf());
-        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+
+        //console.log(startDate.setDate(startDate.getDate()+1));
+        //startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+        startDate.setDate(startDate.getDate() + 1)
+        
         $('#fechaFin').datepicker('setStartDate', startDate);
         if ($('#fechaInicio').val() !== "")
             CalcularTotalDias();
