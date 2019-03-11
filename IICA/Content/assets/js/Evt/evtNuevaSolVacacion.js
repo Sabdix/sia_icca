@@ -47,6 +47,11 @@ $(document).ready(function () {
         }
     });
 
+    $("#diasFestivos").on('change', function () {
+        if ($("#diasFestivos").val() > 0)
+            CalcularTotalDias();
+    });
+
 });
 
 function ConfirmarEnviarSolicitud() {
@@ -84,7 +89,15 @@ function OnSuccesRegistrarSolicitud(data) {
 function CalcularTotalDias() {
     var fecha1 = moment($("#fechaInicio").val());
     var fecha2 = moment($("#fechaFin").val());
-    var diasVacaciones = moment.duration(fecha2.diff(fecha1)).days(); //fecha2.diff(fecha1, 'days');
+    var diasInhabiles = $('#diasFestivos').val();
+    var diasVacaciones = moment.duration(fecha2.diff(fecha1)).days();
+
+    if (diasInhabiles > diasVacaciones) {
+        MostrarNotificacionLoad("error", "Dias inhabiles no pueden ser mayor a los de vacaciones", 3000);
+        $("#diasFestivos").val("");
+        return;
+    }
+    diasVacaciones = diasVacaciones - diasInhabiles;
 
     if (diasVacaciones > 0)
     {
@@ -105,6 +118,54 @@ function ImprimirFormatoVacacion(id) {
     $.ajax({
         data: { id: id },
         url: rootUrl("/Vacacion/_ImprimirFormatoVacacion"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+
+function ImprimirReporteSolicitudesVacaciones(id) {
+    $.ajax({
+        data: { id: id },
+        url: rootUrl("/Vacacion/_ImprimirReporteSolicitudesVacaciones"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+
+function ImprimirReporteVacaciones(id) {
+    $.ajax({
+        data: { id: id },
+        url: rootUrl("/Vacacion/_ImprimirReporteVacaciones"),
         dataType: "html",
         method: "post",
         beforeSend: function () {

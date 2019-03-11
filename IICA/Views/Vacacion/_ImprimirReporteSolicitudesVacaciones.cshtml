@@ -2,7 +2,7 @@
 @using System.Globalization;
 @using IICA.Models.Entidades.PVI
 @using IICA.Models.Entidades
-@model List<IICA.Models.Entidades.PVI.ReporteVacacion>
+@model List<IICA.Models.Entidades.PVI.ReporteSolicitudVacacion>
 <style>
     .md-100 {
         width: 100%;
@@ -114,44 +114,44 @@
 
     <div id="content-datos-empleado" class="md-90">
         <table class="md-100">
-            @foreach (ReporteVacacion reporteVacacion in Model)
+            @foreach (ReporteSolicitudVacacion reporteSolicitudVacacion in Model)
             {
 
 
             <tr>
                 <td><label style="font-weight:900;">Nombre Completo:</label></td>
-                <td style="border-bottom: 1px solid #000;"><label>@reporteVacacion.nombreCompleto</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@reporteSolicitudVacacion.nombreCompleto</label></td>
             </tr>
             <tr>
                 <td><label style="font-weight:900;">Programa:</label></td>
-                <td style="border-bottom: 1px solid #000;"><label>@reporteVacacion.Proyecto</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@reporteSolicitudVacacion.Proyecto</label></td>
             </tr>
             <tr>
                 <td><label style="font-weight:900;">Departamento:</label></td>
-                <td style="border-bottom: 1px solid #000;"><label>@reporteVacacion.Departamento</label></td>
+                <td style="border-bottom: 1px solid #000;"><label>@reporteSolicitudVacacion.Departamento</label></td>
             </tr>
             <tr>
-                <td><label style="font-weight:900;">Saldo anterior</label></td>
+                <td><label style="font-weight:900;">Fecha Solicitud</label></td>
                 <td class="text-center" colspan="3">
-                    <label class="label-dato">@reporteVacacion.Saldo_Anterior</label>
+                    <label class="label-dato">@reporteSolicitudVacacion.FechaSolicitud</label>
                 </td>
             </tr>
             <tr>
-                <td><label style="font-weight:900;">Vacaciones tomadas</label></td>
+                <td><label style="font-weight:900;">Fecha Inicio</label></td>
                 <td class="text-center" colspan="3">
-                    <label class="label-dato">@reporteVacacion.Vacaciones_Tomandas</label>
+                    <label class="label-dato">@reporteSolicitudVacacion.FechaInicio</label>
                 </td>
             </tr>
             <tr>
-                <td><label style="font-weight:900;">Dias proporcionales</label></td>
+                <td><label style="font-weight:900;">Fecha Fin</label></td>
                 <td class="text-center" colspan="3">
-                    <label class="label-dato">@reporteVacacion.Saldo_Proporcional</label>
+                    <label class="label-dato">@reporteSolicitudVacacion.FechaFin</label>
                 </td>
             </tr>
             <tr>
-                <td><label style="font-weight:900;">Saldo final</label></td>
+                <td><label style="font-weight:900;">Estatus Solicitud/label></td>
                 <td class="text-center" colspan="3">
-                    <label class="label-dato">@reporteVacacion.Saldo_Final</label>
+                    <label class="label-dato">@reporteSolicitudVacacion.DescripcionStatusSolicitud</label>
                 </td>
             </tr>
             }
