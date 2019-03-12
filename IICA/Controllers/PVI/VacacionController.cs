@@ -131,13 +131,13 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        [HttpPost]
-        public ActionResult _ImprimirReporteVacaciones()
+
+        public ActionResult ReporteSaldosVacacionales()
         {
             try
             {
                 vacacionDAO = new VacacionDAO();
-                return PartialView(vacacionDAO.ObtenerReporteVacaciones());
+                return View(vacacionDAO.ObtenerReporteVacaciones());
             }
             catch (Exception ex)
             {
@@ -145,13 +145,12 @@ namespace IICA.Controllers.PVI
             }
         }
 
-        [HttpPost]
-        public ActionResult _ImprimirReporteSolicitudesVacaciones()
+        public ActionResult ReporteSolicitudesVacaciones()
         {
             try
             {
                 vacacionDAO = new VacacionDAO();
-                return PartialView(vacacionDAO.ObtenerReporteSolicitudesVacaciones());
+                return View(vacacionDAO.ObtenerReporteSolicitudesVacaciones());
             }
             catch (Exception ex)
             {

@@ -51,8 +51,13 @@
                     @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
                     {
                         <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
-                        <li> <a id="submenu-vacaPorAut" href="javascript:();" onclick="ImprimirReporteVacaciones()">Reporte de vacaciones</a> </li>
-                        <li> <a id="submenu-vacaPorAut" href="javascript:();" onclick="ImprimirReporteSolicitudesVacaciones()">Reporte de solicitudes de vacaciones</a> </li>
+                        <li class="nodo-submenu">
+                            <a href="javascript:;" id="submenu-reportesVaca"> <span class="title">Reportes</span> <span class="arrow"></span> </a>
+                            <ul class="sub-menu" style="display: block;">
+                                <li> <a id="submenu2-vaca-reporteVaca" href="@Url.Action("ReporteSaldosVacacionales", "Vacacion")">Reporte de saldos vacacionales</a> </li>
+                                <li> <a id="submenu2-vaca-reporteSol" href="@Url.Action("ReporteSolicitudesVacaciones", "Vacacion")">Reporte de solicitudes de vacaciones</a> </li>
+                            </ul>
+                        </li>
                     }
                 </ul>
             </li>

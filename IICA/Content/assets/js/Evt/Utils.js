@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var nodoMenu, submenu, submenu2;
+
+$(document).ready(function () {
 
     MostrarOpcionMenuActivo();
 });
@@ -55,16 +57,28 @@ function CerrarSesion() {
 
 function MostrarOpcionMenuActivo() {
     $(".nodo-menu").removeClass("open");
-    $("#nodo-" + nodoMenu).find("ul").css("display", "none");
+    $(".nodo-menu").find("ul").css("display", "none");
     if (nodoMenu != undefined) {
         $("#nodo-" + nodoMenu).addClass("open");
         $("#nodo-" + nodoMenu).find("ul").css("display", "block");
     }
 
-    $(".nodo-menu li a").removeClass("a-submenu");
-    if (submenu != null) {
-        $("#submenu-" + submenu).addClass("a-submenu");
+    if (submenu2 == undefined) {
+        $(".nodo-menu li a").removeClass("a-submenu");
+        if (submenu != undefined) {
+            $("#submenu-" + submenu).addClass("a-submenu");
+        }
     }
+
+
+    $(".nodo-submenu").removeClass("open");
+    $(".sub-menu").find("ul").css("display", "none");
+    if (submenu2 != undefined) {
+        $("#submenu-" + submenu).parent().addClass("open");
+        $("#submenu2-" + submenu2).addClass("a-submenu");
+        $(".sub-menu").find("ul").css("display", "block");
+    }
+
 }
 
 
