@@ -132,7 +132,7 @@ namespace IICA.Controllers.PVI
         }
 
         [HttpPost]
-        public ActionResult _ImprimirReporteVacacion()
+        public ActionResult _ImprimirReporteVacaciones()
         {
             try
             {
@@ -146,7 +146,7 @@ namespace IICA.Controllers.PVI
         }
 
         [HttpPost]
-        public ActionResult _ImprimirReporteSolicitudesVacacion()
+        public ActionResult _ImprimirReporteSolicitudesVacaciones()
         {
             try
             {

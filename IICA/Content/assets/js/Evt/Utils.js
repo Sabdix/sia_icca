@@ -66,3 +66,49 @@ function MostrarOpcionMenuActivo() {
         $("#submenu-" + submenu).addClass("a-submenu");
     }
 }
+
+
+function ImprimirReporteVacaciones() {
+    $.ajax({
+        url: rootUrl("/Vacacion/_ImprimirReporteVacaciones"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function ImprimirReporteSolicitudesVacaciones() {
+    $.ajax({
+        url: rootUrl("/Vacacion/_ImprimirReporteSolicitudesVacaciones"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+    

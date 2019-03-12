@@ -51,6 +51,8 @@
                     @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
                     {
                         <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
+                        <li> <a id="submenu-vacaPorAut" href="javascript:();" onclick="ImprimirReporteVacaciones()">Reporte de vacaciones</a> </li>
+                        <li> <a id="submenu-vacaPorAut" href="javascript:();" onclick="ImprimirReporteSolicitudesVacaciones()">Reporte de solicitudes de vacaciones</a> </li>
                     }
                 </ul>
             </li>
@@ -71,7 +73,7 @@
             </li>
         </ul>
 
-        <br /><br /><br /><br /><br /><br />
+        <br /><br /><br />
         <div class="side-bar-widgets">
             <p class="menu-title sm">SIA IICA</p>
             <ul class="folders">
