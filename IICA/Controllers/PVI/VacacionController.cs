@@ -131,7 +131,7 @@ namespace IICA.Controllers.PVI
             }
         }
 
-
+        [SessionExpire]
         public ActionResult ReporteSaldosVacacionales()
         {
             try
@@ -141,10 +141,11 @@ namespace IICA.Controllers.PVI
             }
             catch (Exception ex)
             {
-                return new HttpStatusCodeResult(500, ex.Message);
+                throw ex;
             }
         }
 
+        [SessionExpire]
         public ActionResult ReporteSolicitudesVacaciones()
         {
             try
@@ -154,7 +155,7 @@ namespace IICA.Controllers.PVI
             }
             catch (Exception ex)
             {
-                return new HttpStatusCodeResult(500, ex.Message);
+                throw ex;
             }
         }
 

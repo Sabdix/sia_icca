@@ -513,8 +513,8 @@
     <Content Include="Views\Vacacion\VacacionesPorAutorizar.cshtml" />
     <Content Include="Views\Incapacidad\IncapacidadesPorAutorizar.cshtml" />
     <Content Include="Views\Vacacion\ReporteSaldosVacacionales.cshtml" />
-    <Content Include="Views\Vacacion\ReporteSolicitudesVacaciones.cshtml" />
     <Content Include="Views\Permiso\ReporteSolicitudesPermisos.cshtml" />
+    <Content Include="Views\Vacacion\ReporteSolicitudesVacaciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
