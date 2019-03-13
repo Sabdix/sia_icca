@@ -218,10 +218,6 @@ namespace IICA.Models.DAO.PVI
                         reporteVacacion.Saldo_Final = dbManager.DataReader["Saldo_Final"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Final"].ToString();
                         reporteVacaciones.Add(reporteVacacion);
                     }
-                    if(reporteVacaciones.Count == 0)
-                    {
-                        throw new Exception("No se encontro ningun reporte de vacaciones");
-                    }
                 }
             }
             catch (Exception ex)
@@ -254,10 +250,6 @@ namespace IICA.Models.DAO.PVI
                         reporteSolicitudVacacion.FechaFin = dbManager.DataReader["Fecha_Fin"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Fin"].ToString();
                         reporteSolicitudVacacion.DescripcionStatusSolicitud = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
                         reporteSolicitudVacaciones.Add(reporteSolicitudVacacion);
-                    }
-                    if (reporteSolicitudVacaciones.Count == 0)
-                    {
-                        throw new Exception("No se encontro ningun reporte de vacaciones");
                     }
                 }
             }
