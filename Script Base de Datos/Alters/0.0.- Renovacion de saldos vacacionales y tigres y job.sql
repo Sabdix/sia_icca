@@ -1,3 +1,6 @@
+USE IICA_1
+GO
+
 
 IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'SaldoVacacionalNewEmpTrigger'))
 	DROP TRIGGER SaldoVacacionalNewEmpTrigger
@@ -335,8 +338,4 @@ END
 GO
 
 GRANT EXECUTE ON DT_SP_RENUEVA_SALDOS_VACACIONALES TO public;  
-GO
-
---Actualización de saldos vacacionales
-EXECUTE DT_SP_RENUEVA_SALDOS_VACACIONALES
 GO
