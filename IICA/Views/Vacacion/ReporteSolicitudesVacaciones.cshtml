@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de solicitudes de vacaciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <script>
+        nodoMenu = "vacaciones";
+        submenu = "reportesVaca";
+        submenu2 = "vaca-reporteVaca";
+    </script>
+}
+
+@using System.Globalization;
+@using System.Web.Script.Serialization;
+@using IICA.Models.Entidades.PVI
+
+@model List<ReporteSolicitudVacacion>
+
+<ul class="breadcrumb">
+    <li>
+        <p>VACACIONES</p>
+    </li>
+    <li><a href="#" class="active">Reporte de solicitudes de vacaciones</a> </li>
+</ul>
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="grid simple ">
+            <div class="grid-title">
+                <h4>Lista <span class="semi-bold">de solicitudes de vacaciones</span></h4>
+            </div>
+            <div class="grid-body ">
+                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-reporte-solVaca">
+                    <thead>
+                        <tr>
+                            <th style="width:15%;text-align: center;">Empleado</th>
+                            <th style="width:10%;text-align: center;">Programa</th>
+                            <th style="width:10%;text-align: center;">Departamento</th>
+                            <th style="width:10%;text-align: center;">Fecha Solicitud</th>
+                            <th style="width:10%;text-align: center;">Fecha Inicio</th>
+                            <th style="width:10%;text-align: center;">Fecha Fin</th>
+                            <th style="width:10%;text-align: center;">Estatus Solicitud</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ReporteSolicitudVacacion solicitudVacacion in Model)
+                        {
+                            <tr>
+                                <td>@(solicitudVacacion.nombreCompleto)</td>
+                                <td><span class="muted">@solicitudVacacion.Proyecto</span></td>
+                                <td><span>@solicitudVacacion.Departamento</span></td>
+                                <td><span class="muted">@solicitudVacacion.FechaSolicitud</span></td>
+                                <td><span class="muted">@solicitudVacacion.FechaInicio</span></td>
+                                <td><span class="muted">
+                                        <span class="label label-info">
+                                            @solicitudVacacion.FechaFin
+                                        </span>
+                                    </span>
+                                </td>
+                                <td><span class="muted">@solicitudVacacion.DescripcionStatusSolicitud</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <style>
+        .btn-imprimir {
+            float: right;
+            margin-left: 5px;
+        }
+    </style>
+
+    <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+    
+    <script src="~/Content/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+    
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+
+    <script src="~/Content/assets/js/datatables.js"></script>
+    <script src="~/Content/assets/js/Evt/evtReporteSolicitudesVacaciones.js"></script>
+}
+

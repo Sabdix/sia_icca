@@ -9,16 +9,16 @@ $(document).ready(function () {
     $("#fechaSolicitud").val(moment().format("YYYY/MM/DD"));
     /*---------------------------------------------------------------------*/
 
-    $("#fechaFin").datepicker({
-        startView: 1,
-        format: 'yyyy/mm/dd',
-        startDate: "today",
-        autoclose: true,
-        todayHighlight: true
-    }).on('changeDate', function (e) {
-        if ($('#fechaFin').val() !== "")
-            CalcularTotalDias();
-    });
+    //$("#fechaFin").datepicker({
+    //    startView: 1,
+    //    format: 'yyyy/mm/dd',
+    //    startDate: "today",
+    //    autoclose: true,
+    //    todayHighlight: true
+    //}).on('changeDate', function (e) {
+    //    if ($('#fechaFin').val() !== "")
+    //        CalcularTotalDias();
+    //});
 
     $("#fechaInicio").datepicker({
         startView: 1,
@@ -73,7 +73,7 @@ function OnSuccesRegistrarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Incapacidad/MisIncapacidades"); }, 3000);
+        setTimeout(function () { window.location = rootUrl("/Incapacidad/MisIncapacidades"); }, 1500);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
@@ -91,4 +91,16 @@ function CalcularTotalDias() {
         $('#totalDias').val(0);
     }
     console.log($('#totalDias').val());
+}
+
+
+function CalcularFechaPresentarse() {
+    var totalDias = $("#totalDias").val();
+    var startDate = moment($("#fechaInicio").val());
+
+    //console.log(startDate.setDate(startDate.getDate()+1));
+    //startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+   
+
+    $('#fechaFin').val(startDate.add('days', totalDias).format("YYYY/MM/DD"));
 }

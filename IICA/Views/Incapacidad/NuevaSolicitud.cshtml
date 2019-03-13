@@ -43,9 +43,9 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                                     @Html.ValidationMessageFor(x => x.fechaInicio, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Fecha fin</label>
-                                    @Html.TextBoxFor(x => x.fechaFin, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.fechaFin, "", new { @class = "error" })
+                                    <label class="form-label">Días de incapacidad</label>
+                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control", type = "number",min="1", oninput = "CalcularFechaPresentarse()" })
+                                    @Html.ValidationMessageFor(x => x.totalDias, "", new { @class = "error" })
                                 </div>
                             </div>
 
@@ -66,10 +66,10 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                                 </div>
                             </div>
                             <div class="row form-row">
-                                <div class="col-md-4">
-                                    <label class="form-label">Total de dias</label>
-                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control", @readOnly = "true" })
-                                    @Html.ValidationMessageFor(x => x.totalDias, "", new { @class = "error" })
+                                <div class="col-md-8">
+                                    <label class="form-label">Presentarse el primer día hábil a partir de</label>
+                                    @Html.TextBoxFor(x => x.fechaFin, new { @class = "form-control", @readonly= "true" })
+                                    @Html.ValidationMessageFor(x => x.fechaFin, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">

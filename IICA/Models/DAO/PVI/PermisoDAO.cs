@@ -169,5 +169,42 @@ namespace IICA.Models.DAO.PVI
             }
             return permisos; ;
         }
+
+        public List<Permiso> ObtenerReporteSolicitudesPermisos()
+        {
+            List<Permiso> permisos = new List<Permiso>();
+            Permiso permiso;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_GENERA_REPORTE_PERMISOS");
+                    while (dbManager.DataReader.Read())
+                    {
+                        permiso = new Permiso();
+                        permiso.usuario.nombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
+                        permiso.usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
+                        permiso.usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
+                        //permiso.usuario.fechaIngreso = dbManager.DataReader["Em_Fecha_Ingreso"] == DBNull.Value ? "" : dbManager.DataReader["Em_Fecha_Ingreso"].ToString();
+                        permiso.usuario.programa = dbManager.DataReader["Proyecto"] == DBNull.Value ? "" : dbManager.DataReader["Proyecto"].ToString();
+                        permiso.usuario.departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
+                        permiso.fechaPermiso = dbManager.DataReader["Fecha_Permiso"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Permiso"].ToString());
+                        permiso.fechaAlta = dbManager.DataReader["Fecha_Alta"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Alta"].ToString());
+                        permiso.motivoPermiso = dbManager.DataReader["Motivo_Permiso"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Permiso"].ToString();
+                        //permiso.estatusPermiso.idEstatusPermiso = dbManager.DataReader["Id_Status_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Status_Solicitud"].ToString());
+                        permiso.estatusPermiso.descripcion = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
+                        //permiso.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
+                        //permiso.fechaAutorizacion = dbManager.DataReader["Fecha_Revision"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Revision"].ToString());
+                        permisos.Add(permiso);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return permisos; ;
+        }
     }
 }

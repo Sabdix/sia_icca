@@ -168,6 +168,8 @@
     <Compile Include="Models\Entidades\PVI\FormatoVacacion.cs" />
     <Compile Include="Models\Entidades\PVI\Incapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\Permiso.cs" />
+    <Compile Include="Models\Entidades\PVI\ReporteSolicitudVacacion.cs" />
+    <Compile Include="Models\Entidades\PVI\ReporteVacacion.cs" />
     <Compile Include="Models\Entidades\PVI\TipoIncapacidad.cs" />
     <Compile Include="Models\Entidades\PVI\TipoSeguimiento.cs" />
     <Compile Include="Models\Entidades\PVI\Vacacion.cs" />
@@ -458,6 +460,13 @@
     <Content Include="Content\webarch\fonts\custom-set.woff" />
     <Content Include="Content\webarch\fonts\custom-setd41d.eot" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_ADICIONAL.pdf" />
+    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_INCAPACIDAD.pdf" />
+    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_ST7_ALTA_RT.pdf" />
+    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_ADICIONAL.pdf" />
+    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_INCAPACIDAD.pdf" />
+    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_ST7_ALTA_RT.pdf" />
+    <Content Include="PVI\Incapacidades\Formatos\0000000006\3_FORMATO_INCAPACIDAD.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -499,6 +508,8 @@
     <Content Include="Views\Incapacidad\MisIncapacidades.cshtml" />
     <Content Include="Views\Vacacion\VacacionesPorAutorizar.cshtml" />
     <Content Include="Views\Incapacidad\IncapacidadesPorAutorizar.cshtml" />
+    <Content Include="Views\Vacacion\_ImprimirReporteVacaciones.cshtml" />
+    <Content Include="Views\Vacacion\_ImprimirReporteSolicitudesVacaciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

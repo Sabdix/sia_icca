@@ -1,4 +1,5 @@
-﻿var idIncapacidad;
+﻿var solSeleccionada;
+var idIncapacidad;
 var formato;
 
 $(document).ready(function () {
@@ -8,6 +9,9 @@ $(document).ready(function () {
     $(".subirFormato").click(function () {
         idIncapacidad = $(this).attr("data-incapacidad");
         formato = $(this).attr("data-formato");
+        formatoText = $(this).attr("data-formato-text");
+        MostrarFormato(idIncapacidad, formatoText);
+        $("#item-dropzone a").trigger("click");
         myDropzone.removeAllFiles(true);
         //$("#formDropZone").empty();
     });
@@ -153,6 +157,48 @@ function OnSuccesCancelarSol(data) {
     }
 }
 
+/*==========================================================================================================*/
+/*=====================================     FORMATOS DE SOLICITUD    ====================================*/
+/*==========================================================================================================*/
+
+
+
+
+function MostrarFormato(idIncapacidad,formato) {
+    $.ajax({
+        data: { id: idIncapacidad },
+        url: rootUrl("/Incapacidad/ObtenerIncapacidad"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            if (data.status) {
+                var url = data.objeto[formato];
+                if (url !== "") {
+                    url = rootUrl(url);
+                    $("#item-verArchivo").show();
+                    $('#content-formato').html("");
+                    var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    iframe.attr('src', url);
+                    $('#content-formato').append(iframe);
+                }
+                else {
+                    $("#item-verArchivo").hide();
+                    $("#content-formato").html("");
+                }
+            } else {
+                $("#item-verArchivo").hide();
+                $("#content-formato").html("");
+            }
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
 
 
 /*==========================================================================================================*/

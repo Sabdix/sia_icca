@@ -132,5 +132,18 @@ namespace IICA.Controllers.PVI
                 return new HttpStatusCodeResult(500, ex.Message);
             }
         }
+
+        public ActionResult ReporteSolicitudesPermisos()
+        {
+            try
+            {
+                permisoDAO = new PermisoDAO();
+                return View(permisoDAO.ObtenerReporteSolicitudesPermisos());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -131,5 +131,32 @@ namespace IICA.Controllers.PVI
             }
         }
 
+
+        public ActionResult ReporteSaldosVacacionales()
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                return View(vacacionDAO.ObtenerReporteVacaciones());
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        public ActionResult ReporteSolicitudesVacaciones()
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                return View(vacacionDAO.ObtenerReporteSolicitudesVacaciones());
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
     }
 }
