@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
 
-    var img = window.location.protocol + "//" + window.location.host + "/Content/assets/img/logo_iica.png";
+    var img = window.location.protocol + "//" + window.location.host + rootUrl("/Content/assets/img/logo_iica.png");
     $('#tabla-reporte-saldoVaca').dataTable({
         dom: 'Bfrtip',
         buttons: [

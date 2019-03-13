@@ -227,6 +227,9 @@
     <Content Include="Content\assets\js\Evt\evtNuevaSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolPermiso.js" />
+    <Content Include="Content\assets\js\Evt\evtReporteSaldoVaca.js" />
+    <Content Include="Content\assets\js\Evt\evtReporteSolicitudesVacaciones.js" />
+    <Content Include="Content\assets\js\Evt\evtReporteSolPermisos.js" />
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
@@ -467,6 +470,7 @@
     <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_INCAPACIDAD.pdf" />
     <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_ST7_ALTA_RT.pdf" />
     <Content Include="PVI\Incapacidades\Formatos\0000000006\3_FORMATO_INCAPACIDAD.pdf" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -508,8 +512,9 @@
     <Content Include="Views\Incapacidad\MisIncapacidades.cshtml" />
     <Content Include="Views\Vacacion\VacacionesPorAutorizar.cshtml" />
     <Content Include="Views\Incapacidad\IncapacidadesPorAutorizar.cshtml" />
-    <Content Include="Views\Vacacion\_ImprimirReporteVacaciones.cshtml" />
-    <Content Include="Views\Vacacion\_ImprimirReporteSolicitudesVacaciones.cshtml" />
+    <Content Include="Views\Vacacion\ReporteSaldosVacacionales.cshtml" />
+    <Content Include="Views\Vacacion\ReporteSolicitudesVacaciones.cshtml" />
+    <Content Include="Views\Permiso\ReporteSolicitudesPermisos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

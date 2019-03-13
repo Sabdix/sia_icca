@@ -44,7 +44,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Días de incapacidad</label>
-                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control", type = "number",min="1", oninput = "CalcularFechaPresentarse()" })
+                                    @Html.TextBoxFor(x => x.totalDias, new { @class = "form-control", type = "number",min="1", oninput = "CalcularFechaPresentarse()", data_val_required = "Indique el número de dias para la incapacidad" })
                                     @Html.ValidationMessageFor(x => x.totalDias, "", new { @class = "error" })
                                 </div>
                             </div>
