@@ -1,9 +1,9 @@
 USE IICA_1
 GO 
 
-IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_GENERAR_REPORTE_VACACIONES_GENERAL')
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_GENERA_REPORTE_PERMISOS_SOLICITUDES')
 BEGIN
-	DROP PROCEDURE DT_SP_GENERAR_REPORTE_VACACIONES_GENERAL
+	DROP PROCEDURE DT_SP_GENERA_REPORTE_PERMISOS_SOLICITUDES
 END
 GO
 
@@ -27,8 +27,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE DT_SP_GENERAR_REPORTE_VACACIONES_GENERAL
-	
+CREATE PROCEDURE DT_SP_GENERA_REPORTE_PERMISOS_SOLICITUDES
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -37,23 +36,24 @@ BEGIN
 
     -- Insert statements for procedure here
 	SELECT
-		b.Em_Cve_Empleado,
+		Id_Permiso,
 		B.Em_Nombre,
 		B.Em_Apellido_Paterno,
 		B.Em_Apellido_Materno,
 		C.Sc_Descripcion Proyecto,
 		COALESCE(NULL,D.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
-		A.Saldo_Periodo_Anterior-a.Saldo_Periodo_Anterior_Usado Saldo_Anterior,
-		A.Saldo_Actual_Utilizado Vacaciones_Tomandas,
-		A.Saldo_Proporcional_Actual Saldo_Proporcional,
-		A.Saldo_Actual_Disponible Saldo_Final
-	FROM DT_TBL_PERIODO_VACACIONAL_EMPLEADO A
+		A.Fecha_Alta,
+		A.Fecha_Permiso,
+		A.Motivo_Permiso,
+		E.Descripcion_Status_Solicitud
+	FROM DT_TBL_PERMISO A
 	INNER JOIN Empleado B ON A.Em_Cve_Empleado=B.Em_Cve_Empleado
 	LEFT JOIN SUCURSAL C ON B.SC_CVE_SUCURSAL=C.SC_CVE_SUCURSAL
 	LEFT JOIN DEPARTAMENTO D ON B.DE_CVE_DEPARTAMENTO_EMPLEADO=D.DP_CVE_DEPARTAMENTO
+	INNER JOIN DT_CAT_STATUS_SOLICITUD E ON A.Id_Status_Solicitud=E.Id_Status_Solicitud
 
-END
+END 
 GO
 
-GRANT EXECUTE ON DT_SP_GENERAR_REPORTE_VACACIONES_GENERAL TO public;  
+GRANT EXECUTE ON DT_SP_GENERA_REPORTE_PERMISOS_SOLICITUDES TO public;  
 GO
