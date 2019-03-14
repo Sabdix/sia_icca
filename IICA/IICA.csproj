@@ -462,6 +462,7 @@
     <Content Include="Content\webarch\fonts\custom-set.ttf" />
     <Content Include="Content\webarch\fonts\custom-set.woff" />
     <Content Include="Content\webarch\fonts\custom-setd41d.eot" />
+    <Content Include="Content\assets\plugins\jquery-datatable\css\buttons_dataTables.css" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_ADICIONAL.pdf" />
     <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_INCAPACIDAD.pdf" />

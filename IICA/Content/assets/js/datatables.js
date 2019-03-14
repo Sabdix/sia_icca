@@ -1,6 +1,6 @@
 $.extend(true, $.fn.dataTable.defaults, {
     "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'p i>>",
-    "sPaginationType": "bootstrap", 
+    "sPaginationType": "bootstrap",
     "oLanguage": {
         "sProcessing": "Procesando...",
         "sLengthMenu": "Mostrar _MENU_ registros",
@@ -26,6 +26,8 @@ $.extend(true, $.fn.dataTable.defaults, {
         }
     }
 });
+
+
 $.extend($.fn.dataTableExt.oStdClasses, { "sWrapper": "dataTables_wrapper form-inline" }); $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) { return { "iStart": oSettings._iDisplayStart, "iEnd": oSettings.fnDisplayEnd(), "iLength": oSettings._iDisplayLength, "iTotal": oSettings.fnRecordsTotal(), "iFilteredTotal": oSettings.fnRecordsDisplay(), "iPage": oSettings._iDisplayLength === -1 ? 0 : Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength), "iTotalPages": oSettings._iDisplayLength === -1 ? 0 : Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength) }; }; $.extend($.fn.dataTableExt.oPagination, {
     "bootstrap": {
         "fnInit": function (oSettings, nPaging, fnDraw) {
@@ -43,13 +45,137 @@ $.extend($.fn.dataTableExt.oStdClasses, { "sWrapper": "dataTables_wrapper form-i
             }
         }
     }
-}); $.extend(true, $.fn.DataTable.TableTools.classes, { "container": "DTTT ", "buttons": { "normal": "btn btn-white", "disabled": "disabled" }, "collection": { "container": "DTTT_dropdown dropdown-menu", "buttons": { "normal": "", "disabled": "disabled" } }, "print": { "info": "DTTT_print_info modal" }, "select": { "row": "active" } }); $.extend(true, $.fn.DataTable.TableTools.DEFAULTS.oTags, { "collection": { "container": "ul", "button": "li", "liner": "a" } }); $(".select2-wrapper").select2({ minimumResultsForSearch: -1 }); $(document).ready(function () {
-    var responsiveHelper = undefined; var breakpointDefinition = { tablet: 1024, phone: 480 };
+});
+
+//$.extend(true, $.fn.DataTable.TableTools.classes, {
+//    "container": "DTTT ",
+//    "buttons": { "normal": "btn btn-white", "disabled": "disabled" },
+//    "collection": {
+//        "container": "DTTT_dropdown dropdown-menu",
+//        "buttons": { "normal": "", "disabled": "disabled" }
+//    },
+//    "print": { "info": "DTTT_print_info modal" }, "select": { "row": "active" }
+//});
+
+//$.extend(true, $.fn.DataTable.TableTools.DEFAULTS.oTags,{
+//        "collection": { "container": "ul", "button": "li", "liner": "a" }
+//});
+
+$(".select2-wrapper").select2({ minimumResultsForSearch: -1 });
+
+$(document).ready(function () {
+    var responsiveHelper = undefined;
+    var breakpointDefinition = { tablet: 1024, phone: 480 };
     var tableElement = $('#example');
-    tableElement.dataTable({ "sDom": "<'row'<'col-md-6'l T><'col-md-6'f>r>t<'row'<'col-md-12'p i>>", "oTableTools": { "aButtons": [{ "sExtends": "collection", "sButtonText": "<i class='fa fa-cloud-download'></i>", "aButtons": ["csv", "xls", "pdf", "copy"] }] }, "sPaginationType": "bootstrap", "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [0] }], "aaSorting": [[1, "asc"]], "oLanguage": { "sLengthMenu": "_MENU_ ", "sInfo": "Página <b>_START_ to _END_</b> of _TOTAL_ entries" }, bAutoWidth: false, fnPreDrawCallback: function () { if (!responsiveHelper) { responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition); } }, fnRowCallback: function (nRow) { responsiveHelper.createExpandIcon(nRow); }, fnDrawCallback: function (oSettings) { responsiveHelper.respond(); } });
-    $('#example th').click(function (e) { $('#example .animate-progress-bar').each(function () { $(this).removeClass('progress-bar'); $(this).css('width', '0%'); $(this).css('width', $(this).attr("data-percentage")); $(this).addClass('progress-bar'); }); }); $('#example_wrapper .dataTables_filter input').addClass("input-medium "); $('#example_wrapper .dataTables_length select').addClass("select2-wrapper span12"); $('#example input').click(function () { $(this).parent().parent().parent().toggleClass('row_selected'); }); $('#quick-access .btn-cancel').click(function () { $("#quick-access").css("bottom", "-115px"); }); $('#quick-access .btn-add').click(function () { fnClickAddRow(); $("#quick-access").css("bottom", "-115px"); }); var nCloneTh = document.createElement('th'); var nCloneTd = document.createElement('td'); nCloneTd.innerHTML = '<i class="fa fa-plus-circle"></i>'; nCloneTd.className = "center"; $('#example2 thead tr').each(function () { this.insertBefore(nCloneTh, this.childNodes[0]); }); $('#example2 tbody tr').each(function () { this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]); }); var oTable = $('#example2').dataTable({ "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>", "aaSorting": [], "oLanguage": { "sLengthMenu": "_MENU_ ", "sInfo": "página <b>_START_ to _END_</b> of _TOTAL_ entries" }, }); var oTable3 = $('#example3').dataTable({ "sDom": "<'row'<'col-md-6'l <'toolbar'>><'col-md-6'f>r>t<'row'<'col-md-12'p i>>", "oTableTools": { "aButtons": [{ "sExtends": "collection", "sButtonText": "<i class='fa fa-cloud-download'></i>", "aButtons": ["csv", "xls", "pdf", "copy"] }] }, "aoColumnDefs": [{ "bSortable": false, "aTargets": [0] }], "aaSorting": [[3, "desc"]], "oLanguage": { "sLengthMenu": "_MENU_ ", "sInfo": "Página<b>_START_ to _END_</b> of _TOTAL_ entries" }, }); $("div.toolbar").html('<div class="table-tools-actions"><button class="btn btn-primary" style="margin-left:12px" id="test2">Add</button></div>'); $('#test2').on("click", function () { $("#quick-access").css("bottom", "0px"); });
-    $('#example2_wrapper .dataTables_filter input').addClass("input-medium "); $('#example2_wrapper .dataTables_length select').addClass("select2-wrapper span12"); $('#example3_wrapper .dataTables_filter input').addClass("input-medium "); $('#example3_wrapper .dataTables_length select').addClass("select2-wrapper span12"); $(document).on('click', '#example2 tbody td i', function () {
-        var nTr = $(this).parents('tr')[0]; if (oTable.fnIsOpen(nTr)) { this.removeClass = "fa fa-plus-circle"; this.addClass = "fa fa-minus-circle"; oTable.fnClose(nTr); }
-        else { this.removeClass = "fa fa-minus-circle"; this.addClass = "fa fa-plus-circle"; oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details'); }
-    }); $(".select2-wrapper").select2({ minimumResultsForSearch: -1 }); function fnClickAddRow() { $('#example3').dataTable().fnAddData([$("#val1 option:selected").text(), $("#val2 option:selected").text(), "Windows", "789.", "A"]); }
-}); function fnFormatDetails(oTable, nTr) { var aData = oTable.fnGetData(nTr); var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="inner-table">'; sOut += '<tr><td>Rendering engine:</td><td>' + aData[1] + ' ' + aData[4] + '</td></tr>'; sOut += '<tr><td>Link to source:</td><td>Could provide a link here</td></tr>'; sOut += '<tr><td>Extra info:</td><td>And any further details here (images etc)</td></tr>'; sOut += '</table>'; return sOut; }
+
+    tableElement.dataTable({
+        "sDom": "<'row'<'col-md-6'l T><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
+        "oTableTools": {
+            "aButtons": [{
+                "sExtends": "collection",
+                "sButtonText": "<i class='fa fa-cloud-download'></i>", "aButtons": ["csv", "xls", "pdf", "copy"]
+            }]
+        },
+        "sPaginationType": "bootstrap",
+        "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [0] }], "aaSorting": [[1, "asc"]],
+        "oLanguage": { "sLengthMenu": "_MENU_ ", "sInfo": "Página <b>_START_ to _END_</b> of _TOTAL_ entries" },
+        bAutoWidth: false, fnPreDrawCallback: function () {
+            if (!responsiveHelper)
+                responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition);
+        },
+        fnRowCallback: function (nRow) {
+            responsiveHelper.createExpandIcon(nRow);
+        },
+        fnDrawCallback: function (oSettings) { responsiveHelper.respond(); }
+    });
+
+});
+
+$('#example th').click(function (e) {
+    $('#example .animate-progress-bar').each(function () {
+        $(this).removeClass('progress-bar');
+        $(this).css('width', '0%');
+        $(this).css('width', $(this).attr("data-percentage"));
+        $(this).addClass('progress-bar');
+    });
+
+});
+
+$('#example_wrapper .dataTables_filter input').addClass("input-medium ");
+$('#example_wrapper .dataTables_length select').addClass("select2-wrapper span12");
+$('#example input').click(function () {
+    $(this).parent().parent().parent().toggleClass('row_selected');
+});
+$('#quick-access .btn-cancel').click(function () {
+    $("#quick-access").css("bottom", "-115px");
+});
+$('#quick-access .btn-add').click(function () {
+    fnClickAddRow();
+    $("#quick-access").css("bottom", "-115px");
+});
+var nCloneTh = document.createElement('th');
+
+var nCloneTd = document.createElement('td');
+nCloneTd.innerHTML = '<i class="fa fa-plus-circle"></i>';
+
+nCloneTd.className = "center"; $('#example2 thead tr').each(function () {
+    this.insertBefore(nCloneTh, this.childNodes[0]);
+});
+
+$('#example2 tbody tr').each(function () {
+    this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+});
+
+var oTable = $('#example2').dataTable({
+    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>", "aaSorting": [],
+    "oLanguage": { "sLengthMenu": "_MENU_ ", "sInfo": "página <b>_START_ to _END_</b> of _TOTAL_ entries" },
+});
+
+var oTable3 = $('#example3').dataTable({
+    "sDom": "<'row'<'col-md-6'l <'toolbar'>><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
+    "oTableTools": {
+        "aButtons": [{ "sExtends": "collection", "sButtonText": "<i class='fa fa-cloud-download'></i>", "aButtons": ["csv", "xls", "pdf", "copy"] }]
+    },
+    "aoColumnDefs": [{ "bSortable": false, "aTargets": [0] }], "aaSorting": [[3, "desc"]], "oLanguage": { "sLengthMenu": "_MENU_ ", "sInfo": "Página<b>_START_ to _END_</b> of _TOTAL_ entries" },
+});
+
+$("div.toolbar").html('<div class="table-tools-actions"><button class="btn btn-primary" style="margin-left:12px" id="test2">Add</button></div>');
+
+$('#test2').on("click", function () {
+    $("#quick-access").css("bottom", "0px");
+});
+
+$('#example2_wrapper .dataTables_filter input').addClass("input-medium ");
+
+$('#example2_wrapper .dataTables_length select').addClass("select2-wrapper span12");
+
+$('#example3_wrapper .dataTables_filter input').addClass("input-medium ");
+
+$('#example3_wrapper .dataTables_length select').addClass("select2-wrapper span12");
+
+$(document).on('click', '#example2 tbody td i', function () {
+    var nTr = $(this).parents('tr')[0];
+    if (oTable.fnIsOpen(nTr)) {
+        this.removeClass = "fa fa-plus-circle"; this.addClass = "fa fa-minus-circle"; oTable.fnClose(nTr);
+    }
+    else {
+        this.removeClass = "fa fa-minus-circle"; this.addClass = "fa fa-plus-circle"; oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
+    }
+});
+
+$(".select2-wrapper").select2({ minimumResultsForSearch: -1 });
+
+function fnClickAddRow() {
+    $('#example3').dataTable().fnAddData([$("#val1 option:selected").text(),
+    $("#val2 option:selected").text(), "Windows", "789.", "A"]);
+}
+
+function fnFormatDetails(oTable, nTr) {
+    var aData = oTable.fnGetData(nTr);
+    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="inner-table">';
+    sOut += '<tr><td>Rendering engine:</td><td>' + aData[1] + ' ' + aData[4] + '</td></tr>';
+    sOut += '<tr><td>Link to source:</td><td>Could provide a link here</td></tr>';
+    sOut += '<tr><td>Extra info:</td><td>And any further details here (images etc)</td></tr>';
+    sOut += '</table>';
+    return sOut;
+}
