@@ -283,6 +283,7 @@ BEGIN
 		B.Em_Nombre,
 		B.Em_Apellido_Paterno,
 		B.Em_Apellido_Materno,
+		b.Em_Fecha_Ingreso,
 		C.Sc_Descripcion Proyecto,
 		COALESCE(NULL,D.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
 		A.Saldo_Periodo_Anterior-a.Saldo_Periodo_Anterior_Usado Saldo_Anterior,
