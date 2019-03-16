@@ -50,5 +50,94 @@ BEGIN
 END
 GO
 
-GRANT EXECUTE ON DT_SP_GENERAR_REPORTE_VACACIONES_GENERAL TO public;  
+/****** Object:  StoredProcedure [dbo].[DT_SP_OBTENER_PERMISOS_USUARIO]    Script Date: 15/03/2019 06:15:01 p. m. ******/
+SET ANSI_NULLS ON
 GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Christian Peña Romero>
+-- Description:	<COnsultar los registros segun el usuario>
+-- =============================================
+ALTER PROCEDURE [dbo].[DT_SP_OBTENER_PERMISOS_USUARIO]
+	-- Add the parameters for the stored procedure here
+	@Em_Cve_Empleado VARCHAR(100)=NULL,
+	@Em_Cve_Empleado_Autoriza VARCHAR(100)=NULL
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE
+		@query nvarchar(max),
+		@Proyecto_Empleado_Autoriza varchar(10)
+
+	IF (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza IS NOT NULL)
+	 OR (@Em_Cve_Empleado IS NOT NULL AND @Em_Cve_Empleado_Autoriza='') 
+	 OR (@Em_Cve_Empleado='' AND @Em_Cve_Empleado_Autoriza IS NOT NULL)
+	 OR (@Em_Cve_Empleado='' AND @Em_Cve_Empleado_Autoriza='')
+		select 0 STATUS, 'ERROR, NÚMERO DE PARAMETROS INCORRECTO' MENSAJE
+	ELSE
+	BEGIN
+		IF @Em_Cve_Empleado IS NOT NULL
+		BEGIN
+			select
+				1 STATUS,
+				'' MENSAJE,
+				Id_Permiso,
+				Fecha_Permiso,
+				Hora_inicio,
+				Hora_fin,
+				Total_Horas,
+				Motivo_Permiso,
+				a.Fecha_Alta,
+				a.Id_Status_Solicitud,
+				b.Descripcion_Status_Solicitud,
+				Motivo_Rechazo,
+				COALESCE(Fecha_Actualizacion,'') Fecha_Revision
+			from
+				DT_TBL_PERMISO a
+			inner join DT_CAT_STATUS_SOLICITUD b on a.Id_Status_Solicitud=b.Id_Status_Solicitud
+			WHERE a.Em_Cve_Empleado=@Em_Cve_Empleado
+		END
+		IF @Em_Cve_Empleado_Autoriza IS NOT NULL
+		BEGIN
+
+			select
+				d.Id_Permiso,
+				Em_nombre,
+				Em_Apellido_Paterno,
+				Em_Apellido_Materno,
+				CONVERT (VARCHAR,Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
+				b.Sc_Descripcion Programa,
+				COALESCE(NULL,c.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
+				CONVERT (VARCHAR,d.Fecha_Permiso,103)Fecha_Permiso,
+				CONVERT (VARCHAR,d.Fecha_Alta,103)Fecha_Alta,
+				d.Hora_Inicio,
+				d.Hora_Fin,
+				d.Total_Horas,
+				d.Motivo_Permiso,
+				a.Em_Cve_Empleado
+			from Empleado a
+			--LEFT JOIN IICA_COMPRAS.dbo.Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			--LEFT JOIN IICA_COMPRAS.dbo.Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			LEFT JOIN Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
+			LEFT JOIN Departamento c ON a.De_Cve_Departamento_Empleado=c.Dp_Cve_Departamento
+			INNER JOIN DT_TBL_PERMISO d ON a.Em_Cve_Empleado=d.Em_Cve_Empleado
+			--WHERE d.Em_Cve_Empleado_Autoriza=@Em_Cve_Empleado_Autoriza
+			WHERE b.Sc_UserDef_2 IN (
+				select aut_proyecto
+				from IICA_COMPRAS.dbo.Viaticos_Autorizadores
+				where Em_Cve_Empleado=@Em_Cve_Empleado_Autoriza
+				and aut_nivel='D'
+				group by aut_proyecto
+			)
+			and Id_Status_Solicitud=1
+		END
+
+	END	
+	
+END
+go
