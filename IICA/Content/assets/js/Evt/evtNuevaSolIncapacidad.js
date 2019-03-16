@@ -23,7 +23,6 @@ $(document).ready(function () {
     $("#fechaInicio").datepicker({
         startView: 1,
         format: 'yyyy/mm/dd',
-        startDate: "today",
         autoclose: true,
         todayHighlight: true
 

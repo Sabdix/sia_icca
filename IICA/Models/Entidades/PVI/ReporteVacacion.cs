@@ -13,10 +13,11 @@ namespace IICA.Models.Entidades.PVI
         public string emApellidoMaterno { get; set; }
         public string Proyecto { get; set; }
         public string Departamento { get; set; }
-        public string Saldo_Anterior { get; set; }
-        public string Vacaciones_Tomandas { get; set; }
-        public string Saldo_Proporcional { get; set; }
-        public string Saldo_Final { get; set; }
+        public string SaldoAnterior { get; set; }
+        public string VacacionesTomandas { get; set; }
+        public string SaldoProporcional { get; set; }
+        public string SaldoFinal { get; set; }
+        public string FechaIngreso { get; set; }
         public string nombreCompleto => $"{emNombre + " " + (string.IsNullOrEmpty(emApellidoPaterno) ? "" : emApellidoPaterno) + " " + (string.IsNullOrEmpty(emApellidoMaterno) ? "" : emApellidoMaterno)}";
     }
 }

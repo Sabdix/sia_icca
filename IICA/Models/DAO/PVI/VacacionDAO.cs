@@ -210,12 +210,13 @@ namespace IICA.Models.DAO.PVI
                         reporteVacacion.emNombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
                         reporteVacacion.emApellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
                         reporteVacacion.emApellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
+                        reporteVacacion.FechaIngreso = dbManager.DataReader["Em_Fecha_Ingreso"] == DBNull.Value ? "" : dbManager.DataReader["Em_Fecha_Ingreso"].ToString();
                         reporteVacacion.Proyecto = dbManager.DataReader["Proyecto"] == DBNull.Value ? "" : dbManager.DataReader["Proyecto"].ToString();
                         reporteVacacion.Departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
-                        reporteVacacion.Saldo_Anterior = dbManager.DataReader["Saldo_Anterior"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Anterior"].ToString();
-                        reporteVacacion.Vacaciones_Tomandas = dbManager.DataReader["Vacaciones_Tomandas"] == DBNull.Value ? "" : dbManager.DataReader["Vacaciones_Tomandas"].ToString();
-                        reporteVacacion.Saldo_Proporcional = dbManager.DataReader["Saldo_Proporcional"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Proporcional"].ToString();
-                        reporteVacacion.Saldo_Final = dbManager.DataReader["Saldo_Final"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Final"].ToString();
+                        reporteVacacion.SaldoAnterior = dbManager.DataReader["Saldo_Anterior"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Anterior"].ToString();
+                        reporteVacacion.VacacionesTomandas = dbManager.DataReader["Vacaciones_Tomandas"] == DBNull.Value ? "" : dbManager.DataReader["Vacaciones_Tomandas"].ToString();
+                        reporteVacacion.SaldoProporcional = dbManager.DataReader["Saldo_Proporcional"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Proporcional"].ToString();
+                        reporteVacacion.SaldoFinal = dbManager.DataReader["Saldo_Final"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Final"].ToString();
                         reporteVacaciones.Add(reporteVacacion);
                     }
                 }

@@ -155,6 +155,7 @@ namespace IICA.Models.DAO.PVI
                         permiso.horaFin = dbManager.DataReader["Hora_fin"] == DBNull.Value ? "" : dbManager.DataReader["Hora_fin"].ToString();
                         permiso.totalHoras = dbManager.DataReader["Total_Horas"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["Total_Horas"].ToString());
                         permiso.motivoPermiso = dbManager.DataReader["Motivo_Permiso"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Permiso"].ToString();
+                        permiso.emCveEmpleado= dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         //permiso.estatusPermiso.idEstatusPermiso = dbManager.DataReader["Id_Status_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Status_Solicitud"].ToString());
                         //permiso.estatusPermiso.descripcion = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
                         //permiso.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
@@ -205,6 +206,80 @@ namespace IICA.Models.DAO.PVI
                 throw ex;
             }
             return permisos; ;
+        }
+
+        public Result ActualizarFormatoPermiso(int idPermiso, string pathFormato)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(2);
+                    dbManager.AddParameters(0, "Id_Permiso", idPermiso);
+                    dbManager.AddParameters(1, "path_formato_autorizacion", pathFormato);
+                    dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_FORMATO_PERMISO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["error_message"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        public Result ObtenerPermiso(int idPermiso)
+        {
+            Result result = new Result();
+            Permiso permiso;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Id_Permiso", idPermiso);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_PERMISO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        if (Convert.ToInt32(dbManager.DataReader["STATUS"].ToString()) == 1)
+                        {
+                            permiso = new Permiso();
+                            permiso.idPermiso = dbManager.DataReader["Id_Permiso"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Permiso"].ToString());
+                            permiso.fechaPermiso = dbManager.DataReader["Fecha_Permiso"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Permiso"].ToString());
+                            permiso.horaInicio = dbManager.DataReader["Hora_Inicio"] == DBNull.Value ? "": dbManager.DataReader["Hora_Inicio"].ToString();
+                            permiso.horaFin = dbManager.DataReader["Hora_Fin"] == DBNull.Value ? "" : dbManager.DataReader["Hora_Fin"].ToString();
+                            permiso.totalHoras = dbManager.DataReader["total_horas"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["total_horas"].ToString());
+                            permiso.motivoPermiso = dbManager.DataReader["motivo_Permiso"] == DBNull.Value ? "" : dbManager.DataReader["motivo_Permiso"].ToString();
+                            permiso.fechaAlta = dbManager.DataReader["fecha_alta"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["fecha_alta"].ToString());
+                            permiso.estatusPermiso.idEstatusPermiso = dbManager.DataReader["Id_Status_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Status_Solicitud"].ToString());
+                            permiso.estatusPermiso.descripcion = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
+                            permiso.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
+                            permiso.PathFormatoAutorizacion = dbManager.DataReader["path_formato_autorizacion"] == DBNull.Value ? "" :dbManager.DataReader["path_formato_autorizacion"].ToString();
+                            permiso.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
+                            permiso.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado_Autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_Autoriza"].ToString();
+                            result.status = true;
+                            result.objeto = permiso;
+                        }
+                        else
+                        {
+                            result.mensaje = dbManager.DataReader["mensaje"] == DBNull.Value ? "" : dbManager.DataReader["mensaje"].ToString();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
     }
 }

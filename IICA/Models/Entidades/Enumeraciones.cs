@@ -31,6 +31,11 @@ namespace IICA.Models.Entidades
         FoRMATO_ST7_CALIFICACION_RT,
         FORMATO_ST7_ALTA_RT,
     }
+
+    public enum FormatosPermiso
+    {
+        FORMATO_AUTORIZACION = 1
+    }
     static class Constants
     {
         public const string notificacionPermiso = "Notificación de la solicitud de un permiso";
