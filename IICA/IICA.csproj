@@ -516,9 +516,11 @@
     <Content Include="Views\Vacacion\ReporteSaldosVacacionales.cshtml" />
     <Content Include="Views\Permiso\ReporteSolicitudesPermisos.cshtml" />
     <Content Include="Views\Vacacion\ReporteSolicitudesVacaciones.cshtml" />
+    <Content Include="Views\Shared\_LayoutViaticos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Controllers\Viaticos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

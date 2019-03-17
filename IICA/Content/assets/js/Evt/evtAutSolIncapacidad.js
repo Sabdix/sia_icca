@@ -144,4 +144,5 @@ function mostrarFormato(url) {
     var iframe = $('<iframe style="width: 100%;height:600px;">');
     iframe.attr('src', url);
     $('#content-formato').append(iframe);
+    iframe[0].contentWindow.location.reload();
 }

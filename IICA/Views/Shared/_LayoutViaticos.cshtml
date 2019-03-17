@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+    <title>@ViewBag.Title</title>
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    <link href="~/Content/assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/Content/assets/plugins/bootstrapv3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/bootstrapv3/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/animate.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/jquery-notifications/css/messenger-theme-flat.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/Content/assets/plugins/jquery-notifications/css/location-sel.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
+    
+</head>
+<body>
+    <script>
+        function rootUrl(url) {
+            var _rootUrl = '@Url.Content("~")';
+            var x = url;
+            if (url.indexOf(_rootUrl) != 0) {
+                x = _rootUrl + "/" + url;
+                x = x.replace(/\/\//g, "/").replace(/\/\//g, "/");
+            }
+            return x;
+        };
+    </script>
+    <div class="header navbar navbar-inverse ">
+        <div class="navbar-inner">
+            <div class="header-seperation">
+                <ul class="nav pull-left notifcation-center visible-xs visible-sm">
+                    <li class="dropdown">
+                        <a href="#main-menu" data-webarch="toggle-left-side">
+                            <i class="material-icons">menu</i>
+                        </a>
+                    </li>
+                </ul>
+                <a href="@Url.Action("Index","Home")">
+                    <img src="~/Content/assets/img/logo_iica.png" class="logo"  width="150" height="60" 
+                         style="margin-top: 0px;" />
+                </a>
+                <ul class="nav pull-right notifcation-center">
+                    <li class="dropdown hidden-xs hidden-sm">
+                        <a href="@Url.Action("Sistemas","IICA")" class="dropdown-toggle" data-toggle="">
+                            <i class="material-icons">home</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="header-quick-nav">
+                <div class="pull-left">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a href="#" class="" id="layout-condensed-toggle">
+                                <i class="material-icons">menu</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                @*<div class="pull-right">
+                    <ul class="nav quick-section ">
+                        <li class="quicklinks" data-toggle="tooltip" title="Configuración" data-placement="left">
+                            <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
+                                <i class="material-icons">tune</i>
+                            </a>
+                            <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                <li>
+                                    <a href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="quicklinks"> <span class="h-seperate"></span></li>
+                    </ul>
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container row-fluid">
+        @Html.Action("_MenuLeft", "Home")
+        
+        @*<a href="#" class="scrollup">Scroll</a>
+        <div class="footer-widget">
+            <div class="progress transparent progress-small no-radius no-margin">
+                <div class="progress-bar progress-bar-success animate-progress-bar" data-percentage="79%" style="width: 79%;"></div>
+            </div>
+            <div class="pull-right">
+                <div class="details-status"> <span class="animate-number" data-value="86" data-animation-duration="560">86</span>% </div>
+                <a href="lockscreen.html"><i class="material-icons">power_settings_new</i></a>
+            </div>
+        </div>*@
+
+        <div class="page-content">
+            <div id="portlet-config" class="modal hide">
+                <div class="modal-header">
+                    <button data-dismiss="modal" class="close" type="button"></button>
+                    <h3>Widget Settings</h3>
+                </div>
+                <div class="modal-body"> Widget settings form goes here </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/Content/assets/plugins/pace/pace.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/bootstrapv3/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-block-ui/jqueryblockui.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-unveil/jquery.unveil.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-scrollbar/jquery.scrollbar.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-numberAnimate/jquery.animateNumbers.js" type="text/javascript"></script>
+
+
+    <script src="~/Content/assets/plugins/jquery-notifications/js/messenger.min.js"></script>
+    <script src="~/Content/assets/plugins/jquery-notifications/js/messenger-theme-future.js"></script>
+
+    <script type="text/javascript" src="~/Content/assets/plugins/jquery-notifications/js/demo/demo.js"></script>
+    <link href="~/Content/assets/plugins/sweet-alert/sweetalert.min.css" rel="stylesheet" />
+    <script src="~/Content/assets/plugins/sweet-alert/sweetalert.min.js"></script>
+
+    <script src="~/Content/webarch//js/webarch.js" type="text/javascript"></script>
+    <script src="~/Content/assets/js/Evt/Utils.js"></script>
+    <script src="~/Content/assets/js/Evt/HttpStatusCode.js"></script>
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")*@
+    @RenderSection("scripts", required: false)
+
+    <div id="loading-layout">
+        <div>
+            <div class="mdl-spinner mdl-spinner--cyan-color mdl-js-spinner is-active"></div>
+            <H4>Cargando...</H4>
+        </div>
+    </div>
+    <div id="content-impresion">
+    </div>
+    <style>
+        #loading-layout {
+            display: none;
+            width: 100%;
+            min-height: 100%;
+            position: fixed;
+            top: 0px;
+            z-index: 9999;
+            background-color: rgba(0,0,0,.6);
+        }
+
+            #loading-layout > div {
+                position: fixed;
+                top: 40%;
+                left: 47.5%;
+            }
+
+            #loading-layout h4 {
+                position: relative;
+                color: white;
+                left: -15px;
+            }
+
+        #content-impresion {
+            display: none;
+        }
+
+        .a-submenu {
+            color: #fff !important;
+            font-weight: 800 !important;
+            background-color: rgba(255,255,255,.2) !important;
+        }
+
+    </style>
+</body>
+</html>

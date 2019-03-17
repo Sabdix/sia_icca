@@ -149,17 +149,17 @@ namespace IICA.Controllers.PVI
         }
 
         [HttpPost, SessionExpire]
-        public ActionResult SubirDocumento(int idPermiso, FormatosPermiso formato)
+        public ActionResult ActualizarFormatoPermiso(Permiso permiso_, FormatosPermiso formato)
         {
             try
             {
                 permisoDAO = new PermisoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 Result result = new Result();
-                string pathFormato = ObtenerFormatoHttpPost(Request, idPermiso, formato.ToString(), usuarioSesion.emCveEmpleado);
+                string pathFormato = ObtenerFormatoHttpPost(Request, permiso_, formato.ToString(), permiso_.emCveEmpleado);
                 if (!string.IsNullOrEmpty(pathFormato))
                 {
-                    result = permisoDAO.ActualizarFormatoPermiso(idPermiso,pathFormato);
+                    result = permisoDAO.ActualizarFormatoPermiso(permiso_, pathFormato);
                 }
                 else
                     result.mensaje = "No se logro subir el formato, intente mas tarde.";
@@ -173,7 +173,7 @@ namespace IICA.Controllers.PVI
 
 
         [HttpPost]
-        public ActionResult ObtenerPermiso(int id)
+        public ActionResult ObtenerPermiso(Int64 id)
         {
             try
             {
@@ -187,7 +187,7 @@ namespace IICA.Controllers.PVI
         }
 
         #region Funciones - Generales
-        private string ObtenerFormatoHttpPost(HttpRequestBase httpRequestBase, int idPermiso, string formato, string usuario)
+        private string ObtenerFormatoHttpPost(HttpRequestBase httpRequestBase, Permiso permiso, string formato, string usuario)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace IICA.Controllers.PVI
                             if (!System.IO.Directory.Exists(pathGeneral))
                                 System.IO.Directory.CreateDirectory(pathGeneral);
 
-                            string nombre = Path.GetFileName(idPermiso + "_" + formato + "" + Path.GetExtension(file.FileName));
+                            string nombre = Path.GetFileName(permiso.idPermiso + "_" + formato + "" + Path.GetExtension(file.FileName));
                             string pathFormato = Path.Combine(pathGeneral, nombre);
 
                             file.SaveAs(pathFormato);

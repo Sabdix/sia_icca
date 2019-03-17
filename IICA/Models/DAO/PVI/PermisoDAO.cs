@@ -148,6 +148,8 @@ namespace IICA.Models.DAO.PVI
                         permiso.usuario.fechaIngreso = dbManager.DataReader["Em_Fecha_Ingreso"] == DBNull.Value ? "" : dbManager.DataReader["Em_Fecha_Ingreso"].ToString();
                         permiso.usuario.programa = dbManager.DataReader["Programa"] == DBNull.Value ? "" : dbManager.DataReader["Programa"].ToString();
                         permiso.usuario.departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
+                        permiso.usuario.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
+                        permiso.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         permiso.fechaPermiso = dbManager.DataReader["Fecha_Permiso"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Permiso"].ToString());
                         permiso.fechaAlta = dbManager.DataReader["Fecha_Alta"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Alta"].ToString());
 
@@ -155,7 +157,6 @@ namespace IICA.Models.DAO.PVI
                         permiso.horaFin = dbManager.DataReader["Hora_fin"] == DBNull.Value ? "" : dbManager.DataReader["Hora_fin"].ToString();
                         permiso.totalHoras = dbManager.DataReader["Total_Horas"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["Total_Horas"].ToString());
                         permiso.motivoPermiso = dbManager.DataReader["Motivo_Permiso"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Permiso"].ToString();
-                        permiso.emCveEmpleado= dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         //permiso.estatusPermiso.idEstatusPermiso = dbManager.DataReader["Id_Status_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Status_Solicitud"].ToString());
                         //permiso.estatusPermiso.descripcion = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
                         //permiso.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
@@ -208,7 +209,7 @@ namespace IICA.Models.DAO.PVI
             return permisos; ;
         }
 
-        public Result ActualizarFormatoPermiso(int idPermiso, string pathFormato)
+        public Result ActualizarFormatoPermiso(Permiso permiso, string pathFormato)
         {
             Result result = new Result();
             try
@@ -217,7 +218,7 @@ namespace IICA.Models.DAO.PVI
                 {
                     dbManager.Open();
                     dbManager.CreateParameters(2);
-                    dbManager.AddParameters(0, "Id_Permiso", idPermiso);
+                    dbManager.AddParameters(0, "Id_Permiso", permiso.idPermiso);
                     dbManager.AddParameters(1, "path_formato_autorizacion", pathFormato);
                     dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_FORMATO_PERMISO");
                     if (dbManager.DataReader.Read())
@@ -234,7 +235,7 @@ namespace IICA.Models.DAO.PVI
             return result;
         }
 
-        public Result ObtenerPermiso(int idPermiso)
+        public Result ObtenerPermiso(Int64 idPermiso)
         {
             Result result = new Result();
             Permiso permiso;
@@ -263,7 +264,7 @@ namespace IICA.Models.DAO.PVI
                             permiso.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
                             permiso.PathFormatoAutorizacion = dbManager.DataReader["path_formato_autorizacion"] == DBNull.Value ? "" :dbManager.DataReader["path_formato_autorizacion"].ToString();
                             permiso.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
-                            permiso.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado_Autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_Autoriza"].ToString();
+                            permiso.emCveEmpleadoAutoriza = dbManager.DataReader["Em_Cve_Empleado_Autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_Autoriza"].ToString();
                             result.status = true;
                             result.objeto = permiso;
                         }

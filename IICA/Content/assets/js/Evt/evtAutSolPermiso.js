@@ -1,16 +1,18 @@
 ﻿var solSeleccionada;
-var idPermiso;
 var formato;
+var formatoText;
 
 $(document).ready(function () {
 
     $('#tabla-solicitud-permisos').dataTable();
 
+
+    ///============================ SUBIDA DE ARCHIVO DE AUTORIZACION   ============================
     $(".subirFormato").click(function () {
-        idPermiso = $(this).attr("data-permiso");
+        solSeleccionada = JSON.parse($(this).attr("data-permiso"));
         formato = $(this).attr("data-formato");
         formatoText = $(this).attr("data-formato-text");
-        MostrarFormato(idPermiso, formatoText);
+        MostrarFormato(solSeleccionada.idPermiso);
         $("#item-dropzone a").trigger("click");
         myDropzone.removeAllFiles(true);
         //$("#formDropZone").empty();
@@ -19,7 +21,7 @@ $(document).ready(function () {
 
     $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
     myAwesomeDropzone = {
-        url: rootUrl("/Permiso/SubirDocumento"),
+        url: rootUrl("/Permiso/ActualizarFormatoPermiso"),
         addRemoveLinks: true,
         paramName: "archivo",
         maxFilesize: 4, // MB
@@ -30,7 +32,10 @@ $(document).ready(function () {
         //    formato: formato
         //},
         sending: function (file, xhr, formData) {
-            formData.append("idPermiso", idPermiso);
+            for (var key in solSeleccionada) {
+                formData.append(key, solSeleccionada[key]);
+            }
+            //formData.append("permiso_", permiso);
             formData.append("formato", formato);
         },
         success: function (file, data) {
@@ -52,10 +57,17 @@ $(document).ready(function () {
     myDropzone.on("complete", function (file, response) {
 
     });
+    //---------------------------------------------------------------------------------------------------
+
 
 });
 
-function MostrarFormato(idPermiso, formato) {
+
+/*==========================================================================================================*/
+/*=============================     SUBIDA DE ARCHIVO DE AUTORIZACION   ====================================*/
+/*==========================================================================================================*/
+
+function MostrarFormato(idPermiso) {
     $.ajax({
         data: { id: idPermiso },
         url: rootUrl("/Permiso/ObtenerPermiso"),
@@ -75,6 +87,7 @@ function MostrarFormato(idPermiso, formato) {
                     var iframe = $('<iframe style="width: 100%;height:600px;">');
                     iframe.attr('src', url);
                     $('#content-formato').append(iframe);
+                    iframe[0].contentWindow.location.reload();
                 }
                 else {
                     $("#item-verArchivo").hide();

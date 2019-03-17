@@ -149,6 +149,8 @@ namespace IICA.Models.DAO.PVI
                         vacacion.usuario.fechaIngreso = dbManager.DataReader["Em_Fecha_Ingreso"] == DBNull.Value ? "" : dbManager.DataReader["Em_Fecha_Ingreso"].ToString();
                         vacacion.usuario.programa = dbManager.DataReader["Programa"] == DBNull.Value ? "" : dbManager.DataReader["Programa"].ToString();
                         vacacion.usuario.departamento = dbManager.DataReader["Departamento"] == DBNull.Value ? "" : dbManager.DataReader["Departamento"].ToString();
+                        vacacion.usuario.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
+                        vacacion.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         vacacion.fechaSolicitud = dbManager.DataReader["Fecha_Alta"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Alta"].ToString());
                         vacacion.totalDiasSaldoVacacional = dbManager.DataReader["Total_Dias_Saldo_Vacacional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Total_Dias_Saldo_Vacacional"].ToString());
                         vacacion.fechaInicio = dbManager.DataReader["Fecha_Inicio"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Inicio"].ToString());
@@ -259,6 +261,83 @@ namespace IICA.Models.DAO.PVI
                 throw ex;
             }
             return reporteSolicitudVacaciones;
+        }
+
+        public Result ActualizarFormatoPermiso(Vacacion vacacion, string pathFormato)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(2);
+                    dbManager.AddParameters(0, "Id_Vacacion", vacacion.idVacacion);
+                    dbManager.AddParameters(1, "path_formato_autorizacion", pathFormato);
+                    dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_FORMATO_VACACION");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["error_message"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        public Result ObtenerVacacion(Int64 idPermiso)
+        {
+            Result result = new Result();
+            Vacacion vacacion;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Id_Vacacion", idPermiso);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_VACACION");
+                    if (dbManager.DataReader.Read())
+                    {
+                        if (Convert.ToInt32(dbManager.DataReader["STATUS"].ToString()) == 1)
+                        {
+                            vacacion = new Vacacion();
+                            vacacion.idVacacion = dbManager.DataReader["Id_Vacaciones"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Vacaciones"].ToString());
+                            vacacion.periodoAnterior = dbManager.DataReader["periodo_anterior"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["periodo_anterior"].ToString());
+                            vacacion.proporcional= dbManager.DataReader["proporcional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["proporcional"].ToString());
+                            vacacion.totalDiasSaldoVacacional = dbManager.DataReader["total_dias_saldo_vacacional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["total_dias_saldo_vacacional"].ToString());
+                            vacacion.fechaSolicitud = dbManager.DataReader["Fecha_Solicitud"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Solicitud"].ToString());
+                            vacacion.fechaInicio = dbManager.DataReader["Fecha_inicio"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_inicio"].ToString());
+                            vacacion.fechaFin = dbManager.DataReader["Fecha_fin"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_fin"].ToString());
+                            vacacion.totalDias = dbManager.DataReader["total_dias"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["total_dias"].ToString());
+                            vacacion.motivoVacaciones = dbManager.DataReader["motivo_Vacaciones"] == DBNull.Value ? "" : dbManager.DataReader["motivo_Vacaciones"].ToString();
+                            vacacion.estatusVacacion.idEstatusVacacion = dbManager.DataReader["Id_Status_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Status_Solicitud"].ToString());
+                            vacacion.estatusVacacion.descripcion = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
+                            vacacion.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();                            
+                            vacacion.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
+                            vacacion.emCveEmpleadoAutoriza = dbManager.DataReader["Em_Cve_Empleado_Autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_Autoriza"].ToString();
+                            vacacion.fechaAutorizacion = dbManager.DataReader["Fecha_Actualizacion"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Actualizacion"].ToString());
+                            vacacion.PathFormatoAutorizacion = dbManager.DataReader["path_formato_autorizacion"] == DBNull.Value ? "" : dbManager.DataReader["path_formato_autorizacion"].ToString();
+                            result.status = true;
+                            result.objeto = vacacion;
+                        }
+                        else
+                        {
+                            result.mensaje = dbManager.DataReader["mensaje"] == DBNull.Value ? "" : dbManager.DataReader["mensaje"].ToString();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
     }
 }

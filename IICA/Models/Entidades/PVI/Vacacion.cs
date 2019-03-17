@@ -37,5 +37,7 @@ namespace IICA.Models.Entidades.PVI
         /*------------------------------------------------*/
         public Usuario usuario { get; set; }
         public int diasFestivos { get; set; }
+
+        public string PathFormatoAutorizacion { get; set; }
     }
 }

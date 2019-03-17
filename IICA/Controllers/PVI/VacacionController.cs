@@ -3,8 +3,10 @@ using IICA.Models.Entidades;
 using IICA.Models.Entidades.PVI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace IICA.Controllers.PVI
@@ -158,6 +160,78 @@ namespace IICA.Controllers.PVI
                 throw ex;
             }
         }
+
+        [HttpPost, SessionExpire]
+        public ActionResult ActualizarFormatoVacacion(Vacacion vacacion_, FormatosPermiso formato)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                Result result = new Result();
+                string pathFormato = ObtenerFormatoHttpPost(Request, vacacion_, formato.ToString(), vacacion_.emCveEmpleado);
+                if (!string.IsNullOrEmpty(pathFormato))
+                {
+                    result = vacacionDAO.ActualizarFormatoPermiso(vacacion_, pathFormato);
+                }
+                else
+                    result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult ObtenerVacacion(Int64 id)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                return Json(vacacionDAO.ObtenerVacacion(id), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #region Funciones - Generales
+        private string ObtenerFormatoHttpPost(HttpRequestBase httpRequestBase, Vacacion vacacion, string formato, string usuario)
+        {
+            try
+            {
+                if (httpRequestBase.Files.Count > 0)
+                {
+                    for (int i = 0; i < httpRequestBase.Files.Count; i++)
+                    {
+                        var file = httpRequestBase.Files[i];
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            string pathFormatosPermisos = WebConfigurationManager.AppSettings["pathFormatosVacaciones"].ToString();
+                            string pathGeneral = Server.MapPath("~" + pathFormatosPermisos + "/" + usuario + "/");
+                            if (!System.IO.Directory.Exists(pathGeneral))
+                                System.IO.Directory.CreateDirectory(pathGeneral);
+
+                            string nombre = Path.GetFileName(vacacion.idVacacion + "_" + formato + "" + Path.GetExtension(file.FileName));
+                            string pathFormato = Path.Combine(pathGeneral, nombre);
+
+                            file.SaveAs(pathFormato);
+                            return pathFormatosPermisos + "/" + usuario + "/" + nombre;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return string.Empty;
+        }
+        #endregion Funciones - Generales
 
     }
 }
