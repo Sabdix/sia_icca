@@ -150,6 +150,7 @@
     <Compile Include="Controllers\PVI\IncapacidadController.cs" />
     <Compile Include="Controllers\PVI\PermisoController.cs" />
     <Compile Include="Controllers\PVI\VacacionController.cs" />
+    <Compile Include="Controllers\Viaticos\ViaticoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -233,6 +234,7 @@
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtNuevaSolViatico.js" />
     <Content Include="Content\assets\js\form_elements.js" />
     <Content Include="Content\assets\js\form_validations.js" />
     <Content Include="Content\assets\js\google_maps.js" />
@@ -501,7 +503,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\IICA\Index.cshtml" />
     <Content Include="Views\Permiso\NuevaSolicitud.cshtml" />
-    <Content Include="Views\Home\_MenuLeft.cshtml" />
+    <Content Include="Views\Home\_MenuLeftPVI.cshtml" />
     <Content Include="Views\Permiso\MisPermisos.cshtml" />
     <Content Include="Views\Vacacion\NuevaSolicitud.cshtml" />
     <Content Include="Views\IICA\Sistemas.cshtml" />
@@ -517,10 +519,12 @@
     <Content Include="Views\Permiso\ReporteSolicitudesPermisos.cshtml" />
     <Content Include="Views\Vacacion\ReporteSolicitudesVacaciones.cshtml" />
     <Content Include="Views\Shared\_LayoutViaticos.cshtml" />
+    <Content Include="Views\Home\_MenuLeftViaticos.cshtml" />
+    <Content Include="Views\Home\Viaticos.cshtml" />
+    <Content Include="Views\Viatico\NuevaSolicitud.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Viaticos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

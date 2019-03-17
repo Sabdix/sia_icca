@@ -20,7 +20,7 @@ namespace IICA.Controllers
         }
 
         [SessionExpire]
-        public ActionResult _MenuLeft()
+        public ActionResult _MenuLeftPVI()
         {
             try
             {
@@ -28,12 +28,42 @@ namespace IICA.Controllers
                 if (usuarioSesion != null)
                     return PartialView(usuarioSesion);
                 else
-                    return RedirectToAction("Index","IICA");
+                    return RedirectToAction("Index", "IICA");
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+
+        [SessionExpire]
+        public ActionResult Viaticos()
+        {
+            Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+            if (usuarioSesion != null)
+                return View(usuarioSesion);
+            else
+                return RedirectToAction("Index", "IICA");
+        }
+
+        [SessionExpire]
+        public ActionResult _MenuLeftViaticos()
+        {
+            try
+            {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                if (usuarioSesion != null)
+                    return PartialView(usuarioSesion);
+                else
+                    return RedirectToAction("Index", "IICA");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

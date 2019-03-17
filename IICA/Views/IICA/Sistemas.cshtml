@@ -119,13 +119,7 @@
                     <div class="col-md-4">
                         <h3>IICA - VIATICOS</h3>
                         <p>IICA-VIATICOS le permitira llevar a cabo el proceso de la solicitud y comprobación de viaticos.</p>
-                        <p>
-                            <form action="@WebConfigurationManager.AppSettings["urlViaticos"].ToString()" method="post">
-                                <input hidden name="user" value="@(Model.emCveEmpleado)" />
-                                <input hidden name="pass" value="@(Model.contrasena)" />
-                                <button type="submit" class="btn btn-default">Ingresar</button>
-                            </form>
-                        </p>
+                        <p><a class="btn btn-default" href="@Url.Action("Viaticos","Home")">Ingresar</a></p>
                     </div>
                     <div class="col-md-4">
                         <h3>IICA - PERMISOS, VACACIONES E INCAPACIDADES</h3>
