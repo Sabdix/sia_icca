@@ -159,6 +159,7 @@
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\GastoExtraDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\TipoDivisaDAO.cs" />

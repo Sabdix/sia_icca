@@ -299,13 +299,8 @@
                             <div class="col-md-6">
                                 <div class="col-md-6">
                                     <label class="form-label">Gasto</label>
-                                    <select class="select-iica" id="gasto">
-                                        <option value="0">Seleccionar</option>
-                                        <option value="1">Transporte Aéreo</option>
-                                        <option value="2">Peaje / Gasolina</option>
-                                        <option value="2">Autobús</option>
-                                    </select>
-                                    <span class="error field-validation-valid" data-valmsg-for="gasto" data-valmsg-replace="true"></span>
+                                    @Html.DropDownList("gasto_extra", (IEnumerable<SelectListItem>)ViewBag.GastosExtra, "SELECCIONE UN GASTO",
+                                  new { @class = "select-iica", style = "width: 100%;" })
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Monto:</label>
