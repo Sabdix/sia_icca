@@ -1,5 +1,11 @@
 ﻿var totalHoras;
 
+var itinerario;
+var itinerarios;
+var idRowItinerario=1;
+var tablaItinerarioIda;
+
+
 
 function Viatico() {
     this.idViatico;
@@ -14,7 +20,27 @@ function Viatico() {
 }
 
 
+function Itinerario() {
+    this.idItinerario;
+    this.medioTransporte;
+    this.origen;
+    this.destino;
+    this.linea;
+    this.numeroAsiento;
+    this.horaSalida;
+    this.horaLLegada;
+    this.fechaSalida;
+    this.fechaLLegada;
+    this.tipoSalida;
+    this.pathBoleto;
+}
+
+
+
 $(document).ready(function () {
+
+    itinerarios = new Array();
+    tablaItinerarioIda = $('#tabla-itinerarioIda').DataTable();
 
     $(".select-iica").select2({
         width: '100%' // need to override the changed default
@@ -49,19 +75,28 @@ $(document).ready(function () {
     $("#fechaFin").datepicker('setDate', moment().add('days', 1).toDate());
 
 
-    $("#btn-guardar-sol").click(function (e) {
-        if ($("#form-nuevaSol").valid()) {
+    $("#btn-guardar-solViatico").click(function (e) {
+        if (ValidarDatosSol()) {
             ConfirmarEnviarSolicitud();
+        } else {
+            swal("Cancelado", "Faltan datos necesarios para proceder a guardar la solicitud", "error");
         }
     });
 
 
 });
 
+
+function ValidarDatosSol() {
+    if ($("#form-tipoViaje").valid()) {
+        return false;
+    }
+}
+
 function ConfirmarEnviarSolicitud() {
     swal({
-        title: "Está Usted seguro de enviar la solicitud de permiso?",
-        text: "Al enviar la solicitud un autorizador la revisara para aprobarla o rechazarla",
+        title: "Está Usted seguro de guardar la solicitud de viatico?",
+        text: "Al guardar la solicitud tendra que enviarla, para que un autorizador la revise y pueda aprobarla o rechazarla",
         type: "warning",
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
@@ -72,7 +107,7 @@ function ConfirmarEnviarSolicitud() {
     }, function (isConfirm) {
         if (isConfirm) {
             swal.close();
-            $("#form-nuevaSol").submit();
+            //procesar datos
         } else {
             swal("Cancelado", "Se ha cancelado la operación", "error");
         }
@@ -89,3 +124,64 @@ function OnSuccesRegistrarSolicitud(data) {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
 }
+
+/*=============================================================================================
+======================================      ITINERARIO     ====================================
+===============================================================================================*/
+
+function MostrarModalAddItinerario(tipoSalida) {
+    $.ajax({
+        data: { itinerario: itinerario},
+        url: rootUrl("/Viatico/_Itinerario"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+            $("#content-md-itinerario").html("");
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-md-itinerario").html(data);
+            $("#modal-itinerario").modal("show");
+            $("#tipo-salida").val(tipoSalida);
+            $.validator.unobtrusive.parse($("#modal-itinerario"));
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function AgregarItinerario() {
+    if ($("#form-itn").valid()) {
+        itinerario = JSON.stringify($("#form-itn").serializeArray());
+        if (("#form-itn #medioTransporte_idMedioTransporte").val() === "2") {//Si es aereo mostrar el 
+            //solicitamos el archivo a subir
+        } else {
+            itinerario.idRowItinerario = idRowItinerario;
+            itinerarios.push();
+            idRowItinerario++;
+            MostrarTablasItinerario(itinerarios, itinerario.tipoSalida.idTipoSalida);
+        }
+    }
+}
+
+function MostrarTablasItinerario(itinerarios, tipoSalida) {
+    if (tipoSalida === 1) { //Itinerarios de ida
+        tablaItinerarioIda.clear().draw();
+        itinerarios.forEach(function (itinerario, index) {
+            tablaCombinacionIngredientes.row.add([
+                itinerario.origen,
+                itinerario.destino,
+                itinerario.medioTransporte,
+                itinerario.linea,
+                '<button onclick="QuitarIngredienteCombinacion(' + itinerario.idRowTemp + ')" class="btn btn-tbl-delete btn-xs"><i class="fa fa-trash-o "></i></button>'
+            ]).draw(false)
+        })
+    }
+   
+}
+/*=============================================================================================
+======================================      GASTOS EXTRAS     =================================
+===============================================================================================*/
+
