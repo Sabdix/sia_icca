@@ -38,18 +38,7 @@ namespace IICA.Controllers.Viaticos
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                TipoSalida ts = null;
-                ts = new TipoSalida();
-                ts.idTipoSalida = 1;
-                ts.descripcion = "ida";
-                solicitudViatico_.itinerario.Add(new Itinerario { origen = "morelia", destino = "leon", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = ts, linea = "abejita" });
 
-                TipoSalida tsr = null;
-                ts = new TipoSalida();
-                ts.idTipoSalida = 1;
-                ts.descripcion = "regreso";
-                solicitudViatico_.itinerario.Add(new Itinerario { origen = "leon", destino = "morelia", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = tsr, linea = "abejita" });
-                solicitudViatico_.estatusSolicitud =EstatusSolicitud.SOLICITUD_ENVIADA;
                 Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
                 //if (result.status)
                 //{

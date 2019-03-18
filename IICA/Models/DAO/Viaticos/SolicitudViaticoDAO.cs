@@ -27,12 +27,9 @@ namespace IICA.Models.DAO.Viaticos
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_INSERTAR_VIATICO_SOLICITUD");
                     while (dbManager.DataReader.Read())
                     {
-                        if (dbManager.DataReader.Read())
-                        {
-                            result.mensaje = dbManager.DataReader["mensaje"].ToString();
+                            result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
                             result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
-                            result.id = dbManager.DataReader["ID_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_Solicitud"].ToString());
-                        }
+                            //result.id = dbManager.DataReader["ID_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_Solicitud"].ToString());
                     }
                 }
             }
