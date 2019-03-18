@@ -5,8 +5,8 @@ using System.Web;
 
 namespace IICA.Models.Entidades.Viaticos
 {
-    public class TipoTransportacion:Catalogo
+    public class TipoDivisa:Catalogo
     {
-        public int idTipoTransportacion { get; set; }
+        public int idTipoDivisa { get; set; }
     }
 }

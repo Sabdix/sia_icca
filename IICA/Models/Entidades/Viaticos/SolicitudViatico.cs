@@ -5,11 +5,11 @@ using System.Web;
 
 namespace IICA.Models.Entidades.Viaticos
 {
-    public class Viatico
+    public class SolicitudViatico
     {
-        public Int64 idViatico { get; set; }
+        public Int64 idSolitud { get; set; }
         public TipoViaje tipoViaje { get; set; }
-        public TipoTransportacion tipoTransportacion { get; set; }
+        public MedioTransporte medioTransporte { get; set; }
         public DateTime fechaInicio { get; set; }
         public DateTime fechaFin { get; set; }
         public string proposito { get; set; }
@@ -17,13 +17,16 @@ namespace IICA.Models.Entidades.Viaticos
         public Justificacion justificacion { get; set; }
         public string condicionesEspeciales { get; set; }
         public List<Itinerario> itinerario { get; set; }
-        public DateTime fechaSolicitud { get; set; }
-        ///Faltan los gastos extras
+        public DateTime fechaAlta { get; set; }
+        public List<GastoExtraSol> gastosExtrasSol { get; set; }
+        public Usuario usuario { get; set; }
+        public string emCveEmpleadoAutoriza { get; set; }
+        public EstatusSolicitud estatusSolicitud { get; set; }
 
-
-        public Viatico()
+        public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();
+            gastosExtrasSol = new List<GastoExtraSol>;
         }
     }
 }

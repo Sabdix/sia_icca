@@ -7,7 +7,7 @@
         submenu = "";
     </script>
 }
-@model IICA.Models.Entidades.Viaticos.Viatico
+@model IICA.Models.Entidades.Viaticos.SolicitudViatico
 
 <ul class="breadcrumb">
     <li>
@@ -59,20 +59,15 @@
                             <div class="row form-row">
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de viaje</label>
-                                    <select class="select-iica" id="tipoViaje">
-                                        <option value="0">Seleccionar</option>
-                                        <option value="0">Nacional</option>
-                                        <option value="0">Internacional</option>
-                                    </select>
-                                    <span class="error field-validation-valid" data-valmsg-for="tipoViaje" data-valmsg-replace="true"></span>
+                                    @Html.DropDownListFor(x => x.tipoViaje.idTipoViaje, (IEnumerable<SelectListItem>)ViewBag.TiposViaje, "SELECCIONE EL TIPO DE VIAJE",
+                                 new { @class = "select-iica", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.tipoViaje.idTipoViaje, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de transportación</label>
-                                    <select class="select-iica" id="tipoTransporte">
-                                        <option value="0">Terrestre</option>
-                                        <option value="0">Aera</option>
-                                    </select>
-                                    <span class="error field-validation-valid" data-valmsg-for="tipoTransporte" data-valmsg-replace="true"></span>
+                                    @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposTrasnporte, "SELECCIONE EL TIPO DE TRASNPORTE",
+                                  new { @class = "select-iica", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.medioTransporte.idMedioTransporte, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row"><br /></div>
@@ -100,38 +95,37 @@
                             <span class="semi-bold">Propósito y</span> resultados
                         </h3>
                         <div class="col-md-10 col-sm-10 col-md-10 col-vlg-offset-2">
-                            <div class="row form-row">
-                                <div class="col-md-8">
-                                    <label class="form-label">Propósito</label>
-                                    <textarea id="proposito" placeholder="Propósito" class="form-control"></textarea>
-                                    <span class="error field-validation-valid" data-valmsg-for="proposito" data-valmsg-replace="true"></span>
+                            <form id="form-proposito">
+                                <div class="row form-row">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Propósito</label>
+                                        @Html.TextAreaFor(x => x.proposito, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.proposito, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-row">
-                                <div class="col-md-8">
-                                    <label class="form-label">Resultados esperados</label>
-                                    <textarea type="text" id="resultadoEsperado" placeholder="Resultados esperados" class="form-control"></textarea>
-                                    <span class="error field-validation-valid" data-valmsg-for="resultadoEsperado" data-valmsg-replace="true"></span>
+                                <div class="row form-row">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Resultados esperados</label>
+                                        @Html.TextAreaFor(x => x.resultadosEsperados, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.resultadosEsperados, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-row">
-                                <div class="col-md-4">
-                                    <label class="form-label">Justificación</label>
-                                    <select class="select-iica" id="justificacion">
-                                        <option value="0">Seleccionar</option>
-                                        <option value="1">Solicitud del representante o Institución</option>
-                                        <option value="2">Ofrecimiento de Director y/o Coordinador</option>
-                                    </select>
-                                    <span class="error field-validation-valid" data-valmsg-for="justificacion" data-valmsg-replace="true"></span>
+                                <div class="row form-row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Justificación</label>
+                                        @Html.DropDownListFor(x => x.justificacion.idJustificacion, (IEnumerable<SelectListItem>)ViewBag.TiposJustificacion, "SELECCIONE LA JUSTIFICACIÓN",
+                                   new { @class = "select-iica", style = "width: 100%;" })
+                                        @Html.ValidationMessageFor(x => x.justificacion.idJustificacion, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-row">
-                                <div class="col-md-8">
-                                    <label class="form-label">Condiciones especiales</label>
-                                    <textarea type="text" id="condicionesEspeciales" placeholder="Condiciones especiales" class="form-control"></textarea>
-                                    <span class="error field-validation-valid" data-valmsg-for="condicionesEspeciales" data-valmsg-replace="true"></span>
+                                <div class="row form-row">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Condiciones especiales</label>
+                                        @Html.TextAreaFor(x => x.condicionesEspeciales, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.condicionesEspeciales, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                             <div class="row form-row"><br /></div>
                         </div>
                     </div>

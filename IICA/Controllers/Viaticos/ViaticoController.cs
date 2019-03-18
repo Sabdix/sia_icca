@@ -11,6 +11,7 @@ namespace IICA.Controllers.Viaticos
         // GET: Viatico
         public ActionResult NuevaSolicitud()
         {
+            ViewBag.TiposViaje = 
             return View();
         }
     }
