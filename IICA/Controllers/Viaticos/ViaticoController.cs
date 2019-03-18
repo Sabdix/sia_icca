@@ -1,4 +1,5 @@
 ﻿using IICA.Models.DAO.Viaticos;
+using IICA.Models.Entidades;
 using IICA.Models.Entidades.Viaticos;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace IICA.Controllers.Viaticos
 
 
         // GET: Viatico
+        [SessionExpire]
         public ActionResult NuevaSolicitud()
         {
             ViewBag.TiposViaje = new TipoViajeDAO().ObtenerTiposViaje().Select(x=> new SelectListItem() {Text=x.descripcion,Value= x.idTipoViaje.ToString() });

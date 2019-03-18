@@ -4,43 +4,14 @@ var itinerario;
 var itinerarios;
 var idRowItinerario=1;
 var tablaItinerarioIda;
-
-
-
-function Viatico() {
-    this.idViatico;
-    this.tipoViaje;
-    this.tipoTrasnsporte;
-    this.fechaInicio;
-    this.fechaFin;
-    this.propocito;
-    this.resultadoEsperado;
-    this.justificacion;
-    this.condicionesEspeciales;
-}
-
-
-function Itinerario() {
-    this.idItinerario;
-    this.medioTransporte;
-    this.origen;
-    this.destino;
-    this.linea;
-    this.numeroAsiento;
-    this.horaSalida;
-    this.horaLLegada;
-    this.fechaSalida;
-    this.fechaLLegada;
-    this.tipoSalida;
-    this.pathBoleto;
-}
-
+var tablaItinerarioRegreso;
 
 
 $(document).ready(function () {
 
     itinerarios = new Array();
     tablaItinerarioIda = $('#tabla-itinerarioIda').DataTable();
+    tablaItinerarioRegreso = $('#tabla-itinerarioRegreso').DataTable();
 
     $(".select-iica").select2({
         width: '100%' // need to override the changed default
@@ -77,7 +48,7 @@ $(document).ready(function () {
 
     $("#btn-guardar-solViatico").click(function (e) {
         if (ValidarDatosSol()) {
-            ConfirmarEnviarSolicitud();
+            GuardarSolicutudViatico();
         } else {
             swal("Cancelado", "Faltan datos necesarios para proceder a guardar la solicitud", "error");
         }
@@ -88,9 +59,38 @@ $(document).ready(function () {
 
 
 function ValidarDatosSol() {
-    if ($("#form-tipoViaje").valid()) {
+    if (!$("#form-tipoViaje").valid()) {
         return false;
     }
+    if (!$("#form-proposito").valid()) {
+        return false;
+    }
+    return true;
+}
+
+function GuardarSolicutudViatico() {
+    var formTipoViaje = $("#form-tipoViaje").serializeArray();
+    var formProposito = $("#form-proposito").serializeArray();
+    viatico = castFormViaticoToJson(formTipoViaje, formProposito);
+    viatico.itinerario = itinerarios;
+
+    $.ajax({
+        data: { viatico: viatico },
+        url: rootUrl("/Viatico/_Itinerario"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            OnSuccesGuardarSolicitud(data);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+
 }
 
 function ConfirmarEnviarSolicitud() {
@@ -114,12 +114,12 @@ function ConfirmarEnviarSolicitud() {
     });
 }
 
-function OnSuccesRegistrarSolicitud(data) {
+function OnSuccesGuardarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
         ImprimirFormatoPermiso(data.id);
-        setTimeout(function () { window.location = rootUrl("/Permiso/MisPermisos"); }, 3000);
+        setTimeout(function () { window.location = rootUrl("/Home/Viaticos"); }, 3000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
@@ -154,34 +154,118 @@ function MostrarModalAddItinerario(tipoSalida) {
 
 function AgregarItinerario() {
     if ($("#form-itn").valid()) {
-        itinerario = JSON.stringify($("#form-itn").serializeArray());
-        if (("#form-itn #medioTransporte_idMedioTransporte").val() === "2") {//Si es aereo mostrar el 
+        itinerario = castFormToJson($("#form-itn").serializeArray());
+        if ($("#form-itn #medioTransporte_idMedioTransporte").val() === "2") {//Si es aereo mostrar el 
             //solicitamos el archivo a subir
         } else {
-            itinerario.idRowItinerario = idRowItinerario;
-            itinerarios.push();
+            itinerario.idRow = idRowItinerario;
+            itinerarios.push(itinerario);
             idRowItinerario++;
             MostrarTablasItinerario(itinerarios, itinerario.tipoSalida.idTipoSalida);
+            $("#modal-itinerario").modal("hide");
         }
     }
 }
 
+
+
 function MostrarTablasItinerario(itinerarios, tipoSalida) {
-    if (tipoSalida === 1) { //Itinerarios de ida
-        tablaItinerarioIda.clear().draw();
-        itinerarios.forEach(function (itinerario, index) {
-            tablaCombinacionIngredientes.row.add([
-                itinerario.origen,
-                itinerario.destino,
-                itinerario.medioTransporte,
-                itinerario.linea,
-                '<button onclick="QuitarIngredienteCombinacion(' + itinerario.idRowTemp + ')" class="btn btn-tbl-delete btn-xs"><i class="fa fa-trash-o "></i></button>'
-            ]).draw(false)
-        })
+    var itinerarios_ = $.grep(itinerarios, function (itinerario) { return itinerario.tipoSalida.idTipoSalida == tipoSalida; });
+    if (tipoSalida == 1) { //Itinerarios de ida
+        MostrarTablaItinerario(tablaItinerarioIda, itinerarios_);
     }
-   
+    if (tipoSalida == 2) { //Itinerarios de ida
+        MostrarTablaItinerario(tablaItinerarioRegreso, itinerarios_);
+    }
+}
+
+function QuitarItinerario(idRowItinerario, tipoSalida) {
+    swal({
+        title: 'Notificación',
+        text: '¿Esta seguro de eliminar el viaje?',
+        type: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: 'Si, deseo eliminarlo',
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+            itinerarios = $.grep(itinerarios, function (itinerario) { return itinerario.idRow !== idRowItinerario; });
+            MostrarTablasItinerario(itinerarios, tipoSalida);
+            swal('Mensaje!', 'Se ha eliminado correctamente el viaje', 'success');
+        } else {
+            swal('Cancelado', 'Se ha cancelado la operación', 'error');
+        }
+    });
+}
+
+function MostrarTablaItinerario(tabla,itinerarios) {
+    tabla.fnClearTable();
+    tabla.fnDraw();
+    itinerarios.forEach(function (itinerario, index) {
+        var medioTrans = $.grep(mediosTransportes, function (medioTransporte) { return medioTransporte.Value === itinerario.medioTransporte.idMedioTransporte; })[0];
+        tabla.fnAddData([
+            itinerario.origen,
+            itinerario.destino,
+            medioTrans.Text,
+            itinerario.linea + " / " + itinerario.numeroAsiento,
+            itinerario.horaSalida,
+            itinerario.horaLLegada,
+            '<button onclick="QuitarItinerario(' + itinerario.idRow + ',' + itinerario.tipoSalida.idTipoSalida + ')" class="btn btn-tbl-delete btn-xs"><i class="fa fa-trash-o "></i></button>'
+        ]);
+        tabla.fnDraw(false);
+    });
 }
 /*=============================================================================================
 ======================================      GASTOS EXTRAS     =================================
 ===============================================================================================*/
 
+
+
+/*=============================================================================================
+======================================      FUNCIONES GENERALES     =================================
+===============================================================================================*/
+
+function castFormToJson(formArray) {
+    var obj = {};
+    $.each(formArray, function (i, pair) {
+        var cObj = obj, pObj, cpName;
+        $.each(pair.name.split("."), function (i, pName) {
+            pObj = cObj;
+            cpName = pName;
+            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
+        });
+        pObj[cpName] = pair.value;
+    });
+    obj["idRow"] = 0;
+    return obj;
+}
+
+function castFormViaticoToJson(formTipoViaje,formProposito) {
+    var obj = {};
+
+    $.each(formTipoViaje, function (i, pair) {
+        var cObj = obj, pObj, cpName;
+        $.each(pair.name.split("."), function (i, pName) {
+            pObj = cObj;
+            cpName = pName;
+            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
+        });
+        pObj[cpName] = pair.value;
+    });
+
+    $.each(formProposito, function (i, pair) {
+        var cObj = obj, pObj, cpName;
+        $.each(pair.name.split("."), function (i, pName) {
+            pObj = cObj;
+            cpName = pName;
+            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
+        });
+        pObj[cpName] = pair.value;
+    });
+    obj["itinerario"] = new Array();
+
+    return obj;
+}
