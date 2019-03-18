@@ -159,6 +159,11 @@
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\TipoDivisaDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\TipoSalidaDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\TipoViajeDAO.cs" />
     <Compile Include="Models\Entidades\Conexion.cs" />
     <Compile Include="Models\Entidades\Email.cs" />
     <Compile Include="Models\Entidades\Enumeraciones.cs" />
@@ -531,6 +536,7 @@
     <Content Include="Views\Home\_MenuLeftViaticos.cshtml" />
     <Content Include="Views\Home\Viaticos.cshtml" />
     <Content Include="Views\Viatico\NuevaSolicitud.cshtml" />
+    <Content Include="Views\Viatico\_Itinerario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
