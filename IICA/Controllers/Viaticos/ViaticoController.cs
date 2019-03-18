@@ -12,7 +12,7 @@ namespace IICA.Controllers.Viaticos
     public class ViaticoController : Controller
     {
 
-
+        SolicitudViaticoDAO solicitudViaticoDAO;
         // GET: Viatico
         [SessionExpire]
         public ActionResult NuevaSolicitud()
@@ -28,6 +28,39 @@ namespace IICA.Controllers.Viaticos
         {
             ViewBag.TiposMediosTrasnporte = new MedioTransporteDAO().ObtenerMediosTransporte().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idMedioTransporte.ToString() });
             return PartialView(itinerario);
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult RegistrarSolicitud(SolicitudViatico solicitudViatico)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                TipoSalida ts = null;
+                ts = new TipoSalida();
+                ts.idTipoSalida = 1;
+                ts.descripcion = "ida";
+                solicitudViatico.itinerario.Add(new Itinerario { origen = "morelia", destino = "leon", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = ts, linea = "abejita" });
+
+                TipoSalida tsr = null;
+                ts = new TipoSalida();
+                ts.idTipoSalida = 1;
+                ts.descripcion = "regreso";
+                solicitudViatico.itinerario.Add(new Itinerario { origen = "leon", destino = "morelia", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = tsr, linea = "abejita" });
+                solicitudViatico.estatusSolicitud =EstatusSolicitud.SOLICITUD_ENVIADA;
+                Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico);
+                //if (result.status)
+                //{
+                //    try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                //}
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
         }
     }
 }
