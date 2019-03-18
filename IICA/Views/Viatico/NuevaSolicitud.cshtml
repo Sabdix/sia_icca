@@ -29,10 +29,10 @@
             <li>
                 <a href="#tab-itinerario" role="tab" data-toggle="tab">Itinerario</a>
             </li>
-            <li>
+            <li id="li-importeExt">
                 <a href="#tab-importeExt" role="tab" data-toggle="tab">Importe extras</a>
             </li>
-            <li>
+            <li id="li-resumen">
                 <a href="#tab-resumen" role="tab" data-toggle="tab">Resumen</a>
             </li>
         </ul>
@@ -274,6 +274,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h3><span class="semi-bold">Resumen</span> del viaje</h3>
+                        
+                        <!---aqui empiezas hacer la estructura para la visualizacion-->
+
+
                         <button type="button" id="btn-guardar-solViatico">Guardar</button>
                     </div>
                 </div>
@@ -295,6 +299,8 @@
         @* Son para el estilo de los select ya que estan en el layout pero no funcionan si no estan en cada vista *@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
+
+        <script src="~/Content/assets/plugins/accounting/accounting.min.js"></script>
 
         <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
         <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />

@@ -4,6 +4,7 @@ var itinerarios;
 var idRowItinerario;
 var tablaItinerarioIda;
 var tablaItinerarioRegreso;
+var myDropzone;
 
 //variables para los gastos extras
 var gastoExtra={ };
@@ -13,6 +14,8 @@ var tablaGastosExtras;
 
 //Para mostrar la divisa
 var divisa;
+
+
 
 $(document).ready(function () {
 
@@ -58,7 +61,23 @@ $(document).ready(function () {
 
 
     //=============================== GASTOS EXTRAS ====================
-    //$("#tipoViajeSol")
+    $("#li-importeExt").click(function () {
+        MostrarTablaGastos(gastosExtraSol);
+    });
+
+    $("#tipoViajeSol").change(function () {
+        if ($(this).val() == 1) {
+            divisa = "MXN";
+        } else {
+            divisa = "USD";
+        }
+    });
+
+    /*============================      RESUMEN     =========================*/
+    $("#li-resumen").click(function () {
+        MostrarResumen();
+    });
+
 
 
     $("#btn-guardar-solViatico").click(function (e) {
@@ -66,7 +85,6 @@ $(document).ready(function () {
             if (ValidarItinerarios()) {
                 GuardarSolicutudViatico();
             }
-            
         } else {
             swal("Cancelado", "Faltan datos necesarios para proceder a guardar la solicitud", "error");
         }
@@ -156,6 +174,7 @@ function MostrarModalAddItinerario(tipoSalida) {
             $("#content-md-itinerario").html(data);
             $("#modal-itinerario").modal("show");
             $("#tipo-salida").val(tipoSalida);
+            $("#idMedioItinerario").change(function () { ComponenteBoletoItinerario($(this).val());});
             $.validator.unobtrusive.parse($("#modal-itinerario"));
         },
         error: function (xhr, status, error) {
@@ -169,6 +188,13 @@ function AgregarItinerario() {
         itinerario = castFormToJson($("#form-itn").serializeArray());
         if ($("#idMedioItinerario").val() == 2) {//Si es aereo mostrar el 
             //solicitamos el archivo a subir
+            if (myDropzone.files.length == 0) {
+                swal("Cancelado", "Por favor anexe el archivo del boleto", "error");
+            } else {
+                myDropzone.processQueue();
+            }
+            
+
         } else {
             itinerario.idRow = idRowItinerario;
             itinerarios.push(itinerario);
@@ -231,6 +257,14 @@ function MostrarTablaItinerario(tabla,itinerarios) {
     });
     $('[data-toggle="tooltip"]').tooltip();
 }
+
+function ComponenteBoletoItinerario(idMedioItinerario) {
+    if (idMedioItinerario == 2) { //si el vuelo es aereo se muestra el componente para subir el archivo del boleto
+        $("#content-boleto").show();
+    } else {
+        $("#content-boleto").hide();
+    }
+}
 /*=============================================================================================
 ======================================      GASTOS EXTRAS     =================================
 ===============================================================================================*/
@@ -246,6 +280,7 @@ function OnAddGastoExt(tipoGasto) {
             gastosExtraSol.push(gastoExtra);
             idRowGastoExtra++;
             MostrarTablaGastos(gastosExtraSol);
+            $("#form-gastoExt1").trigger("reset");
         }
     }
     if (tipoGasto == 2) {
@@ -256,6 +291,7 @@ function OnAddGastoExt(tipoGasto) {
             gastosExtraSol.push(gastoExtra);
             idRowGastoExtra++;
             MostrarTablaGastos(gastosExtraSol);
+            $("#form-gastoExt2").trigger("reset");
         }
     }
 }
@@ -266,7 +302,7 @@ function MostrarTablaGastos(gastosExtras) {
     gastosExtras.forEach(function (gastoExtra_, index) {
         tablaGastosExtras.fnAddData([
             gastoExtra_.descripcion,
-            gastoExtra_.monto,
+            accounting.formatMoney(gastoExtra_.monto) +' '+ divisa,
             '<button data-toggle="tooltip" title="Eliminar" class="btn btn-warning btn-mini" onclick="QuitarGastoExt(' + gastoExtra_.idRow+')">' +
             '<i class= "fa fa-close"></i></button>'
             //'<button onclick="QuitarItinerario(' + itinerario.idRow + ',' + itinerario.tipoSalida.idTipoSalida + ')" class="btn btn-tbl-delete btn-xs"><i class="fa fa-trash-o "></i></button>'
@@ -297,6 +333,17 @@ function QuitarGastoExt(idRowGastoExtra) {
         }
     });
 }
+
+/*=============================================================================================
+==========================================      RESUMEN     ===================================
+===============================================================================================*/
+
+function MostrarResumen() {
+    //mandas llamar las subfunciones
+}
+
+
+
 
 /*=============================================================================================
 ======================================      FUNCIONES GENERALES     =================================

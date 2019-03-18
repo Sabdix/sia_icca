@@ -261,6 +261,7 @@
     <Content Include="Content\assets\js\support_ticket.js" />
     <Content Include="Content\assets\js\vector_maps.js" />
     <Content Include="Content\assets\js\widgets.js" />
+    <Content Include="Content\assets\plugins\accounting\accounting.min.js" />
     <Content Include="Content\assets\plugins\animate.min.css" />
     <Content Include="Content\assets\plugins\boostrap-checkbox\css\bootstrap-checkbox.css" />
     <Content Include="Content\assets\plugins\boostrap-clockpicker\bootstrap-clockpicker.min.css" />

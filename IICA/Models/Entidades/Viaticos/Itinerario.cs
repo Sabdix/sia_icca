@@ -15,8 +15,8 @@ namespace IICA.Models.Entidades.Viaticos
         public string numeroAsiento { get; set; }
         public string horaSalida { get; set; }
         public string horaLLegada { get; set; }
-        public DateTime fechaSalida { get; set; }
-        public DateTime fechaLLegada { get; set; }
+        public DateTime ? fechaSalida { get; set; }
+        public DateTime ? fechaLLegada { get; set; }
         public TipoSalida tipoSalida { get; set; }
         public string pathBoleto { get; set; }
 
