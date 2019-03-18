@@ -7,7 +7,7 @@
         submenu = "";
     </script>
 }
-@model IICA.Models.Entidades.Viaticos.Viatico
+@model IICA.Models.Entidades.Viaticos.SolicitudViatico
 
 <ul class="breadcrumb">
     <li>
@@ -52,27 +52,22 @@
                             <div class="row form-row">
                                 <div class="col-md-4">
                                     <label class="form-label">Fecha de solitud</label>
-                                    @Html.TextBoxFor(x => x.fechaSolicitud, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.fechaSolicitud, "", new { @class = "error" })
+                                    @Html.TextBoxFor(x => x.fechaAlta, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.fechaAlta, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de viaje</label>
-                                    <select class="select-iica" id="tipoViaje">
-                                        <option value="0">Seleccionar</option>
-                                        <option value="0">Nacional</option>
-                                        <option value="0">Internacional</option>
-                                    </select>
-                                    <span class="error field-validation-valid" data-valmsg-for="tipoViaje" data-valmsg-replace="true"></span>
+                                    @Html.DropDownListFor(x => x.tipoViaje.idTipoViaje, (IEnumerable<SelectListItem>)ViewBag.TiposViaje, "SELECCIONE EL TIPO DE VIAJE",
+                                 new { @class = "select-iica", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.tipoViaje.idTipoViaje, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de transportación</label>
-                                    <select class="select-iica" id="tipoTransporte">
-                                        <option value="0">Terrestre</option>
-                                        <option value="0">Aera</option>
-                                    </select>
-                                    <span class="error field-validation-valid" data-valmsg-for="tipoTransporte" data-valmsg-replace="true"></span>
+                                    @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposTrasnporte, "SELECCIONE EL TIPO DE TRASNPORTE",
+                                  new { @class = "select-iica", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(x => x.medioTransporte.idMedioTransporte, "", new { @class = "error" })
                                 </div>
                             </div>
                             <div class="row form-row"><br /></div>
@@ -100,38 +95,37 @@
                             <span class="semi-bold">Propósito y</span> resultados
                         </h3>
                         <div class="col-md-10 col-sm-10 col-md-10 col-vlg-offset-2">
-                            <div class="row form-row">
-                                <div class="col-md-8">
-                                    <label class="form-label">Propósito</label>
-                                    <textarea id="proposito" placeholder="Propósito" class="form-control"></textarea>
-                                    <span class="error field-validation-valid" data-valmsg-for="proposito" data-valmsg-replace="true"></span>
+                            <form id="form-proposito">
+                                <div class="row form-row">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Propósito</label>
+                                        @Html.TextAreaFor(x => x.proposito, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.proposito, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-row">
-                                <div class="col-md-8">
-                                    <label class="form-label">Resultados esperados</label>
-                                    <textarea type="text" id="resultadoEsperado" placeholder="Resultados esperados" class="form-control"></textarea>
-                                    <span class="error field-validation-valid" data-valmsg-for="resultadoEsperado" data-valmsg-replace="true"></span>
+                                <div class="row form-row">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Resultados esperados</label>
+                                        @Html.TextAreaFor(x => x.resultadosEsperados, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.resultadosEsperados, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-row">
-                                <div class="col-md-4">
-                                    <label class="form-label">Justificación</label>
-                                    <select class="select-iica" id="justificacion">
-                                        <option value="0">Seleccionar</option>
-                                        <option value="1">Solicitud del representante o Institución</option>
-                                        <option value="2">Ofrecimiento de Director y/o Coordinador</option>
-                                    </select>
-                                    <span class="error field-validation-valid" data-valmsg-for="justificacion" data-valmsg-replace="true"></span>
+                                <div class="row form-row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Justificación</label>
+                                        @Html.DropDownListFor(x => x.justificacion.idJustificacion, (IEnumerable<SelectListItem>)ViewBag.TiposJustificacion, "SELECCIONE LA JUSTIFICACIÓN",
+                                   new { @class = "select-iica", style = "width: 100%;" })
+                                        @Html.ValidationMessageFor(x => x.justificacion.idJustificacion, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-row">
-                                <div class="col-md-8">
-                                    <label class="form-label">Condiciones especiales</label>
-                                    <textarea type="text" id="condicionesEspeciales" placeholder="Condiciones especiales" class="form-control"></textarea>
-                                    <span class="error field-validation-valid" data-valmsg-for="condicionesEspeciales" data-valmsg-replace="true"></span>
+                                <div class="row form-row">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Condiciones especiales</label>
+                                        @Html.TextAreaFor(x => x.condicionesEspeciales, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.condicionesEspeciales, "", new { @class = "error" })
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                             <div class="row form-row"><br /></div>
                         </div>
                     </div>
@@ -396,7 +390,54 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-itinerarioIda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br>
+                    <i class="fa fa-question-circle fa-7x"></i>
+                    <h4 id="myModalLabel" class="semi-bold">Itinerario de Ida.</h4>
+                    <p class="no-margin">A continuación se muestran los datos a capturar </p>
+                    <br>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-row">
+                        <div class="col-md-8">
+                            <label class="form-label">Nombre:</label>
+                            <input id="modal-Intida-transporte" type="text" class="form-control" placeholder="Nombre" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Programa:</label>
+                            <input id="modal-aut-programa" type="text" class="form-control" placeholder="Programa" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-12">
+                            <label class="form-label">Motivo de las vacaciones:</label>
+                            <input id="modal-aut-motivo" type="text" class="form-control" placeholder="Motivo de las vacaciones" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha de inicio:</label>
+                            <input id="modal-aut-fechaIni" type="text" class="form-control" placeholder="Fecha de inicio" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Inicio de labores:</label>
+                            <input id="modal-aut-fechaFin" type="text" class="form-control" placeholder="Fecha de termino de vacaciones" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="AutorizarSol()">Autorizar</button>
+                </div>
+            </div>
 
+        </div>
+
+    </div>
 
 
     @section scripts {
