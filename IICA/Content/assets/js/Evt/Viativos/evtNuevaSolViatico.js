@@ -1,24 +1,35 @@
-﻿var totalHoras;
-
+﻿//variables para el itinerario
 var itinerario;
 var itinerarios;
-var idRowItinerario=1;
+var idRowItinerario;
 var tablaItinerarioIda;
 var tablaItinerarioRegreso;
 
+//variables para los gastos extras
+var gastoExtra={ };
+var gastosExtraSol;
+var idRowGastoExtra;
+var tablaGastosExtras;
+
+//Para mostrar la divisa
+var divisa;
 
 $(document).ready(function () {
 
     itinerarios = new Array();
+    gastosExtraSol = new Array();
+
     tablaItinerarioIda = $('#tabla-itinerarioIda').DataTable();
     tablaItinerarioRegreso = $('#tabla-itinerarioRegreso').DataTable();
+    tablaGastosExtras = $('#tabla-gastosExtras').DataTable();
+    idRowItinerario = idRowGastoExtra = 1;
 
     $(".select-iica").select2({
         width: '100%' // need to override the changed default
     });
 
     /*---------------------------------------------------------------------*/
-    $("#fechaSolicitud").val(moment().format("YYYY/MM/DD"));
+    $("#fechaAlta").val(moment().format("YYYY/MM/DD"));
     /*---------------------------------------------------------------------*/
 
     $("#fechaInicio").datepicker({
@@ -46,9 +57,16 @@ $(document).ready(function () {
     $("#fechaFin").datepicker('setDate', moment().add('days', 1).toDate());
 
 
+    //=============================== GASTOS EXTRAS ====================
+    //$("#tipoViajeSol")
+
+
     $("#btn-guardar-solViatico").click(function (e) {
         if (ValidarDatosSol()) {
-            GuardarSolicutudViatico();
+            if (ValidarItinerarios()) {
+                GuardarSolicutudViatico();
+            }
+            
         } else {
             swal("Cancelado", "Faltan datos necesarios para proceder a guardar la solicitud", "error");
         }
@@ -68,11 +86,26 @@ function ValidarDatosSol() {
     return true;
 }
 
+function ValidarItinerarios() {
+    var itineIda = $.grep(itinerarios, function (itinerario) { return itinerario.tipoSalida.idTipoSalida == 1; });
+    var itineRegreso = $.grep(itinerarios, function (itinerario) { return itinerario.tipoSalida.idTipoSalida == 2; });
+    if (itineIda.length == 0) {
+        swal("Cancelado", "Faltan de capturar por lo menos un viaje de ida", "error");
+        return false;
+    }
+    if (itineRegreso.length == 0) {
+        swal("Cancelado", "Faltan de capturar por lo menos un viaje de regreso", "error");
+        return false;
+    }
+    return true;
+}
+
 function GuardarSolicutudViatico() {
     var formTipoViaje = $("#form-tipoViaje").serializeArray();
     var formProposito = $("#form-proposito").serializeArray();
     viatico = castFormViaticoToJson(formTipoViaje, formProposito);
     viatico.itinerario = itinerarios;
+    viatico.gastosExtrasSol = gastosExtraSol;
 
     $.ajax({
         data: { solicitudViatico_: viatico },
@@ -93,27 +126,6 @@ function GuardarSolicutudViatico() {
 
 }
 
-function ConfirmarEnviarSolicitud() {
-    swal({
-        title: "Está Usted seguro de guardar la solicitud de viatico?",
-        text: "Al guardar la solicitud tendra que enviarla, para que un autorizador la revise y pueda aprobarla o rechazarla",
-        type: "warning",
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: "#1f3853",
-        confirmButtonText: "Si, deseo enviarla",
-        closeOnConfirm: false,
-        closeOnCancel: false
-    }, function (isConfirm) {
-        if (isConfirm) {
-            swal.close();
-            //procesar datos
-        } else {
-            swal("Cancelado", "Se ha cancelado la operación", "error");
-        }
-    });
-}
-
 function OnSuccesGuardarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
@@ -131,7 +143,7 @@ function OnSuccesGuardarSolicitud(data) {
 
 function MostrarModalAddItinerario(tipoSalida) {
     $.ajax({
-        data: { itinerario: itinerario},
+        data: { itinerario: undefined },
         url: rootUrl("/Viatico/_Itinerario"),
         dataType: "html",
         method: "post",
@@ -155,7 +167,7 @@ function MostrarModalAddItinerario(tipoSalida) {
 function AgregarItinerario() {
     if ($("#form-itn").valid()) {
         itinerario = castFormToJson($("#form-itn").serializeArray());
-        if ($("#form-itn #medioTransporte_idMedioTransporte").val() === "2") {//Si es aereo mostrar el 
+        if ($("#idMedioItinerario").val() == 2) {//Si es aereo mostrar el 
             //solicitamos el archivo a subir
         } else {
             itinerario.idRow = idRowItinerario;
@@ -166,8 +178,6 @@ function AgregarItinerario() {
         }
     }
 }
-
-
 
 function MostrarTablasItinerario(itinerarios, tipoSalida) {
     var itinerarios_ = $.grep(itinerarios, function (itinerario) { return itinerario.tipoSalida.idTipoSalida == tipoSalida; });
@@ -213,16 +223,80 @@ function MostrarTablaItinerario(tabla,itinerarios) {
             itinerario.linea + " / " + itinerario.numeroAsiento,
             itinerario.horaSalida,
             itinerario.horaLLegada,
-            '<button onclick="QuitarItinerario(' + itinerario.idRow + ',' + itinerario.tipoSalida.idTipoSalida + ')" class="btn btn-tbl-delete btn-xs"><i class="fa fa-trash-o "></i></button>'
+            '<button data-toggle="tooltip" title="Eliminar" class="btn btn-warning btn-mini" onclick="QuitarItinerario(' + itinerario.idRow + ',' + itinerario.tipoSalida.idTipoSalida + ')">'+
+            '<i class= "fa fa-close"></i></button>'
+            //'<button onclick="QuitarItinerario(' + itinerario.idRow + ',' + itinerario.tipoSalida.idTipoSalida + ')" class="btn btn-tbl-delete btn-xs"><i class="fa fa-trash-o "></i></button>'
         ]);
         tabla.fnDraw(false);
     });
+    $('[data-toggle="tooltip"]').tooltip();
 }
 /*=============================================================================================
 ======================================      GASTOS EXTRAS     =================================
 ===============================================================================================*/
 
+function OnAddGastoExt(tipoGasto) {
+    var gastoExtra = {};
+    if (tipoGasto == 1) {
+        if ($("#form-gastoExt1").valid()) {
+            var catGastoExt_ = $.grep(catGastosExtras, function (gastoExt) { return gastoExt.Value === $("#gasto_extra1").val(); })[0];
+            gastoExtra.idRow = idRowGastoExtra;
+            gastoExtra.descripcion = catGastoExt_.Text;
+            gastoExtra.monto = parseFloat($("#monto1").val());
+            gastosExtraSol.push(gastoExtra);
+            idRowGastoExtra++;
+            MostrarTablaGastos(gastosExtraSol);
+        }
+    }
+    if (tipoGasto == 2) {
+        if ($("#form-gastoExt2").valid()) {
+            gastoExtra.idRow = idRowGastoExtra;
+            gastoExtra.descripcion = $("#gasto_extra2").val();
+            gastoExtra.monto = parseFloat($("#monto2").val());
+            gastosExtraSol.push(gastoExtra);
+            idRowGastoExtra++;
+            MostrarTablaGastos(gastosExtraSol);
+        }
+    }
+}
 
+function MostrarTablaGastos(gastosExtras) {
+    tablaGastosExtras.fnClearTable();
+    tablaGastosExtras.fnDraw();
+    gastosExtras.forEach(function (gastoExtra_, index) {
+        tablaGastosExtras.fnAddData([
+            gastoExtra_.descripcion,
+            gastoExtra_.monto,
+            '<button data-toggle="tooltip" title="Eliminar" class="btn btn-warning btn-mini" onclick="QuitarGastoExt(' + gastoExtra_.idRow+')">' +
+            '<i class= "fa fa-close"></i></button>'
+            //'<button onclick="QuitarItinerario(' + itinerario.idRow + ',' + itinerario.tipoSalida.idTipoSalida + ')" class="btn btn-tbl-delete btn-xs"><i class="fa fa-trash-o "></i></button>'
+        ]);
+        tablaGastosExtras.fnDraw(false);
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
+function QuitarGastoExt(idRowGastoExtra) {
+    swal({
+        title: 'Notificación',
+        text: '¿Esta seguro de eliminar el gasto extra?',
+        type: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: 'Si, deseo eliminarlo',
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+            gastosExtraSol = $.grep(gastosExtraSol, function (gastoEx_) { return gastoEx_.idRow !== idRowGastoExtra; });
+            MostrarTablaGastos(gastosExtraSol);
+            swal('Mensaje!', 'Se ha eliminado correctamente el gasto extra', 'success');
+        } else {
+            swal('Cancelado', 'Se ha cancelado la operación', 'error');
+        }
+    });
+}
 
 /*=============================================================================================
 ======================================      FUNCIONES GENERALES     =================================
@@ -265,7 +339,9 @@ function castFormViaticoToJson(formTipoViaje,formProposito) {
         });
         pObj[cpName] = pair.value;
     });
+
     obj["itinerario"] = new Array();
+    obj["gastosExtrasSol"] = new Array();
 
     return obj;
 }

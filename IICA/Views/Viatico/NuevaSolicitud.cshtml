@@ -61,7 +61,7 @@
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de viaje</label>
                                     @Html.DropDownListFor(x => x.tipoViaje.idTipoViaje, (IEnumerable<SelectListItem>)ViewBag.TiposViaje, "SELECCIONE EL TIPO DE VIAJE",
-                                 new { @class = "select-iica", style = "width: 100%;" })
+                                 new { @class = "select-iica", style = "width: 100%;",id="tipoViajeSol" })
                                     @Html.ValidationMessageFor(x => x.tipoViaje.idTipoViaje, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
@@ -156,8 +156,7 @@
                                             <th style="width:10%;text-align: center;">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
@@ -181,8 +180,7 @@
                                             <th style="width:10%;text-align: center;">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
@@ -197,40 +195,54 @@
                         </h3>
                         <div class="row column-seperation">
                             <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <label class="form-label">Gasto</label>
-                                    @Html.DropDownList("gasto_extra", (IEnumerable<SelectListItem>)ViewBag.GastosExtra, "SELECCIONE UN GASTO",
-                                  new { @class = "select-iica", style = "width: 100%;" })
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Monto:</label>
-                                    <input type="text" id="monto" placeholder="Monto" class="form-control" />
-                                    <span class="error field-validation-valid" data-valmsg-for="monto" data-valmsg-replace="true"></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <label style="color:#fff;" class="form-label">-</label>
-                                    <button type="button" id="btn-guardar-sol" class="btn btn-info btn-xs btn-mini">
-                                        <i class="fa fa-plus-circle"></i>&nbsp;Agregar
-                                    </button>
-                                </div>
+                                <form id="form-gastoExt1">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Gasto</label>
+                                        @Html.DropDownList("gasto_extra1", (IEnumerable<SelectListItem>)ViewBag.GastosExtra, "SELECCIONE UN GASTO",
+                                      new { @class = "select-iica",id="gasto_extra1", style = "width: 100%;",
+                                          data_val_required = "Seleccione un tipo de gasto.", data_val = "true" })
+                                        @Html.ValidationMessage("gasto_extra1", new { @class = "error" })
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Monto:</label>
+                                        <input type="text" id="monto1" name="monto1" placeholder="Monto" class="form-control"
+                                               data-val-required="Ingrese un monto."
+                                               data-val-number="Este campo debe ser númerico"
+                                               data-val="true" />
+                                        @Html.ValidationMessage("monto1", new { @class = "error" })
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label style="color:#fff;" class="form-label">-</label>
+                                        <button type="button" onclick="OnAddGastoExt(1)" class="btn btn-info btn-xs btn-mini">
+                                            <i class="fa fa-plus-circle"></i>&nbsp;Agregar
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                             <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <label class="form-label">Otros gastos (especificar)</label>
-                                    <textarea type="text" id="otrosGastos" placeholder="Otros gastos (especificar)" class="form-control"></textarea>
-                                    <span class="error field-validation-valid" data-valmsg-for="otrosGastos" data-valmsg-replace="true"></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Monto:</label>
-                                    <input type="text" id="monto" placeholder="Monto" class="form-control" />
-                                    <span class="error field-validation-valid" data-valmsg-for="monto" data-valmsg-replace="true"></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <label style="color:#fff;" class="form-label">-</label>
-                                    <button type="button" id="btn-guardar-sol" class="btn btn-info btn-xs btn-mini">
-                                        <i class="fa fa-plus-circle"></i>&nbsp;Agregar
-                                    </button>
-                                </div>
+                                <form id="form-gastoExt2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Otros gastos (especificar)</label>
+                                        <textarea type="text" id="gasto_extra2" , name="gasto_extra2" placeholder="Otros gastos (especificar)" class="form-control"
+                                                  data-val-required="Ingrese una descripción."
+                                                  data-val="true"></textarea>
+                                        @Html.ValidationMessage("gasto_extra2", new { @class = "error" })
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Monto:</label>
+                                        <input type="text" id="monto2" name="monto2" placeholder="Monto" class="form-control"
+                                               data-val-required="Ingrese un monto."
+                                               data-val-number="Este campo debe ser númerico"
+                                               data-val="true" />
+                                        @Html.ValidationMessage("monto2", new { @class = "error" })
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label style="color:#fff;" class="form-label">-</label>
+                                        <button type="button" onclick="OnAddGastoExt(2)" class="btn btn-info btn-xs btn-mini">
+                                            <i class="fa fa-plus-circle"></i>&nbsp;Agregar
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                             <div class="row form-row"><br /></div>
                         </div>
@@ -241,7 +253,7 @@
                                     <h4>Lista <span class="semi-bold">de gastos</span></h4>
                                 </div>
                                 <div class="grid-body ">
-                                    <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-mis-incapacidades">
+                                    <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-gastosExtras">
                                         <thead>
                                             <tr>
                                                 <th style="width:10%;text-align: center;">Gasto</th>
@@ -249,24 +261,7 @@
                                                 <th style="width:10%;text-align: center;">Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Transporte Aereo</td>
-                                                <td>$1500.00</td>
-                                                <td>
-                                                    <span data-toggle="modal" data-target="#modal-enviar" onclick="">
-                                                        <button data-toggle="tooltip" title="Modificar" class="btn btn-info btn-mini">
-                                                            <i class="fa fa-check-square-o"></i>
-                                                        </button>
-                                                    </span>
-                                                    <span data-toggle="modal" data-target="#modal-cancelar" onclick="">
-                                                        <button data-toggle="tooltip" title="Eliminar" class="btn btn-warning btn-mini">
-                                                            <i class="fa fa-close"></i>
-                                                        </button>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -286,14 +281,11 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-itinerario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-itinerario" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" id="content-md-itinerario">
-
             </div>
-
         </div>
-
     </div>
 
 
@@ -333,7 +325,9 @@
         <script>
             //Catalogos
             var mediosTransportes;
-            mediosTransportes = @Html.Raw(new JavaScriptSerializer().Serialize(ViewBag.TiposMediosTrasnporte))
+            mediosTransportes = @Html.Raw(new JavaScriptSerializer().Serialize(ViewBag.TiposMediosTrasnporte));
+            var catGastosExtras;
+            catGastosExtras = @Html.Raw(new JavaScriptSerializer().Serialize(ViewBag.GastosExtra));
         </script>
 
         <script src="~/Content/assets/js/Evt/Viativos/evtNuevaSolViatico.js"></script>
