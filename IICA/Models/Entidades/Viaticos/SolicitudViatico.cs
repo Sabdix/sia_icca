@@ -26,7 +26,7 @@ namespace IICA.Models.Entidades.Viaticos
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();
-            gastosExtrasSol = new List<GastoExtraSol>;
+            gastosExtrasSol = new List<GastoExtraSol>();
         }
     }
 }
