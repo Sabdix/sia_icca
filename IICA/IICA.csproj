@@ -178,6 +178,12 @@
     <Compile Include="Models\Entidades\SessionExpire.cs" />
     <Compile Include="Models\Entidades\Usuario.cs" />
     <Compile Include="Models\Entidades\Utils.cs" />
+    <Compile Include="Models\Entidades\Viaticos\Catalogo.cs" />
+    <Compile Include="Models\Entidades\Viaticos\Itinerario.cs" />
+    <Compile Include="Models\Entidades\Viaticos\Justificacion.cs" />
+    <Compile Include="Models\Entidades\Viaticos\TipoTransportacion.cs" />
+    <Compile Include="Models\Entidades\Viaticos\TipoViaje.cs" />
+    <Compile Include="Models\Entidades\Viaticos\Viatico.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

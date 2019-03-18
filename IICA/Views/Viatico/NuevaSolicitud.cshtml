@@ -7,10 +7,11 @@
         submenu = "";
     </script>
 }
+@model IICA.Models.Entidades.Viaticos.Viatico
 
 <ul class="breadcrumb">
     <li>
-        <p>PERMISOS</p>
+        <p>VIATICOS</p>
     </li>
     <li><a href="#" class="active">Registro de Solicitud</a> </li>
 </ul>
@@ -47,45 +48,47 @@
                         <span class="semi-bold">Tipo</span> de viaje
                     </h3>
                     <div class="col-md-10 col-sm-10 col-md-10 col-vlg-offset-2">
-                        <div class="row form-row">
-                            <div class="col-md-4">
-                                <label class="form-label">Fecha de solitud</label>
-                                <input class="form-control" id="fechaSolicitud" type="text">
-                                <span class="error field-validation-valid" data-valmsg-for="fechaSolicitud" data-valmsg-replace="true"></span>
+                        <form id="form-tipoViaje">
+                            <div class="row form-row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Fecha de solitud</label>
+                                    @Html.TextBoxFor(x => x.fechaSolicitud, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.fechaSolicitud, "", new { @class = "error" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-row">
-                            <div class="col-md-4">
-                                <label class="form-label">Tipo de viaje</label>
-                                <select class="select-iica" id="tipoViaje">
-                                    <option value="0">Seleccionar</option>
-                                    <option value="0">Nacional</option>
-                                    <option value="0">Internacional</option>
-                                </select>
-                                <span class="error field-validation-valid" data-valmsg-for="tipoViaje" data-valmsg-replace="true"></span>
+                            <div class="row form-row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Tipo de viaje</label>
+                                    <select class="select-iica" id="tipoViaje">
+                                        <option value="0">Seleccionar</option>
+                                        <option value="0">Nacional</option>
+                                        <option value="0">Internacional</option>
+                                    </select>
+                                    <span class="error field-validation-valid" data-valmsg-for="tipoViaje" data-valmsg-replace="true"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Tipo de transportación</label>
+                                    <select class="select-iica" id="tipoTransporte">
+                                        <option value="0">Terrestre</option>
+                                        <option value="0">Aera</option>
+                                    </select>
+                                    <span class="error field-validation-valid" data-valmsg-for="tipoTransporte" data-valmsg-replace="true"></span>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Tipo de transportación</label>
-                                <select class="select-iica" id="tipoTransporte">
-                                    <option value="0">Terrestre</option>
-                                    <option value="0">Aera</option>
-                                </select>
-                                <span class="error field-validation-valid" data-valmsg-for="tipoTransporte" data-valmsg-replace="true"></span>
+                            <div class="row form-row"><br /></div>
+                            <div class="row form-row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Fecha de inicio</label>
+                                    @Html.TextBoxFor(x => x.fechaInicio, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.fechaInicio, "", new { @class = "error" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Fecha de fin</label>
+                                    @Html.TextBoxFor(x => x.fechaFin, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.fechaFin, "", new { @class = "error" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-row"><br /></div>
-                        <div class="row form-row">
-                            <div class="col-md-4">
-                                <label class="form-label">Fecha de inicio</label>
-                                <input class="form-control" id="fechaInicio" type="text">
-                                <span class="error field-validation-valid" data-valmsg-for="fechaInicio" data-valmsg-replace="true"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Fecha de fin</label>
-                                <input class="form-control" id="fechaFin" type="text">
-                                <span class="error field-validation-valid" data-valmsg-for="fechaFin" data-valmsg-replace="true"></span>
-                            </div>
-                        </div>
+                        </form>
                         <div class="row form-row"><br /></div>
                     </div>
                 </div>
