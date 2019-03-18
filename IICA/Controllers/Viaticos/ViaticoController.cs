@@ -37,6 +37,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 TipoSalida ts = null;
                 ts = new TipoSalida();
                 ts.idTipoSalida = 1;
