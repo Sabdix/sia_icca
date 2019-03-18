@@ -113,11 +113,11 @@ Id_Medio_Transporte INT,
 Proposito VARCHAR(300),
 Resultados_Esperados VARCHAR(300),
 Id_Justificacion INT,
-Condiciones_Especiales VARCHAR(300),
+Condiciones_Especiales VARCHAR(300) NULL,
 Id_Tipo_Divisa INT,
 Id_Estatus_Solicitud INT,
 Em_Cve_Empleado VARCHAR(20),
-Em_Cve_Empleado_Autoriza VARCHAR(20)
+Em_Cve_Empleado_Autoriza VARCHAR(20) NULL
 )
 GO
 --==========================================================================================================================
@@ -130,14 +130,14 @@ Id_Itinerario INT IDENTITY(1,1),
 Origen VARCHAR(300),
 Destino VARCHAR(300),
 Id_Medio_Transporte INT,
-Linea VARCHAR(35),
-Numero_Asiento VARCHAR(35),
-Hora_Salida VARCHAR(6),
-Hora_Llegada VARCHAR(6),
-Fecha_Salida DATETIME,
-Fecha_Llegada DATETIME,
+Linea VARCHAR(35) NULL,
+Numero_Asiento VARCHAR(35) NULL,
+Hora_Salida VARCHAR(6) NULL,
+Hora_Llegada VARCHAR(6) NULL,
+Fecha_Salida DATETIME NULL,
+Fecha_Llegada DATETIME NULL, 
 Dias DECIMAL(3,1),
-Path_Boleto VARCHAR(250),
+Path_Boleto VARCHAR(250) NULL,
 Id_Solicitud INT,
 Id_Tipo_Salida INT
 )
