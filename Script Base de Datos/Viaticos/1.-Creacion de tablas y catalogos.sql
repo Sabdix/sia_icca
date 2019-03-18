@@ -117,7 +117,8 @@ Condiciones_Especiales VARCHAR(300) NULL,
 Id_Tipo_Divisa INT,
 Id_Estatus_Solicitud INT,
 Em_Cve_Empleado VARCHAR(20),
-Em_Cve_Empleado_Autoriza VARCHAR(20) NULL
+Em_Cve_Empleado_Autoriza VARCHAR(20) NULL,
+Id_Tipo_Viaje INT
 )
 GO
 --==========================================================================================================================
