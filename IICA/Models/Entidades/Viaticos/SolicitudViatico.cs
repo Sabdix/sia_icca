@@ -10,6 +10,7 @@ namespace IICA.Models.Entidades.Viaticos
         public Int64 idSolitud { get; set; }
         public TipoViaje tipoViaje { get; set; }
         public MedioTransporte medioTransporte { get; set; }
+        public TipoDivisa tipoDivisa { get; set; }
         public DateTime fechaInicio { get; set; }
         public DateTime fechaFin { get; set; }
         public string proposito { get; set; }
@@ -21,6 +22,7 @@ namespace IICA.Models.Entidades.Viaticos
         public List<GastoExtraSol> gastosExtrasSol { get; set; }
         public Usuario usuario { get; set; }
         public string emCveEmpleadoAutoriza { get; set; }
+        public string Em_Cve_Empleado { get; set; }
         public EstatusSolicitud estatusSolicitud { get; set; }
 
         public SolicitudViatico()
