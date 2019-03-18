@@ -31,7 +31,7 @@ namespace IICA.Controllers.Viaticos
         }
 
         [HttpPost, SessionExpire]
-        public ActionResult RegistrarSolicitud(SolicitudViatico solicitudViatico)
+        public ActionResult RegistrarSolicitud(SolicitudViatico solicitudViatico_)
         {
             try
             {
@@ -41,15 +41,15 @@ namespace IICA.Controllers.Viaticos
                 ts = new TipoSalida();
                 ts.idTipoSalida = 1;
                 ts.descripcion = "ida";
-                solicitudViatico.itinerario.Add(new Itinerario { origen = "morelia", destino = "leon", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = ts, linea = "abejita" });
+                solicitudViatico_.itinerario.Add(new Itinerario { origen = "morelia", destino = "leon", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = ts, linea = "abejita" });
 
                 TipoSalida tsr = null;
                 ts = new TipoSalida();
                 ts.idTipoSalida = 1;
                 ts.descripcion = "regreso";
-                solicitudViatico.itinerario.Add(new Itinerario { origen = "leon", destino = "morelia", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = tsr, linea = "abejita" });
-                solicitudViatico.estatusSolicitud =EstatusSolicitud.SOLICITUD_ENVIADA;
-                Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico);
+                solicitudViatico_.itinerario.Add(new Itinerario { origen = "leon", destino = "morelia", fechaSalida = new DateTime(), fechaLLegada = new DateTime(), tipoSalida = tsr, linea = "abejita" });
+                solicitudViatico_.estatusSolicitud =EstatusSolicitud.SOLICITUD_ENVIADA;
+                Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
                 //if (result.status)
                 //{
                 //    try { Email.NotificacionPermiso((Permiso)result.objeto); }

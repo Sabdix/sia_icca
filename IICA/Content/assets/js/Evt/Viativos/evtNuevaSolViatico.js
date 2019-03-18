@@ -75,8 +75,8 @@ function GuardarSolicutudViatico() {
     viatico.itinerario = itinerarios;
 
     $.ajax({
-        data: { viatico: viatico },
-        url: rootUrl("/Viatico/_Itinerario"),
+        data: { solicitudViatico_: viatico },
+        url: rootUrl("/Viatico/RegistrarSolicitud"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
