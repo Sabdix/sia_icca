@@ -78,7 +78,7 @@ namespace IICA.Controllers.Viaticos
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaInicio - solicitudViatico_.fechaFin).Days;
+                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days;
 
                 Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
                 //if (result.status)
