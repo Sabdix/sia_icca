@@ -45,7 +45,8 @@ BEGIN
 			XTBL.value('(condicionesEspeciales)[1]',' VARCHAR(300)')Solicitud_Condiciones_Especiales,
 			XTBL.value('(Em_Cve_Empleado)[1]',' VARCHAR(20)')Solicitud_Em_Cve_Empleado,
 			XTBL.value('(Em_Cve_Empleado_Autoriza)[1]',' VARCHAR(20)')Solicitud_Em_Cve_Empleado_Autoriza,
-			XTBL.value('(tipoViaje/idTipoViaje)[1]',' INT')Solicitud_Id_Tipo_Viaje
+			XTBL.value('(tipoViaje/idTipoViaje)[1]',' INT')Solicitud_Id_Tipo_Viaje,
+			XTBL.value('(duracionViaje)[1]',' decimal')Solicitud_duracion_viaje
 		INTO #SOLICITUD
 		FROM @Solicitud.nodes('SolicitudViatico') AS XD(XTBL)
 		IF @@ERROR<>0
@@ -107,7 +108,8 @@ BEGIN
 				Id_Estatus_Solicitud,
 				Em_Cve_Empleado,
 				Em_Cve_Empleado_Autoriza,
-				Id_Tipo_Viaje
+				Id_Tipo_Viaje,
+				duracion_viaje
 			)
 		SELECT
 			Solicitud_Fecha_Alta,
@@ -122,7 +124,8 @@ BEGIN
 			1,
 			Solicitud_Em_Cve_Empleado,
 			Solicitud_Em_Cve_Empleado_Autoriza,
-			Solicitud_Id_Tipo_Viaje
+			Solicitud_Id_Tipo_Viaje,
+			Solicitud_duracion_viaje
 		FROM #SOLICITUD
 		IF @@ERROR<>0
 		BEGIN

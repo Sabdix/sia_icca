@@ -1,5 +1,5 @@
 ﻿//variables para el itinerario
-var itinerario;
+var itinerario = {};
 var itinerarios;
 var idRowItinerario;
 var tablaItinerarioIda;
@@ -183,7 +183,7 @@ function MostrarModalAddItinerario(tipoSalida) {
     });
 }
 
-function AgregarItinerario() {
+function OnAgregarItinerario() {
     if ($("#form-itn").valid()) {
         itinerario = castFormToJson($("#form-itn").serializeArray());
         if ($("#idMedioItinerario").val() == 2) {//Si es aereo mostrar el 
@@ -193,16 +193,19 @@ function AgregarItinerario() {
             } else {
                 myDropzone.processQueue();
             }
-            
-
         } else {
-            itinerario.idRow = idRowItinerario;
-            itinerarios.push(itinerario);
-            idRowItinerario++;
-            MostrarTablasItinerario(itinerarios, itinerario.tipoSalida.idTipoSalida);
-            $("#modal-itinerario").modal("hide");
+            AgregarItinerario("");
         }
     }
+}
+
+function AgregarItinerario(pathBoleto) {
+    itinerario.idRow = idRowItinerario;
+    itinerario.pathBoleto = pathBoleto;
+    itinerarios.push(itinerario);
+    idRowItinerario++;
+    MostrarTablasItinerario(itinerarios, itinerario.tipoSalida.idTipoSalida);
+    $("#modal-itinerario").modal("hide");
 }
 
 function MostrarTablasItinerario(itinerarios, tipoSalida) {
@@ -228,11 +231,31 @@ function QuitarItinerario(idRowItinerario, tipoSalida) {
         closeOnCancel: false
     }, function (isConfirm) {
         if (isConfirm) {
+            BorrarFileBoletoItinerario(idRowItinerario);
             itinerarios = $.grep(itinerarios, function (itinerario) { return itinerario.idRow !== idRowItinerario; });
             MostrarTablasItinerario(itinerarios, tipoSalida);
             swal('Mensaje!', 'Se ha eliminado correctamente el viaje', 'success');
         } else {
             swal('Cancelado', 'Se ha cancelado la operación', 'error');
+        }
+    });
+}
+
+function BorrarFileBoletoItinerario(idRowItinerario) {
+    var itinera_ = $.grep(itinerarios, function (itinerario) { return itinerario.idRow == idRowItinerario; })[0];
+    $.ajax({
+        data: { pathBoleto: itinera_.pathBoleto },
+        url: rootUrl("/Viatico/EliminarBoletoItinerario"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
         }
     });
 }
@@ -360,7 +383,7 @@ function castFormToJson(formArray) {
         });
         pObj[cpName] = pair.value;
     });
-    obj["idRow"] = 0;
+    //obj["idRow"] = 0;
     return obj;
 }
 

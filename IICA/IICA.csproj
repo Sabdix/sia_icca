@@ -186,6 +186,7 @@
     <Compile Include="Models\Entidades\Usuario.cs" />
     <Compile Include="Models\Entidades\Utils.cs" />
     <Compile Include="Models\Entidades\Viaticos\Catalogo.cs" />
+    <Compile Include="Models\Entidades\Viaticos\EstatusSolicitud.cs" />
     <Compile Include="Models\Entidades\Viaticos\GastoExtra.cs" />
     <Compile Include="Models\Entidades\Viaticos\Itinerario.cs" />
     <Compile Include="Models\Entidades\Viaticos\Justificacion.cs" />

@@ -61,7 +61,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" onclick="AgregarItinerario()">Agregar</button>
+        <button type="button" class="btn btn-primary" onclick="OnAgregarItinerario()">Agregar</button>
     </div>
 </form>
 
@@ -88,31 +88,27 @@
     $(document).ready(function () {
         $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
         myAwesomeDropzone = {
-            url: rootUrl("/Incapacidad/SubirDocumento"),
+            url: rootUrl("/Viatico/SubirBoletoItinerario"),
             addRemoveLinks: true,
             paramName: "archivo",
             maxFilesize: 4, // MB
             dictRemoveFile: "Remover",
             acceptedFiles: ".pdf,image/*",
             autoProcessQueue: false,
-            
-            sending: function (file, xhr, formData) {
-                formData.append("idIncapacidad", idIncapacidad);
-                formData.append("formato", formato);
-            },
-            success: function (file, data) {
-                swal("Subida Exitosa", data.mensaje, "success");
+            //sending: function (file, xhr, formData) {
+            //    formData.append("idIncapacidad", idIncapacidad);
+            //    formData.append("formato", formato);
+            //},
+            success: function (file, nombreArchivo) {
                 file.previewElement.classList.add("dz-success");
-                if (data.status === true) {
-                    MostrarNotificacionLoad("success", data.mensaje, 3000);
-                } else {
-                    MostrarNotificacionLoad("error", data.mensaje, 3000);
+                $("#modal-itinerario").modal("hide");
+                if (nombreArchivo.mensaje != undefined) {
+                    AgregarItinerario(nombreArchivo.mensaje);
                 }
-                $("#modal-subir-archivo").modal("hide");
             },
             error: function (file, response) {
                 file.previewElement.classList.add("dz-error");
-                swal("Error", "No se ha logrado subir correctamente el formato, intente mas tarde", "error");
+                swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
             }
         } // FIN myAwesomeDropzone
         myDropzone = new Dropzone("#dZUpload", myAwesomeDropzone);
