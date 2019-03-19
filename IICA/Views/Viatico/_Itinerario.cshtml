@@ -95,6 +95,13 @@
             dictRemoveFile: "Remover",
             acceptedFiles: ".pdf,image/*",
             autoProcessQueue: false,
+            maxFiles: 1,
+            init: function () {
+                this.on("maxfilesexceeded", function (file) {
+                    this.removeFile(file);
+                    swal("Error", "No se puede subir mas de un archivo", "error");
+                });
+            },
             //sending: function (file, xhr, formData) {
             //    formData.append("idIncapacidad", idIncapacidad);
             //    formData.append("formato", formato);
@@ -108,7 +115,7 @@
             },
             error: function (file, response) {
                 file.previewElement.classList.add("dz-error");
-                swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
+                //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
             }
         } // FIN myAwesomeDropzone
         myDropzone = new Dropzone("#dZUpload", myAwesomeDropzone);
