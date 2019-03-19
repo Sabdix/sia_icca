@@ -108,22 +108,24 @@ function ValidarItinerarios() {
     var itineIda = $.grep(itinerarios, function (itinerario) { return itinerario.tipoSalida.idTipoSalida == 1; });
     var itineRegreso = $.grep(itinerarios, function (itinerario) { return itinerario.tipoSalida.idTipoSalida == 2; });
     if (itineIda.length == 0) {
-        swal("Cancelado", "Faltan de capturar por lo menos un viaje de ida", "error");
+        swal("Notificación", "Faltan de capturar por lo menos un viaje de ida", "error");
         return false;
     }
     if (itineRegreso.length == 0) {
-        swal("Cancelado", "Faltan de capturar por lo menos un viaje de regreso", "error");
+        swal("Notificación", "Faltan de capturar por lo menos un viaje de regreso", "error");
         return false;
     }
     return true;
 }
 
 function GuardarSolicutudViatico() {
-    var formTipoViaje = $("#form-tipoViaje").serializeArray();
-    var formProposito = $("#form-proposito").serializeArray();
-    viatico = castFormViaticoToJson(formTipoViaje, formProposito);
-    viatico.itinerario = itinerarios;
-    viatico.gastosExtrasSol = gastosExtraSol;
+    viatico = ObtenerSolViatico();
+
+    //var formTipoViaje = $("#form-tipoViaje").serializeArray();
+    //var formProposito = $("#form-proposito").serializeArray();
+    //viatico = castFormViaticoToJson(formTipoViaje, formProposito);
+    //viatico.itinerario = itinerarios;
+    //viatico.gastosExtrasSol = gastosExtraSol;
 
     $.ajax({
         data: { solicitudViatico_: viatico },
@@ -358,11 +360,30 @@ function QuitarGastoExt(idRowGastoExtra) {
 }
 
 /*=============================================================================================
-==========================================      RESUMEN     ===================================
+==========================================      RESÚMEN     ===================================
 ===============================================================================================*/
 
 function MostrarResumen() {
-    //mandas llamar las subfunciones
+    viatico = ObtenerSolViatico();
+    if (viatico !== undefined) {
+        $.ajax({
+            data: { solicitudViatico_: viatico },
+            url: rootUrl("/Viatico/_ResumenSolicitudViatico"),
+            dataType: "html",
+            method: "post",
+            beforeSend: function () {
+                $("#content-resumenSolViatico").html("");
+                MostrarLoading();
+            },
+            success: function (data) {
+                OcultarLoading();
+                $("#content-resumenSolViatico").html(data);
+            },
+            error: function (xhr, status, error) {
+                ControlErrores(xhr, status, error);
+            }
+        });
+    }
 }
 
 
@@ -414,4 +435,14 @@ function castFormViaticoToJson(formTipoViaje,formProposito) {
     obj["gastosExtrasSol"] = new Array();
 
     return obj;
+}
+
+function ObtenerSolViatico() {
+    var formTipoViaje = $("#form-tipoViaje").serializeArray();
+    var formProposito = $("#form-proposito").serializeArray();
+    solicitud = castFormViaticoToJson(formTipoViaje, formProposito);
+    solicitud.itinerario = itinerarios;
+    solicitud.gastosExtrasSol = gastosExtraSol;
+
+    return solicitud;
 }

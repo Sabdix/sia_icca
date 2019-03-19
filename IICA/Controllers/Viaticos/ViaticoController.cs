@@ -71,6 +71,21 @@ namespace IICA.Controllers.Viaticos
         }
 
         [HttpPost, SessionExpire]
+        public ActionResult _ResumenSolicitudViatico(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                return PartialView(solicitudViatico_);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
         public ActionResult RegistrarSolicitud(SolicitudViatico solicitudViatico_)
         {
             try

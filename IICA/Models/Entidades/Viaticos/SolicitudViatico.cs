@@ -38,6 +38,11 @@ namespace IICA.Models.Entidades.Viaticos
         {
             itinerario = new List<Itinerario>();
             gastosExtrasSol = new List<GastoExtraSol>();
+            tipoViaje = new TipoViaje();
+            tipoDivisa = new TipoDivisa();
+            usuario = new Usuario();
+            estatusSolicitud = new EstatusSolicitud();
+            justificacion = new Justificacion();
         }
     }
 }

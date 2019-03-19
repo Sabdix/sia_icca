@@ -541,6 +541,7 @@
     <Content Include="Views\Home\Viaticos.cshtml" />
     <Content Include="Views\Viatico\NuevaSolicitud.cshtml" />
     <Content Include="Views\Viatico\_Itinerario.cshtml" />
+    <Content Include="Views\Viatico\_ResumenSolicitudViatico.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
