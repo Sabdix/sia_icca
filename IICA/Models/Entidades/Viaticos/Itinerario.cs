@@ -9,6 +9,7 @@ namespace IICA.Models.Entidades.Viaticos
     public class Itinerario
     {
         public Int64 idItinerario { get; set; }
+        [Required(ErrorMessage = "Es necesario capturar el medio de transporte")]
         public MedioTransporte medioTransporte { get; set; }
         [Required(ErrorMessage ="Ingrese un origen del viaje")]
         public string origen { get; set; }

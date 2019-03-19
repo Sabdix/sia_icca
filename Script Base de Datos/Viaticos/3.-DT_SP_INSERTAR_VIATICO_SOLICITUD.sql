@@ -34,37 +34,6 @@ BEGIN
 		@Mensaje VARCHAR(250)='OK',
 		@Id_Solicitud_Viatico INT
 
-		--@Solicitud_Fecha_Alta DATETIME,
-		--@Solicitud_Fecha_Inicio DATETIME,
-		--@Solicitud_Fecha_Fin DATETIME,
-		--@Solicitud_Id_Medio_Transporte INT,
-		--@Solicitud_Proposito VARCHAR(300),
-		--@Solicitud_Resultados_Esperados VARCHAR(300),
-		--@Solicitud_Id_Justificacion INT,
-		--@Solicitud_Condiciones_Especiales VARCHAR(300),
-		--@Solicitud_Id_Tipo_Divisa INT,
-		--@Solicitud_Id_Estatus_Solicitud INT,
-		--@Solicitud_Em_Cve_Empleado VARCHAR(20),
-		--@Solicitud_Em_Cve_Empleado_Autoriza VARCHAR(20),
-
-		--@Itinerario_Origen VARCHAR(300),
-		--@Itinerario_Destino VARCHAR(300),
-		--@Itinerario_Id_Medio_Transporte INT,
-		--@Itinerario_Linea VARCHAR(35),
-		--@Itinerario_Numero_Asiento VARCHAR(35),
-		--@Itinerario_Hora_Salida VARCHAR(6),
-		--@Itinerario_Hora_Llegada VARCHAR(6),
-		--@Itinerario_Fecha_Salida DATETIME,
-		--@Itinerario_Fecha_Llegada DATETIME,
-		--@Itinerario_Dias DECIMAL(3,1),
-		--@Itinerario_Path_Boleto VARCHAR(250),
-		--@Itinerario_Id_Solicitud INT,
-		--@Itinerario_Id_Tipo_Salida INT,
-
-		--@Gasto_Extra_Descripcion VARCHAR(100),
-		--@Gasto_Extra_Monto MONEY,
-		--@Gasto_Extra_Id_Solicitud INT
-
 		SELECT 
 			XTBL.value('(fechaAlta)[1]','Datetime') Solicitud_Fecha_Alta,
 			XTBL.value('(fechaInicio)[1]',' DATETIME')Solicitud_Fecha_Inicio,
@@ -76,7 +45,8 @@ BEGIN
 			XTBL.value('(condicionesEspeciales)[1]',' VARCHAR(300)')Solicitud_Condiciones_Especiales,
 			XTBL.value('(Em_Cve_Empleado)[1]',' VARCHAR(20)')Solicitud_Em_Cve_Empleado,
 			XTBL.value('(Em_Cve_Empleado_Autoriza)[1]',' VARCHAR(20)')Solicitud_Em_Cve_Empleado_Autoriza,
-			XTBL.value('(tipoViaje/idTipoViaje)[1]',' INT')Solicitud_Id_Tipo_Viaje
+			XTBL.value('(tipoViaje/idTipoViaje)[1]',' INT')Solicitud_Id_Tipo_Viaje,
+			XTBL.value('(duracionViaje)[1]',' decimal')Solicitud_duracion_viaje
 		INTO #SOLICITUD
 		FROM @Solicitud.nodes('SolicitudViatico') AS XD(XTBL)
 		IF @@ERROR<>0
@@ -111,7 +81,6 @@ BEGIN
 		SELECT
 			XTBL.value('(descripcion)[1]', 'VARCHAR(100)')Gasto_Extra_Descripcion,
 			XTBL.value('(monto)[1]', 'MONEY')Gasto_Extra_Monto
-		--XTBL.value('(Id_Solicitud', 'INT')
 		INTO #GASTO_EXTRA
 		FROM @Solicitud.nodes('SolicitudViatico/gastosExtrasSol/GastoExtraSol') AS XD(XTBL)
 		IF @@ERROR<>0
@@ -120,9 +89,9 @@ BEGIN
 			GOTO ERROR_
 		END
 
-		select * from #SOLICITUD
-		select * from #ITINERARIO
-		select * from #GASTO_EXTRA
+		--select * from #SOLICITUD
+		--select * from #ITINERARIO
+		--select * from #GASTO_EXTRA
 		--1.-Insertamos la solicitud
 		INSERT 
 			INTO DT_TBL_VIATICO_SOLICITUD
@@ -139,7 +108,8 @@ BEGIN
 				Id_Estatus_Solicitud,
 				Em_Cve_Empleado,
 				Em_Cve_Empleado_Autoriza,
-				Id_Tipo_Viaje
+				Id_Tipo_Viaje,
+				duracion_viaje
 			)
 		SELECT
 			Solicitud_Fecha_Alta,
@@ -154,7 +124,8 @@ BEGIN
 			1,
 			Solicitud_Em_Cve_Empleado,
 			Solicitud_Em_Cve_Empleado_Autoriza,
-			Solicitud_Id_Tipo_Viaje
+			Solicitud_Id_Tipo_Viaje,
+			Solicitud_duracion_viaje
 		FROM #SOLICITUD
 		IF @@ERROR<>0
 		BEGIN
@@ -166,38 +137,38 @@ BEGIN
 		SELECT @Id_Solicitud_Viatico=MAX(Id_Solicitud) FROM DT_TBL_VIATICO_SOLICITUD
 
 		--2-Se insertan los itinerarios:
-		--INSERT
-		--	INTO DT_TBL_VIATICO_ITINERARIO
-		--	(
-		--		Origen,
-		--		Destino,
-		--		Id_Medio_Transporte,
-		--		Linea,
-		--		Numero_Asiento,
-		--		Hora_Salida,
-		--		Hora_Llegada,
-		--		Fecha_Salida,
-		--		Fecha_Llegada,
-		--		Dias,
-		--		Path_Boleto,
-		--		Id_Solicitud,
-		--		Id_Tipo_Salida
-		--	)
-		--SELECT
-		--	Itinerario_Origen,
-		--	Itinerario_Destino,
-		--	Itinerario_Id_Medio_Transporte,
-		--	Itinerario_Linea,
-		--	Itinerario_Numero_Asiento,
-		--	Itinerario_Hora_Salida,
-		--	Itinerario_Hora_Llegada,
-		--	Itinerario_Fecha_Salida,
-		--	Itinerario_Fecha_Llegada,
-		--	Itinerario_Dias,
-		--	Itinerario_Path_Boleto,
-		--	@Id_Solicitud_Viatico,
-		--	Itinerario_Id_Tipo_Salida
-		--FROM #ITINERARIO
+		INSERT
+			INTO DT_TBL_VIATICO_ITINERARIO
+			(
+				Origen,
+				Destino,
+				Id_Medio_Transporte,
+				Linea,
+				Numero_Asiento,
+				Hora_Salida,
+				Hora_Llegada,
+				Fecha_Salida,
+				Fecha_Llegada,
+				Dias,
+				Path_Boleto,
+				Id_Solicitud,
+				Id_Tipo_Salida
+			)
+		SELECT
+			Itinerario_Origen,
+			Itinerario_Destino,
+			Itinerario_Id_Medio_Transporte,
+			Itinerario_Linea,
+			Itinerario_Numero_Asiento,
+			Itinerario_Hora_Salida,
+			Itinerario_Hora_Llegada,
+			Itinerario_Fecha_Salida,
+			Itinerario_Fecha_Llegada,
+			Itinerario_Dias,
+			Itinerario_Path_Boleto,
+			@Id_Solicitud_Viatico,
+			Itinerario_Id_Tipo_Salida
+		FROM #ITINERARIO
 		IF @@ERROR<>0
 		BEGIN
 			SELECT @Mensaje='Error al guardar información, apartado de itinerario'
@@ -205,18 +176,18 @@ BEGIN
 		END
 
 
-		--INSERT
-		--	INTO DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD
-		--	(
-		--		Descripcion,
-		--		Monto,
-		--		Id_Solicitud
-		--	)
-		--SELECT
-		--	Gasto_Extra_Descripcion,
-		--	Gasto_Extra_Monto,
-		--	@Id_Solicitud_Viatico
-		--FROM #GASTO_EXTRA
+		INSERT
+			INTO DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD
+			(
+				Descripcion,
+				Monto,
+				Id_Solicitud
+			)
+		SELECT
+			Gasto_Extra_Descripcion,
+			Gasto_Extra_Monto,
+			@Id_Solicitud_Viatico
+		FROM #GASTO_EXTRA
 		IF @@ERROR<>0
 		BEGIN
 			SELECT @Mensaje='Error al guardar información, apartado de gastos extra'
