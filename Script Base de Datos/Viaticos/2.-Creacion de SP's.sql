@@ -309,7 +309,7 @@ as
 			end -- validaciones
 			
 			begin -- ámbito de la actualización
-			select * from DT_CAT_STATUS_SOLICITUD
+			--select * from DT_CAT_STATUS_SOLICITUD
 				if((select COUNT(*) from DT_TBL_VIATICO_SOLICITUD where Em_Cve_Empleado=@Em_Cve_Empleado and Id_Estatus_Solicitud not in (2,3))>1)
 				begin
 					set @status=0
@@ -340,7 +340,7 @@ as
 		begin -- reporte de estatus
 
 			select	@status status,
-					@error_procedure error_procedure,
+					@error_procedure mensaje ,
 					@error_line error_line,
 					@error_severity error_severity,
 					@error_message error_message
@@ -352,4 +352,5 @@ as
 go
 
 grant exec on DT_SP_VERIFICAR_ORIGINACION_SOLICITUD to public
+
 

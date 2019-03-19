@@ -2,14 +2,14 @@
 
 @model IICA.Models.Entidades.Viaticos.SolicitudViatico
 
-<div class="col-md-6">
+<div class="col-md-6 col-sm-6 col-md-6">
     <div class="col-md-12">
         <div class="grid simple vertical purple">
             <div class="grid-title">
                 <h4>Datos <span class="semi-bold">del solicitante</span></h4>
             </div>
             <div class="grid-body">
-                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-gastosExtras">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
                     <tbody>
                         <tr>
                             <td><span class="bold blueIICA">Viáticante</span></td>
@@ -34,7 +34,7 @@
                 <h4>Datos <span class="semi-bold">de la solicitud</span></h4>
             </div>
             <div class="grid-body">
-                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-gastosExtras">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
                     <tbody>
                         <tr>
                             <td><span class="bold blueIICA">Tipo de viaje</span></td>
@@ -52,7 +52,7 @@
                         </tr>
                         <tr>
                             <td><span class="bold blueIICA">Justificación</span></td>
-                            <td colspan="3">@Model.justificacion</td>
+                            <td colspan="3">@Model.justificacion.descripcion</td>
                         </tr>
                         <tr>
                             <td><span class="bold blueIICA">Relación gastos pendientes</span></td>
@@ -68,18 +68,17 @@
                 </table>
             </div>
         </div>
-    </div>
-    
+    </div>    
 </div>
 
-<div class="col-md-6">
+<div class="col-md-6 col-sm-6 col-md-6">
     <div class="col-md-12">
         <div class="grid simple vertical green">
             <div class="grid-title">
                 <h4>Lista <span class="semi-bold">de itinerario</span></h4>
             </div>
             <div class="grid-body">
-                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-gastosExtras">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
                     <thead>
                         <tr>
                             <th style="width:10%;text-align: center;">Tipo</th>
@@ -115,7 +114,7 @@
                 <h4>Lista <span class="semi-bold">de gastos</span></h4>
             </div>
             <div class="grid-body">
-                <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-gastosExtras">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
                     <thead>
                         <tr>
                             <th style="width:10%;text-align: center;">Gasto</th>
@@ -127,7 +126,7 @@
                         {
                             <tr>
                                 <td>@gasto.descripcion</td>
-                                <td>@(gasto.monto.ToString("C")+" "+(Model.tipoViaje.idTipoViaje == 1 ? "MXN" : "USD"))</td>
+                                <td>@(gasto.monto.ToString("C")+" "+(Model.tipoViaje.idTipoViaje == 2 ? "USD" : "MXN"))</td>
                             </tr>
                         }
                     </tbody>
@@ -144,4 +143,17 @@
     .blueIICA {
         color: #1f3853;
     }
+
+    .grid-body{
+        padding: 0px !important;
+    }
+
+    table tr th {
+        font-size: 11px !important;
+    }
+
+    table td{
+        font-size: 11px !important;
+    }
+
 </style>

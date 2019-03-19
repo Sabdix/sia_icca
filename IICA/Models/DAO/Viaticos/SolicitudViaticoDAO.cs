@@ -40,6 +40,34 @@ namespace IICA.Models.DAO.Viaticos
             return result;
         }
 
+        public Result VerificarReglasSolViaticos(Usuario usuario)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Em_Cve_Empleado", usuario.emCveEmpleado);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_VERIFICAR_ORIGINACION_SOLICITUD");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                        //result.id = dbManager.DataReader["ID_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_Solicitud"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+
+
         public string ConvertiraXML(Object o)
         {
             try

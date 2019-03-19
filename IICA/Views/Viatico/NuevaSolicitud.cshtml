@@ -20,13 +20,13 @@
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-tabs" role="tablist">
-            <li class="active">
+            <li id="li-infoSol1" class="active">
                 <a href="#tab-tipoViaje" role="tab" data-toggle="tab">Tipo de viaje</a>
             </li>
-            <li>
+            <li id="li-infoSol2">
                 <a href="#tab-propositoResultados" role="tab" data-toggle="tab">Propósito y resultados</a>
             </li>
-            <li>
+            <li id="li-itinerario">
                 <a href="#tab-itinerario" role="tab" data-toggle="tab">Itinerario</a>
             </li>
             <li id="li-importeExt">
@@ -47,7 +47,7 @@
                             <div class="row form-row">
                                 <div class="col-md-4">
                                     <label class="form-label">Fecha de solitud</label>
-                                    @Html.TextBoxFor(x => x.fechaAlta, new { @class = "form-control" })
+                                    @Html.TextBoxFor(x => x.fechaAlta, new { @class = "form-control"})
                                     @Html.ValidationMessageFor(x => x.fechaAlta, "", new { @class = "error" })
                                 </div>
                             </div>
@@ -55,13 +55,13 @@
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de viaje</label>
                                     @Html.DropDownListFor(x => x.tipoViaje.idTipoViaje, (IEnumerable<SelectListItem>)ViewBag.TiposViaje, "SELECCIONE EL TIPO DE VIAJE",
-                                 new { @class = "select-iica", style = "width: 100%;",id="tipoViajeSol" })
+                                 new { @class = "select-iica", style = "width: 100%;",id="tipoViajeSol", data_val = "true" })
                                     @Html.ValidationMessageFor(x => x.tipoViaje.idTipoViaje, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de transportación</label>
                                     @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposMediosTrasnporte, "SELECCIONE EL TIPO DE TRASNPORTE",
-                                  new { @class = "select-iica", style = "width: 100%;" })
+                                  new { @class = "select-iica", style = "width: 100%;" , data_val = "true" })
                                     @Html.ValidationMessageFor(x => x.medioTransporte.idMedioTransporte, "", new { @class = "error" })
                                 </div>
                             </div>
@@ -94,14 +94,16 @@
                                 <div class="row form-row">
                                     <div class="col-md-8">
                                         <label class="form-label">Propósito</label>
-                                        @Html.TextAreaFor(x => x.proposito, new { @class = "form-control" })
+                                        @Html.TextAreaFor(x => x.proposito, new { @class = "form-control", maxlength = "300",
+                                       data_val_required = "Ingrese un proposito.",
+                                       data_val = "true" })
                                         @Html.ValidationMessageFor(x => x.proposito, "", new { @class = "error" })
                                     </div>
                                 </div>
                                 <div class="row form-row">
                                     <div class="col-md-8">
                                         <label class="form-label">Resultados esperados</label>
-                                        @Html.TextAreaFor(x => x.resultadosEsperados, new { @class = "form-control" })
+                                        @Html.TextAreaFor(x => x.resultadosEsperados, new { @class = "form-control", maxlength = "300" })
                                         @Html.ValidationMessageFor(x => x.resultadosEsperados, "", new { @class = "error" })
                                     </div>
                                 </div>
@@ -116,7 +118,7 @@
                                 <div class="row form-row">
                                     <div class="col-md-8">
                                         <label class="form-label">Condiciones especiales</label>
-                                        @Html.TextAreaFor(x => x.condicionesEspeciales, new { @class = "form-control" })
+                                        @Html.TextAreaFor(x => x.condicionesEspeciales, new { @class = "form-control", maxlength = "300" })
                                         @Html.ValidationMessageFor(x => x.condicionesEspeciales, "", new { @class = "error" })
                                     </div>
                                 </div>
@@ -266,7 +268,6 @@
             </div>
             <div class="tab-pane" id="tab-resumen">
                 <div class="row">
-                    <div class="col-md-12">
                         <h3><span class="semi-bold">Resumen</span> de la solicitud  
                         <button type="button" class="btn btn-info btn-cons" id="btn-guardar-solViatico" style="float:right">Guardar solicitud</button>
                         </h3>
@@ -277,7 +278,6 @@
 
 
                     </div>
-                </div>
             </div>
         </div>
     </div>

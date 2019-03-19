@@ -13,11 +13,15 @@ var idRowGastoExtra;
 var tablaGastosExtras;
 
 //Para mostrar la divisa
-var divisa;
+var divisa ="MXN";
 
-
+///importante para validar los formularios no visibles en los tabs
+$.validator.setDefaults({
+    ignore: ""
+});
 
 $(document).ready(function () {
+    
 
     itinerarios = new Array();
     gastosExtraSol = new Array();
@@ -95,13 +99,12 @@ $(document).ready(function () {
 
 
 function ValidarDatosSol() {
-    if (!$("#form-tipoViaje").valid()) {
-        return false;
+    if ($("#form-tipoViaje").valid()) {
+        if ($("#form-proposito").valid()) {
+            return true;
+        }
     }
-    if (!$("#form-proposito").valid()) {
-        return false;
-    }
-    return true;
+    return false;
 }
 
 function ValidarItinerarios() {
@@ -176,6 +179,8 @@ function MostrarModalAddItinerario(tipoSalida) {
             $("#content-md-itinerario").html(data);
             $("#modal-itinerario").modal("show");
             $("#tipo-salida").val(tipoSalida);
+            $("#tipo-salida-desc").val(tipoSalida == 1 ? "Ida" : "Regreso")
+            $("#tipo-salida-title").text(tipoSalida == 1 ? "Ida" : "Regreso")
             $("#idMedioItinerario").change(function () { ComponenteBoletoItinerario($(this).val());});
             $.validator.unobtrusive.parse($("#modal-itinerario"));
         },
@@ -202,6 +207,11 @@ function OnAgregarItinerario() {
 }
 
 function AgregarItinerario(pathBoleto) {
+    var medioTrans = $.grep(mediosTransportes, function (medioTransporte) { return medioTransporte.Value === itinerario.medioTransporte.idMedioTransporte; })[0];
+    //itinerario.medioTransporte={};
+    itinerario.medioTransporte.idMedioTransporte = medioTrans.Value;
+    itinerario.medioTransporte.descripcion = medioTrans.Text;
+
     itinerario.idRow = idRowItinerario;
     itinerario.pathBoleto = pathBoleto;
     itinerarios.push(itinerario);
@@ -266,11 +276,11 @@ function MostrarTablaItinerario(tabla,itinerarios) {
     tabla.fnClearTable();
     tabla.fnDraw();
     itinerarios.forEach(function (itinerario, index) {
-        var medioTrans = $.grep(mediosTransportes, function (medioTransporte) { return medioTransporte.Value === itinerario.medioTransporte.idMedioTransporte; })[0];
+        
         tabla.fnAddData([
             itinerario.origen,
             itinerario.destino,
-            medioTrans.Text,
+            itinerario.medioTransporte.descripcion,
             itinerario.linea + " / " + itinerario.numeroAsiento,
             itinerario.horaSalida,
             itinerario.horaLLegada,
@@ -396,7 +406,7 @@ function MostrarResumen() {
 function castFormToJson(formArray) {
     var obj = {};
     $.each(formArray, function (i, pair) {
-        var cObj = obj, pObj, cpName;
+        var cObj = obj, pObj = {}, cpName;
         $.each(pair.name.split("."), function (i, pName) {
             pObj = cObj;
             cpName = pName;

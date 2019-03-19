@@ -8,7 +8,7 @@ namespace IICA.Models.Entidades.Viaticos
 {
     public class MedioTransporte:Catalogo
     {
-        [Required(ErrorMessage = "Seleccione un medio de transporte")]
+        [Required(ErrorMessage = "Es necesario capturar el medio de transporte")]
         public int idMedioTransporte { get; set; }
     }
 }

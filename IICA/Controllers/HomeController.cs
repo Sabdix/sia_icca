@@ -64,6 +64,9 @@ namespace IICA.Controllers
             }
         }
 
-
+        public ActionResult SitioEnConstruccion()
+        {
+            return View();
+        }
     }
 }

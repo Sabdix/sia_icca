@@ -9,20 +9,17 @@ namespace IICA.Models.Entidades.Viaticos
     public class SolicitudViatico
     {
         public Int64 idSolitud { get; set; }
-
-        [Required(ErrorMessage = "Es necesario capturar el tipo de viaje")]
         public TipoViaje tipoViaje { get; set; }
-        [Required(ErrorMessage = "Es necesario capturar el medio de transporte")]
         public MedioTransporte medioTransporte { get; set; }
         public TipoDivisa tipoDivisa { get; set; }
         [Required(ErrorMessage = "Es necesario capturar la fecha de inicio")]
         public DateTime fechaInicio { get; set; }
+        [Required(ErrorMessage = "Es necesario capturar la fecha de fin")]
         public DateTime fechaFin { get; set; }
         [Required(ErrorMessage = "Es necesario capturar un proposito")]
         public string proposito { get; set; }
         [Required(ErrorMessage = "Es necesario capturar los resultados esperados")]
         public string resultadosEsperados { get; set; }
-        [Required(ErrorMessage = "Es necesario capturar una justificación")]
         public Justificacion justificacion { get; set; }
         public string condicionesEspeciales { get; set; }
         public List<Itinerario> itinerario { get; set; }
@@ -42,6 +39,7 @@ namespace IICA.Models.Entidades.Viaticos
             itinerario = new List<Itinerario>();
             gastosExtrasSol = new List<GastoExtraSol>();
             tipoViaje = new TipoViaje();
+            medioTransporte = new MedioTransporte();
             tipoDivisa = new TipoDivisa();
             usuario = new Usuario();
             estatusSolicitud = new EstatusSolicitud();

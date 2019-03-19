@@ -19,10 +19,25 @@ namespace IICA.Controllers.Viaticos
         [SessionExpire]
         public ActionResult NuevaSolicitud()
         {
-            ViewBag.TiposViaje = new TipoViajeDAO().ObtenerTiposViaje().Select(x=> new SelectListItem() {Text=x.descripcion,Value= x.idTipoViaje.ToString() });
-            ViewBag.TiposMediosTrasnporte= new MedioTransporteDAO().ObtenerMediosTransporte().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idMedioTransporte.ToString() });
-            ViewBag.TiposJustificacion = new JustificacionDAO().ObtenerTiposJustificacion().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idJustificacion.ToString() });
-            ViewBag.GastosExtra = new GastoExtraDAO().ObtenerTiposGastosExtra().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idGastoExtra.ToString() });
+            Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+            if (new SolicitudViaticoDAO().VerificarReglasSolViaticos(usuarioSesion).status)
+            {
+                ViewBag.TiposViaje = new TipoViajeDAO().ObtenerTiposViaje().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idTipoViaje.ToString() });
+                ViewBag.TiposMediosTrasnporte = new MedioTransporteDAO().ObtenerMediosTransporte().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idMedioTransporte.ToString() });
+                ViewBag.TiposJustificacion = new JustificacionDAO().ObtenerTiposJustificacion().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idJustificacion.ToString() });
+                ViewBag.GastosExtra = new GastoExtraDAO().ObtenerTiposGastosExtra().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idGastoExtra.ToString() });
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("NotNuevaSolicitud", "Viatico");
+            }
+
+        }
+
+        [SessionExpire]
+        public ActionResult NotNuevaSolicitud()
+        {
             return View();
         }
 
@@ -38,13 +53,13 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                string mensaje=null;
-                string pathFormato = ObtenerBoletoHttpPost(Request,"Boleto_Itinerario", usuarioSesion.emCveEmpleado);
+                string mensaje = null;
+                string pathFormato = ObtenerBoletoHttpPost(Request, "Boleto_Itinerario", usuarioSesion.emCveEmpleado);
                 if (!string.IsNullOrEmpty(pathFormato))
                 {
                     mensaje = pathFormato;
                 }
-                return Json(new {mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+                return Json(new { mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -116,7 +131,7 @@ namespace IICA.Controllers.Viaticos
         {
             try
             {
-                string idAleatorio = Guid.NewGuid().ToString().Substring(0,5)+DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
+                string idAleatorio = Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
                 if (httpRequestBase.Files.Count > 0)
                 {
                     for (int i = 0; i < httpRequestBase.Files.Count; i++)
@@ -145,6 +160,7 @@ namespace IICA.Controllers.Viaticos
             }
             return string.Empty;
         }
+
         #endregion Funciones - Generales
     }
 }
