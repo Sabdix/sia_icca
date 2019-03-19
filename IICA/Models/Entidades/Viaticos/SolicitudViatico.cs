@@ -33,6 +33,9 @@ namespace IICA.Models.Entidades.Viaticos
         public string Em_Cve_Empleado { get; set; }
         public EstatusSolicitud estatusSolicitud { get; set; }
         public decimal duracionViaje { get; set; }
+        public bool pernocta { get; set; }
+
+        public bool marginal { get; set; }
 
         public SolicitudViatico()
         {
