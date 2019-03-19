@@ -262,3 +262,94 @@ GO
 GRANT EXECUTE ON DT_SP_OBTENER_GASTO_EXTRA TO public;  
 GO
 
+-- se crea procedimiento DT_SP_VERIFICAR_ORIGINACION_SOLICITUD
+if exists (select * from sysobjects where name like 'DT_SP_VERIFICAR_ORIGINACION_SOLICITUD' and xtype = 'p')
+	drop proc DT_SP_VERIFICAR_ORIGINACION_SOLICITUD
+go
+
+/*
+
+Autor			PICHARDO HURTADO OSCAR
+Fecha			20190319
+Objetivo		VERIFICA SI SE PUEDE ORIGINAR UNA SOLICITUD
+
+
+*/
+
+create proc DT_SP_VERIFICAR_ORIGINACION_SOLICITUD
+
+	@Em_Cve_Empleado varchar(20)
+	
+		-- parametros
+		-- [aquí van los parámetros]
+
+as
+
+	begin -- procedimiento
+		
+		begin try -- try principal
+		
+			begin -- inicio
+
+				-- declaraciones
+				declare @status int = 1,
+						@error_message varchar(255) = '',
+						@error_line varchar(255) = '',
+						@error_severity varchar(255) = '',
+						@error_procedure varchar(255) = ''
+						
+			end -- inicio
+			
+			begin -- validaciones
+			
+				-- -- se realiza la validación que exista el empleado
+				 if not exists (select * from Empleado where Em_Cve_Empleado=@Em_Cve_Empleado)
+				 	raiserror('El empleado no existe', 11, 0)
+				
+			end -- validaciones
+			
+			begin -- ámbito de la actualización
+			select * from DT_CAT_STATUS_SOLICITUD
+				if((select COUNT(*) from DT_TBL_VIATICO_SOLICITUD where Em_Cve_Empleado=@Em_Cve_Empleado and Id_Estatus_Solicitud not in (2,3))>1)
+				begin
+					set @status=0
+					set @error_message='El empleado excede el número de solicitudes permitidas'
+				end
+			
+			end -- ámbito de la actualización
+
+		end try -- try principal
+		
+		begin catch -- catch principal
+		
+			-- captura del error
+			select	@status = -error_state(),
+					@error_procedure = coalesce(error_procedure(), 'CONSULTA DINÁMICA'),
+					@error_line = error_line(),
+					@error_message = error_message(),
+					@error_severity =
+						case error_severity()
+							when 11 then 'Error en validación'
+							when 12 then 'Error en consulta'
+							when 13 then 'Error en actualización'
+							else 'Error general'
+						end
+		
+		end catch -- catch principal
+		
+		begin -- reporte de estatus
+
+			select	@status status,
+					@error_procedure error_procedure,
+					@error_line error_line,
+					@error_severity error_severity,
+					@error_message error_message
+					
+		end -- reporte de estatus
+		
+	end -- procedimiento
+	
+go
+
+grant exec on DT_SP_VERIFICAR_ORIGINACION_SOLICITUD to public
+
