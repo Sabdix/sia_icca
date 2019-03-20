@@ -22,6 +22,8 @@ namespace IICA.Models.Entidades.Viaticos
         public string resultadosEsperados { get; set; }
         public Justificacion justificacion { get; set; }
         public string condicionesEspeciales { get; set; }
+        [Required(ErrorMessage = "Es necesario anexar el documento de la autorización")]
+        public string pathArchivoAutorizacion { get; set; }
         public List<Itinerario> itinerario { get; set; }
         public DateTime fechaAlta { get; set; }
         public List<GastoExtraSol> gastosExtrasSol { get; set; }
