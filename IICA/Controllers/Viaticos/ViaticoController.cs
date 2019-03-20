@@ -54,7 +54,7 @@ namespace IICA.Controllers.Viaticos
             {
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 string mensaje = null;
-                string pathFormato = ObtenerBoletoHttpPost(Request, "Boleto_Itinerario", usuarioSesion.emCveEmpleado);
+                string pathFormato = ObtenerFormatosTempHttpPost(Request, "Boleto_Itinerario", usuarioSesion.emCveEmpleado);
                 if (!string.IsNullOrEmpty(pathFormato))
                 {
                     mensaje = pathFormato;
@@ -100,6 +100,26 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [HttpPost,SessionExpire]
+        public ActionResult SubirOficioAut()
+        {
+            try
+            {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                string mensaje = null;
+                string pathFormato = ObtenerFormatosTempHttpPost(Request, "OficioAutorizacion", usuarioSesion.emCveEmpleado);
+                if (!string.IsNullOrEmpty(pathFormato))
+                {
+                    mensaje = pathFormato;
+                }
+                return Json(new { mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
         [HttpPost, SessionExpire]
         public ActionResult RegistrarSolicitud(SolicitudViatico solicitudViatico_)
         {
@@ -127,7 +147,7 @@ namespace IICA.Controllers.Viaticos
 
 
         #region Funciones - Generales
-        private string ObtenerBoletoHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
+        private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
         {
             try
             {
@@ -139,17 +159,17 @@ namespace IICA.Controllers.Viaticos
                         var file = httpRequestBase.Files[i];
                         if (file != null && file.ContentLength > 0)
                         {
-                            string pathViaticosItinerariosBoletos = WebConfigurationManager.AppSettings["pathViaticosItinerariosBoletos"].ToString();
+                            string pathViaticosFormatos = WebConfigurationManager.AppSettings["pathViaticosFormatos"].ToString();
                             //string pathGeneral = pathFormatosIncapacidades + @"\" + usuario + @"\";
-                            string pathGeneral = Server.MapPath("~" + pathViaticosItinerariosBoletos + "/" + usuario + "/");
+                            string pathGeneral = Server.MapPath("~" + pathViaticosFormatos + "/" + usuario + "/");
                             if (!System.IO.Directory.Exists(pathGeneral))
                                 System.IO.Directory.CreateDirectory(pathGeneral);
 
-                            string nombre = Path.GetFileName(idAleatorio + "_" + formato + "" + Path.GetExtension(file.FileName));
+                            string nombre = Path.GetFileName(formato + "_" + idAleatorio + "" + Path.GetExtension(file.FileName));
                             string pathFormato = Path.Combine(pathGeneral, nombre);
 
                             file.SaveAs(pathFormato);
-                            return pathViaticosItinerariosBoletos + "/" + usuario + "/" + nombre;
+                            return pathViaticosFormatos + "/" + usuario + "/" + nombre;
                         }
                     }
                 }
@@ -160,7 +180,7 @@ namespace IICA.Controllers.Viaticos
             }
             return string.Empty;
         }
-
+       
         #endregion Funciones - Generales
     }
 }

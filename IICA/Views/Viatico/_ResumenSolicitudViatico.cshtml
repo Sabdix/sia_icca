@@ -54,12 +54,12 @@
                             <td><span class="bold blueIICA">Justificación</span></td>
                             <td colspan="3">@Model.justificacion.descripcion</td>
                         </tr>
-                        <tr>
+                        @*<tr>
                             <td><span class="bold blueIICA">Relación gastos pendientes</span></td>
                             <td>?</td>
                             <td><span class="bold blueIICA">Informe de viaje pendiente</span></td>
                             <td>?</td>
-                        </tr>
+                        </tr>*@
                         <tr>
                             <td><span class="bold blueIICA">Duración estimada del viaje</span></td>
                             <td colspan="3">@((Model.fechaFin - Model.fechaInicio).Days)</td>
