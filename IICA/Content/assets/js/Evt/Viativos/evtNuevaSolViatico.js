@@ -35,6 +35,46 @@ $(document).ready(function () {
         width: '100%' // need to override the changed default
     });
 
+
+    $("#dropZoneOficioAut").append("<form id='dZUploadOficioAut' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+
+    DropzoneOficioAut = {
+        url: rootUrl("/Viatico/SubirOficioAut"),
+        addRemoveLinks: true,
+        paramName: "archivo",
+        maxFilesize: 4, // MB
+        dictRemoveFile: "Remover",
+        acceptedFiles: ".pdf,image/*",
+        autoProcessQueue: false,
+        maxFiles: 1,
+        init: function () {
+            this.on("maxfilesexceeded", function (file) {
+                this.removeFile(file);
+                swal("Error", "No se puede subir mas de un archivo", "error");
+            });
+        },
+        //sending: function (file, xhr, formData) {
+        //    formData.append("idIncapacidad", idIncapacidad);
+        //    formData.append("formato", formato);
+        //},
+        success: function (file, nombreArchivo) {
+            file.previewElement.classList.add("dz-success");
+            if (nombreArchivo.mensaje != undefined) {
+                viatico = ObtenerSolViatico();
+                viatico.pathArchivoAutorizacion = nombreArchivo.mensaje
+                GuardarSolicitudViatico(viatico);
+            }
+        },
+        error: function (file, response) {
+            file.previewElement.classList.add("dz-error");
+            //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
+        }
+    } // FIN myAwesomeDropzone
+    oficioAutDropzone = new Dropzone("#dZUploadOficioAut", DropzoneOficioAut);
+    oficioAutDropzone.on("complete", function (file, response) {
+
+    });
+
     /*---------------------------------------------------------------------*/
     $("#fechaAlta").val(moment().format("YYYY/MM/DD"));
     /*---------------------------------------------------------------------*/
@@ -87,7 +127,12 @@ $(document).ready(function () {
     $("#btn-guardar-solViatico").click(function (e) {
         if (ValidarDatosSol()) {
             if (ValidarItinerarios()) {
-                GuardarSolicutudViatico();
+                oficioAutDropzone
+                if (oficioAutDropzone.files.length == 0) {
+                    swal("Notificación", "Por favor anexe el archivo del oficio de autorización", "error");
+                } else {
+                    oficioAutDropzone.processQueue();
+                }
             }
         } else {
             swal("Cancelado", "Faltan datos necesarios para proceder a guardar la solicitud", "error");
@@ -121,15 +166,7 @@ function ValidarItinerarios() {
     return true;
 }
 
-function GuardarSolicutudViatico() {
-    viatico = ObtenerSolViatico();
-
-    //var formTipoViaje = $("#form-tipoViaje").serializeArray();
-    //var formProposito = $("#form-proposito").serializeArray();
-    //viatico = castFormViaticoToJson(formTipoViaje, formProposito);
-    //viatico.itinerario = itinerarios;
-    //viatico.gastosExtrasSol = gastosExtraSol;
-
+function GuardarSolicitudViatico(viatico) {
     $.ajax({
         data: { solicitudViatico_: viatico },
         url: rootUrl("/Viatico/RegistrarSolicitud"),
@@ -153,7 +190,6 @@ function OnSuccesGuardarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        ImprimirFormatoPermiso(data.id);
         setTimeout(function () { window.location = rootUrl("/Home/Viaticos"); }, 3000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
@@ -196,7 +232,7 @@ function OnAgregarItinerario() {
         if ($("#idMedioItinerario").val() == 2) {//Si es aereo mostrar el 
             //solicitamos el archivo a subir
             if (myDropzone.files.length == 0) {
-                swal("Cancelado", "Por favor anexe el archivo del boleto", "error");
+                swal("Notificación", "Por favor anexe el archivo del boleto", "error");
             } else {
                 myDropzone.processQueue();
             }
