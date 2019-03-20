@@ -41,6 +41,18 @@
                     }
                 </ul>
             </li>
+
+            <!--    SOLICITUDES AUTORIZADOR    -->
+            <li class="nodo-menu" id="nodo-misSolicitudes">
+                <a href="javascript:;"> <i class="material-icons">account_balance_wallet</i> <span class="title">Solicitudes por Autorizar</span> <span class=" arrow"></span> </a>
+                <ul class="sub-menu">
+                    @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
+                    {
+                        <li> <a id="submenu-nvsolVaca" href="@Url.Action("SitioEnConstruccion", "Home")">En proceso </a> </li>
+                    }
+                </ul>
+            </li>
+
             <!--    REPORTES    -->
             <li class="nodo-menu" id="nodo-reportes">
                 <a href="javascript:;"> <i class="material-icons">assignment</i> <span class="title">Reportes</span> <span class=" arrow"></span> </a>
