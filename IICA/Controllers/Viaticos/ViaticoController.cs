@@ -125,6 +125,20 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [SessionExpire]
+        public ActionResult MisSolicitudes()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         #region Funciones - Generales
         private string ObtenerBoletoHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)

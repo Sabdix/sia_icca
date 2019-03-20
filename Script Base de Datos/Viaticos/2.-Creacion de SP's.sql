@@ -352,5 +352,58 @@ as
 go
 
 grant exec on DT_SP_VERIFICAR_ORIGINACION_SOLICITUD to public
+go
 
+-- se crea procedimiento DT_SP_CONSULTAR_SOLICITUDES_USUARIO
+if exists (select * from sysobjects where name like 'DT_SP_CONSULTAR_SOLICITUDES_USUARIO' and xtype = 'p')
+	drop proc DT_SP_CONSULTAR_SOLICITUDES_USUARIO
+go
+
+/*
+
+Autor			PICHARDO HURTADO OSCAR
+Fecha			20190319
+Objetivo		VERIFICA SI SE PUEDE ORIGINAR UNA SOLICITUD
+
+
+*/
+
+create proc DT_SP_CONSULTAR_SOLICITUDES_USUARIO
+
+	@Em_Cve_Empleado varchar(20)
+	
+		-- parametros
+		-- [aquí van los parámetros]
+
+as
+
+	begin -- procedimiento
+				select vs.*
+					,mt.Descripcion medio_transporte
+					,j.Descripcion justificacion
+					,td.Descripcion tipo_divisa
+					,es.Descripcion_Status_Solicitud
+					,tv.Descripcion tipo_viaje
+				from 
+					DT_TBL_VIATICO_SOLICITUD  vs
+					join DT_CAT_MEDIO_TRANSPORTE mt
+					on vs.Id_Medio_Transporte=mt.Id_Medio_Transporte
+					join DT_CAT_JUSTIFICACION j
+					on vs.Id_Justificacion=j.Id_Justificacion
+					join DT_CAT_TIPO_DIVISA td
+					on vs.Id_Tipo_Divisa=td.Id_Tipo_Divisa
+					join DT_CAT_STATUS_SOLICITUD es
+					on vs.Id_Estatus_Solicitud=es.Id_Status_Solicitud
+					join DT_CAT_TIPO_VIAJE tv
+					on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
+				where 
+					Em_Cve_Empleado=@Em_Cve_Empleado 
+					and Id_Estatus_Solicitud not in (3)
+			
+	end -- procedimiento
+	
+go
+
+grant exec on DT_SP_CONSULTAR_SOLICITUDES_USUARIO to public
+go
 
