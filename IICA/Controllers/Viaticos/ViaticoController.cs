@@ -160,6 +160,21 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [SessionExpire]
+        public ActionResult SolicitudesPorAutorizar()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpPost, SessionExpire]
         public ActionResult EnviarSolicitud(SolicitudViatico solicitudViatico_)
         {

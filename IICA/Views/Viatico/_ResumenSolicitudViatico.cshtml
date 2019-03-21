@@ -1,6 +1,7 @@
 ﻿
 
 @model IICA.Models.Entidades.Viaticos.SolicitudViatico
+@using System.Web.Script.Serialization;
 
 <div class="col-md-6 col-sm-6 col-md-6">
     <div class="col-md-12">
@@ -29,6 +30,36 @@
         </div>
     </div>
     <div class="col-md-12">
+        <div class="grid simple vertical red">
+            <div class="grid-title">
+                <h4>Lista <span class="semi-bold">de gastos</span></h4>
+            </div>
+            <div class="grid-body">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+                    <thead>
+                        <tr>
+                            <th style="width:10%;text-align: center;">Gasto</th>
+                            <th style="width:10%;text-align: center;">Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var gasto in Model.gastosExtrasSol)
+                        {
+                            <tr>
+                                <td>@gasto.descripcion</td>
+                                <td>@(gasto.monto.ToString("C") + " " + (Model.tipoViaje.idTipoViaje == 2 ? "USD" : "MXN"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-md-6 col-sm-6 col-md-6">
+    <div class="col-md-12">
         <div class="grid simple vertical blue">
             <div class="grid-title">
                 <h4>Datos <span class="semi-bold">de la solicitud</span></h4>
@@ -55,11 +86,11 @@
                             <td colspan="3">@Model.justificacion.descripcion</td>
                         </tr>
                         @*<tr>
-                            <td><span class="bold blueIICA">Relación gastos pendientes</span></td>
-                            <td>?</td>
-                            <td><span class="bold blueIICA">Informe de viaje pendiente</span></td>
-                            <td>?</td>
-                        </tr>*@
+                                <td><span class="bold blueIICA">Relación gastos pendientes</span></td>
+                                <td>?</td>
+                                <td><span class="bold blueIICA">Informe de viaje pendiente</span></td>
+                                <td>?</td>
+                            </tr>*@
                         <tr>
                             <td><span class="bold blueIICA">Duración estimada del viaje</span></td>
                             <td colspan="3">@((Model.fechaFin - Model.fechaInicio).Days)</td>
@@ -68,10 +99,10 @@
                 </table>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 
-<div class="col-md-6 col-sm-6 col-md-6">
+<div class="col-md-12 col-sm-12 col-md-12">
     <div class="col-md-12">
         <div class="grid simple vertical green">
             <div class="grid-title">
@@ -88,6 +119,7 @@
                             <th style="width:10%;text-align: center;">Linea / No. de vuelo</th>
                             <th style="width:10%;text-align: center;">Hora de salida</th>
                             <th style="width:10%;text-align: center;">Hora de llegada</th>
+                            <th style="width:10%;text-align: center;">Boleto</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,32 +133,20 @@
                                 <td>@(itinerario.linea + "/" + itinerario.numeroAsiento)</td>
                                 <td>@(string.IsNullOrEmpty(itinerario.horaSalida) ? "N/A" : itinerario.horaSalida )</td>
                                 <td>@(string.IsNullOrEmpty(itinerario.horaLLegada) ? "N/A" : itinerario.horaLLegada )</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="grid simple vertical red">
-            <div class="grid-title">
-                <h4>Lista <span class="semi-bold">de gastos</span></h4>
-            </div>
-            <div class="grid-body">
-                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
-                    <thead>
-                        <tr>
-                            <th style="width:10%;text-align: center;">Gasto</th>
-                            <th style="width:10%;text-align: center;">Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var gasto in Model.gastosExtrasSol)
-                        {
-                            <tr>
-                                <td>@gasto.descripcion</td>
-                                <td>@(gasto.monto.ToString("C")+" "+(Model.tipoViaje.idTipoViaje == 2 ? "USD" : "MXN"))</td>
+                                <td>
+                                    @if (itinerario.medioTransporte.idMedioTransporte == 2)
+                                    {
+                                        <span data-toggle="modal" data-target="#modal-itinBoleto" onclick="mostrarBoletoItinerario(@(new JavaScriptSerializer().Serialize(itinerario)))">
+                                            <button data-toggle="tooltip" title="Ver boleto" class="btn btn-warning btn-mini">
+                                                <i class="fa fa-print"></i>
+                                            </button>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>N/A</span>
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -136,15 +156,12 @@
     </div>
 </div>
 
-
-
-
 <style>
     .blueIICA {
         color: #1f3853;
     }
 
-    .grid-body{
+    .grid-body {
         padding: 0px !important;
     }
 
@@ -152,8 +169,33 @@
         font-size: 11px !important;
     }
 
-    table td{
+    table td {
         font-size: 11px !important;
     }
-
 </style>
+
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    function mostrarBoletoItinerario(itinerario) {
+        var url = itinerario.pathBoleto;
+        if (url !== "") {
+            url = rootUrl(url);
+            $('div #content-boleto').html("");
+            $("div #bol-ida").text(itinerario.origen);
+            $("div #bol-regreso").text(itinerario.destino);
+            var iframe = $('<iframe style="width: 100%;height:600px;">');
+            iframe.attr('src', url);
+            $('div #content-boleto').append(iframe);
+            iframe[0].contentWindow.location.reload();
+        }
+        else {
+            $("div #content-boleto").html("");
+            $("div #bol-ida").text("-");
+            $("div #bol-regreso").text("-");
+        }
+    }
+</script>
