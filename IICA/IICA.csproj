@@ -484,13 +484,6 @@
     <Content Include="Content\webarch\fonts\custom-setd41d.eot" />
     <Content Include="Content\assets\plugins\jquery-datatable\css\buttons_dataTables.css" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_ADICIONAL.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_INCAPACIDAD.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_ST7_ALTA_RT.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_ADICIONAL.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_INCAPACIDAD.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_ST7_ALTA_RT.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\3_FORMATO_INCAPACIDAD.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -544,6 +537,7 @@
     <Content Include="Views\Viatico\_ResumenSolicitudViatico.cshtml" />
     <Content Include="Views\Viatico\NotNuevaSolicitud.cshtml" />
     <Content Include="Views\Home\SitioEnConstruccion.cshtml" />
+    <Content Include="Views\Viatico\MisSolicitudes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
