@@ -36,7 +36,7 @@
                 <ul class="sub-menu">
                     @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
                     {
-                        <li> <a id="submenu-nvsolVaca" href="@Url.Action("SitioEnConstruccion", "Home")">En proceso </a> </li>
+                        <li> <a id="submenu-nvsolVaca" href="@Url.Action("MisSolicitudes","Viatico")">En proceso </a> </li>
                         <li> <a id="submenu-nvsolVaca" href="@Url.Action("SitioEnConstruccion", "Home")">Comprobación de gastos</a> </li>
                     }
                 </ul>
