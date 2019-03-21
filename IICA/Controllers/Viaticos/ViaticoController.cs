@@ -160,6 +160,56 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [HttpPost, SessionExpire]
+        public ActionResult EnviarSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days;
+
+                Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
+                //if (result.status)
+                //{
+                //    try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                //}
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CancelarSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days;
+
+                Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
+                //if (result.status)
+                //{
+                //    try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                //}
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
         {
