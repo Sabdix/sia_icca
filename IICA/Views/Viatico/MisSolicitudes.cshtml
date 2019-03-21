@@ -36,12 +36,9 @@
                             <th style="width:8%;text-align: center;">Fecha inicio</th>
                             <th style="width:8%;text-align: center;">Fecha fin</th>
                             <th style="width:5%;text-align: center;">Duración viaje</th>
-                            <th style="width:10%;text-align: center;">Proposito</th>
                             <th style="width:10%;text-align: center;">Resultados esperados</th>
                             <th style="width:10%;text-align: center;">Estatus</th>
                             <th style="width:10%;text-align: center;">Medio transporte</th>
-                            <th style="width:10%;text-align: center;">Tipo de viaje</th>
-                            <th style="width:10%;text-align: center;">Tipo de divisa</th>
                             <th style="width:10%;text-align: center;">Acciones</th>
                         </tr>
                     </thead>
@@ -79,26 +76,20 @@
                                 </span>
                             </td>
                             <td><span class="muted">@solicitud.duracionViaje</span></td>
-                            <td><span class="muted">@solicitud.proposito</span></td>
                             <td><span class="muted">@solicitud.resultadosEsperados</span></td>
                             <td><span class="label label-@labelEstatus">@solicitud.estatusSolicitud.descripcion</span></td>
                             <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
-                            <td><span class="muted">@solicitud.tipoViaje.descripcion</span></td>
-                            <td><span class="muted">@solicitud.tipoDivisa.descripcion</span></td>
                             <td>
-                                @if (solicitud.estatusSolicitud.idEstatusSolicitud== (int)IICA.Models.Entidades.EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR)
-                                {
-                                    @*<span data-toggle="modal" data-target="#modal-completar" onclick="MostrarModalEnvSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
+                                    <span data-toggle="modal" data-target="#modal-completar">
                                         <button data-toggle="tooltip" title="Enviar solicitud" class="btn btn-info btn-mini">
                                             <i class="fa fa-check-square-o"></i>
                                         </button>
                                     </span>
-                                        <span data-toggle="modal" data-target="#modal-cancelar" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(incapacidad)))">
+                                        <span data-toggle="modal" data-target="#modal-cancelar">
                                             <button data-toggle="tooltip" title="Cancelar solicitud" class="btn btn-warning btn-mini">
                                                 <i class="fa fa-close"></i>
                                             </button>
-                                        </span>*@
-                                }
+                                        </span>
                             </td>
 
                         </tr>

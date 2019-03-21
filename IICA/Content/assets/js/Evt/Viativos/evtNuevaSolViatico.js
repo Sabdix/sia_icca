@@ -190,7 +190,7 @@ function OnSuccesGuardarSolicitud(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Home/Viaticos"); }, 3000);
+        setTimeout(function () { window.location = rootUrl("/Viatico/MisSolicitudes"); }, 3000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
