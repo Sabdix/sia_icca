@@ -55,13 +55,13 @@
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de viaje</label>
                                     @Html.DropDownListFor(x => x.tipoViaje.idTipoViaje, (IEnumerable<SelectListItem>)ViewBag.TiposViaje, "SELECCIONE EL TIPO DE VIAJE",
-                                 new { @class = "select-iica", style = "width: 100%;", id = "tipoViajeSol", data_val = "true" })
+                                      new { @class = "select-iica", style = "width: 100%;", id = "tipoViajeSol", data_val = "true" })
                                     @Html.ValidationMessageFor(x => x.tipoViaje.idTipoViaje, "", new { @class = "error" })
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de transportación</label>
                                     @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposMediosTrasnporte, "SELECCIONE EL TIPO DE TRASNPORTE",
-                                  new { @class = "select-iica", style = "width: 100%;", data_val = "true" })
+                                       new { @class = "select-iica", style = "width: 100%;", data_val = "true" })
                                     @Html.ValidationMessageFor(x => x.medioTransporte.idMedioTransporte, "", new { @class = "error" })
                                 </div>
                             </div>
@@ -123,7 +123,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Justificación</label>
                                         @Html.DropDownListFor(x => x.justificacion.idJustificacion, (IEnumerable<SelectListItem>)ViewBag.TiposJustificacion, "SELECCIONE LA JUSTIFICACIÓN",
-                                                  new { @class = "select-iica", style = "width: 100%;" })
+                                                       new { @class = "select-iica", style = "width: 100%;" })
                                         @Html.ValidationMessageFor(x => x.justificacion.idJustificacion, "", new { @class = "error" })
                                     </div>
                                 </div>
@@ -207,14 +207,14 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Gasto</label>
                                         @Html.DropDownList("gasto_extra1", (IEnumerable<SelectListItem>)ViewBag.GastosExtra, "SELECCIONE UN GASTO",
-                                                     new
-                                                     {
-                                                         @class = "select-iica",
-                                                         id = "gasto_extra1",
-                                                         style = "width: 100%;",
-                                                         data_val_required = "Seleccione un tipo de gasto.",
-                                                         data_val = "true"
-                                                     })
+                                                          new
+                                                          {
+                                                              @class = "select-iica",
+                                                              id = "gasto_extra1",
+                                                              style = "width: 100%;",
+                                                              data_val_required = "Seleccione un tipo de gasto.",
+                                                              data_val = "true"
+                                                          })
                                         @Html.ValidationMessage("gasto_extra1", new { @class = "error" })
                                     </div>
                                     <div class="col-md-3">
@@ -309,6 +309,36 @@
 </div>
 
 
+
+<div class="modal fade" id="modal-itinBoleto" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br>
+                <i class="fa fa-cloud-upload fa-7x"></i>
+                <h4 id="myModalLabel" class="semi-bold">Boleto del itinerario.</h4>
+                <p class="no-margin">De <span id="bol-ida"></span> A <span id="bol-regreso"></span> </p>
+                <br>
+            </div>
+            <div class="modal-body">
+                <div class="row form-row">
+                    <div class="row">
+                        <div class="col-md-12" id="content-boleto">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
 @section scripts {
 
     <style>
@@ -359,6 +389,9 @@
             mediosTransportes = @Html.Raw(new JavaScriptSerializer().Serialize(ViewBag.TiposMediosTrasnporte));
             var catGastosExtras;
             catGastosExtras = @Html.Raw(new JavaScriptSerializer().Serialize(ViewBag.GastosExtra));
+
+            var catTipoJustificacion;
+            catTipoJustificacion = @Html.Raw(new JavaScriptSerializer().Serialize(ViewBag.TiposJustificacion));
     </script>
 
     <script src="~/Content/assets/js/Evt/Viativos/evtNuevaSolViatico.js"></script>

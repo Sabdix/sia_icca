@@ -433,8 +433,6 @@ function MostrarResumen() {
 }
 
 
-
-
 /*=============================================================================================
 ======================================      FUNCIONES GENERALES     =================================
 ===============================================================================================*/
@@ -489,6 +487,10 @@ function ObtenerSolViatico() {
     solicitud = castFormViaticoToJson(formTipoViaje, formProposito);
     solicitud.itinerario = itinerarios;
     solicitud.gastosExtrasSol = gastosExtraSol;
+
+    var justificacion = $.grep(catTipoJustificacion, function (justifica) { return justifica.Value === solicitud.justificacion.idJustificacion; })[0];
+    if (justificacion !== undefined)
+        solicitud.justificacion.descripcion = justificacion.Text;
 
     return solicitud;
 }
