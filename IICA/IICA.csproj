@@ -538,6 +538,7 @@
     <Content Include="Views\Viatico\NotNuevaSolicitud.cshtml" />
     <Content Include="Views\Home\SitioEnConstruccion.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudes.cshtml" />
+    <Content Include="Views\Viatico\SolicitudesPorAutorizar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

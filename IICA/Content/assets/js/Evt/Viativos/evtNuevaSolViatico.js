@@ -21,8 +21,8 @@ $.validator.setDefaults({
 });
 
 $(document).ready(function () {
-    
 
+    
     itinerarios = new Array();
     gastosExtraSol = new Array();
 
@@ -213,11 +213,11 @@ function MostrarModalAddItinerario(tipoSalida) {
         success: function (data) {
             OcultarLoading();
             $("#content-md-itinerario").html(data);
-            $("#modal-itinerario").modal("show");
+            $("#modal-itinerario").modal({ backdrop: 'static', keyboard: false, show: true });
             $("#tipo-salida").val(tipoSalida);
             $("#tipo-salida-desc").val(tipoSalida == 1 ? "Ida" : "Regreso")
             $("#tipo-salida-title").text(tipoSalida == 1 ? "Ida" : "Regreso")
-            $("#idMedioItinerario").change(function () { ComponenteBoletoItinerario($(this).val());});
+            $("#idMedioItinerario").change(function () { ComponenteBoletoItinerario($(this).val()); });
             $.validator.unobtrusive.parse($("#modal-itinerario"));
         },
         error: function (xhr, status, error) {
