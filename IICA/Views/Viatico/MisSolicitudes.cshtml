@@ -46,17 +46,18 @@
                         @foreach (SolicitudViatico solicitud in Model)
                         {
                             string labelEstatus;
-                            switch ((IICA.Models.Entidades.EstatusSolicitud)solicitud.estatusSolicitud.idEstatusSolicitud)
+                            switch ((IICA.Models.Entidades.EnumEtapaSolicitudViaticos)solicitud.etapaSolicitud.idEtapaSolicitud)
                             {
-                                case IICA.Models.Entidades.EstatusSolicitud.SOLICITUD_ENVIADA:
-                                case IICA.Models.Entidades.EstatusSolicitud.SOLICITUD_APROBADA:
+                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.GENERADA:
+                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.ENVIADA:
+                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.GENERACION_CHEQUE:
+                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.COMPLETAR_DATOS:
+                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.COMPROBACION_GASTOS:
+                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.VERIFICACION_GASTOS:
                                     labelEstatus = "success";
                                     break;
-                                case IICA.Models.Entidades.EstatusSolicitud.SOLICITUD_CANCELADA:
+                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.FINALIZADA:
                                     labelEstatus = "important";
-                                    break;
-                                case IICA.Models.Entidades.EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR:
-                                    labelEstatus = "info";
                                     break;
                                 default:
                                     labelEstatus = "success";
@@ -77,7 +78,7 @@
                                 </td>
                                 <td><span class="muted">@solicitud.duracionViaje</span></td>
                                 <td><span class="muted">@solicitud.resultadosEsperados</span></td>
-                                <td><span class="label label-@labelEstatus">@solicitud.estatusSolicitud.descripcion</span></td>
+                                <td><span class="label label-@labelEstatus">@solicitud.etapaSolicitud.descripcion</span></td>
                                 <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
                                 <td>
                                     <span data-toggle="modal" data-target="#modal-enviar">
@@ -196,7 +197,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="EnviarSol()">Enviar solicitud</button>
+                <button type="button" class="btn btn-primary" onclick="EnviarSolViatico()">Enviar solicitud</button>
             </div>
         </div>
 
