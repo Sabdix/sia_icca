@@ -184,9 +184,7 @@ namespace IICA.Controllers.Viaticos
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                solicitudViatico_.estatusSolicitud.idEstatusSolicitud = Convert.ToInt32(EnumEstatusSolicitudViaticos.SOLICITUD_ENVIADA);
-
-                Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {
                     try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
@@ -209,7 +207,7 @@ namespace IICA.Controllers.Viaticos
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                solicitudViatico_.estatusSolicitud.idEstatusSolicitud = Convert.ToInt32(EnumEstatusSolicitudViaticos.SOLICITUD_CANCELADA);
+                //solicitudViatico_.estatusSolicitud.idEstatusSolicitud = Convert.ToInt32(EnumEstatusSolicitudViaticos.SOLICITUD_CANCELADA);
 
                 Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
                 //if (result.status)

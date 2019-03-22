@@ -75,8 +75,10 @@ function EnviarSol() {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
+    solSeleccionada.etapaSolicitud.idEtapaSolicitud = EnumEtapaSolicitudViaticos.ENVIADA;
+    solSeleccionada.estatusSolicitud.idEstatusSolicitud = EnumEstatusSolicitudViaticos.CORRECTA;
     $.ajax({
-        data: { incapacidad_: solSeleccionada },
+        data: { solicitudViatico_: solSeleccionada },
         url: rootUrl("/Viatico/EnviarSolicitud"),
         dataType: "json",
         method: "post",

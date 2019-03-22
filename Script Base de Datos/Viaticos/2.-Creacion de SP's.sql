@@ -414,3 +414,105 @@ go
 grant exec on DT_SP_CONSULTAR_SOLICITUDES_USUARIO to public
 go
 
+-- se crea procedimiento DT_SP_CONSULTAR_SOLICITUDES_USUARIO
+if exists (select * from sysobjects where name like 'DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD' and xtype = 'p')
+	drop proc DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD
+go
+
+/*
+
+Autor			PICHARDO HURTADO OSCAR
+Fecha			20190322
+Objetivo		ACTUALIZA EL ESTATUS DE LA SOLICITUD
+
+
+*/
+
+create proc DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD
+
+	@id_etapa_solicitud int,
+	@id_estatus_solicitud int,
+	@id_solicitud int
+	
+		-- parametros
+		-- [aquí van los parámetros]
+
+as
+
+	begin -- procedimiento
+		
+		begin try -- try principal
+		
+			begin -- inicio
+
+				-- declaraciones
+				declare @status int = 1,
+						@error_message varchar(255) = '',
+						@error_line varchar(255) = '',
+						@error_severity varchar(255) = '',
+						@error_procedure varchar(255) = ''
+			
+			end -- inicio
+			
+			begin -- validaciones
+			
+				-- -- se realiza la validación que exista la solicitud
+				 if not exists(select * from DT_TBL_VIATICO_SOLICITUD where Id_Solicitud=@id_solicitud)
+					raiserror('La solicitud actual no existe', 11, 0)
+
+				-- -- se realiza la validación que exista la etapa de la solicitud
+				 if not exists(select * from DT_CAT_ETAPAS_SOLICITUD_VIATICO where Id_etapa_solicitud=@id_etapa_solicitud)
+					raiserror('La etapa actual no existe', 11, 0)
+
+					-- -- se realiza la validación que exista el estatus de la solicitud
+				 if not exists(select * from DT_CAT_ESTATUS_SOLICITUD_VIATICO where Id_estatus_solicitud=@id_estatus_solicitud)
+					raiserror('El estatus de la solicitud no existe', 11, 0)
+				
+			end -- validaciones
+			
+			begin -- ámbito de la actualización
+			
+				update DT_TBL_VIATICO_SOLICITUD 
+				set Id_etapa_solicitud=@id_etapa_solicitud
+				,Id_estatus_solicitud=@id_estatus_solicitud
+				where 
+					Id_Solicitud=@id_solicitud
+			
+			end -- ámbito de la actualización
+
+		end try -- try principal
+		
+		begin catch -- catch principal
+		
+			-- captura del error
+			select	@status = -error_state(),
+					@error_procedure = coalesce(error_procedure(), 'CONSULTA DINÁMICA'),
+					@error_line = error_line(),
+					@error_message = error_message(),
+					@error_severity =
+						case error_severity()
+							when 11 then 'Error en validación'
+							when 12 then 'Error en consulta'
+							when 13 then 'Error en actualización'
+							else 'Error general'
+						end
+		
+		end catch -- catch principal
+		
+		begin -- reporte de estatus
+
+			select	@status status,
+					@error_procedure error_procedure,
+					@error_line error_line,
+					@error_severity error_severity,
+					@error_message error_message
+					
+		end -- reporte de estatus
+		
+	end -- procedimiento
+	
+go
+
+grant exec on DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD to public
+go
+
