@@ -59,10 +59,12 @@ namespace IICA.Models.Entidades
         public const string notificacionPermiso = "Notificación de la solicitud de un permiso";
         public const string notificacionVacacion = "Notificación de la solicitud de vacaciones";
         public const string notificacionIncapacidad = "Notificación de la solicitud de una incapacidad";
+        public const string notificacionSolViatico = "Notificación de la solicitud de viaticos";
 
         public const string procesoPermiso = "Creación de la solicitud de un permiso";
         public const string procesoVacacion = "Creación de una solicitud de vacaciones";
         public const string procesoIncapacidad = "Creación de una solicitud de incapacidad";
+        public const string procesoSolViatico = "Creación de una solicitud de viaticos";
 
         public const string especificacionPermiso = "Se finaliza la solicitud de un pemiso";
         public const string especificacionVacacion = "Se finaliza la solicitud de las vacaciones";
