@@ -90,8 +90,6 @@ namespace IICA.Controllers.Viaticos
         {
             try
             {
-                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
                 return PartialView(solicitudViatico_);
             }
             catch (Exception ex)
@@ -215,6 +213,23 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [HttpPost]
+        public ActionResult DetalleSolicitud(int id)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerDetalleSol(id);
+                if (result.status)
+                    return PartialView("_ResumenSolicitudViatico", (SolicitudViatico)result.objeto);
+                else
+                    return HttpNotFound(result.mensaje);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
         [SessionExpire]
         public ActionResult SolicitudesPorGenerarCheque()
         {
@@ -229,6 +244,7 @@ namespace IICA.Controllers.Viaticos
                 throw ex;
             }
         }
+
 
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)

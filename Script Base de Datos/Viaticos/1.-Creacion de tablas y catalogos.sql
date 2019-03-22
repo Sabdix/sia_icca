@@ -80,7 +80,8 @@ GO
 TRUNCATE TABLE DT_CAT_TIPO_DIVISA
 
 INSERT INTO DT_CAT_TIPO_DIVISA(Descripcion) VALUES('PESOS (MX)')
-INSERT INTO DT_CAT_TIPO_DIVISA(Descripcion) VALUES('DOLAR (USA)')
+INSERT INTO DT_CAT_TIPO_DIVISA(Descripcion) VALUES('DOLAR (DLS)')
+INSERT INTO DT_CAT_TIPO_DIVISA(Descripcion) VALUES('EURO (EURO)')
 GO
 --==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_GASTO_EXTRA]') AND type in (N'U'))
@@ -135,7 +136,71 @@ INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('CORRECTA')
 INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('DEVUELTA')
 INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('CANCELADA')
 GO
-	
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_NIVEL_MANDO]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_NIVEL_MANDO]
+GO
+
+CREATE TABLE DT_CAT_NIVEL_MANDO (
+Id_Nivel_Mando INT IDENTITY(1,1),
+Descripcion VARCHAR(40)
+)
+GO
+
+TRUNCATE TABLE DT_CAT_NIVEL_MANDO
+
+INSERT INTO DT_CAT_NIVEL_MANDO(Descripcion) VALUES('OPERATIVO')
+INSERT INTO DT_CAT_NIVEL_MANDO(Descripcion) VALUES('MEDIO')
+INSERT INTO DT_CAT_NIVEL_MANDO(Descripcion) VALUES('SUPERIOR')
+GO
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_TARIFA_VIATICO]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_TARIFA_VIATICO]
+GO
+
+CREATE TABLE DT_CAT_TARIFA_VIATICO (
+Id_Tarifa_Viatico INT IDENTITY(1,1),
+Tarifa MONEY,
+Pernocta BIT,
+Marginal BIT,
+Id_Tipo_Viaje INT,
+Id_Tipo_Divisa INT,
+Id_Nivel_Mando INT
+)
+GO
+
+TRUNCATE TABLE DT_CAT_TARIFA_VIATICO
+
+--Combinaciones de mando Operativo
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(980,1,0,1,1,1)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(490,0,0,1,1,1)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(450,1,0,2,2,1)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(450,1,0,2,3,1)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(225,0,0,2,2,1)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(225,0,0,2,3,1)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(550,1,1,1,1,1)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(435,0,1,1,1,1)
+
+--Combinaciones de mando Medio
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(1700,1,0,1,1,2)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(850,0,0,1,1,2)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(450,1,0,2,2,2)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(450,1,0,2,3,2)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(225,0,0,2,2,2)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(225,0,0,2,3,2)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(750,1,1,1,1,2)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(625,0,1,1,1,2)
+
+--Combinaciones de mando Superior
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(2850,1,0,1,1,3)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(1425,0,0,1,1,3)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(450,1,0,2,2,3)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(450,1,0,2,3,3)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(225,0,0,2,2,3)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(225,0,0,2,3,3)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(925,1,1,1,1,3)
+INSERT INTO DT_CAT_TARIFA_VIATICO(Tarifa,Pernocta,Marginal,Id_Tipo_Viaje,Id_Tipo_Divisa,Id_Nivel_Mando) VALUES(900,0,1,1,1,3)
+GO
 --==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VIATICO_SOLICITUD]') AND type in (N'U'))
 DROP TABLE [dbo].[DT_TBL_VIATICO_SOLICITUD]
