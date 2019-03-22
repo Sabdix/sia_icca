@@ -98,7 +98,44 @@ TRUNCATE TABLE DT_CAT_GASTO_EXTRA
 INSERT INTO DT_CAT_GASTO_EXTRA(Descripcion) VALUES('TRANSPORTE AÉREO')
 INSERT INTO DT_CAT_GASTO_EXTRA(Descripcion) VALUES('PEAJE / GASOLINA')
 INSERT INTO DT_CAT_GASTO_EXTRA(Descripcion) VALUES('AUTOBÚS')
-GO	
+GO
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_ETAPAS_SOLICITUD_VIATICO]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_ETAPAS_SOLICITUD_VIATICO]
+GO
+
+CREATE TABLE DT_CAT_ETAPAS_SOLICITUD_VIATICO (
+Id_etapa_solicitud INT IDENTITY(1,1),
+Descripcion VARCHAR(40)
+)
+GO
+
+TRUNCATE TABLE DT_CAT_ETAPAS_SOLICITUD_VIATICO
+INSERT INTO DT_CAT_ETAPAS_SOLICITUD_VIATICO(Descripcion) VALUES('GENERADA')
+INSERT INTO DT_CAT_ETAPAS_SOLICITUD_VIATICO(Descripcion) VALUES('ENVIADA')
+INSERT INTO DT_CAT_ETAPAS_SOLICITUD_VIATICO(Descripcion) VALUES('COMPLETAR DATOS')
+INSERT INTO DT_CAT_ETAPAS_SOLICITUD_VIATICO(Descripcion) VALUES('GENERACION CHEQUE')
+INSERT INTO DT_CAT_ETAPAS_SOLICITUD_VIATICO(Descripcion) VALUES('COMPROBACION GASTOS')
+INSERT INTO DT_CAT_ETAPAS_SOLICITUD_VIATICO(Descripcion) VALUES('VERIFICACION DE GASTOS')
+INSERT INTO DT_CAT_ETAPAS_SOLICITUD_VIATICO(Descripcion) VALUES('FINALIZADA')
+GO
+
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_ESTATUS_SOLICITUD_VIATICO]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_ESTATUS_SOLICITUD_VIATICO]
+GO
+
+CREATE TABLE DT_CAT_ESTATUS_SOLICITUD_VIATICO (
+Id_estatus_solicitud INT IDENTITY(1,1),
+Descripcion VARCHAR(40)
+)
+GO
+TRUNCATE TABLE DT_CAT_ESTATUS_SOLICITUD_VIATICO
+INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('CORRECTA')
+INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('DEVUELTA')
+INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('CANCELADA')
+GO
+	
 --==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VIATICO_SOLICITUD]') AND type in (N'U'))
 DROP TABLE [dbo].[DT_TBL_VIATICO_SOLICITUD]
@@ -119,7 +156,8 @@ Id_Justificacion INT,
 Condiciones_Especiales VARCHAR(300) NULL,
 Path_Archivo_Autorizacion VARCHAR(300) NULL,
 Id_Tipo_Divisa INT,
-Id_Estatus_Solicitud INT,
+Id_etapa_solicitud INT,
+Id_estatus_solicitud INT,
 Em_Cve_Empleado VARCHAR(20),
 Em_Cve_Empleado_Autoriza VARCHAR(20) NULL,
 Id_Tipo_Viaje INT

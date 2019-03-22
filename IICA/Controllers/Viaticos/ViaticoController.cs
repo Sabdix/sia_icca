@@ -167,7 +167,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado));
+                return View(solicitudViaticoDAO.ObtenerSolPorAutorizar(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {
