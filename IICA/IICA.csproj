@@ -252,6 +252,8 @@
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtMisSolViaticos.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtNuevaSolViatico.js" />
     <Content Include="Content\assets\js\form_elements.js" />
     <Content Include="Content\assets\js\form_validations.js" />

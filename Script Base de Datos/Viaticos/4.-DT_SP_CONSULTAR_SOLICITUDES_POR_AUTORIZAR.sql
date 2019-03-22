@@ -1,3 +1,7 @@
+USE IICA_1
+GO
+
+
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTAR_SOLICITUDES_POR_AUTORIZAR')
 BEGIN
 	DROP PROCEDURE DT_SP_CONSULTAR_SOLICITUDES_POR_AUTORIZAR
@@ -17,16 +21,10 @@ CREATE PROCEDURE DT_SP_CONSULTAR_SOLICITUDES_POR_AUTORIZAR
 	@Em_Cve_Empleado varchar(20)
 AS
 BEGIN
-	
-	DECLARE 
-		@aut_proyecto varchar(10)
 
-	SELECT @aut_proyecto =aut_proyecto FROM IICA_COMPRAS..Viaticos_Autorizadores
-	WHERE
-		Em_UserDef_1= @Em_Cve_Empleado
 
-	select Sc_UserDef_2,
-	vs.*
+	select distinct
+		vs.*
 		,mt.Descripcion medio_transporte
 		,j.Descripcion justificacion
 		,td.Descripcion tipo_divisa
@@ -51,10 +49,11 @@ BEGIN
 		on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
 		join Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
 		join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
+		join IICA_COMPRAS..Viaticos_Autorizadores autorizadores on autorizadores.aut_proyecto = s.Sc_UserDef_2
 	where 
-		s.Sc_UserDef_2 = @aut_proyecto 
-		and vs.Id_etapa_solicitud = 2
+		vs.Id_etapa_solicitud = 2
 		and vs.Id_estatus_solicitud <> 3
+		and autorizadores.Em_Cve_Empleado = @Em_Cve_Empleado
 
 END
 GO

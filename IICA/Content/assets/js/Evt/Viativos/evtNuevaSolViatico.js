@@ -331,9 +331,9 @@ function MostrarTablaItinerario(tabla,itinerarios) {
 
 function ComponenteBoletoItinerario(idMedioItinerario) {
     if (idMedioItinerario == 2) { //si el vuelo es aereo se muestra el componente para subir el archivo del boleto
-        $("#content-boleto").show();
+        $("div #content-boleto").show();
     } else {
-        $("#content-boleto").hide();
+        $("div #content-boleto").hide();
     }
 }
 /*=============================================================================================

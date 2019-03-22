@@ -90,8 +90,6 @@ namespace IICA.Controllers.Viaticos
         {
             try
             {
-                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
                 return PartialView(solicitudViatico_);
             }
             catch (Exception ex)
@@ -208,6 +206,24 @@ namespace IICA.Controllers.Viaticos
                 //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 //}
                 return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalleSolicitud(int id)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerDetalleSol(id);
+                if (result.status)
+                    return PartialView("_ResumenSolicitudViatico", (SolicitudViatico)result.objeto);
+                else
+                    return HttpNotFound(result.mensaje);
             }
             catch (Exception ex)
             {
