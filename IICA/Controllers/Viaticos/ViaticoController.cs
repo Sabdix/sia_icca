@@ -184,14 +184,14 @@ namespace IICA.Controllers.Viaticos
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days;
+                solicitudViatico_.estatusSolicitud.idEstatusSolicitud = Convert.ToInt32(EnumEstatusSolicitudViaticos.SOLICITUD_ENVIADA);
 
                 Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
-                //if (result.status)
-                //{
-                //    try { Email.NotificacionPermiso((Permiso)result.objeto); }
-                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
-                //}
+                if (result.status)
+                {
+                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -209,7 +209,7 @@ namespace IICA.Controllers.Viaticos
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days;
+                solicitudViatico_.estatusSolicitud.idEstatusSolicitud = Convert.ToInt32(EnumEstatusSolicitudViaticos.SOLICITUD_CANCELADA);
 
                 Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
                 //if (result.status)
