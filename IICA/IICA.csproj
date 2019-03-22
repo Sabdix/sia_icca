@@ -540,6 +540,9 @@
     <Content Include="Views\Home\SitioEnConstruccion.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudes.cshtml" />
     <Content Include="Views\Viatico\SolicitudesPorAutorizar.cshtml" />
+    <Content Include="Views\Viatico\SolicitudesGenerarCheque.cshtml" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_5cf452019_21_03_12_21.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_f88062019_22_03_12_22.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -215,6 +215,21 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [SessionExpire]
+        public ActionResult SolicitudesPorGenerarCheque()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(solicitudViaticoDAO.ObtenerSolPorGenerarCheque(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
         {
