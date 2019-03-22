@@ -47,6 +47,7 @@ namespace IICA.Models.Entidades.Viaticos
             usuario = new Usuario();
             estatusSolicitud = new EstatusSolicitud();
             justificacion = new Justificacion();
+            etapaSolicitud = new EtapaSolicitud();
         }
     }
 }

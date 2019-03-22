@@ -45,23 +45,6 @@
                     <tbody>
                         @foreach (SolicitudViatico solicitud in Model)
                         {
-                            string labelEstatus;
-                            switch ((IICA.Models.Entidades.EnumEstatusSolicitudViaticos)solicitud.estatusSolicitud.idEstatusSolicitud)
-                            {
-                                case IICA.Models.Entidades.EnumEstatusSolicitudViaticos.SOLICITUD_ENVIADA:
-                                case IICA.Models.Entidades.EnumEstatusSolicitudViaticos.SOLICITUD_APROBADA:
-                                    labelEstatus = "success";
-                                    break;
-                                case IICA.Models.Entidades.EnumEstatusSolicitudViaticos.SOLICITUD_CANCELADA:
-                                    labelEstatus = "important";
-                                    break;
-                                case IICA.Models.Entidades.EnumEstatusSolicitudViaticos.SOLICITUD_GENERADA:
-                                    labelEstatus = "info";
-                                    break;
-                                default:
-                                    labelEstatus = "success";
-                                    break;
-                            }
                             <tr>
                                 <td>@solicitud.idSolitud</td>
                                 <td>@solicitud.proposito</td>
@@ -77,18 +60,18 @@
                                 </td>
                                 <td><span class="muted">@solicitud.duracionViaje</span></td>
                                 <td><span class="muted">@solicitud.resultadosEsperados</span></td>
-                                <td><span class="label label-@labelEstatus">@solicitud.estatusSolicitud.descripcion</span></td>
+                                <td><span class="muted">@solicitud.estatusSolicitud.descripcion</span></td>
                                 <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
                                 <td>
                                     <span data-toggle="modal" data-target="#modal-solViatico">
                                         <button data-toggle="tooltip" title="Ver Solicitud" class="btn btn-info btn-mini"
                                                 onclick="VerDetalleSolViatico(@(new JavaScriptSerializer().Serialize(solicitud)) )">
-                                            <i class="fa fa-check-square-o"></i>
+                                            <i class="fa fa-list"></i>
                                         </button>
                                     </span>
-                                    <span data-toggle="modal" data-target="#modal-completar">
-                                        <button data-toggle="tooltip" title="Completar Solicitud" class="btn btn-info btn-mini">
-                                            <i class="fa fa-check-square-o"></i>
+                                    <span data-toggle="modal" data-target="#modal-completarSol">
+                                        <button data-toggle="tooltip" title="Completar Solicitud" class="btn btn-success btn-mini">
+                                            <i class="fa fa-plus-circle"></i>
                                         </button>
                                     </span>
                                     <span data-toggle="modal" data-target="#modal-cancelar">
@@ -109,50 +92,48 @@
 
 
 
-<div class="modal fade" id="modal-solViatico" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content modal-lg">
-            <div class="modal-body">
-                <div class="row form-row">
-                    <div class="row">
-                        <div class="col-md-12" id="content-solViatico">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-
-<div class="modal fade" id="modal-itinBoleto" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-completarSol" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <br>
-                <i class="fa fa-cloud-upload fa-7x"></i>
-                <h4 id="myModalLabel" class="semi-bold">Boleto del itinerario.</h4>
-                <p class="no-margin">De <span id="bol-ida"></span> A <span id="bol-regreso"></span> </p>
+                <i class="fa fa-question-circle fa-7x"></i>
+                <h4 id="myModalLabel" class="semi-bold">Completar datos de la solicitud.</h4>
+                <p class="no-margin">A continuación se muestran los datos a completar la solicitud para autorizar.</p>
                 <br>
             </div>
             <div class="modal-body">
                 <div class="row form-row">
-                    <div class="row">
-                        <div class="col-md-12" id="content-boleto">
-
-                        </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Fecha inicio:</label>
+                        <input id="modal-env-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha fin:</label>
+                        <input id="modal-env-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-6">
+                        <label class="form-label">Duración del viaje:</label>
+                        <input id="modal-env-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Resultados esperados:</label>
+                        <input id="modal-env-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <label class="form-label">Medio de transporte:</label>
+                        <input id="modal-env-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="EnviarSol()">Enviar solicitud</button>
             </div>
         </div>
 
@@ -172,30 +153,5 @@
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <script src="~/Content/assets/js/datatables.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#tabla-mis-solicitudes').dataTable()
-        });
-
-        function VerDetalleSolViatico(sol) {
-            $.ajax({
-                data: { solicitudViatico_: sol },
-                url: rootUrl("/Viatico/_ResumenSolicitudViatico"),
-                dataType: "html",
-                method: "post",
-                beforeSend: function () {
-                    $("#content-solViatico").html("");
-                    MostrarLoading();
-                },
-                success: function (data) {
-                    OcultarLoading();
-                    $("#content-solViatico").html(data);
-                },
-                error: function (xhr, status, error) {
-                    ControlErrores(xhr, status, error);
-                }
-            });
-        }
-    </script>
-
+    <script src="~/Content/assets/js/Evt/Viativos/evtAutSolicitudes.js"></script>
 }

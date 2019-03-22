@@ -47,7 +47,7 @@
                     </li>
                 </ul>
                 <a href="@Url.Action("Index","Home")">
-                    <img src="~/Content/assets/img/logo_iica.png" class="logo"  width="150" height="60" 
+                    <img src="~/Content/assets/img/logo_iica.png" class="logo" width="150" height="60"
                          style="margin-top: 0px;" />
                 </a>
                 <ul class="nav pull-right notifcation-center">
@@ -69,37 +69,37 @@
                     </ul>
                 </div>
                 @*<div class="pull-right">
-                    <ul class="nav quick-section ">
-                        <li class="quicklinks" data-toggle="tooltip" title="Configuración" data-placement="left">
-                            <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
-                                <i class="material-icons">tune</i>
-                            </a>
-                            <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-                                <li>
-                                    <a href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="quicklinks"> <span class="h-seperate"></span></li>
-                    </ul>
-                </div>*@
+                        <ul class="nav quick-section ">
+                            <li class="quicklinks" data-toggle="tooltip" title="Configuración" data-placement="left">
+                                <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
+                                    <i class="material-icons">tune</i>
+                                </a>
+                                <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                    <li>
+                                        <a href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="quicklinks"> <span class="h-seperate"></span></li>
+                        </ul>
+                    </div>*@
             </div>
         </div>
     </div>
 
     <div class="page-container row-fluid">
         @Html.Action("_MenuLeftViaticos", "Home")
-        
+
         @*<a href="#" class="scrollup">Scroll</a>
-        <div class="footer-widget">
-            <div class="progress transparent progress-small no-radius no-margin">
-                <div class="progress-bar progress-bar-success animate-progress-bar" data-percentage="79%" style="width: 79%;"></div>
-            </div>
-            <div class="pull-right">
-                <div class="details-status"> <span class="animate-number" data-value="86" data-animation-duration="560">86</span>% </div>
-                <a href="lockscreen.html"><i class="material-icons">power_settings_new</i></a>
-            </div>
-        </div>*@
+            <div class="footer-widget">
+                <div class="progress transparent progress-small no-radius no-margin">
+                    <div class="progress-bar progress-bar-success animate-progress-bar" data-percentage="79%" style="width: 79%;"></div>
+                </div>
+                <div class="pull-right">
+                    <div class="details-status"> <span class="animate-number" data-value="86" data-animation-duration="560">86</span>% </div>
+                    <a href="lockscreen.html"><i class="material-icons">power_settings_new</i></a>
+                </div>
+            </div>*@
 
         <div class="page-content">
             <div id="portlet-config" class="modal hide">
@@ -113,6 +113,57 @@
             <div class="content">
                 @RenderBody()
             </div>
+        </div>
+
+    </div>
+
+
+    <div class="modal fade" id="modal-solViatico" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-body">
+                    <div class="row form-row">
+                        <div class="row">
+                            <div class="col-md-12" id="content-solViatico">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="modal-itinBoleto" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br>
+                    <i class="fa fa-cloud-upload fa-7x"></i>
+                    <h4 id="myModalLabel" class="semi-bold">Boleto del itinerario.</h4>
+                    <p class="no-margin">De <span id="bol-ida"></span> A <span id="bol-regreso"></span> </p>
+                    <br>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-row">
+                        <div class="row">
+                            <div class="col-md-12" id="content-boleto">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -180,7 +231,6 @@
             font-weight: 800 !important;
             background-color: rgba(255,255,255,.2) !important;
         }
-
     </style>
 </body>
 </html>
