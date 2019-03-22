@@ -89,6 +89,8 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.proposito = dbManager.DataReader["proposito"] == DBNull.Value ? "" : dbManager.DataReader["proposito"].ToString();
                         solicitudViatico.resultadosEsperados = dbManager.DataReader["resultados_esperados"] == DBNull.Value ? "" : dbManager.DataReader["resultados_esperados"].ToString();
                         solicitudViatico.condicionesEspeciales = dbManager.DataReader["condiciones_especiales"] == DBNull.Value ? "" : dbManager.DataReader["condiciones_especiales"].ToString();
+                        solicitudViatico.etapaSolicitud.idEtapaSolicitud = dbManager.DataReader["Id_etapa_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_etapa_Solicitud"].ToString());
+                        solicitudViatico.etapaSolicitud.descripcion = dbManager.DataReader["desc_etapa"] == DBNull.Value ? "" : dbManager.DataReader["desc_etapa"].ToString();
                         solicitudViatico.estatusSolicitud.idEstatusSolicitud = dbManager.DataReader["Id_eStatus_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_eStatus_Solicitud"].ToString());
                         solicitudViatico.estatusSolicitud.descripcion = dbManager.DataReader["desc_estatus"] == DBNull.Value ? "" : dbManager.DataReader["desc_estatus"].ToString();
                         solicitudViatico.medioTransporte.idMedioTransporte= dbManager.DataReader["Id_medio_transporte"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_medio_transporte"].ToString());
@@ -282,6 +284,33 @@ namespace IICA.Models.DAO.Viaticos
             }
         }
 
+        public Result ActualizarEstatusSolicitud(SolicitudViatico solicitudViatico)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(3);
+                    dbManager.AddParameters(0, "id_etapa_solicitud", solicitudViatico.etapaSolicitud.idEtapaSolicitud);
+                    dbManager.AddParameters(1, "id_estatus_solicitud", solicitudViatico.estatusSolicitud.idEstatusSolicitud);
+                    dbManager.AddParameters(2, "id_solicitud", solicitudViatico.idSolitud);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["error_message"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                        result.objeto = solicitudViatico;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
 
     }
 }

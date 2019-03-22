@@ -20,9 +20,10 @@ function CancelarSol() {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
-
+    solSeleccionada.etapaSolicitud.idEtapaSolicitud = 1;
+    solSeleccionada.estatusSolicitud.idEstatusSolicitud = 3;
     $.ajax({
-        data: { incapacidad_: solSeleccionada },
+        data: { solicitudViatico_: solSeleccionada },
         url: rootUrl("/Viatico/CancelarSolicitud"),
         dataType: "json",
         method: "post",
@@ -70,13 +71,15 @@ function MostrarModalEnvSol(solicitud) {
     $("#modal-env-fechaFin").val(solSeleccionada.fechaFin);
 }
 
-function EnviarSol() {
+function EnviarSolViatico() {
     if (solSeleccionada === null || solSeleccionada === undefined) {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
+    solSeleccionada.etapaSolicitud.idEtapaSolicitud =2;
+    solSeleccionada.estatusSolicitud.idEstatusSolicitud = 1;
     $.ajax({
-        data: { incapacidad_: solSeleccionada },
+        data: { solicitudViatico_: solSeleccionada },
         url: rootUrl("/Viatico/EnviarSolicitud"),
         dataType: "json",
         method: "post",
