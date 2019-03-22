@@ -24,12 +24,22 @@ namespace IICA.Models.Entidades
         SOLICITUD_PENDIENTE_DE_ENVIAR
     }
 
+    public enum EnumEtapaSolicitudViaticos
+    {
+        GENERADA = 1,
+        ENVIADA = 2,
+        COMPLETAR_DATOS = 3,
+        GENERACION_CHEQUE = 4,
+        COMPROBACION_GASTOS = 5,
+        VERIFICACION_GASTOS = 6,
+        FINALIZADA = 7
+    }
+
     public enum EnumEstatusSolicitudViaticos
     {
-        SOLICITUD_GENERADA = 1,
-        SOLICITUD_ENVIADA = 2,
-        SOLICITUD_APROBADA = 3,
-        SOLICITUD_CANCELADA = 4
+        CORRECTA = 1,
+        DEVUELTA = 2,
+        CANCELADA = 3
     }
 
     public enum FormatosIncapacidad

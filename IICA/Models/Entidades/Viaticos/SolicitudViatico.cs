@@ -30,6 +30,7 @@ namespace IICA.Models.Entidades.Viaticos
         public Usuario usuario { get; set; }
         public string emCveEmpleadoAutoriza { get; set; }
         public string Em_Cve_Empleado { get; set; }
+        public EtapaSolicitud etapaSolicitud { get; set; }
         public EstatusSolicitud estatusSolicitud { get; set; }
         public decimal duracionViaje { get; set; }
         public bool pernocta { get; set; }

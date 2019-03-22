@@ -107,6 +107,7 @@ BEGIN
 				Condiciones_Especiales,
 				Path_Archivo_Autorizacion,
 				Id_Tipo_Divisa,
+				Id_etapa_solicitud,
 				Id_Estatus_Solicitud,
 				Em_Cve_Empleado,
 				Em_Cve_Empleado_Autoriza,
@@ -124,7 +125,8 @@ BEGIN
 			Solicitud_Condiciones_Especiales,
 			Solicitud_Path_Archivo_Autorizacion,
 			case when Solicitud_Id_Tipo_Viaje=1 then 1 else 2 end,
-			1,
+			1,--GENERADA
+			1,--CORRECTA
 			Solicitud_Em_Cve_Empleado,
 			Solicitud_Em_Cve_Empleado_Autoriza,
 			Solicitud_Id_Tipo_Viaje,
