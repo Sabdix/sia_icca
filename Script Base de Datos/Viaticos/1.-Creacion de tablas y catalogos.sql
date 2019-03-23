@@ -136,7 +136,7 @@ INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('CORRECTA')
 INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('DEVUELTA')
 INSERT INTO DT_CAT_ESTATUS_SOLICITUD_VIATICO(Descripcion) VALUES('CANCELADA')
 GO
-
+--==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_NIVEL_MANDO]') AND type in (N'U'))
 DROP TABLE [dbo].[DT_CAT_NIVEL_MANDO]
 GO
@@ -214,12 +214,14 @@ Fecha_Fin DATETIME,
 Duracion_Viaje DECIMAL(3,1),
 Pernocta bit,
 Marginal bit,
-Id_Medio_Transporte INT,
 Proposito VARCHAR(300),
 Resultados_Esperados VARCHAR(300),
-Id_Justificacion INT,
 Condiciones_Especiales VARCHAR(300) NULL,
+Monto_Viatico_Autorizado MONEY,
+Monto_Viatico_Comprobado MONEY,
 Path_Archivo_Autorizacion VARCHAR(300) NULL,
+Id_Medio_Transporte INT,
+Id_Justificacion INT,
 Id_Tipo_Divisa INT,
 Id_etapa_solicitud INT,
 Id_estatus_solicitud INT,
