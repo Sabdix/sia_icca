@@ -548,6 +548,7 @@ BEGIN
 		,coalesce(em.Em_Nombre,'')Em_Nombre
 		,coalesce(em.Em_Apellido_Paterno,'')Em_Apellido_Paterno
 		,coalesce(em.Em_Apellido_Materno,'') Em_Apellido_Materno
+		,Monto_Viatico_Autorizado
 	from 
 		DT_TBL_VIATICO_SOLICITUD  vs
 		join DT_CAT_MEDIO_TRANSPORTE mt
@@ -573,7 +574,7 @@ BEGIN
 END
 GO
 
-GRANT EXECUTE ON DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE TO public;  
+GRANT EXECUTE ON DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE TO public
 GO
 
 
