@@ -39,6 +39,8 @@ namespace IICA.Models.Entidades.Viaticos
 
         public double montoAutorizado { get; set; }
         public double montoComprobado { get; set; }
+        public decimal tarifaDeIda { get; set; }
+        public decimal tarifaDeVuelta { get; set; }
         public NivelMando nivelMando { get; set; }
 
         public SolicitudViatico()

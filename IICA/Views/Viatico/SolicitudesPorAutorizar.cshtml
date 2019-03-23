@@ -65,7 +65,7 @@
                                 <td>
                                     <span data-toggle="modal" data-target="#modal-solViatico">
                                         <button data-toggle="tooltip" title="Ver Solicitud" class="btn btn-info btn-mini"
-                                                onclick="VerDetalleSolViatico(@(new JavaScriptSerializer().Serialize(solicitud)) )">
+                                                onclick="VerDetalleSolViatico( @(new JavaScriptSerializer().Serialize(solicitud)) )">
                                             <i class="fa fa-list"></i>
                                         </button>
                                     </span>
@@ -118,26 +118,31 @@
                 </div>
                 <div class="row form-row">
                     <div class="col-md-12">
-                        <label class="form-label">Mando:</label>
-                        <select id="modal-comp-mando" class="select-iica">
-                            <option value="0">SIN PERNOTA</option>
-                            <option value="1">CON PERNOTA</option>
-                        </select>
+                        <label class="form-label">Nivel de mando:</label>
+                        @Html.DropDownList("modalcompmando", (IEnumerable<SelectListItem>)ViewBag.NivelMandos,
+                        new
+                        {
+                            @class = "select-iica",
+                            id = "modal-comp-mando",
+                            style = "width: 100%;",
+                            data_val_required = "Seleccione un nivel de mando.",
+                            data_val = "true"
+                        })
                     </div>
                 </div>
                 <div class="row form-row">
                     <div class="col-md-6">
                         <label class="form-label">Pernota:</label>
                         <select id="modal-comp-pernota" class="select-iica">
-                            <option value="0">SIN PERNOTA</option>
-                            <option value="1">CON PERNOTA</option>
+                            <option value="false">SIN PERNOTA</option>
+                            <option value="true">CON PERNOTA</option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Marginal:</label>
                         <select id="modal-comp-marginal" class="select-iica">
-                            <option value="0">NO ES MARGINAL</option>
-                            <option value="1">ES MARGINAL</option>
+                            <option value="false">NO ES MARGINAL</option>
+                            <option value="true">ES MARGINAL</option>
                         </select>
                     </div>
                 </div>
@@ -156,7 +161,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="OnCompletarDatosSol()">Completar solicitud</button>
+                <button type="button" id="btn-onCompletarDatosSol" class="btn btn-primary" onclick="OnCompletarDatosSol()">Completar solicitud</button>
             </div>
         </div>
 

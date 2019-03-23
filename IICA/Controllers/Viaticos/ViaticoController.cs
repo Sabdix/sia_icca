@@ -160,7 +160,9 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
+                ViewBag.NivelMandos = new NivelMandoDAO().ObtenerNivelMandos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idNivelMando.ToString() });
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+
                 return View(solicitudViaticoDAO.ObtenerSolPorAutorizar(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
@@ -252,11 +254,8 @@ namespace IICA.Controllers.Viaticos
         {
             try
             {
-                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
-                if (result.status)
-                {
-                   return Json(new { },JsonRequestBehavior.AllowGet)
-                }
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerTarifasViaticos(solicitudViatico_);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -272,8 +271,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
-                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                solicitudViatico_.emCveEmpleadoAutoriza = usuarioSesion.emCveEmpleado;
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {

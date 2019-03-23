@@ -432,7 +432,8 @@ create proc DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD
 
 	@id_etapa_solicitud int,
 	@id_estatus_solicitud int,
-	@id_solicitud int
+	@id_solicitud int,
+	@Em_Cve_Empleado varchar(20) = null
 	
 		-- parametros
 		-- [aquí van los parámetros]
@@ -447,7 +448,7 @@ as
 
 				-- declaraciones
 				declare @status int = 1,
-						@error_message varchar(255) = '',
+						@error_message varchar(255) = 'Solicitud actualizada correctamente.',
 						@error_line varchar(255) = '',
 						@error_severity varchar(255) = '',
 						@error_procedure varchar(255) = ''
@@ -472,6 +473,16 @@ as
 			
 			begin -- ámbito de la actualización
 			
+			if @id_etapa_solicitud = 3 and @id_estatus_solicitud = 1--Se autoriza la sol.
+			begin
+				update DT_TBL_VIATICO_SOLICITUD 
+					set Id_etapa_solicitud=@id_etapa_solicitud
+					,Id_estatus_solicitud=@id_estatus_solicitud
+					,Em_Cve_Empleado_Autoriza = @Em_Cve_Empleado
+				where 
+					Id_Solicitud=@id_solicitud
+			end
+			else
 				update DT_TBL_VIATICO_SOLICITUD 
 				set Id_etapa_solicitud=@id_etapa_solicitud
 				,Id_estatus_solicitud=@id_estatus_solicitud
