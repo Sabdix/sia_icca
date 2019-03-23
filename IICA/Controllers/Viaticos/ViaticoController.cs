@@ -231,7 +231,7 @@ namespace IICA.Controllers.Viaticos
             }
         }
         [SessionExpire]
-        public ActionResult SolicitudesPorGenerarCheque()
+        public ActionResult SolicitudesGenerarCheque()
         {
             try
             {
