@@ -38,6 +38,7 @@ namespace IICA.Models.Entidades.Viaticos
         public bool marginal { get; set; }
 
         public string viaticante { get; set; }
+        public NivelMando nivelMando { get; set; }
 
         public SolicitudViatico()
         {
@@ -50,6 +51,7 @@ namespace IICA.Models.Entidades.Viaticos
             estatusSolicitud = new EstatusSolicitud();
             justificacion = new Justificacion();
             etapaSolicitud = new EtapaSolicitud();
+            nivelMando = new NivelMando();
         }
     }
 }
