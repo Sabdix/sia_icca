@@ -65,6 +65,7 @@ namespace IICA.Models.Entidades
         public const string procesoVacacion = "Creación de una solicitud de vacaciones";
         public const string procesoIncapacidad = "Creación de una solicitud de incapacidad";
         public const string procesoSolViatico = "Creación de una solicitud de viaticos";
+        public const string procesoCompDatosSolViatico = "Autorización de solicitud";
 
         public const string especificacionPermiso = "Se finaliza la solicitud de un pemiso";
         public const string especificacionVacacion = "Se finaliza la solicitud de las vacaciones";

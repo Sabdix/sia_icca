@@ -90,6 +90,8 @@ namespace IICA.Controllers.Viaticos
         {
             try
             {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
                 return PartialView(solicitudViatico_);
             }
             catch (Exception ex)
@@ -245,6 +247,70 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [HttpPost, SessionExpire]
+        public ActionResult ObtenerImportesCompletarDatosSol(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                if (result.status)
+                {
+                    try { Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CompletarDatosSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                if (result.status)
+                {
+                    try { Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CancelarDatosSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                //if (result.status)
+                //{
+                //    try { Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto); }
+                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                //}
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
 
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
