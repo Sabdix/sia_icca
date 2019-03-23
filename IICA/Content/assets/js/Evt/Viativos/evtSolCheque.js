@@ -83,7 +83,7 @@ function OnSuccesGenerarCheque(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        //ImprimirFormatoI4(data.id);
+        ImprimirFormatoI4(data.idSolitud);
         setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
