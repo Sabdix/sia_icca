@@ -127,7 +127,6 @@ $(document).ready(function () {
     $("#btn-guardar-solViatico").click(function (e) {
         if (ValidarDatosSol()) {
             if (ValidarItinerarios()) {
-                oficioAutDropzone
                 if (oficioAutDropzone.files.length == 0) {
                     swal("Notificación", "Por favor anexe el archivo del oficio de autorización", "error");
                 } else {

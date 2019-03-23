@@ -159,10 +159,12 @@
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\GastoComprobacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\GastoExtraDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\NivelMandoDAO.cs" />
+    <Compile Include="Models\Entidades\Viaticos\GastoComprobacion.cs" />
     <Compile Include="Models\Entidades\Viaticos\NivelMando.cs" />
     <Compile Include="Models\DAO\Viaticos\SolicitudViaticoDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\TipoDivisaDAO.cs" />
@@ -254,6 +256,7 @@
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtMisComproSol.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolViaticos.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtNuevaSolViatico.js" />
@@ -549,6 +552,7 @@
     <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_5cf452019_21_03_12_21.pdf" />
     <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_f88062019_22_03_12_22.pdf" />
     <Content Include="Views\Viatico\_ImprimirFormatoI4.cshtml" />
+    <Content Include="Views\Viatico\MisSolicitudesPorComprobar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -2,12 +2,13 @@
 using IICA.Models.Entidades;
 using IICA.Models.Entidades.Viaticos;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace IICA.Controllers.Viaticos
 {
@@ -345,6 +346,38 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [SessionExpire]
+        public ActionResult MisSolicitudesPorComprobar()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                ViewBag.GastosComprobacion = new GastoComprobacionDAO().ObtenerGastosComprobacion().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idGastoComprobacion.ToString() });
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+
+                return View(solicitudViaticoDAO.ObtenerSolPorComprobar(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ActionResult ValidarFacturaComprobacion(int id)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerDetalleSol(id);
+                if (result.status)
+                    ObtenerDatosFactura(Request, "Factura",(SolicitudViatico) result.objeto);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
@@ -380,7 +413,93 @@ namespace IICA.Controllers.Viaticos
             }
             return string.Empty;
         }
-       
+
+        private string ObtenerDatosFactura(HttpRequestBase httpRequestBase, string formato, SolicitudViatico solicitudViatico)
+        {
+            try
+            {
+                string idAleatorio = Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
+                if (httpRequestBase.Files.Count > 0)
+                {
+                    for (int i = 0; i < httpRequestBase.Files.Count; i++)
+                    {
+                        var file = httpRequestBase.Files[i];
+                        if (file != null && file.ContentLength > 0)
+                        {
+
+                            if (file.ContentType == "text/xml")
+                            {
+                                BinaryReader b = new BinaryReader(file.InputStream);
+                                byte[] binData = b.ReadBytes(file.ContentLength);
+
+                                string result = Encoding.UTF8.GetString(binData);
+
+                                
+                                Result subtotal = ObtenerDatosXml(result, new GastoComprobacion());
+                            }
+                            //string pathViaticosFormatos = WebConfigurationManager.AppSettings["pathViaticosFormatos"].ToString();
+                            ////string pathGeneral = pathFormatosIncapacidades + @"\" + usuario + @"\";
+                            //string pathGeneral = Server.MapPath("~" + pathViaticosFormatos + "/" + usuario + "/");
+                            //if (!System.IO.Directory.Exists(pathGeneral))
+                            //    System.IO.Directory.CreateDirectory(pathGeneral);
+
+                            //string nombre = Path.GetFileName(formato + "_" + idAleatorio + "" + Path.GetExtension(file.FileName));
+                            //string pathFormato = Path.Combine(pathGeneral, nombre);
+
+                            //file.SaveAs(pathFormato);
+                            //return pathViaticosFormatos + "/" + usuario + "/" + nombre;
+                            //return string.Empty;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return string.Empty;
+        }
+
+        private Result ObtenerDatosXml(string xmlString,GastoComprobacion gastoComprobacion)
+        {
+            Result result = new Result();
+            try
+            {
+                //eliminamos el caracter BOM ya que este caracter no permite tener una correcta lectura del xml
+                string _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+                if (xmlString.StartsWith(_byteOrderMarkUtf8))
+                {
+                    xmlString = xmlString.Remove(0, _byteOrderMarkUtf8.Length);
+                }
+
+                XmlDocument xml = new XmlDocument();
+                xml.LoadXml(xmlString);
+                XmlElement xmlElement = xml.DocumentElement;
+                if (xmlElement.LocalName == "Comprobante")
+                {
+                    foreach (XmlAttribute xn in xmlElement.Attributes)
+                    {
+                        if(xn.LocalName== "subTotal")
+                        {
+                            gastoComprobacion.
+                        }
+                        string firstName = xn["subTotal"].InnerText;
+                        string lastName = xn["total"].InnerText;
+                        Console.WriteLine("Name: {0} {1}", firstName, lastName);
+                    }
+                }
+                else
+                {
+                    result.mensaje = "Los datos de la factura son incorrectos, intente de nuevo.";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
         #endregion Funciones - Generales
     }
 }
