@@ -40,6 +40,7 @@ namespace IICA.Models.Entidades.Viaticos
         public double montoAutorizado { get; set; }
         public double montoComprobado { get; set; }
         public NivelMando nivelMando { get; set; }
+        public DateTime  fechaCheque { get; set; }
 
         public SolicitudViatico()
         {

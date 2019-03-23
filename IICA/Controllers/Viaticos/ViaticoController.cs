@@ -315,19 +315,32 @@ namespace IICA.Controllers.Viaticos
         [HttpPost, SessionExpire]
         public ActionResult GenerarCheque(SolicitudViatico solicitudViatico_)
         {
+            Result result = new Result();
             try
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
-                //if (result.status)
-                //{
-                //    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
-                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
-                //}
+                Result resulta = solicitudViaticoDAO.ActualizarFechaCheque(solicitudViatico_);
+                if (resulta.status)
+                    result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult _ImprimirFormatoI4(int id)
+        {
+            Result result = new Result();
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                return PartialView(solicitudViaticoDAO.ObtenerDetalleSol(id));
             }
             catch (Exception ex)
             {

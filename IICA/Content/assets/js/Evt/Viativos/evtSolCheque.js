@@ -1,7 +1,15 @@
 ﻿
 var solSeleccionada;
 $(document).ready(function () {
-        $('#tabla-mis-solicitudes').dataTable()
+    $('#tabla-mis-solicitudes').dataTable()
+    $("#modal-fecha_cheque").datepicker({
+        startView: 1,
+        format: 'yyyy/mm/dd',
+        startDate: "today",
+        autoclose: true,
+        todayHighlight: true
+    })
+    $("#modal-fecha_cheque").datepicker('setDate', moment().toDate());
     });
 
 function VerDetalleSolViatico(sol) {
@@ -52,6 +60,7 @@ function GenerarChequeSolViatico() {
     }
     solSeleccionada.etapaSolicitud.idEtapaSolicitud = 4;
     solSeleccionada.estatusSolicitud.idEstatusSolicitud = 1;
+    solSeleccionada.fechaCheque = $("#modal-fecha_cheque").val();
     $.ajax({
         data: { solicitudViatico_: solSeleccionada },
         url: rootUrl("/Viatico/GenerarCheque"),
@@ -74,8 +83,32 @@ function OnSuccesGenerarCheque(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
+        //ImprimirFormatoI4(data.id);
         setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
+}
+function ImprimirFormatoI4(id) {
+    $.ajax({
+        data: { id: id },
+        url: rootUrl("/Viatico/_ImprimirFormatoI4"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+
 }

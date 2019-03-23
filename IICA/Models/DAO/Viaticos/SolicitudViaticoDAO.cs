@@ -101,6 +101,9 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.tipoDivisa.descripcion = dbManager.DataReader["tipo_divisa"] == DBNull.Value ? "" : dbManager.DataReader["tipo_divisa"].ToString();
                         solicitudViatico.tipoViaje.idTipoViaje = dbManager.DataReader["Id_tipo_viaje"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_tipo_viaje"].ToString());
                         solicitudViatico.tipoViaje.descripcion = dbManager.DataReader["tipo_viaje"] == DBNull.Value ? "" : dbManager.DataReader["tipo_viaje"].ToString();
+                        solicitudViatico.usuario.nombre = dbManager.DataReader["Em_Nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_Nombre"].ToString();
+                        solicitudViatico.usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
+                        solicitudViatico.usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
                         solicitudViatico.Em_Cve_Empleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         solicitudViatico.emCveEmpleadoAutoriza = dbManager.DataReader["Em_Cve_Empleado_autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_autoriza"].ToString();
                         solicitudViatico.pernocta = dbManager.DataReader["pernocta"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["pernocta"].ToString());
@@ -350,6 +353,8 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.proposito = dbManager.DataReader["proposito"] == DBNull.Value ? "" : dbManager.DataReader["proposito"].ToString();
                         solicitudViatico.resultadosEsperados = dbManager.DataReader["resultados_esperados"] == DBNull.Value ? "" : dbManager.DataReader["resultados_esperados"].ToString();
                         solicitudViatico.condicionesEspeciales = dbManager.DataReader["condiciones_especiales"] == DBNull.Value ? "" : dbManager.DataReader["condiciones_especiales"].ToString();
+                        solicitudViatico.etapaSolicitud.idEtapaSolicitud = dbManager.DataReader["Id_etapa_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_etapa_Solicitud"].ToString());
+                        solicitudViatico.etapaSolicitud.descripcion = dbManager.DataReader["desc_etapa"] == DBNull.Value ? "" : dbManager.DataReader["desc_etapa"].ToString();
                         solicitudViatico.estatusSolicitud.idEstatusSolicitud = dbManager.DataReader["Id_eStatus_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_eStatus_Solicitud"].ToString());
                         solicitudViatico.estatusSolicitud.descripcion = dbManager.DataReader["desc_estatus"] == DBNull.Value ? "" : dbManager.DataReader["desc_estatus"].ToString();
                         solicitudViatico.medioTransporte.idMedioTransporte = dbManager.DataReader["Id_medio_transporte"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_medio_transporte"].ToString());
@@ -378,6 +383,33 @@ namespace IICA.Models.DAO.Viaticos
                 throw ex;
             }
             return solicitudes;
+        }
+
+        public Result ActualizarFechaCheque(SolicitudViatico solicitudViatico)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(2);
+                    dbManager.AddParameters(0, "Id_Solicitud ", solicitudViatico.idSolitud);
+                    dbManager.AddParameters(1, "Fecha_Cheque ", solicitudViatico.fechaCheque);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["mensaje"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                        result.objeto = solicitudViatico;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
 
     }

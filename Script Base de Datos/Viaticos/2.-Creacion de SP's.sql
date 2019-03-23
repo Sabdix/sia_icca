@@ -388,6 +388,9 @@ as
 					,es.Id_estatus_solicitud
 					,es.Descripcion desc_estatus
 					,tv.Descripcion tipo_viaje
+					,coalesce(emp.Em_Nombre,'')Em_Nombre
+					,coalesce(emp.Em_Apellido_Paterno,'')Em_Apellido_Paterno
+					,coalesce(emp.Em_Apellido_Materno,'') Em_Apellido_Materno
 				from 
 					DT_TBL_VIATICO_SOLICITUD  vs
 					join DT_CAT_MEDIO_TRANSPORTE mt
@@ -402,8 +405,10 @@ as
 					on vs.Id_Estatus_Solicitud=es.Id_estatus_solicitud
 					join DT_CAT_TIPO_VIAJE tv
 					on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
+					join Empleado emp
+					on vs.Em_Cve_Empleado=emp.Em_Cve_Empleado
 				where 
-					Em_Cve_Empleado=@Em_Cve_Empleado 
+					vs.Em_Cve_Empleado=@Em_Cve_Empleado 
 					and vs.Id_etapa_solicitud = 1
 					and vs.Id_estatus_solicitud <> 3
 			
