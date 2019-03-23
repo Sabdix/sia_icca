@@ -101,6 +101,25 @@ INSERT INTO DT_CAT_GASTO_EXTRA(Descripcion) VALUES('PEAJE / GASOLINA')
 INSERT INTO DT_CAT_GASTO_EXTRA(Descripcion) VALUES('AUTOBÚS')
 GO
 --==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_GASTO_COMPROBACION]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_GASTO_COMPROBACION]
+GO
+
+CREATE TABLE DT_CAT_GASTO_COMPROBACION (
+Id_Gasto_Comprobacion INT IDENTITY(1,1),
+Descripcion VARCHAR(100)
+)
+GO
+
+TRUNCATE TABLE DT_CAT_GASTO_COMPROBACION
+
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('HOTEL')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('TRANSPORTE')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('ALIMENTOS')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('GASOLINA')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('PEAJE')
+GO
+--==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_ETAPAS_SOLICITUD_VIATICO]') AND type in (N'U'))
 DROP TABLE [dbo].[DT_CAT_ETAPAS_SOLICITUD_VIATICO]
 GO
@@ -265,5 +284,36 @@ Contador INT IDENTITY(1,1),
 Descripcion VARCHAR(100),
 Monto MONEY,
 Id_Solicitud INT
+)
+GO
+
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD]
+GO
+
+CREATE TABLE DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD (
+Contador INT IDENTITY(1,1),
+Descripcion VARCHAR(100),
+Monto MONEY,
+Id_Solicitud INT
+)
+GO
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VIATICO_COMPROBACION_GASTOS]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_TBL_VIATICO_COMPROBACION_GASTOS]
+GO
+
+CREATE TABLE DT_TBL_VIATICO_COMPROBACION_GASTOS (
+Contador INT IDENTITY(1,1),
+Id_Solicitud INT,
+Comentario VARCHAR(500),
+Path_Archivo_XML VARCHAR(500),
+Path_Archivo_PDF VARCHAR(500),
+Id_Gasto_Comprobacion INT,
+Emisor VARCHAR(500),
+Subtotal MONEY,
+Total MONEY,
+Lugar VARCHAR(500)
 )
 GO

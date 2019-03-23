@@ -1,7 +1,7 @@
 USE IICA_1
 GO
 
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_TIPO_VIAJE')
 BEGIN
 	DROP PROCEDURE DT_SP_OBTENER_TIPO_VIAJE
@@ -44,7 +44,7 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_TIPO_VIAJE TO public;  
 GO
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_TIPO_MEDIO_TRANSPORTE')
 BEGIN
 	DROP PROCEDURE DT_SP_OBTENER_TIPO_MEDIO_TRANSPORTE
@@ -88,7 +88,7 @@ GO
 GRANT EXECUTE ON DT_SP_OBTENER_TIPO_MEDIO_TRANSPORTE TO public;  
 GO
 
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_JUSTIFICACION')
 BEGIN
 	DROP PROCEDURE DT_SP_OBTENER_JUSTIFICACION
@@ -131,7 +131,7 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_JUSTIFICACION TO public;  
 GO
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_TIPO_SALIDA')
 BEGIN
 	DROP PROCEDURE DT_SP_OBTENER_TIPO_SALIDA
@@ -174,7 +174,7 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_TIPO_SALIDA TO public;  
 GO
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_TIPO_DIVISA')
 BEGIN
 	DROP PROCEDURE DT_SP_OBTENER_TIPO_DIVISA
@@ -218,7 +218,7 @@ GO
 GRANT EXECUTE ON DT_SP_OBTENER_TIPO_DIVISA TO public;  
 GO
 
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_GASTO_EXTRA')
 BEGIN
 	DROP PROCEDURE DT_SP_OBTENER_GASTO_EXTRA
@@ -261,7 +261,93 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_GASTO_EXTRA TO public;  
 GO
+--==========================================================================================================================
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_NIVEL_MANDO')
+BEGIN
+	DROP PROCEDURE DT_SP_OBTENER_NIVEL_MANDO
+END
+GO
 
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Christian Peña Romero>
+
+-- Description:	<OBTIENE CATALOGO DE>
+-- =============================================
+CREATE PROCEDURE DT_SP_OBTENER_NIVEL_MANDO
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT *
+	FROM DT_CAT_NIVEL_MANDO
+END
+GO
+
+GRANT EXECUTE ON DT_SP_OBTENER_NIVEL_MANDO TO public;  
+GO
+--==========================================================================================================================
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_GASTO_COMPROBACION')
+BEGIN
+	DROP PROCEDURE DT_SP_OBTENER_GASTO_COMPROBACION
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Christian Peña Romero>
+
+-- Description:	<OBTIENE CATALOGO DE>
+-- =============================================
+CREATE PROCEDURE DT_SP_OBTENER_GASTO_COMPROBACION
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT *
+	FROM DT_CAT_GASTO_COMPROBACION
+END
+GO
+
+GRANT EXECUTE ON DT_SP_OBTENER_GASTO_COMPROBACION TO public;  
+GO
+--==========================================================================================================================
 -- se crea procedimiento DT_SP_VERIFICAR_ORIGINACION_SOLICITUD
 if exists (select * from sysobjects where name like 'DT_SP_VERIFICAR_ORIGINACION_SOLICITUD' and xtype = 'p')
 	drop proc DT_SP_VERIFICAR_ORIGINACION_SOLICITUD
@@ -354,7 +440,7 @@ go
 
 grant exec on DT_SP_VERIFICAR_ORIGINACION_SOLICITUD to public
 go
-
+--==========================================================================================================================
 -- se crea procedimiento DT_SP_CONSULTAR_SOLICITUDES_USUARIO
 if exists (select * from sysobjects where name like 'DT_SP_CONSULTAR_SOLICITUDES_USUARIO' and xtype = 'p')
 	drop proc DT_SP_CONSULTAR_SOLICITUDES_USUARIO
@@ -413,7 +499,7 @@ go
 
 grant exec on DT_SP_CONSULTAR_SOLICITUDES_USUARIO to public
 go
-
+--==========================================================================================================================
 -- se crea procedimiento DT_SP_CONSULTAR_SOLICITUDES_USUARIO
 if exists (select * from sysobjects where name like 'DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD' and xtype = 'p')
 	drop proc DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD
@@ -515,7 +601,7 @@ go
 
 grant exec on DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD to public
 go
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE')
 BEGIN
 	DROP PROCEDURE DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE
@@ -583,9 +669,7 @@ GO
 GRANT EXECUTE ON DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE TO public;  
 GO
 
-
-
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_TARIFAS_VIATICO')
 BEGIN
 	DROP PROCEDURE DT_SP_OBTENER_TARIFAS_VIATICO
@@ -632,7 +716,7 @@ BEGIN
 		@Id_Tipo_Divisa INT,
 		@Duracion_Viaje DECIMAL(5,2),
 		@Monto_Viatico_Autorizado MONEY,
-		@Tarifa_Viatico DECIMAL(5,2)
+		@Tarifa_Viatico MONEY
 
 
 	SELECT 
@@ -682,8 +766,7 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_TARIFAS_VIATICO TO public;  
 GO
-
-
+--==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO')
 BEGIN
 	DROP PROCEDURE DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO
@@ -749,4 +832,99 @@ END
 GO
 
 GRANT EXECUTE ON DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO TO public;  
+GO
+
+--==========================================================================================================================
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_INSERTA_COMPROBACION_GASTO')
+BEGIN
+	DROP PROCEDURE DT_SP_INSERTA_COMPROBACION_GASTO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_INSERTA_COMPROBACION_GASTO
+	-- Add the parameters for the stored procedure here
+	@Comentario VARCHAR(500),
+	@Path_Archivo_XML VARCHAR(500),
+	@Path_Archivo_PDF VARCHAR(500),
+	@Id_Gasto_Comprobacion INT,
+	@Emisor VARCHAR(500),
+	@Subtotal MONEY,
+	@Total MONEY,
+	@Lugar VARCHAR(500)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE
+		@status INT=1,
+		@mensaje VARCHAR(100)='GUARDADO DE MANERA CORRECTA'
+
+
+	INSERT
+		INTO DT_TBL_VIATICO_COMPROBACION_GASTOS
+			(
+				Id_Solicitud,
+				Comentario,
+				Path_Archivo_XML,
+				Path_Archivo_PDF,
+				Id_Gasto_Comprobacion,
+				Emisor,
+				Subtotal,
+				Total,
+				Lugar
+			)
+		VALUES 
+			(
+				@Comentario,
+				@Path_Archivo_XML,
+				@Path_Archivo_PDF,
+				@Id_Gasto_Comprobacion,
+				@Emisor,
+				@Subtotal,
+				@Total,
+				@Lugar
+			)
+		IF @@ERROR<>0
+		BEGIN
+			SET @mensaje='ERROR AL GUARDAR LA COMPROBACION DEL GASTO.'
+			GOTO ERROR_1
+		END
+
+
+	GOTO EXIT_
+
+	ERROR_1:
+		SET @status=0
+		GOTO EXIT_
+	EXIT_:
+		SELECT @status STATUS, @mensaje MENSAJE
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_INSERTA_COMPROBACION_GASTO TO public;  
 GO
