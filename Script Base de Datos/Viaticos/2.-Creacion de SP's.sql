@@ -474,6 +474,9 @@ as
 					,es.Id_estatus_solicitud
 					,es.Descripcion desc_estatus
 					,tv.Descripcion tipo_viaje
+					,coalesce(emp.Em_Nombre,'')Em_Nombre
+					,coalesce(emp.Em_Apellido_Paterno,'')Em_Apellido_Paterno
+					,coalesce(emp.Em_Apellido_Materno,'') Em_Apellido_Materno
 				from 
 					DT_TBL_VIATICO_SOLICITUD  vs
 					join DT_CAT_MEDIO_TRANSPORTE mt
@@ -488,8 +491,10 @@ as
 					on vs.Id_Estatus_Solicitud=es.Id_estatus_solicitud
 					join DT_CAT_TIPO_VIAJE tv
 					on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
+					join Empleado emp
+					on vs.Em_Cve_Empleado=emp.Em_Cve_Empleado
 				where 
-					Em_Cve_Empleado=@Em_Cve_Empleado 
+					vs.Em_Cve_Empleado=@Em_Cve_Empleado 
 					and vs.Id_etapa_solicitud = 1
 					and vs.Id_estatus_solicitud <> 3
 			
@@ -518,7 +523,8 @@ create proc DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD
 
 	@id_etapa_solicitud int,
 	@id_estatus_solicitud int,
-	@id_solicitud int
+	@id_solicitud int,
+	@Em_Cve_Empleado varchar(20) = null
 	
 		-- parametros
 		-- [aquí van los parámetros]
@@ -533,7 +539,7 @@ as
 
 				-- declaraciones
 				declare @status int = 1,
-						@error_message varchar(255) = '',
+						@error_message varchar(255) = 'Solicitud actualizada correctamente.',
 						@error_line varchar(255) = '',
 						@error_severity varchar(255) = '',
 						@error_procedure varchar(255) = ''
@@ -558,6 +564,16 @@ as
 			
 			begin -- ámbito de la actualización
 			
+			if @id_etapa_solicitud = 3 and @id_estatus_solicitud = 1--Se autoriza la sol.
+			begin
+				update DT_TBL_VIATICO_SOLICITUD 
+					set Id_etapa_solicitud=@id_etapa_solicitud
+					,Id_estatus_solicitud=@id_estatus_solicitud
+					,Em_Cve_Empleado_Autoriza = @Em_Cve_Empleado
+				where 
+					Id_Solicitud=@id_solicitud
+			end
+			else
 				update DT_TBL_VIATICO_SOLICITUD 
 				set Id_etapa_solicitud=@id_etapa_solicitud
 				,Id_estatus_solicitud=@id_estatus_solicitud
@@ -618,18 +634,10 @@ GO
 --Objetivo		OBTIENE LA LISTA DE LAS SOLICITUDES PARA CREAR CHEQUE
 -- =============================================
 CREATE PROCEDURE DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE
-	@Em_Cve_Empleado varchar(20)
 AS
 BEGIN
-	
-	DECLARE 
-		@aut_proyecto varchar(10)
 
-	SELECT @aut_proyecto =aut_proyecto FROM IICA_COMPRAS..Viaticos_Autorizadores
-	WHERE
-		Em_UserDef_1= @Em_Cve_Empleado
-
-	select Sc_UserDef_2,
+	select 
 	vs.*
 		,mt.Descripcion medio_transporte
 		,j.Descripcion justificacion
@@ -639,7 +647,10 @@ BEGIN
 		,es.Id_estatus_solicitud
 		,es.Descripcion desc_estatus
 		,tv.Descripcion tipo_viaje
-		,coalesce(em.Em_Nombre,'') +' '+coalesce(em.Em_Apellido_Paterno,'') + ' '+coalesce(em.Em_Apellido_Materno,'') viaticante
+		,coalesce(em.Em_Nombre,'')Em_Nombre
+		,coalesce(em.Em_Apellido_Paterno,'')Em_Apellido_Paterno
+		,coalesce(em.Em_Apellido_Materno,'') Em_Apellido_Materno
+		,Monto_Viatico_Autorizado
 	from 
 		DT_TBL_VIATICO_SOLICITUD  vs
 		join DT_CAT_MEDIO_TRANSPORTE mt
@@ -656,17 +667,16 @@ BEGIN
 		on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
 		join Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
 		join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
-		join IICA_COMPRAS..Empleado emp
+		join Empleado emp
 		on vs.Em_Cve_Empleado=emp.Em_Cve_Empleado
 	where 
-		s.Sc_UserDef_2 = @aut_proyecto 
-		and vs.Id_etapa_solicitud = 3
+		vs.Id_etapa_solicitud = 3
 		and vs.Id_estatus_solicitud <> 3
 
 END
 GO
 
-GRANT EXECUTE ON DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE TO public;  
+GRANT EXECUTE ON DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE TO public
 GO
 
 --==========================================================================================================================

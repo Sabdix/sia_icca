@@ -90,6 +90,8 @@ namespace IICA.Controllers.Viaticos
         {
             try
             {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
                 return PartialView(solicitudViatico_);
             }
             catch (Exception ex)
@@ -158,7 +160,9 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
+                ViewBag.NivelMandos = new NivelMandoDAO().ObtenerNivelMandos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idNivelMando.ToString() });
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+
                 return View(solicitudViaticoDAO.ObtenerSolPorAutorizar(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
@@ -237,11 +241,107 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                return View(solicitudViaticoDAO.ObtenerSolPorGenerarCheque(usuarioSesion.emCveEmpleado));
+                return View(solicitudViaticoDAO.ObtenerSolPorGenerarCheque());
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult ObtenerTarifasViaticos(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerTarifasViaticos(solicitudViatico_);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CompletarDatosSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.emCveEmpleadoAutoriza = usuarioSesion.emCveEmpleado;
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                if (result.status)
+                {
+                    try { Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult CancelarDatosSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                //if (result.status)
+                //{
+                //    try { Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto); }
+                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                //}
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult GenerarCheque(SolicitudViatico solicitudViatico_)
+        {
+            Result result = new Result();
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                Result resulta = solicitudViaticoDAO.ActualizarFechaCheque(solicitudViatico_);
+                if (resulta.status)
+                    result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult _ImprimirFormatoI4(int id)
+        {
+            Result result = new Result();
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                return PartialView(solicitudViaticoDAO.ObtenerDetalleSol(id));
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
             }
         }
 

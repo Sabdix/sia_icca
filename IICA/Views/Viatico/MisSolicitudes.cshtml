@@ -36,7 +36,6 @@
                             <th style="width:8%;text-align: center;">Fecha inicio</th>
                             <th style="width:8%;text-align: center;">Fecha fin</th>
                             <th style="width:5%;text-align: center;">Duración viaje</th>
-                            <th style="width:10%;text-align: center;">Resultados esperados</th>
                             <th style="width:10%;text-align: center;">Estatus</th>
                             <th style="width:10%;text-align: center;">Medio transporte</th>
                             <th style="width:10%;text-align: center;">Acciones</th>
@@ -45,24 +44,6 @@
                     <tbody>
                         @foreach (SolicitudViatico solicitud in Model)
                         {
-                            string labelEstatus;
-                            switch ((IICA.Models.Entidades.EnumEtapaSolicitudViaticos)solicitud.etapaSolicitud.idEtapaSolicitud)
-                            {
-                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.GENERADA:
-                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.ENVIADA:
-                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.GENERACION_CHEQUE:
-                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.COMPLETAR_DATOS:
-                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.COMPROBACION_GASTOS:
-                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.VERIFICACION_GASTOS:
-                                    labelEstatus = "success";
-                                    break;
-                                case IICA.Models.Entidades.EnumEtapaSolicitudViaticos.FINALIZADA:
-                                    labelEstatus = "important";
-                                    break;
-                                default:
-                                    labelEstatus = "success";
-                                    break;
-                            }
                             <tr>
                                 <td>@solicitud.idSolitud</td>
                                 <td>@solicitud.proposito</td>
@@ -77,10 +58,15 @@
                                     </span>
                                 </td>
                                 <td><span class="muted">@solicitud.duracionViaje</span></td>
-                                <td><span class="muted">@solicitud.resultadosEsperados</span></td>
-                                <td><span class="label label-@labelEstatus">@solicitud.etapaSolicitud.descripcion</span></td>
+                                <td><span class="muted">@solicitud.etapaSolicitud.descripcion</span></td>
                                 <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
                                 <td>
+                                    <span data-toggle="modal" data-target="#modal-solViatico">
+                                        <button data-toggle="tooltip" title="Ver Solicitud" class="btn btn-info btn-mini"
+                                                onclick="VerDetalleSolViatico(@(new JavaScriptSerializer().Serialize(solicitud)) )">
+                                            <i class="fa fa-list"></i>
+                                        </button>
+                                    </span>
                                     <span data-toggle="modal" data-target="#modal-enviar">
                                         <button data-toggle="tooltip" title="Enviar solicitud" class="btn btn-success btn-mini" onclick="MostrarModalEnvSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                             <i class="fa fa-check-square-o"></i>
@@ -89,11 +75,6 @@
                                     <span data-toggle="modal" data-target="#modal-cancelar">
                                         <button data-toggle="tooltip" title="Cancelar solicitud" class="btn btn-warning btn-mini" onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                             <i class="fa fa-close"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-detalle">
-                                        <button data-toggle="tooltip" title="Detalle solicitud" class="btn btn-info btn-mini">
-                                            <i class="fa fa-list"></i>
                                         </button>
                                     </span>
                                 </td>
@@ -120,6 +101,14 @@
             </div>
             <div class="modal-body">
                 <div class="row form-row">
+                    <div class="col-md-8">
+                        <label class="form-label">No. de solicitud:</label>
+                        <input id="modal-can-solicitud" type="text" class="form-control" placeholder="No. de solicitud" readonly>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Viaticante:</label>
+                        <input id="modal-can-viaticante" type="text" class="form-control" placeholder="Viaticante" readonly>
+                    </div>
                     <div class="col-md-8">
                         <label class="form-label">Fecha inicio:</label>
                         <input id="modal-can-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
@@ -169,6 +158,14 @@
             </div>
             <div class="modal-body">
                 <div class="row form-row">
+                    <div class="col-md-8">
+                        <label class="form-label">No. de solicitud:</label>
+                        <input id="modal-env-solicitud" type="text" class="form-control" placeholder="No. de solicitud" readonly>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Viaticante:</label>
+                        <input id="modal-env-viaticante" type="text" class="form-control" placeholder="Viaticante" readonly>
+                    </div>
                     <div class="col-md-8">
                         <label class="form-label">Fecha inicio:</label>
                         <input id="modal-env-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>

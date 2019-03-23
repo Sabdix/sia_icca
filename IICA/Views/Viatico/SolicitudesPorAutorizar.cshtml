@@ -28,7 +28,7 @@
                 <h4>Lista <span class="semi-bold">de solicitudes</span></h4>
             </div>
             <div class="grid-body ">
-                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-mis-solicitudes">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-aut-solicitudes">
                     <thead>
                         <tr>
                             <th style="width:2%;text-align: center;">No.</th>
@@ -65,17 +65,19 @@
                                 <td>
                                     <span data-toggle="modal" data-target="#modal-solViatico">
                                         <button data-toggle="tooltip" title="Ver Solicitud" class="btn btn-info btn-mini"
-                                                onclick="VerDetalleSolViatico(@(new JavaScriptSerializer().Serialize(solicitud)) )">
+                                                onclick="VerDetalleSolViatico( @(new JavaScriptSerializer().Serialize(solicitud)) )">
                                             <i class="fa fa-list"></i>
                                         </button>
                                     </span>
                                     <span data-toggle="modal" data-target="#modal-completarSol">
-                                        <button data-toggle="tooltip" title="Completar Solicitud" class="btn btn-success btn-mini">
+                                        <button data-toggle="tooltip" title="Completar Solicitud" class="btn btn-success btn-mini"
+                                                onclick="MostrarCompletarDatosSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                             <i class="fa fa-plus-circle"></i>
                                         </button>
                                     </span>
                                     <span data-toggle="modal" data-target="#modal-cancelar">
-                                        <button data-toggle="tooltip" title="Cancelar solicitud" class="btn btn-warning btn-mini">
+                                        <button data-toggle="tooltip" title="Cancelar solicitud" class="btn btn-warning btn-mini"
+                                                onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                             <i class="fa fa-close"></i>
                                         </button>
                                     </span>
@@ -105,35 +107,120 @@
             </div>
             <div class="modal-body">
                 <div class="row form-row">
-                    <div class="col-md-8">
-                        <label class="form-label">Fecha inicio:</label>
-                        <input id="modal-env-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
+                    <div class="col-md-6">
+                        <label class="form-label">No. de solicitud:</label>
+                        <input id="modal-comp-idSol" type="text" class="form-control" placeholder="" readonly>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Viaticante:</label>
+                        <input id="modal-comp-viaticante" type="text" class="form-control" placeholder="" readonly>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <label class="form-label">Nivel de mando:</label>
+                        @Html.DropDownList("modalcompmando", (IEnumerable<SelectListItem>)ViewBag.NivelMandos,
+                        new
+                        {
+                            @class = "select-iica",
+                            id = "modal-comp-mando",
+                            style = "width: 100%;",
+                            data_val_required = "Seleccione un nivel de mando.",
+                            data_val = "true"
+                        })
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-6">
+                        <label class="form-label">Pernota:</label>
+                        <select id="modal-comp-pernota" class="select-iica">
+                            <option value="false">SIN PERNOTA</option>
+                            <option value="true">CON PERNOTA</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Marginal:</label>
+                        <select id="modal-comp-marginal" class="select-iica">
+                            <option value="false">NO ES MARGINAL</option>
+                            <option value="true">ES MARGINAL</option>
+                        </select>
+                    </div>
+                </div>
+                <br /><br />
+                <div class="row form-row">
+                    <div class="col-md-6">
+                        <label class="form-label">Importe de ida:</label>
+                        <input id="modal-comp-importeIDa" type="text" class="form-control" placeholder="Importe del viaje de ida" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Importe de regreso:</label>
+                        <input id="modal-comp-importeRegreso" type="text" class="form-control" placeholder="Importe del viaje de regreso" readonly>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="btn-onCompletarDatosSol" class="btn btn-primary" onclick="OnCompletarDatosSol()">Completar solicitud</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="modal-cancelar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br>
+                <i class="fa fa-question-circle fa-7x"></i>
+                <h4 id="myModalLabel" class="semi-bold">Realmente desea CANCELAR la siguiente solicitud.</h4>
+                <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
+                <br>
+            </div>
+            <div class="modal-body">
+                <div class="row form-row">
+                    <div class="col-md-6">
+                        <label class="form-label">No. de solicitud:</label>
+                        <input id="modal-can-idSol" type="text" class="form-control" placeholder="" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Viaticante:</label>
+                        <input id="modal-can-viaticante" type="text" class="form-control" placeholder="" readonly>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-6">
+                        <label class="form-label">Fecha inicio:</label>
+                        <input id="modal-can-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label">Fecha fin:</label>
-                        <input id="modal-env-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
+                        <input id="modal-can-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
                     </div>
                 </div>
                 <div class="row form-row">
                     <div class="col-md-6">
                         <label class="form-label">Duración del viaje:</label>
-                        <input id="modal-env-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
+                        <input id="modal-can-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Resultados esperados:</label>
-                        <input id="modal-env-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
+                        <input id="modal-can-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
                     </div>
                 </div>
                 <div class="row form-row">
                     <div class="col-md-12">
                         <label class="form-label">Medio de transporte:</label>
-                        <input id="modal-env-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
+                        <input id="modal-can-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="EnviarSol()">Enviar solicitud</button>
+                <button type="button" class="btn btn-warning" onclick="CancelarSol()">Cancelar solicitud</button>
             </div>
         </div>
 
@@ -143,6 +230,11 @@
 
 
 @section scripts{
+    <link href="~/Content/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet" />
+    @* Son para el estilo de los select ya que estan en el layout pero no funcionan si no estan en cada vista *@
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
+
     <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
 

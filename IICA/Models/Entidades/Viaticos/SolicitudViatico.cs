@@ -37,7 +37,12 @@ namespace IICA.Models.Entidades.Viaticos
 
         public bool marginal { get; set; }
 
-        public string viaticante { get; set; }
+        public double montoAutorizado { get; set; }
+        public double montoComprobado { get; set; }
+        public decimal tarifaDeIda { get; set; }
+        public decimal tarifaDeVuelta { get; set; }
+        public NivelMando nivelMando { get; set; }
+        public DateTime  fechaCheque { get; set; }
 
         public SolicitudViatico()
         {
@@ -50,6 +55,7 @@ namespace IICA.Models.Entidades.Viaticos
             estatusSolicitud = new EstatusSolicitud();
             justificacion = new Justificacion();
             etapaSolicitud = new EtapaSolicitud();
+            nivelMando = new NivelMando();
         }
     }
 }
