@@ -874,6 +874,7 @@ GO
 -- =============================================
 CREATE PROCEDURE DT_SP_INSERTA_COMPROBACION_GASTO
 	-- Add the parameters for the stored procedure here
+	@Id_Solicitud INT,
 	@Comentario VARCHAR(500),
 	@Path_Archivo_XML VARCHAR(500),
 	@Path_Archivo_PDF VARCHAR(500),
@@ -909,6 +910,7 @@ BEGIN
 			)
 		VALUES 
 			(
+				@Id_Solicitud,
 				@Comentario,
 				@Path_Archivo_XML,
 				@Path_Archivo_PDF,
@@ -938,3 +940,115 @@ GO
 
 GRANT EXECUTE ON DT_SP_INSERTA_COMPROBACION_GASTO TO public;  
 GO
+--==========================================================================================================================
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_ELIMINA_COMPROBACION_GASTO')
+BEGIN
+	DROP PROCEDURE DT_SP_ELIMINA_COMPROBACION_GASTO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_ELIMINA_COMPROBACION_GASTO
+	-- Add the parameters for the stored procedure here
+	@Id_Comprobacion_Gasto INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE
+		@status INT=1,
+		@mensaje VARCHAR(100)='ELIMINADO DE MANERA CORRECTA'
+
+
+		DELETE DT_TBL_VIATICO_COMPROBACION_GASTOS
+		WHERE Id_Comprobacion_Gasto=@Id_Comprobacion_Gasto
+
+		IF @@ERROR<>0
+		BEGIN
+			SET @mensaje='ERROR AL ELIMINAR LA COMPROBACION DEL GASTO.'
+			GOTO ERROR_1
+		END
+
+
+	GOTO EXIT_
+
+	ERROR_1:
+		SET @status=0
+		GOTO EXIT_
+	EXIT_:
+		SELECT @status STATUS, @mensaje MENSAJE
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_ELIMINA_COMPROBACION_GASTO TO public;  
+GO
+--==========================================================================================================================
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_COMPROBACION_GASTO')
+BEGIN
+	DROP PROCEDURE DT_SP_OBTENER_COMPROBACION_GASTO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_OBTENER_COMPROBACION_GASTO
+	-- Add the parameters for the stored procedure here
+	@Id_Solicitud INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT *
+	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
+	WHERE Id_Solicitud=@Id_Solicitud
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_OBTENER_COMPROBACION_GASTO TO public;  
+GO
+--==========================================================================================================================
