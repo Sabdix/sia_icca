@@ -150,6 +150,7 @@
     <Compile Include="Controllers\PVI\IncapacidadController.cs" />
     <Compile Include="Controllers\PVI\PermisoController.cs" />
     <Compile Include="Controllers\PVI\VacacionController.cs" />
+    <Compile Include="Controllers\Viaticos\ViaticoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -158,6 +159,13 @@
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\GastoExtraDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\SolicitudViaticoDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\TipoDivisaDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\TipoSalidaDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\TipoViajeDAO.cs" />
     <Compile Include="Models\Entidades\Conexion.cs" />
     <Compile Include="Models\Entidades\Email.cs" />
     <Compile Include="Models\Entidades\Enumeraciones.cs" />
@@ -177,6 +185,17 @@
     <Compile Include="Models\Entidades\SessionExpire.cs" />
     <Compile Include="Models\Entidades\Usuario.cs" />
     <Compile Include="Models\Entidades\Utils.cs" />
+    <Compile Include="Models\Entidades\Viaticos\Catalogo.cs" />
+    <Compile Include="Models\Entidades\Viaticos\EstatusSolicitud.cs" />
+    <Compile Include="Models\Entidades\Viaticos\EtapaSolicitud.cs" />
+    <Compile Include="Models\Entidades\Viaticos\GastoExtra.cs" />
+    <Compile Include="Models\Entidades\Viaticos\Itinerario.cs" />
+    <Compile Include="Models\Entidades\Viaticos\Justificacion.cs" />
+    <Compile Include="Models\Entidades\Viaticos\MedioTransporte.cs" />
+    <Compile Include="Models\Entidades\Viaticos\TipoDivisa.cs" />
+    <Compile Include="Models\Entidades\Viaticos\TipoSalida.cs" />
+    <Compile Include="Models\Entidades\Viaticos\TipoViaje.cs" />
+    <Compile Include="Models\Entidades\Viaticos\SolicitudViatico.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +252,9 @@
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtMisSolViaticos.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtNuevaSolViatico.js" />
     <Content Include="Content\assets\js\form_elements.js" />
     <Content Include="Content\assets\js\form_validations.js" />
     <Content Include="Content\assets\js\google_maps.js" />
@@ -243,6 +265,7 @@
     <Content Include="Content\assets\js\support_ticket.js" />
     <Content Include="Content\assets\js\vector_maps.js" />
     <Content Include="Content\assets\js\widgets.js" />
+    <Content Include="Content\assets\plugins\accounting\accounting.min.js" />
     <Content Include="Content\assets\plugins\animate.min.css" />
     <Content Include="Content\assets\plugins\boostrap-checkbox\css\bootstrap-checkbox.css" />
     <Content Include="Content\assets\plugins\boostrap-clockpicker\bootstrap-clockpicker.min.css" />
@@ -464,13 +487,6 @@
     <Content Include="Content\webarch\fonts\custom-setd41d.eot" />
     <Content Include="Content\assets\plugins\jquery-datatable\css\buttons_dataTables.css" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_ADICIONAL.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_INCAPACIDAD.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\1_FORMATO_ST7_ALTA_RT.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_ADICIONAL.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_INCAPACIDAD.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\2_FORMATO_ST7_ALTA_RT.pdf" />
-    <Content Include="PVI\Incapacidades\Formatos\0000000006\3_FORMATO_INCAPACIDAD.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -501,7 +517,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\IICA\Index.cshtml" />
     <Content Include="Views\Permiso\NuevaSolicitud.cshtml" />
-    <Content Include="Views\Home\_MenuLeft.cshtml" />
+    <Content Include="Views\Home\_MenuLeftPVI.cshtml" />
     <Content Include="Views\Permiso\MisPermisos.cshtml" />
     <Content Include="Views\Vacacion\NuevaSolicitud.cshtml" />
     <Content Include="Views\IICA\Sistemas.cshtml" />
@@ -517,10 +533,21 @@
     <Content Include="Views\Permiso\ReporteSolicitudesPermisos.cshtml" />
     <Content Include="Views\Vacacion\ReporteSolicitudesVacaciones.cshtml" />
     <Content Include="Views\Shared\_LayoutViaticos.cshtml" />
+    <Content Include="Views\Home\_MenuLeftViaticos.cshtml" />
+    <Content Include="Views\Home\Viaticos.cshtml" />
+    <Content Include="Views\Viatico\NuevaSolicitud.cshtml" />
+    <Content Include="Views\Viatico\_Itinerario.cshtml" />
+    <Content Include="Views\Viatico\_ResumenSolicitudViatico.cshtml" />
+    <Content Include="Views\Viatico\NotNuevaSolicitud.cshtml" />
+    <Content Include="Views\Home\SitioEnConstruccion.cshtml" />
+    <Content Include="Views\Viatico\MisSolicitudes.cshtml" />
+    <Content Include="Views\Viatico\SolicitudesPorAutorizar.cshtml" />
+    <Content Include="Views\Viatico\SolicitudesGenerarCheque.cshtml" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_5cf452019_21_03_12_21.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_f88062019_22_03_12_22.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Viaticos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

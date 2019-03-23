@@ -58,12 +58,12 @@ function CerrarSesion() {
 function MostrarOpcionMenuActivo() {
     $(".nodo-menu").removeClass("open");
     $(".nodo-menu").find("ul").css("display", "none");
-    if (nodoMenu != undefined) {
+    if (nodoMenu !== undefined) {
         $("#nodo-" + nodoMenu).addClass("open");
         $("#nodo-" + nodoMenu).find("ul").css("display", "block");
     }
 
-    if (submenu2 == undefined) {
+    if (submenu2 === undefined) {
         $(".nodo-menu li a").removeClass("a-submenu");
         if (submenu != undefined) {
             $("#submenu-" + submenu).addClass("a-submenu");
@@ -73,7 +73,7 @@ function MostrarOpcionMenuActivo() {
 
     $(".nodo-submenu").removeClass("open");
     $(".sub-menu").find("ul").css("display", "none");
-    if (submenu2 != undefined) {
+    if (submenu2 !== undefined) {
         $("#submenu-" + submenu).parent().addClass("open");
         $("#submenu2-" + submenu2).addClass("a-submenu");
         $(".sub-menu").find("ul").css("display", "block");

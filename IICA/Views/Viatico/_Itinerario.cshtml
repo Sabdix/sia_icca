@@ -1,0 +1,128 @@
+﻿@model IICA.Models.Entidades.Viaticos.Itinerario
+
+<form id="form-itn">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <br>
+        <i class="fa fa-briefcase fa-7x"></i>
+        <h4 id="myModalLabel" class="semi-bold">Itinerario de <span id="tipo-salida-title"></span="></h4>
+        <p class="no-margin">A continuación se muestran los datos a capturar </p>
+        <br>
+    </div>
+    <div class="modal-body">
+        <div class="row form-row">
+            <div class="col-md-12">
+                <label class="form-label">Medio de trasnporte:</label>
+                @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposMediosTrasnporte, "SELECCIONE EL TIPO DE TRANSPORTE",
+                     new { id = "idMedioItinerario" })
+                @Html.ValidationMessageFor(x => x.medioTransporte.idMedioTransporte, "", new { @class = "error" })
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-md-6">
+                <label class="form-label">Origen:</label>
+                @Html.TextBoxFor(x => x.origen, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.origen, "", new { @class = "error" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Destino:</label>
+                @Html.TextBoxFor(x => x.destino, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.destino, "", new { @class = "error" })
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-md-6">
+                <label class="form-label">Linea:</label>
+                @Html.TextBoxFor(x => x.linea, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.linea, "", new { @class = "error" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Número de asiento:</label>
+                @Html.TextBoxFor(x => x.numeroAsiento, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.numeroAsiento, "", new { @class = "error" })
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-md-6">
+                <label class="form-label">Hora de salida:</label>
+                @Html.TextBoxFor(x => x.horaSalida, new { @class = "form-control", @readonly = "true" })
+                @Html.ValidationMessageFor(x => x.horaSalida, "", new { @class = "error" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Hora de llegada:</label>
+                @Html.TextBoxFor(x => x.horaLLegada, new { @class = "form-control", @readonly = "true" })
+                @Html.ValidationMessageFor(x => x.horaLLegada, "", new { @class = "error" })
+            </div>
+        </div>
+        <div class="row form-row" id="content-boleto" style="display:none;">
+            <div class="col-md-12" id="formDropZone"></div>
+        </div>
+        @Html.HiddenFor(x => x.tipoSalida.idTipoSalida, new { id = "tipo-salida" })
+        @Html.HiddenFor(x => x.tipoSalida.descripcion, new { id = "tipo-salida-desc" })
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="OnAgregarItinerario()">Agregar</button>
+    </div>
+</form>
+
+
+
+<script>
+    $('#idMedioItinerario').select2({
+        width: '100%'
+    });
+
+    $('#horaSalida').clockpicker({
+        autoclose: true
+    });
+
+    $('#horaLLegada').clockpicker({
+        autoclose: true
+    });
+</script>
+
+<link href="~/Content/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" />
+<script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+        myAwesomeDropzone = {
+            url: rootUrl("/Viatico/SubirBoletoItinerario"),
+            addRemoveLinks: true,
+            paramName: "archivo",
+            maxFilesize: 4, // MB
+            dictRemoveFile: "Remover",
+            acceptedFiles: ".pdf,image/*",
+            autoProcessQueue: false,
+            maxFiles: 1,
+            init: function () {
+                this.on("maxfilesexceeded", function (file) {
+                    this.removeFile(file);
+                    swal("Error", "No se puede subir mas de un archivo", "error");
+                });
+            },
+            //sending: function (file, xhr, formData) {
+            //    formData.append("idIncapacidad", idIncapacidad);
+            //    formData.append("formato", formato);
+            //},
+            success: function (file, nombreArchivo) {
+                file.previewElement.classList.add("dz-success");
+                $("#modal-itinerario").modal("hide");
+                if (nombreArchivo.mensaje != undefined) {
+                    AgregarItinerario(nombreArchivo.mensaje);
+                }
+            },
+            error: function (file, response) {
+                file.previewElement.classList.add("dz-error");
+                //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
+            }
+        } // FIN myAwesomeDropzone
+        myDropzone = new Dropzone("#dZUpload", myAwesomeDropzone);
+        myDropzone.on("complete", function (file, response) {
+
+        });
+    });
+
+</script>
