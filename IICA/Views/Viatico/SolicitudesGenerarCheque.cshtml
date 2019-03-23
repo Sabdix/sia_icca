@@ -46,7 +46,7 @@
                             <tr>
                                 <td>@solicitud.idSolitud</td>
                                 <td>@solicitud.usuario.nombreCompleto</td>
-                                <td>@solicitud.usuario.nombreCompleto</td>
+                                <td>@solicitud.montoAutorizado</td>
                                 <td>
                                     <span class="muted">
                                         @(solicitud.fechaInicio == DateTime.MinValue ? "N/A" : solicitud.fechaInicio.ToShortDateString())
@@ -72,7 +72,6 @@
                                         </button>
                                     </span>
                                 </td>
-
                             </tr>
                         }
                     </tbody>

@@ -37,7 +37,8 @@ namespace IICA.Models.Entidades.Viaticos
 
         public bool marginal { get; set; }
 
-        public string viaticante { get; set; }
+        public double montoAutorizado { get; set; }
+        public double montoComprobado { get; set; }
         public NivelMando nivelMando { get; set; }
 
         public SolicitudViatico()
