@@ -1,6 +1,7 @@
 ﻿<script src="~/Content/assets/plugins/printThis/printThis.js"></script>
 @model IICA.Models.Entidades.Viaticos.SolicitudViatico
-<style>
+@using IICA.Models.Entidades.Viaticos
+@*<style>
     .md-100 {
         width: 100%;
         margin: auto;
@@ -93,10 +94,12 @@
         display: table;
         margin-top: 80px;
     }
-</style>
+</style>*@
 <div id="content-principal">
+    <p>-hola</p>
+</div>
 
-    <div id="content-header" class="md-90">
+    @*<div id="content-header" class="md-90">
         <img src="http://localhost:59791/Content/assets/img/logo_iica.png" />
     </div>
 
@@ -115,74 +118,257 @@
     <div id="content-datos-vi" class="md-90">
         <table class="md-100">
             <tr>
-                <td><label style="font-weight:900;">VIAJES INTERNACIONALES</label></td>
+                <td>
+                    <table class="md-100">
+                        <tr>
+                            <td><label style="font-weight:900;">VIAJES INTERNACIONALES</label></td>
+                        </tr>
+                        <tr>
+                            <td><label style="font-weight:900;">Código de empleado</label></td>
+                            <td><label style="font-weight:900;">CONSECUTIVO ANUAL</label></td>
+                        </tr>
+                        <tr>
+                            <td><label style="font-weight:900;">""</label></td>
+                            <td><label style="font-weight:900;">""</label></td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                <table class="md-100">
+                    <tr>
+                        <td><label style="font-weight:900;">VIAJES NACIONALES</label></td>
+                    </tr>
+                    <tr>
+                        <td><label style="font-weight:900;">Código de empleado</label></td>
+                        <td><label style="font-weight:900;">CONSECUTIVO ANUAL</label></td>
+                    </tr>
+                    <tr>
+                        <td><label style="font-weight:900;">""</label></td>
+                        <td><label style="font-weight:900;">""</label></td>
+                    </tr>
+                </table>
+                </td>
             </tr>
+           </table>
+        <table class="md-100" border="0">
             <tr>
-                <td><label style="font-weight:900;">Código de empleado</label></td>
-                <td><label style="font-weight:900;">CONSECUTIVO ANUAL</label></td>
-            </tr>
-            <tr>
-                <td><label style="font-weight:900;">""</label></td>
-                <td><label style="font-weight:900;">""</label></td>
+                <td><label style="font-weight:900;">Nombre:</label></td>
+                <td><label style="font-weight:900;">@Model.usuario.nombreCompleto</label></td>
+                <td><label style="font-weight:900;">Cargo:</label></td>
+                <td><label style="font-weight:900;">"aqui cargo"</label></td>
             </tr>
         </table>
-    </div>
-
-    @*<div id="content-datos-solicitud" class="md-90">
-        <div class="md-100 border-solid text-center">
-            <label style="font-weight:900; font-size: 20px; line-height:30px;">Justificación</label>
-        </div>
-        <table>
-            <tbody>
-                <tr>
-                    <td><label style="font-weight:900;">Fecha del Permiso</label></td>
-                    <td class="text-center" colspan="3">
-                        <label class="label-dato">@Model.fechaPermiso</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 30%;"><label style="font-weight:900;">De las</label></td>
-                    <td class="text-center">
-                        <label class="label-dato">@Model.horaInicio hrs.</label>
-                    </td>
-                    <td class="text-center"><label style="font-weight:900;">a las</label></td>
-                    <td class="text-center">
-                        <label class="label-dato">@Model.horaFin hrs.</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label style="font-weight:900;">No. de Horas</label></td>
-                    <td class="text-center" colspan="3">
-                        <label class="label-dato">@Model.totalHoras hrs.</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"><label style="font-weight:900;">Horario en que reanudará labores</label></td>
-                    <td class="text-center" colspan="2">
-                        <label class="label-dato">@Model.horaFin hrs.</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label style="font-weight:900;">Motivo</label></td>
-                    <td style="text-align: justify;" colspan="3">
-                        <label class="label-dato">@Model.motivoPermiso</label>
-                    </td>
-                </tr>
-            </tbody>
+        <p>Próposito del viaje:</p>
+        <p>@Model.proposito</p>
+        <p>Resultados esperados:</p>
+        <p>@Model.resultadosEsperados</p>
+        <p>Justificación del viaje:</p>
+        <p>@Model.justificacion.descripcion</p>
+        <table class="md-100" border="0">
+            <tr>
+                <td><label style="font-weight:900;">Relación de gastos pendientes:</label></td>
+                <td><label style="font-weight:900;">"NO"</label></td>
+                <td><label style="font-weight:900;">Informe de viaje pendiente:</label></td>
+                <td><label style="font-weight:900;">"aqui infvpend"</label></td>
+            </tr>
         </table>
-    </div>
-
-    <div id="content-firmas" class="md-90">
-        <div style="text-align: center; float: left;">
-            <p>________________________</p>
-            <p>@Model.nombreCompleto</p>
+        <p>Duración estimada del viaje:</p>
+        <p>@Model.duracionViaje</p>
+        <div class="col-md-12 col-sm-12 col-md-12">
+            <div class="col-md-12">
+                <div class="grid simple vertical green">
+                    <div class="grid-title">
+                        <h4>Lista <span class="semi-bold">de itinerario</span></h4>
+                    </div>
+                    <div class="grid-body">
+                        <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+                            <thead>
+                                <tr>
+                                    <th style="width:10%;text-align: center;">Tipo</th>
+                                    <th style="width:10%;text-align: center;">Origen</th>
+                                    <th style="width:10%;text-align: center;">Destino</th>
+                                    <th style="width:10%;text-align: center;">Medio de transporte</th>
+                                    <th style="width:10%;text-align: center;">Linea / No. de vuelo</th>
+                                    <th style="width:10%;text-align: center;">Hora de salida</th>
+                                    <th style="width:10%;text-align: center;">Hora de llegada</th>
+                                    <th style="width:10%;text-align: center;">Boleto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var itinerario in Model.itinerario)
+                                {
+                                    <tr>
+                                        <td>@(itinerario.tipoSalida.idTipoSalida == 1 ? "Ida" : "Regreso")</td>
+                                        <td>@itinerario.origen</td>
+                                        <td>@itinerario.destino</td>
+                                        <td>@itinerario.medioTransporte.descripcion</td>
+                                        <td>@(itinerario.linea + "/" + itinerario.numeroAsiento)</td>
+                                        <td>@(string.IsNullOrEmpty(itinerario.horaSalida) ? "N/A" : itinerario.horaSalida )</td>
+                                        <td>@(string.IsNullOrEmpty(itinerario.horaLLegada) ? "N/A" : itinerario.horaLLegada )</td>
+                                        <td>
+                                            @if (itinerario.medioTransporte.idMedioTransporte == 2)
+                                            {
+                                                <span data-toggle="modal" data-target="#modal-itinBoleto" onclick="mostrarBoletoItinerario(@(new JavaScriptSerializer().Serialize(itinerario)))">
+                                                    <button data-toggle="tooltip" title="Ver boleto" class="btn btn-warning btn-mini">
+                                                        <i class="fa fa-print"></i>
+                                                    </button>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>N/A</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div style="text-align: center; float: right;">
-            <p>________________________</p>
-            <p>Nombre y firma del jefe inmediato</p>
+        <div class="col-md-12">
+            <div class="grid simple vertical red">
+                <div class="grid-title">
+                    <h4>Lista <span class="semi-bold">de gastos</span></h4>
+                </div>
+                <div class="grid-body">
+                    <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+                        <thead>
+                            <tr>
+                                <th style="width:10%;text-align: center;">Gasto</th>
+                                <th style="width:10%;text-align: center;">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var gasto in Model.gastosExtrasSol)
+                            {
+                                <tr>
+                                    <td>@gasto.descripcion</td>
+                                    <td>@(gasto.monto.ToString("C") + " " + (Model.tipoViaje.idTipoViaje == 2 ? "USD" : "MXN"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+        <p>Datos del anticipo de viatico:</p>
+        <div>
+            <table>
+                <tr>
+                    <td><p>Monto:</p></td>
+                    <td>@Model.montoAutorizado</td>
+                    <td><p>Cheque:</p></td>
+                    <td><div class="content-box-white">X</div></td>
+                    <td><p>Transferencia:</p></td>
+                    <td></td>
+                    <td>Banco:</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <p>RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE5 DÍAS HABILES POSTERIORES A SU RETORNO:</p>
+        <div class="grid-body">
+            <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+                <thead>
+                    <tr>
+                        <th style="width:10%;text-align: center;">Tipo de Gasto</th>
+                        <th style="width:10%;text-align: center;">OGM</th>
+                        <th style="width:10%;text-align: center;">Codigo Presupuestario</th>
+                        <th style="width:10%;text-align: center;">Monto US/ML</th>
+                        <th style="width:10%;text-align: center;">Cuenta para aviso de cargo</th>
+                        <th style="width:10%;text-align: center;">Nombre de la fuente de Financiamiento</th>
+                        <th style="width:10%;text-align: center;">Nombre de la Unidad Interna o Institución Financiera</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   <table>
+                       <tr>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                       </tr>
+                       <tr>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                       </tr>
+                       <tr>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                       </tr>
+                   </table>
+                </tbody>
+            </table>
+        </div>
+        <div id="content-firmas" class="md-90">
+            <div style="text-align: center; float: left;">
+                <p>________________________</p>
+                <p>@Model.usuario.nombreCompleto</p>
+            </div>
 
-    </div>*@
+            <div style="text-align: center; float: right;">
+                <p>________________________</p>
+                <p>autorizador</p>
+            </div>
 
+        </div>
 </div>
+</div>
+<style>
+    .blueIICA {
+        color: #1f3853;
+    }
+
+    #content-solViatico .grid-body {
+        padding: 0px !important;
+    }
+
+    table tr th {
+        font-size: 11px !important;
+    }
+
+    table td {
+        font-size: 11px !important;
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    function mostrarBoletoItinerario(itinerario) {
+        var url = itinerario.pathBoleto;
+        if (url !== "") {
+            url = rootUrl(url);
+            $('div #content-boleto').html("");
+            $("div #bol-ida").text(itinerario.origen);
+            $("div #bol-regreso").text(itinerario.destino);
+            var iframe = $('<iframe style="width: 100%;height:600px;">');
+            iframe.attr('src', url);
+            $('div #content-boleto').append(iframe);
+            iframe[0].contentWindow.location.reload();
+        }
+        else {
+            $("div #content-boleto").html("");
+            $("div #bol-ida").text("-");
+            $("div #bol-regreso").text("-");
+        }
+    }
+</script>*@
