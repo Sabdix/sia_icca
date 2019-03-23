@@ -671,7 +671,7 @@ BEGIN
 	GOTO EXIT_
 
 	ERROR_1:
-		SET @status=1
+		SET @status=0
 		SET @Tarifa_Viatico=0
 		GOTO EXIT_
 	EXIT_:
@@ -681,4 +681,72 @@ END
 GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_TARIFAS_VIATICO TO public;  
+GO
+
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO')
+BEGIN
+	DROP PROCEDURE DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO
+	-- Add the parameters for the stored procedure here
+	@Id_Solicitud INT,
+	@Fecha_Cheque varchar(50)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE
+		@status INT=1,
+		@mensaje VARCHAR(100)='GUARDADO DE MANERA CORRECTA'
+
+
+	UPDATE DT_TBL_VIATICO_SOLICITUD 
+	SET 
+		Fecha_Cheque=@Fecha_Cheque
+	WHERE Id_Solicitud=@Id_Solicitud
+	IF @@ERROR<>0
+	BEGIN
+		SET @mensaje='ERROR AL GUARDAR INFORMACION DEL CHEQUE.'
+		GOTO ERROR_1
+	END
+
+
+	GOTO EXIT_
+
+	ERROR_1:
+		SET @status=0
+		GOTO EXIT_
+	EXIT_:
+		SELECT @status STATUS, @mensaje MENSAJE
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_ACTUALIZA_FECHA_CHEQUE_VIATICO TO public;  
 GO
