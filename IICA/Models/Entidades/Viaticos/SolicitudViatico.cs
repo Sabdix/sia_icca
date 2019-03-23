@@ -37,6 +37,8 @@ namespace IICA.Models.Entidades.Viaticos
 
         public bool marginal { get; set; }
 
+        public string viaticante { get; set; }
+
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();
