@@ -547,9 +547,11 @@
     <Content Include="Views\Viatico\SolicitudesGenerarCheque.cshtml" />
     <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_5cf452019_21_03_12_21.pdf" />
     <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_f88062019_22_03_12_22.pdf" />
+    <Content Include="Views\Viatico\_ImprimirFormatoI4.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="PVI\Incapacidades\Formatos\0000000006\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
