@@ -874,6 +874,7 @@ GO
 -- =============================================
 CREATE PROCEDURE DT_SP_INSERTA_COMPROBACION_GASTO
 	-- Add the parameters for the stored procedure here
+	@Id_Solicitud INT,
 	@Comentario VARCHAR(500),
 	@Path_Archivo_XML VARCHAR(500),
 	@Path_Archivo_PDF VARCHAR(500),
@@ -909,6 +910,7 @@ BEGIN
 			)
 		VALUES 
 			(
+				@Id_Solicitud,
 				@Comentario,
 				@Path_Archivo_XML,
 				@Path_Archivo_PDF,
