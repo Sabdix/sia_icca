@@ -160,7 +160,9 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
+                ViewBag.NivelMandos = new NivelMandoDAO().ObtenerNivelMandos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idNivelMando.ToString() });
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+
                 return View(solicitudViaticoDAO.ObtenerSolPorAutorizar(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
@@ -248,16 +250,12 @@ namespace IICA.Controllers.Viaticos
         }
 
         [HttpPost, SessionExpire]
-        public ActionResult ObtenerImportesCompletarDatosSol(SolicitudViatico solicitudViatico_)
+        public ActionResult ObtenerTarifasViaticos(SolicitudViatico solicitudViatico_)
         {
             try
             {
-                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
-                if (result.status)
-                {
-                    try { Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto); }
-                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
-                }
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerTarifasViaticos(solicitudViatico_);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -273,8 +271,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
-                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                solicitudViatico_.emCveEmpleadoAutoriza = usuarioSesion.emCveEmpleado;
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {

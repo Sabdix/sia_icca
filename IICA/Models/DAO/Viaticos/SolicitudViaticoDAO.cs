@@ -25,11 +25,11 @@ namespace IICA.Models.DAO.Viaticos
                     dbManager.CreateParameters(1);
                     dbManager.AddParameters(0, "solicitud", ConvertiraXML(solicitudViatico));
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_INSERTAR_VIATICO_SOLICITUD");
-                    if(dbManager.DataReader.Read())
+                    if (dbManager.DataReader.Read())
                     {
-                            result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
-                            result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
-                            //result.id = dbManager.DataReader["ID_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_Solicitud"].ToString());
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                        //result.id = dbManager.DataReader["ID_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_Solicitud"].ToString());
                     }
                 }
             }
@@ -93,7 +93,7 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.etapaSolicitud.descripcion = dbManager.DataReader["desc_etapa"] == DBNull.Value ? "" : dbManager.DataReader["desc_etapa"].ToString();
                         solicitudViatico.estatusSolicitud.idEstatusSolicitud = dbManager.DataReader["Id_eStatus_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_eStatus_Solicitud"].ToString());
                         solicitudViatico.estatusSolicitud.descripcion = dbManager.DataReader["desc_estatus"] == DBNull.Value ? "" : dbManager.DataReader["desc_estatus"].ToString();
-                        solicitudViatico.medioTransporte.idMedioTransporte= dbManager.DataReader["Id_medio_transporte"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_medio_transporte"].ToString());
+                        solicitudViatico.medioTransporte.idMedioTransporte = dbManager.DataReader["Id_medio_transporte"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_medio_transporte"].ToString());
                         solicitudViatico.medioTransporte.descripcion = dbManager.DataReader["medio_transporte"] == DBNull.Value ? "" : dbManager.DataReader["medio_transporte"].ToString();
                         solicitudViatico.justificacion.idJustificacion = dbManager.DataReader["Id_justificacion"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_justificacion"].ToString());
                         solicitudViatico.justificacion.descripcion = dbManager.DataReader["justificacion"] == DBNull.Value ? "" : dbManager.DataReader["justificacion"].ToString();
@@ -312,10 +312,11 @@ namespace IICA.Models.DAO.Viaticos
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(3);
+                    dbManager.CreateParameters(4);
                     dbManager.AddParameters(0, "id_etapa_solicitud", solicitudViatico.etapaSolicitud.idEtapaSolicitud);
                     dbManager.AddParameters(1, "id_estatus_solicitud", solicitudViatico.estatusSolicitud.idEstatusSolicitud);
                     dbManager.AddParameters(2, "id_solicitud", solicitudViatico.idSolitud);
+                    dbManager.AddParameters(3, "Em_Cve_Empleado", solicitudViatico.emCveEmpleadoAutoriza); 
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD");
                     if (dbManager.DataReader.Read())
                     {
@@ -383,6 +384,41 @@ namespace IICA.Models.DAO.Viaticos
                 throw ex;
             }
             return solicitudes;
+        }
+
+        public Result ObtenerTarifasViaticos(SolicitudViatico solicitudViatico)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(4);
+                    dbManager.AddParameters(0, "Id_Solicitud", solicitudViatico.idSolitud);
+                    dbManager.AddParameters(1, "Pernocta", solicitudViatico.pernocta);
+                    dbManager.AddParameters(2, "Marginal", solicitudViatico.marginal);
+                    dbManager.AddParameters(3, "Id_Nivel_Mando", solicitudViatico.nivelMando.idNivelMando);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_TARIFAS_VIATICO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                        if (result.status)
+                        {
+                            solicitudViatico.tarifaDeIda = dbManager.DataReader["TARIFA_DE_IDA"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["TARIFA_DE_IDA"].ToString());
+                            solicitudViatico.tarifaDeVuelta = dbManager.DataReader["TARIFA_DE_VUELTA"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["TARIFA_DE_VUELTA"].ToString());
+                            result.objeto = solicitudViatico;
+                        }
+                        //result.id = dbManager.DataReader["ID_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_Solicitud"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
 
         public Result ActualizarFechaCheque(SolicitudViatico solicitudViatico)

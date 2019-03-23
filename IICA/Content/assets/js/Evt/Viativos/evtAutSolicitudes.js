@@ -10,13 +10,13 @@ $(document).ready(function () {
     });
 
     $("#modal-comp-mando").change(function () {
-        solSeleccionada.nivelMando.idNivelMando= $(this).val();
+        OnObtenerTarifasViaticos();
     });
     $("#modal-comp-pernota").change(function () {
-        solSeleccionada.pernocta = $(this).val();
+        OnObtenerTarifasViaticos();
     });
     $("#modal-comp-marginal").change(function () {
-        solSeleccionada.marginal = $(this).val();
+        OnObtenerTarifasViaticos();
     });
 
 });
@@ -51,43 +51,58 @@ function MostrarCompletarDatosSol(solicitud) {
 
     $("#modal-comp-idSol").val(solicitud.idSolitud);
     $("#modal-comp-viaticante").val(solicitud.usuario.nombreCompleto);
-    $("#modal-comp-mando").val(solSeleccionada.nivelMando.idNivelMando).trigger("change");
-    $("#modal-comp-pernota").val(solSeleccionada.pernocta ).trigger("change");
-    $("#modal-comp-marginal").val(solSeleccionada.marginal).trigger("change");
+    $("#modal-comp-mando").trigger("change");
 
 }
 
-function OnObtenerImportes() {
-    if (solSeleccionada === null || solSeleccionada === undefined ||) {
+function OnObtenerTarifasViaticos() {
+    if (solSeleccionada === null || solSeleccionada === undefined) {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
+        validCompletarDatos = false;
+        $("#btn-onCompletarDatosSol").attr("disabled");
         return;
     }
 
-    if (solSeleccionada.nivelMando.idNivelMando == 0 || solSeleccionada.pernocta === undefined || solSeleccionada.marginal === undefined) {
-        MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
+    solSeleccionada.nivelMando.idNivelMando = parseInt($("#modal-comp-mando").val());
+    solSeleccionada.pernocta = $("#modal-comp-pernota").val();
+    solSeleccionada.marginal = $("#modal-comp-marginal").val();
+
+    if (isNaN(solSeleccionada.nivelMando.idNivelMando) || solSeleccionada.pernocta == null || solSeleccionada.marginal == null) {
+        validCompletarDatos = false;
+        $("#btn-onCompletarDatosSol").attr("disabled");
         return;
     }
-    
 
     $.ajax({
         data: { solicitudViatico_: solSeleccionada },
-        url: rootUrl("/Viatico/ObtenerImportesCompletarDatosSol"),
+        url: rootUrl("/Viatico/ObtenerTarifasViaticos"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
-            $("#modal-completarSol").modal("hide");
-            MostrarLoading();
         },
         success: function (data) {
-            OnSuccesCompletarDatosSol(data);
+            OnSuccesObtenerTarifasViaticos(data);
         },
         error: function (xhr, status, error) {
             $("#modal-completarSol").modal("hide");
+            $("#btn-onCompletarDatosSol").attr("disabled");
             ControlErrores(xhr, status, error);
         }
     });
 }
 
+function OnSuccesObtenerTarifasViaticos(data) {
+    if (data.status === true) {
+        $("#modal-comp-importeIDa").val(data.objeto.tarifaDeIda);
+        $("#modal-comp-importeRegreso").val(data.objeto.tarifaDeVuelta);
+        validCompletarDatos = true;
+        $("#btn-onCompletarDatosSol").removeAttr("disabled");
+    } else {
+        MostrarNotificacionLoad("error", data.mensaje, 3000);
+        validCompletarDatos = false;
+        $("#btn-onCompletarDatosSol").attr("disabled");
+    }
+}
 
 function OnCompletarDatosSol() {
     if (solSeleccionada === null || solSeleccionada === undefined || !validCompletarDatos) {
