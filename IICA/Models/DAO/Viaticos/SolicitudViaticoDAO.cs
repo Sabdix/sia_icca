@@ -379,5 +379,34 @@ namespace IICA.Models.DAO.Viaticos
             return solicitudes;
         }
 
+        public Result ObtenerTarifasViaticos(SolicitudViatico solicitudViatico)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "@Id_Solicitud", solicitudViatico.idSolitud);
+                    dbManager.AddParameters(1, "Pernocta", solicitudViatico.pernocta);
+                    dbManager.AddParameters(2, "Marginal", solicitudViatico.marginal);
+                    dbManager.AddParameters(3, "Id_Nivel_Mando", solicitudViatico.nivelMando.idNivelMando);    
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_TARIFAS_VIATICO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                        //result.id = dbManager.DataReader["ID_Solicitud"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["ID_Solicitud"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
     }
 }
