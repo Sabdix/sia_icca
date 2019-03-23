@@ -255,6 +255,7 @@
     <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolViaticos.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtNuevaSolViatico.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtSolCheque.js" />
     <Content Include="Content\assets\js\form_elements.js" />
     <Content Include="Content\assets\js\form_validations.js" />
     <Content Include="Content\assets\js\google_maps.js" />

@@ -12,6 +12,8 @@ function MostrarModalCanSol(solicitud) {
     $("#modal-can-medioTransporte").val(solicitud.medioTransporte.descripcion);
     $("#modal-can-fechaInicio").val(solSeleccionada.fechaInicio);
     $("#modal-can-fechaFin").val(solSeleccionada.fechaFin);
+    $("#modal-can-solicitud").val(solSeleccionada.idSolitud);
+    $("#modal-can-viaticante").val(solSeleccionada.usuario.nombreCompleto);
 }
 
 
@@ -69,6 +71,8 @@ function MostrarModalEnvSol(solicitud) {
     $("#modal-env-medioTransporte").val(solicitud.medioTransporte.descripcion);
     $("#modal-env-fechaInicio").val(solSeleccionada.fechaInicio);
     $("#modal-env-fechaFin").val(solSeleccionada.fechaFin);
+    $("#modal-env-solicitud").val(solSeleccionada.idSolitud);
+    $("#modal-env-viaticante").val(solSeleccionada.usuario.nombreCompleto);
 }
 
 function EnviarSolViatico() {
@@ -106,3 +110,23 @@ function OnSuccesEnviarSol(data) {
     }
 }
 //Fin Enviar solicitud
+
+function VerDetalleSolViatico(sol) {
+    $.ajax({
+        data: { id: sol.idSolitud },
+        url: rootUrl("/Viatico/DetalleSolicitud"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            $("#content-solViatico").html("");
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-solViatico").html(data);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}

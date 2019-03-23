@@ -532,18 +532,10 @@ GO
 --Objetivo		OBTIENE LA LISTA DE LAS SOLICITUDES PARA CREAR CHEQUE
 -- =============================================
 CREATE PROCEDURE DT_SP_CONSULTAR_SOLICITUDES_PARA_CREAR_CHEQUE
-	@Em_Cve_Empleado varchar(20)
 AS
 BEGIN
-	
-	DECLARE 
-		@aut_proyecto varchar(10)
 
-	SELECT @aut_proyecto =aut_proyecto FROM IICA_COMPRAS..Viaticos_Autorizadores
-	WHERE
-		Em_UserDef_1= @Em_Cve_Empleado
-
-	select Sc_UserDef_2,
+	select 
 	vs.*
 		,mt.Descripcion medio_transporte
 		,j.Descripcion justificacion
@@ -553,7 +545,9 @@ BEGIN
 		,es.Id_estatus_solicitud
 		,es.Descripcion desc_estatus
 		,tv.Descripcion tipo_viaje
-		,coalesce(em.Em_Nombre,'') +' '+coalesce(em.Em_Apellido_Paterno,'') + ' '+coalesce(em.Em_Apellido_Materno,'') viaticante
+		,coalesce(em.Em_Nombre,'')Em_Nombre
+		,coalesce(em.Em_Apellido_Paterno,'')Em_Apellido_Paterno
+		,coalesce(em.Em_Apellido_Materno,'') Em_Apellido_Materno
 	from 
 		DT_TBL_VIATICO_SOLICITUD  vs
 		join DT_CAT_MEDIO_TRANSPORTE mt
@@ -570,11 +564,10 @@ BEGIN
 		on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
 		join Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
 		join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
-		join IICA_COMPRAS..Empleado emp
+		join Empleado emp
 		on vs.Em_Cve_Empleado=emp.Em_Cve_Empleado
 	where 
-		s.Sc_UserDef_2 = @aut_proyecto 
-		and vs.Id_etapa_solicitud = 3
+		vs.Id_etapa_solicitud = 3
 		and vs.Id_estatus_solicitud <> 3
 
 END
