@@ -10,13 +10,16 @@ $(document).ready(function () {
     });
 
     $("#modal-comp-mando").change(function () {
-        solSeleccionada.nivelMando.idNivelMando= $(this).val();
+        solSeleccionada.nivelMando.idNivelMando = $(this).val();
+        OnObtenerTarifasViaticos();
     });
     $("#modal-comp-pernota").change(function () {
         solSeleccionada.pernocta = $(this).val();
+        OnObtenerTarifasViaticos();
     });
     $("#modal-comp-marginal").change(function () {
         solSeleccionada.marginal = $(this).val();
+        OnObtenerTarifasViaticos();
     });
 
 });
@@ -57,7 +60,7 @@ function MostrarCompletarDatosSol(solicitud) {
 
 }
 
-function OnObtenerImportes() {
+function OnObtenerTarifasViaticos() {
     if (solSeleccionada === null || solSeleccionada === undefined ||) {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
@@ -67,19 +70,17 @@ function OnObtenerImportes() {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
-    
 
     $.ajax({
         data: { solicitudViatico_: solSeleccionada },
-        url: rootUrl("/Viatico/ObtenerImportesCompletarDatosSol"),
+        url: rootUrl("/Viatico/ObtenerTarifasViaticos"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
-            $("#modal-completarSol").modal("hide");
             MostrarLoading();
         },
         success: function (data) {
-            OnSuccesCompletarDatosSol(data);
+            OnSuccesObtenerTarifasViaticos(data);
         },
         error: function (xhr, status, error) {
             $("#modal-completarSol").modal("hide");
@@ -88,6 +89,15 @@ function OnObtenerImportes() {
     });
 }
 
+function OnSuccesObtenerTarifasViaticos(data) {
+    OcultarLoading();
+    if (data.status === true) {
+        MostrarNotificacionLoad("success", data.mensaje, 3000);
+        setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesPorAutorizar"); }, 2000);
+    } else {
+        MostrarNotificacionLoad("error", data.mensaje, 3000);
+    }
+}
 
 function OnCompletarDatosSol() {
     if (solSeleccionada === null || solSeleccionada === undefined || !validCompletarDatos) {

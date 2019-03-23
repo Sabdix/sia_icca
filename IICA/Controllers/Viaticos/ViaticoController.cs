@@ -248,15 +248,14 @@ namespace IICA.Controllers.Viaticos
         }
 
         [HttpPost, SessionExpire]
-        public ActionResult ObtenerImportesCompletarDatosSol(SolicitudViatico solicitudViatico_)
+        public ActionResult ObtenerTarifasViaticos(SolicitudViatico solicitudViatico_)
         {
             try
             {
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {
-                    try { Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto); }
-                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                   return Json(new { },JsonRequestBehavior.AllowGet)
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
