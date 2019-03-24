@@ -101,7 +101,7 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
-        [HttpPost,SessionExpire]
+        [HttpPost, SessionExpire]
         public ActionResult SubirOficioAut()
         {
             try
@@ -363,19 +363,34 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [SessionExpire]
         public ActionResult ValidarFacturaComprobacion(int id)
         {
             try
             {
-                solicitudViaticoDAO = new SolicitudViaticoDAO();
-                Result result = solicitudViaticoDAO.ObtenerDetalleSol(id);
-                if (result.status)
-                    ObtenerDatosFactura(Request, "Factura",(SolicitudViatico) result.objeto);
-                return null;
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                Result result = ObtenerFactura(Request, "Factura_sol-" + id + "-", usuarioSesion.emCveEmpleado);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult RegistrarFacturaComprobacion(ComprobacionGasto comprobacionGasto_)
+        {
+            try
+            {
+                ComprobacionGastosDAO comprobacionGastosDAO = new ComprobacionGastosDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                Result result = comprobacionGastosDAO.InsertaComprobacionGasto(comprobacionGasto_);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
             }
         }
 
@@ -414,10 +429,12 @@ namespace IICA.Controllers.Viaticos
             return string.Empty;
         }
 
-        private string ObtenerDatosFactura(HttpRequestBase httpRequestBase, string formato, SolicitudViatico solicitudViatico)
+        private Result ObtenerFactura(HttpRequestBase httpRequestBase, string formato, string usuario)
         {
+            Result result = new Result();
             try
             {
+                ComprobacionGasto comprobacionGasto = new ComprobacionGasto();
                 string idAleatorio = Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
                 if (httpRequestBase.Files.Count > 0)
                 {
@@ -426,29 +443,23 @@ namespace IICA.Controllers.Viaticos
                         var file = httpRequestBase.Files[i];
                         if (file != null && file.ContentLength > 0)
                         {
-
                             if (file.ContentType == "text/xml")
                             {
                                 BinaryReader b = new BinaryReader(file.InputStream);
                                 byte[] binData = b.ReadBytes(file.ContentLength);
-
-                                string result = Encoding.UTF8.GetString(binData);
-
-                                
-                                Result subtotal = ObtenerDatosXml(result, new GastoComprobacion());
+                                string xml = Encoding.UTF8.GetString(binData);
+                                result = ObtenerDatosXml(xml, comprobacionGasto);
                             }
-                            //string pathViaticosFormatos = WebConfigurationManager.AppSettings["pathViaticosFormatos"].ToString();
-                            ////string pathGeneral = pathFormatosIncapacidades + @"\" + usuario + @"\";
-                            //string pathGeneral = Server.MapPath("~" + pathViaticosFormatos + "/" + usuario + "/");
-                            //if (!System.IO.Directory.Exists(pathGeneral))
-                            //    System.IO.Directory.CreateDirectory(pathGeneral);
-
-                            //string nombre = Path.GetFileName(formato + "_" + idAleatorio + "" + Path.GetExtension(file.FileName));
-                            //string pathFormato = Path.Combine(pathGeneral, nombre);
-
-                            //file.SaveAs(pathFormato);
-                            //return pathViaticosFormatos + "/" + usuario + "/" + nombre;
-                            //return string.Empty;
+                        }
+                        if (result.status)
+                        {
+                            if (!GuardarFactura(httpRequestBase.Files, formato, comprobacionGasto, usuario))
+                            {
+                                result.status = false;
+                                result.mensaje = "Error al guardar los achivos de la factura, intente mas tarde.";
+                                result.mensaje = "Error al guardar los achivos de la factura, intente mas tarde.";
+                            }
+                            break;
                         }
                     }
                 }
@@ -457,10 +468,10 @@ namespace IICA.Controllers.Viaticos
             {
                 throw ex;
             }
-            return string.Empty;
+            return result;
         }
 
-        private Result ObtenerDatosXml(string xmlString,GastoComprobacion gastoComprobacion)
+        private Result ObtenerDatosXml(string xmlString, ComprobacionGasto comprobacionGasto)
         {
             Result result = new Result();
             try
@@ -479,13 +490,29 @@ namespace IICA.Controllers.Viaticos
                 {
                     foreach (XmlAttribute xn in xmlElement.Attributes)
                     {
-                        if(xn.LocalName== "subTotal")
+                        if (xn.LocalName == "subTotal")
+                            comprobacionGasto.subtotal = Convert.ToDouble(xn.Value);
+                        if (xn.LocalName == "total")
+                            comprobacionGasto.total = Convert.ToDouble(xn.Value);
+                        if (xn.LocalName == "LugarExpedicion")
+                            comprobacionGasto.lugar = xn.Value.ToString();
+                    }
+
+                    foreach (XmlNode node in xmlElement.ChildNodes)
+                    {
+                        if (node.LocalName == "Emisor")
                         {
-                            gastoComprobacion.
+                            foreach (XmlAttribute xn in node.Attributes)
+                            {
+                                if (xn.LocalName == "nombre")
+                                    comprobacionGasto.emisor = xn.Value.ToString();
+                            }
                         }
-                        string firstName = xn["subTotal"].InnerText;
-                        string lastName = xn["total"].InnerText;
-                        Console.WriteLine("Name: {0} {1}", firstName, lastName);
+                    }
+                    if (comprobacionGasto.subtotal > 0 && comprobacionGasto.subtotal > 0 && !string.IsNullOrEmpty(comprobacionGasto.lugar) && !string.IsNullOrEmpty(comprobacionGasto.emisor))
+                    {
+                        result.objeto = comprobacionGasto;
+                        result.status = true;
                     }
                 }
                 else
@@ -500,6 +527,42 @@ namespace IICA.Controllers.Viaticos
             return result;
         }
 
+        private bool GuardarFactura(HttpFileCollectionBase files, string formato, ComprobacionGasto comprobacion, string usuario)
+        {
+            string idAleatorio = Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
+            try
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    var file = files[i];
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        string pathViaticosFormatos = WebConfigurationManager.AppSettings["pathViaticosFormatos"].ToString();
+                        string pathGeneral = Server.MapPath("~" + pathViaticosFormatos + "/" + usuario + "/");
+                        if (!System.IO.Directory.Exists(pathGeneral))
+                            System.IO.Directory.CreateDirectory(pathGeneral);
+
+                        string nombre = Path.GetFileName(formato + "_" + idAleatorio + "" + Path.GetExtension(file.FileName));
+                        string pathFormato = Path.Combine(pathGeneral, nombre);
+
+                        file.SaveAs(pathFormato);
+                        if (file.ContentType == "Application/pdf")
+                        {
+                            comprobacion.pathArchivoPDF = pathViaticosFormatos + "/" + usuario + "/" + nombre;
+                        }
+                        if (file.ContentType == "text/xml")
+                        {
+                            comprobacion.pathArchivoXML = pathViaticosFormatos + "/" + usuario + "/" + nombre;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return true;
+        }
         #endregion Funciones - Generales
     }
 }

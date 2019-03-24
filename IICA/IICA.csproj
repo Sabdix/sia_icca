@@ -159,11 +159,13 @@
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
+    <Compile Include="Models\DAO\Viaticos\ComprobacionGastosDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\GastoComprobacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\GastoExtraDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\NivelMandoDAO.cs" />
+    <Compile Include="Models\Entidades\Viaticos\ComprobacionGasto.cs" />
     <Compile Include="Models\Entidades\Viaticos\GastoComprobacion.cs" />
     <Compile Include="Models\Entidades\Viaticos\NivelMando.cs" />
     <Compile Include="Models\DAO\Viaticos\SolicitudViaticoDAO.cs" />

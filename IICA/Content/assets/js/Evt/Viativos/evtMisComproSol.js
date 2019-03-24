@@ -1,4 +1,5 @@
 ﻿var solSeleccionada = {};
+var comprobanteGasto = {};
 
 $(document).ready(function () {
 
@@ -31,12 +32,20 @@ $(document).ready(function () {
             //formData.append("idIncapacidad", idIncapacidad);
             formData.append("id", solSeleccionada.idSolitud);
         },
-        success: function (file, nombreArchivo) {
+        success: function (file, data) {
             file.previewElement.classList.add("dz-success");
-            if (nombreArchivo.mensaje != undefined) {
-                viatico = ObtenerSolViatico();
-                viatico.pathArchivoAutorizacion = nombreArchivo.mensaje
-                GuardarSolicitudViatico(viatico);
+            if (data.status) {
+                $("#modal-comp-proveedor").val(data.objeto.emisor);
+                $("#modal-comp-lugar").val(data.objeto.lugar);
+                $("#modal-comp-subtotal").val(accounting.formatMoney(data.objeto.subtotal));
+                $("#modal-comp-total").val(accounting.formatMoney(data.objeto.total));
+                $("#btn-cargarFactura").hide();
+                $("#btn-agregarComprobacion").show();
+                comprobanteGasto = data.objeto;
+                comprobanteGasto.solicitud = solSeleccionada;
+            } else {
+                comprobanteGasto = {};
+                swal("Notificación", data.mensaje, "error");
             }
         },
         error: function (file, response) {
@@ -48,45 +57,6 @@ $(document).ready(function () {
     xmlComprobacionDropzone.on("complete", function (file, response) {
 
     });
-
-    //$("#dropZonePdfComprobacion").append("<form id='dZUploadPdfComp' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
-
-    //DropzonePdf = {
-    //    url: rootUrl("/Viatico/SubirOficioAut"),
-    //    addRemoveLinks: true,
-    //    paramName: "archivo",
-    //    maxFilesize: 4, // MB
-    //    dictRemoveFile: "Remover",
-    //    acceptedFiles: ".pdf,image/*",
-    //    autoProcessQueue: false,
-    //    maxFiles: 1,
-    //    init: function () {
-    //        this.on("maxfilesexceeded", function (file) {
-    //            this.removeFile(file);
-    //            swal("Error", "No se puede subir mas de un archivo", "error");
-    //        });
-    //    },
-    //    //sending: function (file, xhr, formData) {
-    //    //    formData.append("idIncapacidad", idIncapacidad);
-    //    //    formData.append("formato", formato);
-    //    //},
-    //    success: function (file, nombreArchivo) {
-    //        file.previewElement.classList.add("dz-success");
-    //        if (nombreArchivo.mensaje != undefined) {
-    //            viatico = ObtenerSolViatico();
-    //            viatico.pathArchivoAutorizacion = nombreArchivo.mensaje
-    //            GuardarSolicitudViatico(viatico);
-    //        }
-    //    },
-    //    error: function (file, response) {
-    //        file.previewElement.classList.add("dz-error");
-    //        //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
-    //    }
-    //} // FIN myAwesomeDropzone
-    //pdfComprobacionDropzone = new Dropzone("#dZUploadPdfComp", DropzonePdf);
-    //pdfComprobacionDropzone.on("complete", function (file, response) {
-
-    //});
 
     $("#btn-cargarFactura").click(function () {
         if (xmlComprobacionDropzone.files.length < 2) {
@@ -129,33 +99,35 @@ function MostrarModalAgregarComprobacion(solicitud) {
     solSeleccionada = solicitud;
     ObtenerFechasJsonSolSeleccionada(solicitud);
 
+    $("#form-comprobacion").trigger("reset");
+    xmlComprobacionDropzone.removeAllFiles(true);
+
     $("#modal-comp-idSol").val(solicitud.idSolitud);
     $("#modal-comp-viaticante").val(solicitud.usuario.nombreCompleto);
-
+    $("#btn-cargarFactura").show();
+    $("#btn-agregarComprobacion").hide();
+    $("#modal-agregarComprobacion").modal({ backdrop: 'static', keyboard: false, show: true });
 }
 
 function OnAgregarComprobacion() {
-    if (solSeleccionada === null || solSeleccionada === undefined || !validCompletarDatos) {
+    if (comprobanteGasto === null || comprobanteGasto === undefined) {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
-
-    solSeleccionada.etapaSolicitud.idEtapaSolicitud = 3;
-    solSeleccionada.estatusSolicitud.idEstatusSolicitud = 1;
     $.ajax({
-        data: { solicitudViatico_: solSeleccionada },
-        url: rootUrl("/Viatico/CompletarDatosSolicitud"),
+        data: { comprobacionGasto_: comprobanteGasto },
+        url: rootUrl("/Viatico/RegistrarFacturaComprobacion"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
-            $("#modal-completarSol").modal("hide");
+            $("#modal-agregarComprobacion").modal("hide");
             MostrarLoading();
         },
         success: function (data) {
             OnSuccesAgregarComprobacion(data);
         },
         error: function (xhr, status, error) {
-            $("#modal-completarSol").modal("hide");
+            $("#modal-agregarComprobacion").modal("hide");
             ControlErrores(xhr, status, error);
         }
     });
@@ -165,7 +137,7 @@ function OnSuccesAgregarComprobacion(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesPorAutorizar"); }, 2000);
+        setTimeout(function () { window.location = rootUrl("/Viatico/MisSolicitudesPorComprobar"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }

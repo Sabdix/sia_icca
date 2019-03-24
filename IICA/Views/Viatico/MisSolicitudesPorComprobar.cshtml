@@ -68,7 +68,7 @@
                                             <i class="fa fa-list"></i>
                                         </button>
                                     </span>
-                                    <span data-toggle="modal" data-target="#modal-agregarComprobacion">
+                                    <span>
                                         <button data-toggle="tooltip" title="Agregar comprobación" class="btn btn-success btn-mini"
                                                 onclick="MostrarModalAgregarComprobacion(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                             <i class="fa fa-plus-circle"></i>
@@ -107,67 +107,68 @@
                 <h4 id="myModalLabel" class="semi-bold">Agregar comprobación.</h4>
             </div>
             <div class="modal-body">
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">No. de solicitud:</label>
-                        <input id="modal-comp-idSol" type="text" class="form-control" placeholder="" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Viaticante:</label>
-                        <input id="modal-comp-viaticante" type="text" class="form-control" placeholder="" readonly>
-                    </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-12">
-                        <label class="form-label">Tipo de gasto:</label>
-                        @Html.DropDownList("modalcompGasto", (IEnumerable<SelectListItem>)ViewBag.GastosComprobacion,
-                        new
-                        {
-                            @class = "select-iica",
-                            id = "modal-comp-tipoGasto",
-                            style = "width: 100%;",
-                            data_val_required = "Seleccione un nivel de mando.",
-                            data_val = "true"
-                        })
-                    </div>
-                </div>
-                <br />
-                <div class="row form-row">
-                    <div class="col-md-12">
-                        <label class="form-label">Factura en Xml y Pdf</label>
-                        <div style="height: 100px;">
-                            <div class="col-md-12" id="dropZoneXmlComprobacion"></div>
+                <form id="form-comprobacion">
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">No. de solicitud:</label>
+                            <input id="modal-comp-idSol" type="text" class="form-control" placeholder="" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Viaticante:</label>
+                            <input id="modal-comp-viaticante" type="text" class="form-control" placeholder="" readonly>
                         </div>
                     </div>
-                    @*<div class="col-md-6">
+                    <div class="row form-row">
+                        <div class="col-md-12">
+                            <label class="form-label">Tipo de gasto:</label>
+                            @Html.DropDownList("modalcompGasto", (IEnumerable<SelectListItem>)ViewBag.GastosComprobacion,
+                            new
+                            {
+                                @class = "select-iica",
+                                id = "modal-comp-tipoGasto",
+                                style = "width: 100%;",
+                                data_val_required = "Seleccione un nivel de mando.",
+                                data_val = "true"
+                            })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row form-row">
+                        <div class="col-md-12">
+                            <label class="form-label">Factura en Xml y Pdf</label>
+                            <div style="height: 100px;">
+                                <div class="col-md-12" id="dropZoneXmlComprobacion"></div>
+                            </div>
+                        </div>
+                        @*<div class="col-md-6">
                 <label class="form-label">Factura PDF</label>
                 <div style="height: 100px;">
                     <div class="col-md-12" id="dropZonePdfComprobacion"></div>
                 </div>
             </div>*@
-                </div>
-                <br />
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Proveedor:</label>
-                        <input id="modal-comp-proveedor" type="text" class="form-control" placeholder="Proveedor" readonly>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Lugar:</label>
-                        <input id="modal-comp-lugar" type="text" class="form-control" placeholder="Lugar" readonly>
+                    <br />
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Proveedor:</label>
+                            <input id="modal-comp-proveedor" type="text" class="form-control" placeholder="Proveedor" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lugar:</label>
+                            <input id="modal-comp-lugar" type="text" class="form-control" placeholder="Lugar" readonly>
+                        </div>
                     </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Subtotal:</label>
-                        <input id="modal-comp-subtotal" type="text" class="form-control" placeholder="Subtotal" readonly>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Subtotal:</label>
+                            <input id="modal-comp-subtotal" type="text" class="form-control" placeholder="Subtotal" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Total:</label>
+                            <input id="modal-comp-total" type="text" class="form-control" placeholder="Total" readonly>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Total:</label>
-                        <input id="modal-comp-total" type="text" class="form-control" placeholder="Total" readonly>
-                    </div>
-                </div>
-
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -265,6 +266,7 @@
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <script src="~/Content/assets/js/datatables.js"></script>
 
+    <script src="~/Content/assets/plugins/accounting/accounting.min.js"></script>
 
     <link href="~/Content/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" />
     <script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
