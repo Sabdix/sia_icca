@@ -555,6 +555,7 @@
     <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_f88062019_22_03_12_22.pdf" />
     <Content Include="Views\Viatico\_ImprimirFormatoI4.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudesPorComprobar.cshtml" />
+    <Content Include="Views\Viatico\_ObtenerComprobaciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

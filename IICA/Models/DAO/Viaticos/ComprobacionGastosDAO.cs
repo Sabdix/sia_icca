@@ -54,11 +54,12 @@ namespace IICA.Models.DAO.Viaticos
                     {
                         comprobacionGasto = new ComprobacionGasto();
                         comprobacionGasto.idComprobacionGasto = dbManager.DataReader["Id_Comprobacion_Gasto"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Comprobacion_Gasto"].ToString());
-                        comprobacionGasto.solicitud.idSolitud = dbManager.DataReader["id_Solitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["id_Solitud"].ToString());
+                        comprobacionGasto.solicitud.idSolitud = dbManager.DataReader["id_solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["id_solicitud"].ToString());
                         comprobacionGasto.comentario = dbManager.DataReader["Comentario"] == DBNull.Value ? "" : dbManager.DataReader["Comentario"].ToString();
                         comprobacionGasto.pathArchivoXML = dbManager.DataReader["Path_Archivo_XML"] == DBNull.Value ? "" : dbManager.DataReader["Path_Archivo_XML"].ToString();
                         comprobacionGasto.pathArchivoPDF = dbManager.DataReader["Path_Archivo_PDF"] == DBNull.Value ? "" : dbManager.DataReader["Path_Archivo_PDF"].ToString();
                         comprobacionGasto.gastoComprobacion.idGastoComprobacion = dbManager.DataReader["Id_Gasto_Comprobacion"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Gasto_Comprobacion"].ToString());
+                        comprobacionGasto.gastoComprobacion.descripcion = dbManager.DataReader["gasto_comprobacion"] == DBNull.Value ? "" : dbManager.DataReader["gasto_comprobacion"].ToString();
                         comprobacionGasto.emisor = dbManager.DataReader["Emisor"] == DBNull.Value ? "" : dbManager.DataReader["Emisor"].ToString();
                         comprobacionGasto.subtotal = dbManager.DataReader["subtotal"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["subtotal"].ToString());
                         comprobacionGasto.total = dbManager.DataReader["total"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["total"].ToString());
@@ -83,11 +84,11 @@ namespace IICA.Models.DAO.Viaticos
                 {
                     dbManager.Open();
                     dbManager.CreateParameters(1);
-                    dbManager.AddParameters(0, "idSolicitud", idSolicitud);
-                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD");
+                    dbManager.AddParameters(0, "Id_Comprobacion_Gasto", idSolicitud);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ELIMINA_COMPROBACION_GASTO");
                     if (dbManager.DataReader.Read())
                     {
-                        result.mensaje = dbManager.DataReader["error_message"].ToString();
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
                         result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
                     }
                 }
@@ -107,19 +108,20 @@ namespace IICA.Models.DAO.Viaticos
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(1);
+                    dbManager.CreateParameters(9);
                     dbManager.AddParameters(0, "Id_Solicitud", comprobacionGasto.solicitud.idSolitud);
-                    dbManager.AddParameters(1, "Comentario", comprobacionGasto.comentario);
+                    dbManager.AddParameters(1, "Comentario", string.IsNullOrEmpty(comprobacionGasto.comentario)? "":comprobacionGasto.comentario);
                     dbManager.AddParameters(2, "Path_Archivo_XML", comprobacionGasto.pathArchivoXML);
                     dbManager.AddParameters(3, "Path_Archivo_PDF    ", comprobacionGasto.pathArchivoPDF);
-                    dbManager.AddParameters(4, "Id_Gasto_Comprobacion", comprobacionGasto.gastoComprobacion);
+                    dbManager.AddParameters(4, "Id_Gasto_Comprobacion", comprobacionGasto.gastoComprobacion.idGastoComprobacion);
                     dbManager.AddParameters(5, "Emisor", comprobacionGasto.emisor);
-                    dbManager.AddParameters(6, "Total", comprobacionGasto.total);
-                    dbManager.AddParameters(7, "lugar", comprobacionGasto.lugar);
+                    dbManager.AddParameters(6, "Subtotal", comprobacionGasto.subtotal);
+                    dbManager.AddParameters(7, "Total", comprobacionGasto.total);
+                    dbManager.AddParameters(8, "lugar", comprobacionGasto.lugar);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_INSERTA_COMPROBACION_GASTO");
                     if (dbManager.DataReader.Read())
                     {
-                        result.mensaje = dbManager.DataReader["error_message"].ToString();
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
                         result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
                     }
                 }

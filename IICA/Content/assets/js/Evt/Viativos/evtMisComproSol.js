@@ -43,6 +43,9 @@ $(document).ready(function () {
                 $("#btn-agregarComprobacion").show();
                 comprobanteGasto = data.objeto;
                 comprobanteGasto.solicitud = solSeleccionada;
+                comprobanteGasto.gastoComprobacion = {};
+                comprobanteGasto.gastoComprobacion.idGastoComprobacion = $("#modal-comp-tipoGasto").val();
+                comprobanteGasto.comentario = $("#modal-comp-comentario").val();
             } else {
                 comprobanteGasto = {};
                 swal("Notificación", data.mensaje, "error");
@@ -142,6 +145,88 @@ function OnSuccesAgregarComprobacion(data) {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
 }
+
+/*=============================================================================================
+============================      MOSTRAR COMPROBACIÓNES    ===================================
+===============================================================================================*/
+
+
+function MostrarModalComprobaciones(solicitud) {
+    solSeleccionada = solicitud;
+    ObtenerFechasJsonSolSeleccionada(solicitud);
+    $.ajax({
+        data: { id: solSeleccionada.idSolitud },
+        url: rootUrl("/Viatico/_ObtenerComprobaciones"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#modal-content-comprobaciones").html(data);
+        },
+        error: function (xhr, status, error) {
+            $("#modal-comprobaciones").modal("hide");
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function mostrarFactura(url) {
+    window.open(url, '_blank');
+}
+
+function ConfirmarEliminarComprobacion(comprobacionGasto) {
+    swal({
+        title: "Está Usted seguro de eliminar la comprobación de la solicitud?",
+        text: "Al eliminar la comprobación, se borraran todos sus datos respectivos.",
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: "#1f3853",
+        confirmButtonText: "Si, deseo eliminar",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+            swal.close();
+            EliminarComprobacion(comprobacionGasto);
+        } else {
+            swal("Cancelado", "Se ha cancelado la operación", "error");
+        }
+    });
+}
+
+function EliminarComprobacion(comprobacionGasto) {
+    $.ajax({
+        data: { comprobacionGasto_: comprobacionGasto },
+        url: rootUrl("/Viatico/EliminarComprobacion"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            OnSuccesEliminarGasto(data);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function OnSuccesEliminarGasto(data) {
+    OcultarLoading();
+    if (data.status === true) {
+        MostrarNotificacionLoad("success", data.mensaje, 3000);
+        MostrarModalComprobaciones(solSeleccionada);
+    } else {
+        MostrarNotificacionLoad("error", data.mensaje, 3000);
+    }
+}
+
 
 /*=============================================================================================
 ======================================      CANCELAR SOL     ====================================

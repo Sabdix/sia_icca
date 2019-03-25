@@ -1042,8 +1042,13 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT *
-	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
+	SELECT 
+		cg.*,
+		catGC.Descripcion gasto_comprobacion
+	FROM 
+		DT_TBL_VIATICO_COMPROBACION_GASTOS cg
+	inner join 
+		DT_CAT_GASTO_COMPROBACION catGC on cg.Id_Gasto_Comprobacion = catGC.Id_Gasto_Comprobacion
 	WHERE Id_Solicitud=@Id_Solicitud
 
 END
