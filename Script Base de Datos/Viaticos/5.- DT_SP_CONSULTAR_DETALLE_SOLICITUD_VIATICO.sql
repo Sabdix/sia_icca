@@ -44,6 +44,7 @@ BEGIN
 			em.Em_Apellido_Paterno,
 			em.Em_Apellido_Materno,
 			CONVERT (VARCHAR,em.Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
+			em.Em_Email,
 			s.Sc_Descripcion Programa,
 			COALESCE(NULL,c.De_Descripcion ,'SIN DEPARTAMENTO') Departamento,
 			autorizador.Em_nombre Em_nombre_Autorizador,
@@ -70,7 +71,7 @@ BEGIN
 		where 
 			vs.Id_Solicitud = @Id_solicitud
 	
-
+		-------------itinerario-------------
 		select 
 			iti.* ,
 			medio.Descripcion medio_transporte,
@@ -82,9 +83,21 @@ BEGIN
 			DT_CAT_TIPO_SALIDA tSalida on iti.Id_Tipo_Salida= tSalida.Id_Tipo_Salida
 		where Id_Solicitud = @Id_solicitud
 	
+		-------------gastos extras-------------
 		select * from DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD 
 		where
 			Id_Solicitud = @Id_solicitud
+
+		-------------comprobaciones-------------
+		SELECT 
+			cg.*,
+			catGC.Descripcion gasto_comprobacion
+		FROM 
+			DT_TBL_VIATICO_COMPROBACION_GASTOS cg
+		inner join 
+			DT_CAT_GASTO_COMPROBACION catGC on cg.Id_Gasto_Comprobacion = catGC.Id_Gasto_Comprobacion
+		WHERE Id_Solicitud=@Id_Solicitud
+
 	END
 
 END

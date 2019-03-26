@@ -570,7 +570,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoCompDatosSolViatico(solViatico);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Solicitud de viatico autorizada", cuerpo, solViatico.Em_Cve_Empleado);
+                EnviarCorreExternoUsuario("Sistema Integral IICA México - Solicitud de viatico autorizada", cuerpo, solViatico.usuario.email);
             }
             catch (Exception ex)
             {
@@ -772,6 +772,40 @@ namespace IICA.Models.Entidades
             }
             catch (Exception ex) { }// ConfigurationManager.AppSettings["correosParaExterno"].ToString();
         }
+
+        private static void EnviarCorreExternoUsuario(string asunto, string cuerpo, string emailUSuario)
+        {
+            try
+            {
+                string correoProveedor = WebConfigurationManager.AppSettings["correoProveedor"].ToString();//"cristian.perez.garcia.54@gmail.com";
+                string contrasenaProveedor = WebConfigurationManager.AppSettings["contrasenaProveedor"].ToString(); //ConfigurationManager.AppSettings["contrasenaCorreoExterno"].ToString(); //"Kaneki_54";
+
+                System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
+                mmsg.To.Add(emailUSuario); // cuenta Email a la cual sera dirigido el correo
+                mmsg.Subject = asunto; //Asunto del correo
+                mmsg.SubjectEncoding = System.Text.Encoding.UTF8; //cambiamos el tipo de texto a UTF8
+                mmsg.Body = cuerpo; //Cuerpo del mensaje
+                mmsg.BodyEncoding = System.Text.Encoding.UTF8; // tambien encodear a utf8
+                mmsg.IsBodyHtml = true; // indicamos que dentro del body viene codigo HTML
+                mmsg.From = new System.Net.Mail.MailAddress(correoProveedor); // el email que enviara el correo (proveedor)
+
+                System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient(); // se realiza el cliente correo
+
+                cliente.Port = 587;
+                cliente.EnableSsl = true;
+                cliente.UseDefaultCredentials = false;
+                cliente.DeliveryMethod = SmtpDeliveryMethod.Network;
+                cliente.Host = "smtp.gmail.com"; //mail.dominio.com
+                cliente.Credentials = new System.Net.NetworkCredential(correoProveedor, contrasenaProveedor);  // Credenciales del correo emisor
+                //smtp
+                cliente.Send(mmsg);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion FUNCIONES - PRIVADAS
     }
 }

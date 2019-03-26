@@ -477,6 +477,7 @@ as
 					,coalesce(emp.Em_Nombre,'')Em_Nombre
 					,coalesce(emp.Em_Apellido_Paterno,'')Em_Apellido_Paterno
 					,coalesce(emp.Em_Apellido_Materno,'') Em_Apellido_Materno
+					,Em_Email
 				from 
 					DT_TBL_VIATICO_SOLICITUD  vs
 					join DT_CAT_MEDIO_TRANSPORTE mt
@@ -650,6 +651,7 @@ BEGIN
 		,coalesce(em.Em_Nombre,'')Em_Nombre
 		,coalesce(em.Em_Apellido_Paterno,'')Em_Apellido_Paterno
 		,coalesce(em.Em_Apellido_Materno,'') Em_Apellido_Materno
+		,em.Em_Email
 		,Monto_Viatico_Autorizado
 	from 
 		DT_TBL_VIATICO_SOLICITUD  vs
