@@ -45,7 +45,10 @@ BEGIN
 			em.Em_Apellido_Materno,
 			CONVERT (VARCHAR,em.Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
 			s.Sc_Descripcion Programa,
-			COALESCE(NULL,c.De_Descripcion ,'SIN DEPARTAMENTO') Departamento
+			COALESCE(NULL,c.De_Descripcion ,'SIN DEPARTAMENTO') Departamento,
+			autorizador.Em_nombre Em_nombre_Autorizador,
+			autorizador.Em_Apellido_Paterno Em_Apellido_Paterno_autorizador,
+			autorizador.Em_Apellido_Materno Em_Apellido_Materno_autorizador
 		from 
 			DT_TBL_VIATICO_SOLICITUD  vs
 			join DT_CAT_MEDIO_TRANSPORTE mt
@@ -63,6 +66,7 @@ BEGIN
 			join Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
 			join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
 			LEFT JOIN Departamento_Empleado c ON em.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
+			join empleado autorizador on vs.em_cve_empleado_autoriza=autorizador.Em_UserDef_1
 		where 
 			vs.Id_Solicitud = @Id_solicitud
 	

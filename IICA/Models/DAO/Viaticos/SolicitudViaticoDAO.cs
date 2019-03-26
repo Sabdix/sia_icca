@@ -233,6 +233,11 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.usuario.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                             solicitudViatico.Em_Cve_Empleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
 
+                            //lectura datos autorizador
+                            solicitudViatico.usuario.nombre = dbManager.DataReader["Em_nombre_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre_autorizador"].ToString();
+                            solicitudViatico.usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno_autorizador"].ToString();
+                            solicitudViatico.usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno_autorizador"].ToString();
+
                             //lectura de itinerarios
                             dbManager.DataReader.NextResult();
                             Itinerario itinerario;

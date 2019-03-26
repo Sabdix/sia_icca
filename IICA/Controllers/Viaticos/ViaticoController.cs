@@ -338,7 +338,7 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
-                return PartialView(solicitudViaticoDAO.ObtenerDetalleSol(id));
+                return PartialView((SolicitudViatico)solicitudViaticoDAO.ObtenerDetalleSol(id).objeto);
             }
             catch (Exception ex)
             {
