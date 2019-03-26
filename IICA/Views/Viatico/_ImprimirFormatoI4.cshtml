@@ -118,52 +118,56 @@
             </table>
         </div>
     </div>
+
     <div id="tipo_viaje">
-        <table class="md-100">
+        <table class="md-90">
     <tr>
         <td>
-            <table class="md-100" border="1">
+            <table class="md-90" border="1">
                 <tr>
-                    <td colspan="2" align="center"><label style="font-weight:900;">VIAJES INTERNACIONALES</label></td>
+                    <td colspan="2" align="center">VIAJES INTERNACIONALES</td>
                 </tr>
                 <tr>
-                    <td><label style="font-weight:900;">Código de empleado</label></td>
-                    <td><label style="font-weight:900;">CONSECUTIVO ANUAL</label></td>
+                    <td>Código de empleado</td>
+                    <td>CONSECUTIVO ANUAL</td>
                 </tr>
                 <tr>
-                    <td><label style="font-weight:900;">@(Model.tipoViaje.idTipoViaje==1 ? @Model.usuario.emCveEmpleado:"")</label></td>
-                    <td><label style="font-weight:900;">1</label></td>
+                    <td>@(Model.tipoViaje.idTipoViaje==2 ? @Model.usuario.emCveEmpleado:"")</td>
+                    <td>@(Model.tipoViaje.idTipoViaje == 2 ? "1":" ")</td>
                 </tr>
             </table>
         </td>
         <td>
-            <table class="md-100" border="1">
+            <table class="md-90" border="1">
                 <tr>
-                    <td colspan="2" align="center"><label style="font-weight:900;">VIAJES NACIONALES</label></td>
+                    <td colspan="2" align="center">VIAJES NACIONALES</td>
                 </tr>
                 <tr>
-                    <td><label style="font-weight:900;">Código de empleado</label></td>
-                    <td><label style="font-weight:900;">CONSECUTIVO ANUAL</label></td>
+                    <td>Código de empleado</td>
+                    <td>CONSECUTIVO ANUAL</td>
                 </tr>
                 <tr>
-                    <td><label style="font-weight:900;">@(Model.tipoViaje.idTipoViaje==2 ? @Model.usuario.emCveEmpleado:"")</label></td>
-                    <td><label style="font-weight:900;">1</label></td>
+                    <td>@(Model.tipoViaje.idTipoViaje==1 ? @Model.usuario.emCveEmpleado:"")</td>
+                    <td>@(Model.tipoViaje.idTipoViaje == 1 ? "1" : "")</td>
                 </tr>
             </table>
         </td>
     </tr>
 </table><br />
 </div>
+
     <div id="datos_empleado">
-       <table class="md-100" border="0">
+       <table border="0">
            <tr>
-               <td><label style="font-weight:900;">Nombre:</label></td>
-               <td><label style="font-weight:900;">@Model.usuario.nombreCompleto</label></td>
-               <td><label style="font-weight:900;">Cargo:</label></td>
-               <td><label style="font-weight:900;">"puesto"</label></td>
+               <td><label>Nombre:</label></td>
+               <td><label>@Model.usuario.nombreCompleto</label></td>
+               <td width="25">&nbsp;</td>
+               <td><label>Cargo:</label></td>
+               <td><label>"puesto"</label></td>
            </tr>
        </table>
    </div>
+
     <div id="datos_Viaje">
         <p>Próposito del viaje:</p>
         <p>@Model.proposito</p>
@@ -171,25 +175,27 @@
         <p>@Model.resultadosEsperados</p>
         <p>Justificación del viaje:</p>
         <p>@Model.justificacion.descripcion</p>
-        <table class="md-100" border="0">
+        <table border="0">
             <tr>
-                <td><label style="font-weight:900;">Relación de gastos pendientes:</label></td>
-                <td><label style="font-weight:900;">"NO"</label></td>
-                <td><label style="font-weight:900;">Informe de viaje pendiente:</label></td>
-                <td><label style="font-weight:900;">"NO"</label></td>
+                <td>Relación de gastos pendientes:</td>
+                <td>"NO"</td>
+                <td width="25">&nbsp;</td>
+                <td>Informe de viaje pendiente:</td>
+                <td>"NO"</td>
             </tr>
         </table>
         <p>Duración estimada del viaje:</p>
         <p>@(Model.duracionViaje + " día(s)")</p>
      </div>  
-    <div class="col-md-12 col-sm-12 col-md-12">
+
+    <div class="col-md-12">
         <div class="col-md-12">
             <div class="grid simple vertical green">
                 <div class="grid-title">
                     <h4>Lista <span class="semi-bold">de itinerario</span></h4>
                 </div>
                 <div class="grid-body">
-                    <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+                    <table style="text-align: center;" id="tabla-itinerarios">
                         <thead>
                             <tr>
                                 <th style="width:10%;text-align: center;">Tipo</th>
@@ -235,13 +241,14 @@
             </div>
         </div>
     </div>
+
     <div class="col-md-12">
         <div class="grid simple vertical red">
             <div class="grid-title">
                 <h4>Lista <span class="semi-bold">de gastos</span></h4>
             </div>
             <div class="grid-body">
-                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+                <table style="text-align: center;" id="tabla-gastosExtras">
                     <thead>
                         <tr>
                             <th style="width:10%;text-align: center;">Gasto</th>
@@ -261,6 +268,7 @@
             </div>
         </div>
     </div>
+
     <p>Datos del anticipo de viatico:</p>
     <div>
         <table>
@@ -276,9 +284,9 @@
             </tr>
         </table>
     </div>
-    <p>RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE5 DÍAS HABILES POSTERIORES A SU RETORNO:</p>
-    <div class="grid-body">
-        <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+    <p>RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE 5 DÍAS HABILES POSTERIORES A SU RETORNO:</p>
+    <div>
+        <table border="1" style="text-align: center;" id="tabla-gastos_reintegro">
             <thead>
                 <tr>
                     <th style="width:10%;text-align: center;">Tipo de Gasto</th>
@@ -291,46 +299,45 @@
                 </tr>
             </thead>
             <tbody>
-                <table>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                     </tr>
-                </table>
             </tbody>
         </table>
     </div>
+
     <div id="content-firmas" class="md-90">
             <div style="text-align: left; float: left;">
-                <p>________________________</p>
+                <p>___________________________________________</p>
                 <p>@Model.usuario.nombreCompleto</p>
             </div>
 
             <div style="text-align: right; float: right;">
-                <p>________________________</p>
+                <p>__________________________________________</p>
                 <p>@Model.autorizador.nombreCompleto</p>
             </div>
 

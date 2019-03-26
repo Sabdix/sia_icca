@@ -223,6 +223,7 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.pernocta = dbManager.DataReader["pernocta"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["pernocta"].ToString());
                             solicitudViatico.marginal = dbManager.DataReader["marginal"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["marginal"].ToString());
                             solicitudViatico.pathArchivoAutorizacion = dbManager.DataReader["Path_Archivo_Autorizacion"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Autorizacion"].ToString());
+                            solicitudViatico.montoAutorizado = dbManager.DataReader["monto_viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["monto_viatico_Autorizado"].ToString());
 
                             solicitudViatico.usuario.nombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
                             solicitudViatico.usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
@@ -234,9 +235,9 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.Em_Cve_Empleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
 
                             //lectura datos autorizador
-                            solicitudViatico.usuario.nombre = dbManager.DataReader["Em_nombre_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre_autorizador"].ToString();
-                            solicitudViatico.usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno_autorizador"].ToString();
-                            solicitudViatico.usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno_autorizador"].ToString();
+                            solicitudViatico.autorizador.nombre = dbManager.DataReader["Em_nombre_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre_autorizador"].ToString();
+                            solicitudViatico.autorizador.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno_autorizador"].ToString();
+                            solicitudViatico.autorizador.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno_autorizador"].ToString();
 
                             //lectura de itinerarios
                             dbManager.DataReader.NextResult();
