@@ -455,6 +455,14 @@ namespace IICA.Controllers.Viaticos
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.pathArchivoReintegro = ObtenerFormatosTempHttpPost(Request, "Reintegro_sol-" + solicitudViatico_.idSolitud, usuarioSesion.emCveEmpleado);
                 Result result = solicitudViaticoDAO.ConluirComprobacionSolicitud(solicitudViatico_);
+                if (result.status)
+                {
+                    try {
+                        result.objeto = solicitudViaticoDAO.ObtenerDetalleSol(solicitudViatico_.idSolitud).objeto;
+                        Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto);
+                    }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

@@ -183,7 +183,7 @@ namespace IICA.Models.DAO.Viaticos
             return solicitudes;
         }
 
-        public Result ObtenerDetalleSol(int idSolicitudViatico)
+        public Result ObtenerDetalleSol(Int64 idSolicitudViatico)
         {
             Result result = new Result();
             SolicitudViatico solicitudViatico;

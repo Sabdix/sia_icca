@@ -24,39 +24,48 @@
                     <i class="material-icons">home</i> <span class="title">Inicio</span> <span class="selected"></span>
                 </a>
             </li>
+
             <!--    SOLICITUD -->
-            <li class="nodo-menu" id="nodo-solicitud">
-                <a href="@Url.Action("NuevaSolicitud","Viatico")">
-                    <i class="material-icons">note_add</i> <span class="title">Nueva solicitud</span> <span class="selected"></span>
-                </a>
-            </li>
+            @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+            {
+                <li class="nodo-menu" id="nodo-solicitud">
+                    <a href="@Url.Action("NuevaSolicitud", "Viatico")">
+                        <i class="material-icons">note_add</i> <span class="title">Nueva solicitud</span> <span class="selected"></span>
+                    </a>
+                </li>
+            }
             <!--    SOLICITUDES    -->
-            <li class="nodo-menu" id="nodo-misSolicitudes">
-                <a href="javascript:;"> <i class="material-icons">account_balance_wallet</i> <span class="title">Mis Solicitudes</span> <span class=" arrow"></span> </a>
-                <ul class="sub-menu">
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
-                    {
+            @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+            {
+                <li class="nodo-menu" id="nodo-misSolicitudes">
+                    <a href="javascript:;"> <i class="material-icons">account_balance_wallet</i> <span class="title">Mis Solicitudes</span> <span class=" arrow"></span> </a>
+                    <ul class="sub-menu">
+
                         <li> <a id="submenu-misSolProceso" href="@Url.Action("MisSolicitudes","Viatico")">En proceso </a> </li>
                         <li> <a id="submenu-misCompro" href="@Url.Action("MisSolicitudesPorComprobar", "Viatico")">Comprobación de gastos</a> </li>
-                    }
-                </ul>
-            </li>
 
+                    </ul>
+                </li>
+            }
             <!--    SOLICITUDES AUTORIZADOR    -->
-            <li class="nodo-menu" id="nodo-solicitudesAutorizar">
-                <a href="@Url.Action("SolicitudesPorAutorizar","Viatico")">
-                    <i class="material-icons">gavel</i> <span class="title">Sol. para Autorizar</span> <span class="selected"></span>
-                </a>
-            </li>
+            @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
+            {
+                <li class="nodo-menu" id="nodo-solicitudesAutorizar">
+                    <a href="@Url.Action("SolicitudesPorAutorizar", "Viatico")">
+                        <i class="material-icons">gavel</i> <span class="title">Sol. para Autorizar</span> <span class="selected"></span>
+                    </a>
+                </li>
+            }
             <!--    SOLICITUDES ADMINISTRADOR    -->
-            <li class="nodo-menu" id="nodo-solicitudCheque">
             @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
             {
-                <a href="@Url.Action("SolicitudesGenerarCheque", "Viatico")">
-                    <i class="material-icons">gavel</i> <span class="title">Sol. generar cheque</span> <span class="selected"></span>
-                </a>
-             }
-            </li>
+                <li class="nodo-menu" id="nodo-solicitudCheque">
+                    <a href="@Url.Action("SolicitudesGenerarCheque", "Viatico")">
+                        <i class="material-icons">gavel</i> <span class="title">Sol. generar cheque</span> <span class="selected"></span>
+                    </a>
+
+                </li>
+            }
 
             <!--    REPORTES    -->
             <li class="nodo-menu" id="nodo-reportes">
