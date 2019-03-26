@@ -394,6 +394,44 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [HttpPost, SessionExpire]
+        public ActionResult _ObtenerComprobaciones(int id)
+        {
+            try
+            {
+                ComprobacionGastosDAO comprobacionGastosDAO = new ComprobacionGastosDAO();
+                return PartialView(comprobacionGastosDAO.ObtenerComprobacionGastos(id));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult EliminarComprobacion(ComprobacionGasto comprobacionGasto_)
+        {
+            try
+            {
+                ComprobacionGastosDAO comprobacionGastosDAO = new ComprobacionGastosDAO();
+                Result result = comprobacionGastosDAO.EliminaComprobacionGasto(comprobacionGasto_.idComprobacionGasto);
+                if (result.status)
+                {
+                    try
+                    {
+                        EliminarFacturas(comprobacionGasto_);
+                    }
+                    catch (Exception ex) { result.mensaje = "No fue posible eliminar los archivos correspondientes a la comprobación (xml y pdf)"; }
+                }
+                return Json(result,JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
         {
@@ -478,7 +516,8 @@ namespace IICA.Controllers.Viaticos
             {
                 //eliminamos el caracter BOM ya que este caracter no permite tener una correcta lectura del xml
                 string _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-                if (xmlString.StartsWith(_byteOrderMarkUtf8))
+                xmlString = xmlString.TrimEnd(); xmlString = xmlString.TrimStart();
+                if (xmlString.StartsWith(_byteOrderMarkUtf8) && xmlString.Substring(0, 1) != "<")
                 {
                     xmlString = xmlString.Remove(0, _byteOrderMarkUtf8.Length);
                 }
@@ -486,25 +525,25 @@ namespace IICA.Controllers.Viaticos
                 XmlDocument xml = new XmlDocument();
                 xml.LoadXml(xmlString);
                 XmlElement xmlElement = xml.DocumentElement;
-                if (xmlElement.LocalName == "Comprobante")
+                if (string.Compare(xmlElement.LocalName, "Comprobante", true) == 0)
                 {
                     foreach (XmlAttribute xn in xmlElement.Attributes)
                     {
-                        if (xn.LocalName == "subTotal")
+                        if (string.Compare(xn.LocalName, "subTotal", true) == 0)
                             comprobacionGasto.subtotal = Convert.ToDouble(xn.Value);
-                        if (xn.LocalName == "total")
+                        if (string.Compare(xn.LocalName, "total", true) == 0)
                             comprobacionGasto.total = Convert.ToDouble(xn.Value);
-                        if (xn.LocalName == "LugarExpedicion")
+                        if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
                             comprobacionGasto.lugar = xn.Value.ToString();
                     }
 
                     foreach (XmlNode node in xmlElement.ChildNodes)
                     {
-                        if (node.LocalName == "Emisor")
+                        if (string.Compare(node.LocalName, "Emisor", true) == 0)
                         {
                             foreach (XmlAttribute xn in node.Attributes)
                             {
-                                if (xn.LocalName == "nombre")
+                                if (string.Compare(xn.LocalName, "nombre", true) == 0)
                                     comprobacionGasto.emisor = xn.Value.ToString();
                             }
                         }
@@ -514,6 +553,8 @@ namespace IICA.Controllers.Viaticos
                         result.objeto = comprobacionGasto;
                         result.status = true;
                     }
+                    else
+                        result.mensaje = "Los datos de la factura son incorrectos, intente de nuevo.";
                 }
                 else
                 {
@@ -546,15 +587,37 @@ namespace IICA.Controllers.Viaticos
                         string pathFormato = Path.Combine(pathGeneral, nombre);
 
                         file.SaveAs(pathFormato);
-                        if (file.ContentType == "Application/pdf")
+                        if (string.Compare(file.ContentType,"Application/pdf",true)==0)
                         {
                             comprobacion.pathArchivoPDF = pathViaticosFormatos + "/" + usuario + "/" + nombre;
                         }
-                        if (file.ContentType == "text/xml")
+                        if (string.Compare(file.ContentType,"text/xml")==0)
                         {
                             comprobacion.pathArchivoXML = pathViaticosFormatos + "/" + usuario + "/" + nombre;
                         }
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return true;
+        }
+       
+        private bool EliminarFacturas(ComprobacionGasto comprobacionGasto)
+        {
+            try
+            {
+                var pathFacturaXML = Server.MapPath("~" + comprobacionGasto.pathArchivoXML);
+                var pathFacturaPDF = Server.MapPath("~" + comprobacionGasto.pathArchivoPDF);
+                if (System.IO.File.Exists(pathFacturaXML))
+                {
+                    System.IO.File.Delete(pathFacturaXML);
+                }
+                if (System.IO.File.Exists(pathFacturaPDF))
+                {
+                    System.IO.File.Delete(pathFacturaPDF);
                 }
             }
             catch (Exception ex)

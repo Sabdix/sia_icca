@@ -1,0 +1,97 @@
+﻿@model List<IICA.Models.Entidades.Viaticos.ComprobacionGasto>
+@using System.Web.Script.Serialization;
+
+
+<div class="grid simple vertical green">
+    <div class="grid-title">
+        <h4>Lista <span class="semi-bold">de comprobaciones</span></h4>
+    </div>
+    <div class="grid-body">
+        <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-comprobacionsExtras">
+            <thead>
+                <tr>
+                    <th style="width:10%;text-align: center;">No.</th>
+                    <th style="width:10%;text-align: center;">Tipo de comprobacion</th>
+                    <th style="width:10%;text-align: center;">Comentarios</th>
+                    <th style="width:10%;text-align: center;">Emisor</th>
+                    <th style="width:10%;text-align: center;">Subtotal</th>
+                    <th style="width:10%;text-align: center;">Total</th>
+                    <th style="width:10%;text-align: center;">Facturas</th>
+                    <th style="width:10%;text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var comprobacion in Model)
+                {
+                    <tr>
+                        <td>@comprobacion.idComprobacionGasto </td>
+                        <td>@comprobacion.gastoComprobacion.descripcion</td>
+                        <td>@comprobacion.comentario</td>
+                        <td>@comprobacion.emisor</td>
+                        <td>@comprobacion.subtotal.ToString("C")</td>
+                        <td>@comprobacion.total.ToString("C")</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" 
+                                   href="#" style="font-size: 11px;"> Ver formatos <span class="caret"></span> </a>
+                                <ul class="dropdown-menu">
+                                    @if (!string.IsNullOrEmpty(comprobacion.pathArchivoPDF))
+                                    {
+                                        <li>
+                                            <a href="#" onclick="mostrarFactura('@comprobacion.pathArchivoPDF')">
+                                                Factura PDF
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(comprobacion.pathArchivoXML))
+                                    {
+                                        <li>
+                                            <a href="#" onclick="mostrarFactura('@comprobacion.pathArchivoXML')">
+                                                Factura XML
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
+                            <span>
+                                <button data-toggle="tooltip" title="Eliminar comprobación" class="btn btn-warning btn-mini"
+                                        onclick="ConfirmarEliminarComprobacion(@(new JavaScriptSerializer().Serialize(comprobacion)) )">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<style>
+    .blueIICA {
+        color: #1f3853;
+    }
+
+    #content-solViatico .grid-body {
+        padding: 0px !important;
+    }
+
+    table tr th {
+        font-size: 11px !important;
+    }
+
+    table td {
+        font-size: 11px !important;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+</script>
+

@@ -18,5 +18,11 @@ namespace IICA.Models.Entidades.Viaticos
         public double total { get; set; }
         public string lugar { get; set; }
 
+        public ComprobacionGasto()
+        {
+            solicitud = new SolicitudViatico();
+            gastoComprobacion = new GastoComprobacion();
+        }
+
     }
 }
