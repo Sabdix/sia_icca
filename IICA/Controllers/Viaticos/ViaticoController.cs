@@ -353,6 +353,7 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
+                ViewBag.Administrador= (Usuario)Session["usuarioSesion"];
                 return PartialView((SolicitudViatico)solicitudViaticoDAO.ObtenerDetalleSol(id).objeto);
             }
             catch (Exception ex)
