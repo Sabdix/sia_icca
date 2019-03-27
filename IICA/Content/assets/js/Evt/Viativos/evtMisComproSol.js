@@ -2,6 +2,12 @@
 var comprobanteGasto = {};
 var totalComprobacion = 0;
 
+//variable para validar el flujo de acuerdo a las condiciones de marginal con gastos extras y no marginal
+var validarSolamenteInforme;
+
+//variable para validar que se suban todos los archivos de pases de abordar de los itinerarios aereos
+var validarCargaPasesDeAbordar;
+
 $(document).ready(function () {
 
     $('#tabla-aut-solicitudes').dataTable();
