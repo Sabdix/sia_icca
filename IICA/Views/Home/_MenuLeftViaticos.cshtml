@@ -48,7 +48,7 @@
                 </li>
             }
             <!--    SOLICITUDES AUTORIZADOR    -->
-            @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
+            @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
             {
                 <li class="nodo-menu" id="nodo-solicitudesAutorizar">
                     <a href="@Url.Action("SolicitudesPorAutorizar", "Viatico")">
