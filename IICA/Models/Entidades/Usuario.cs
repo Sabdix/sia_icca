@@ -26,5 +26,6 @@ namespace IICA.Models.Entidades
 
         public string CorreoProveedor { get; set; }
         public string ContrasenaProveedor { get; set; }
+        public string puesto { get; set; }
     }
 }

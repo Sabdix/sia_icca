@@ -11,6 +11,7 @@ namespace IICA.Models.Entidades
 
     public enum EnumTipoUsuario
     {
+        NINGUNO=0,
         ADMINISTRADOR = 1,
         EMPLEADO = 2,
         AUTORIZADOR_PVI = 3 //autorizadores para el sistema de Permisos,Vacaciones,Incapacidades
@@ -18,6 +19,7 @@ namespace IICA.Models.Entidades
 
     public enum EstatusSolicitud
     {
+        NINGUNA=0,
         SOLICITUD_ENVIADA = 1,
         SOLICITUD_APROBADA = 2,
         SOLICITUD_CANCELADA = 3,
@@ -26,6 +28,7 @@ namespace IICA.Models.Entidades
 
     public enum EnumEtapaSolicitudViaticos
     {
+        NINGUNO=0,
         GENERADA = 1,
         ENVIADA = 2,
         COMPLETAR_DATOS = 3,
@@ -53,6 +56,13 @@ namespace IICA.Models.Entidades
     public enum FormatosPermiso
     {
         FORMATO_AUTORIZACION = 1
+    }
+
+    public enum EnumTipoSalida
+    {
+        NINGUNO =0,
+        TERRESTRE=1,
+        AEREO=2
     }
     static class Constants
     {

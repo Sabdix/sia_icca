@@ -49,7 +49,9 @@ BEGIN
 			COALESCE(NULL,c.De_Descripcion ,'SIN DEPARTAMENTO') Departamento,
 			autorizador.Em_nombre Em_nombre_Autorizador,
 			autorizador.Em_Apellido_Paterno Em_Apellido_Paterno_autorizador,
-			autorizador.Em_Apellido_Materno Em_Apellido_Materno_autorizador
+			autorizador.Em_Apellido_Materno Em_Apellido_Materno_autorizador,
+			pe.Pe_Descripcion puesto_empleado,
+			pea.Pe_Descripcion puesto_autorizador
 		from 
 			DT_TBL_VIATICO_SOLICITUD  vs
 			join DT_CAT_MEDIO_TRANSPORTE mt
@@ -68,6 +70,8 @@ BEGIN
 			join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
 			LEFT JOIN Departamento_Empleado c ON em.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
 			join empleado autorizador on vs.em_cve_empleado_autoriza=autorizador.Em_UserDef_1
+			join Puesto_Empleado pe on em.pe_cve_puesto_empleado=pe.Pe_Cve_Puesto_Empleado
+			join Puesto_Empleado pea on autorizador.pe_cve_puesto_empleado=pea.Pe_Cve_Puesto_Empleado
 		where 
 			vs.Id_Solicitud = @Id_solicitud
 	
