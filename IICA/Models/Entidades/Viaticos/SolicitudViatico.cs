@@ -46,6 +46,8 @@ namespace IICA.Models.Entidades.Viaticos
 
         public Usuario autorizador { get; set; }
 
+        public List<ComprobacionGasto> comprobacionesGasto { get; set; }
+        public string pathArchivoReintegro { get; set; }
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();
@@ -59,6 +61,7 @@ namespace IICA.Models.Entidades.Viaticos
             etapaSolicitud = new EtapaSolicitud();
             nivelMando = new NivelMando();
             autorizador = new Usuario();
+            comprobacionesGasto = new List<ComprobacionGasto>();
         }
     }
 }

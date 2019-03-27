@@ -37,6 +37,7 @@ BEGIN
 		em.Em_Apellido_Paterno,
 		em.Em_Apellido_Materno,
 		CONVERT (VARCHAR,em.Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
+		em.Em_Email,
 		s.Sc_Descripcion Programa,
 		COALESCE(NULL,c.De_Descripcion ,'SIN DEPARTAMENTO') Departamento
 	from 

@@ -33,7 +33,6 @@
                     <thead>
                         <tr>
                             <th style="width:2%;text-align: center;">No. Solicitud</th>
-                            <th style="width:15%;text-align: center;">Viaticante</th>
                             <th style="width:15%;text-align: center;">Proposito</th>
                             <th style="width:8%;text-align: center;">Fecha inicio</th>
                             <th style="width:8%;text-align: center;">Fecha fin</th>
@@ -47,7 +46,6 @@
                         {
                             <tr>
                                 <td>@solicitud.idSolitud</td>
-                                <td>@solicitud.usuario.nombreCompleto</td>
                                 <td>@solicitud.proposito</td>
                                 <td>
                                     <span class="muted">
@@ -63,8 +61,9 @@
                                 <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
                                 <td>
                                     <div class="btn-group">
-                                        <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" href="#" style="font-size: 11px;"> 
-                                        Ver acciones <span class="caret"></span> </a>
+                                        <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" href="#" style="font-size: 11px;">
+                                            Ver acciones <span class="caret"></span>
+                                        </a>
                                         <ul class="dropdown-menu" style="margin-left: -55px !important;">
                                             <li>
                                                 <a href="#" data-toggle="modal" data-target="#modal-solViatico"
@@ -85,8 +84,8 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
-                                                   onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                <a href="#" data-toggle="modal" data-target="#modal-concluir"
+                                                   onclick="MostrarModalConluirComprobacion(@solicitud.idSolitud)">
                                                     Concluir comprobaciones
                                                 </a>
                                             </li>
@@ -127,14 +126,14 @@
                         <div class="col-md-12">
                             <label class="form-label">Tipo de gasto:</label>
                             @Html.DropDownList("modalcompGasto", (IEnumerable<SelectListItem>)ViewBag.GastosComprobacion,
-                                new
-                                {
-                                    @class = "select-iica",
-                                    id = "modal-comp-tipoGasto",
-                                    style = "width: 100%;",
-                                    data_val_required = "Seleccione un nivel de mando.",
-                                    data_val = "true"
-                                })
+                                          new
+                                          {
+                                              @class = "select-iica",
+                                              id = "modal-comp-tipoGasto",
+                                              style = "width: 100%;",
+                                              data_val_required = "Seleccione un nivel de mando.",
+                                              data_val = "true"
+                                          })
                         </div>
                     </div>
                     <br />
@@ -212,58 +211,61 @@
 </div>
 
 
-<div class="modal fade" id="modal-cancelar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-concluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <br>
-                <i class="fa fa-question-circle fa-7x"></i>
+                <i class="fa fa-question-circle fa-5x"></i>
                 <h5 id="myModalLabel" class="semi-bold">Realmente desea CONCLUIR con la comprobación de gatos.</h5>
-                <p class="no-margin">A continuación se muestran los gastos de la solicitud </p>
-                <br>
+                <p class="no-margin">A continuación se muestran detalle de la solicitud.</p>
             </div>
             <div class="modal-body">
                 <div class="row form-row">
                     <div class="col-md-6">
                         <label class="form-label">No. de solicitud:</label>
-                        <input id="modal-can-idSol" type="text" class="form-control" placeholder="" readonly>
+                        <input id="modal-concluir-idSol" type="text" class="form-control" placeholder="" readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Viaticante:</label>
-                        <input id="modal-can-viaticante" type="text" class="form-control" placeholder="" readonly>
+                        <input id="modal-concluir-viaticante" type="text" class="form-control" placeholder="" readonly>
                     </div>
                 </div>
                 <div class="row form-row">
                     <div class="col-md-6">
                         <label class="form-label">Fecha inicio:</label>
-                        <input id="modal-can-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
+                        <input id="modal-concluir-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Fecha fin:</label>
-                        <input id="modal-can-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
+                        <input id="modal-concluir-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
                     </div>
                 </div>
                 <div class="row form-row">
                     <div class="col-md-6">
-                        <label class="form-label">Duración del viaje:</label>
-                        <input id="modal-can-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
+                        <label class="form-label">Monto autorizado:</label>
+                        <input id="modal-concluir-montoAut" type="text" class="form-control" placeholder="Duración del viaje" readonly>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Resultados esperados:</label>
-                        <input id="modal-can-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
+                        <label class="form-label">Monto comprobado:</label>
+                        <input id="modal-concluir-montoCompr" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
                     </div>
                 </div>
-                <div class="row form-row">
+                <div class="row form-row" id="content-reintegro">
                     <div class="col-md-12">
-                        <label class="form-label">Medio de transporte:</label>
-                        <input id="modal-can-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
+                        <label style="color: #8e2b2b;font-weight: 600;" class="form-label">
+                            Anexar el archivo de reintegro por la cantidad de: <span id="modal-conluir-reintegro"></span>
+                        </label>
+                        <div style="height: 100px;">
+                            <div class="col-md-12" id="dropZoneReintegro"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-warning" onclick="CancelarSol()">Cancelar solicitud</button>
+                <button type="button" class="btn btn-success" onclick="OnConluirComprobacion()">Concluir comprobación</button>
             </div>
         </div>
 
@@ -275,7 +277,7 @@
 @section scripts{
     <style>
 
-        #dZUploadXmlComp, #dZUploadPdfComp {
+        #dZUploadXmlComp, #dZUploadReintegro {
             min-height: 150px !important;
         }
     </style>
