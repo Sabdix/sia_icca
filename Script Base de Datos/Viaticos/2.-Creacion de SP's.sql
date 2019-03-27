@@ -1199,23 +1199,30 @@ BEGIN
 		*/
 		IF(@archivo= 3)--
 		begin
-			 update DT_TBL_VIATICO_COMPROBACION_GASTOS set Path_Archivo_SAT = @archivo
+			 update DT_TBL_VIATICO_COMPROBACION_GASTOS set Path_Archivo_SAT = @path_archivo
 			 where
 				Id_Comprobacion_Gasto = @id_comprobacion_gasto
+
+			IF @@ERROR<>0
+			BEGIN
+				SET @mensaje='ERROR AL GUARDAR EL ARCHIVO DE LA COMPROBACION DE GASTO.'
+				GOTO ERROR_1
+			END
 		end
 
 		IF(@archivo= 4)--
 		begin
-			 update DT_TBL_VIATICO_COMPROBACION_GASTOS set Path_Archivo_Otros = @archivo
+			 update DT_TBL_VIATICO_COMPROBACION_GASTOS set Path_Archivo_Otros = @path_archivo
 			 where
 				Id_Comprobacion_Gasto = @id_comprobacion_gasto
+
+			IF @@ERROR<>0
+			BEGIN
+				SET @mensaje='ERROR AL GUARDAR EL ARCHIVO DE LA COMPROBACION DE GASTO.'
+				GOTO ERROR_1
+			END
+
 		end
-		
-		IF @@ERROR<>0
-		BEGIN
-			SET @mensaje='ERROR AL GUARDAR EL ARCHIVO DE LA COMPROBACION DE GASTO.'
-			GOTO ERROR_1
-		END
 
 
 	GOTO EXIT_
