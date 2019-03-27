@@ -47,6 +47,12 @@ namespace IICA.Models.Entidades.Viaticos
         public Usuario autorizador { get; set; }
 
         public List<ComprobacionGasto> comprobacionesGasto { get; set; }
+		/*Nuevos campos*/
+		public string pathComprobanteEstancia { get; set; }
+		public string pathArchivo10NoComprobable { get; set; }
+		public DateTime fechaReintegro { get; set; }
+		public decimal Importe_Reintegro { get; set; }
+		/*Nuevos campos*/
         public string pathArchivoReintegro { get; set; }
         public SolicitudViatico()
         {

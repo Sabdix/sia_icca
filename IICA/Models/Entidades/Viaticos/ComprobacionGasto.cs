@@ -12,6 +12,10 @@ namespace IICA.Models.Entidades.Viaticos
         public string comentario { get; set; }
         public string pathArchivoXML { get; set; }
         public string pathArchivoPDF { get; set; }
+		/*Campos nuevos*/
+		public string pathArchivoSAT { get; set; }
+		public string pathArchivoOtros { get; set; }
+		/*Campos nuevos*/
         public GastoComprobacion gastoComprobacion { get; set; }
         public string emisor { get; set; }
         public double subtotal { get; set; }

@@ -24,6 +24,9 @@ namespace IICA.Models.Entidades.Viaticos
         public TipoSalida tipoSalida { get; set; }
         public string pathBoleto { get; set; }
         public decimal dias { get; set; }
+		/*Campos nuevos*/
+		public string pathPasajeAbordar { get; set; }
+		/*Campos nuevos*/
 
         public Itinerario()
         {
