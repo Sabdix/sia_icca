@@ -900,7 +900,8 @@ BEGIN
     -- Insert statements for procedure here
 	DECLARE
 		@status INT=1,
-		@mensaje VARCHAR(100)='GUARDADO DE MANERA CORRECTA'
+		@mensaje VARCHAR(100)='GUARDADO DE MANERA CORRECTA',
+		@id bigint = 0
 
 
 	INSERT
@@ -933,6 +934,11 @@ BEGIN
 			SET @mensaje='ERROR AL GUARDAR LA COMPROBACION DEL GASTO.'
 			GOTO ERROR_1
 		END
+		ELSE
+		BEGIN
+			select @id = Max(Id_Comprobacion_Gasto) from 
+			DT_TBL_VIATICO_COMPROBACION_GASTOS where Id_Solicitud=@Id_Solicitud
+		END
 
 
 	GOTO EXIT_
@@ -941,7 +947,7 @@ BEGIN
 		SET @status=0
 		GOTO EXIT_
 	EXIT_:
-		SELECT @status STATUS, @mensaje MENSAJE
+		SELECT @status STATUS, @mensaje MENSAJE,@id id
 
 END
 GO
@@ -1139,6 +1145,91 @@ END
 GO
 
 GRANT EXECUTE ON DT_SP_GUARDA_COMPROBACION_GASTOS TO public;  
+GO
+
+--==========================================================================================================================
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_ACTUALIZAR_PATH_ARCHIVOS_COMPROBACION_GASTO')
+BEGIN
+	DROP PROCEDURE DT_SP_ACTUALIZAR_PATH_ARCHIVOS_COMPROBACION_GASTO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_ACTUALIZAR_PATH_ARCHIVOS_COMPROBACION_GASTO
+	-- Add the parameters for the stored procedure here
+	@id_comprobacion_gasto int,
+	@archivo int,
+	@path_archivo VARCHAR(500)
+	
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE
+		@status INT=1,
+		@mensaje VARCHAR(100)='ARCHIVO GUARDADO DE MANERA CORRECTA',
+		@id bigint = 0
+
+		/*
+		 FACTURA_XML=1,
+        FACTURA_PDF = 2,
+        COMPROBACION_SAT = 3,
+        OTROS_TICKET = 4
+		*/
+		IF(@archivo= 3)--
+		begin
+			 update DT_TBL_VIATICO_COMPROBACION_GASTOS set Path_Archivo_SAT = @archivo
+			 where
+				Id_Comprobacion_Gasto = @id_comprobacion_gasto
+		end
+
+		IF(@archivo= 4)--
+		begin
+			 update DT_TBL_VIATICO_COMPROBACION_GASTOS set Path_Archivo_Otros = @archivo
+			 where
+				Id_Comprobacion_Gasto = @id_comprobacion_gasto
+		end
+		
+		IF @@ERROR<>0
+		BEGIN
+			SET @mensaje='ERROR AL GUARDAR EL ARCHIVO DE LA COMPROBACION DE GASTO.'
+			GOTO ERROR_1
+		END
+
+
+	GOTO EXIT_
+
+	ERROR_1:
+		SET @status=0
+		GOTO EXIT_
+	EXIT_:
+		SELECT @status STATUS, @mensaje MENSAJE,@id id
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_ACTUALIZAR_PATH_ARCHIVOS_COMPROBACION_GASTO TO public;  
 GO
 
 --==========================================================================================================================

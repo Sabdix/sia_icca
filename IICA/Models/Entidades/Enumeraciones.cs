@@ -45,6 +45,14 @@ namespace IICA.Models.Entidades
         CANCELADA = 3
     }
 
+    public enum EnumArchivosComprobacionGastos
+    {
+        FACTURA_XML=1,
+        FACTURA_PDF = 2,
+        COMPROBACION_SAT = 3,
+        OTROS_TICKET = 4
+    }
+
     public enum FormatosIncapacidad
     {
         FORMATO_INCAPACIDAD = 1,
