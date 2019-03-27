@@ -44,9 +44,6 @@ namespace IICA.Models.Entidades.Viaticos
         public NivelMando nivelMando { get; set; }
         public DateTime  fechaCheque { get; set; }
         public Usuario autorizador { get; set; }
-
-        public Usuario autorizador { get; set; }
-
         public List<ComprobacionGasto> comprobacionesGasto { get; set; }
 		/*Nuevos campos*/
 		public string pathComprobanteEstancia { get; set; }

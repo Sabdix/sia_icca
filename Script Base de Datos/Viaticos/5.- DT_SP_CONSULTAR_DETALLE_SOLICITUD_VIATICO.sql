@@ -69,9 +69,9 @@ BEGIN
 			join Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
 			join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
 			LEFT JOIN Departamento_Empleado c ON em.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
-			join empleado autorizador on vs.em_cve_empleado_autoriza=autorizador.Em_UserDef_1
-			join Puesto_Empleado pe on em.pe_cve_puesto_empleado=pe.Pe_Cve_Puesto_Empleado
-			join Puesto_Empleado pea on autorizador.pe_cve_puesto_empleado=pea.Pe_Cve_Puesto_Empleado
+			left join empleado autorizador on vs.em_cve_empleado_autoriza=autorizador.Em_UserDef_1
+			left join Puesto_Empleado pe on em.pe_cve_puesto_empleado=pe.Pe_Cve_Puesto_Empleado
+			left join Puesto_Empleado pea on autorizador.pe_cve_puesto_empleado=pea.Pe_Cve_Puesto_Empleado
 		where 
 			vs.Id_Solicitud = @Id_solicitud
 	
