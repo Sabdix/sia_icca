@@ -66,6 +66,73 @@ $(document).ready(function () {
     xmlComprobacionDropzone.on("complete", function (file, response) {
     });
 
+
+    $("#dropZoneSat").append("<form id='dZUploadSat' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+    DropzoneSat = {
+        url: rootUrl("/Viatico/SubirArchivoComprobacionGasto"),
+        addRemoveLinks: true,
+        paramName: "archivo",
+        maxFilesize: 4, // MB
+        dictRemoveFile: "Remover",
+        acceptedFiles: ".pdf,.xml",
+        maxFiles: 2,
+        uploadMultiple: true,
+        autoProcessQueue: false,
+        init: function () {
+            this.on("maxfilesexceeded", function (file) {
+                this.removeFile(file);
+                swal("Error", "No se puede subir mas de un archivo", "error");
+            });
+        },
+        sending: function (file, xhr, formData) {
+            formData.append("id", comprobanteGasto.idComprobacionGasto);
+            formData.append("archivoComprobacionGasto",3);
+        },
+        success: function (file, data) {
+            file.previewElement.classList.add("dz-success");
+            if (!data.status)
+                swal("Notificación", data.mensaje, "error");
+        },
+        error: function (file, response) {
+            file.previewElement.classList.add("dz-error");
+            //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
+        }
+    } // FIN myAwesomeDropzone
+    SatDropzone = new Dropzone("#dZUploadSat", DropzoneSat);
+
+    $("#dropZoneOtros").append("<form id='dZUploadOtros' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+    DropzoneOtros = {
+        url: rootUrl("/Viatico/ValidarFacturaComprobacion"),
+        addRemoveLinks: true,
+        paramName: "archivo",
+        maxFilesize: 4, // MB
+        dictRemoveFile: "Remover",
+        acceptedFiles: ".pdf,.xml",
+        maxFiles: 1,
+        uploadMultiple: true,
+        autoProcessQueue: false,
+        init: function () {
+            this.on("maxfilesexceeded", function (file) {
+                this.removeFile(file);
+                swal("Error", "No se puede subir mas de un archivo", "error");
+            });
+        },
+        sending: function (file, xhr, formData) {
+            formData.append("id", comprobanteGasto.idComprobacionGasto);
+            formData.append("archivoComprobacionGasto", 3);
+        },
+        success: function (file, data) {
+            file.previewElement.classList.add("dz-success");
+            if (!data.status) 
+                swal("Notificación", data.mensaje, "error");
+        },
+        error: function (file, response) {
+            file.previewElement.classList.add("dz-error");
+            //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
+        }
+    } // FIN myAwesomeDropzone
+    OtrosDropzone = new Dropzone("#dZUploadOtros", DropzoneOtros);
+
     $("#btn-cargarFactura").click(function () {
         if (xmlComprobacionDropzone.files.length < 2) {
             swal("Notificación", "Por favor anexe los archivos de la factura", "error");
@@ -162,6 +229,15 @@ function OnAgregarComprobacion() {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
+    if (SatDropzone.files.length < 1) {
+        MostrarNotificacionLoad("error", "Es necesario anexar el archivo respectivo al comprobante del sat.", 3000);
+        return;
+    }
+    if (OtrosDropzone.files.length < 1) {
+        MostrarNotificacionLoad("error", "Es necesario anexar el archivo: Otros (ticket).", 3000);
+        return;
+    }
+
     $.ajax({
         data: { comprobacionGasto_: comprobanteGasto },
         url: rootUrl("/Viatico/RegistrarFacturaComprobacion"),
@@ -185,6 +261,8 @@ function OnSuccesAgregarComprobacion(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
+        SatDropzone.processQueue();
+        OtrosDropzone.processQueue();
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }

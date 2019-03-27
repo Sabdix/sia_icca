@@ -393,6 +393,28 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [SessionExpire]
+        public ActionResult SubirArchivoComprobacionGasto(int id,EnumArchivosComprobacionGastos archivoComprobacionGasto)
+        {
+            try
+            {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                string pathFormato = ObtenerFormatosTempHttpPost(Request,archivoComprobacionGasto.ToString()+"_sol-" + id, usuarioSesion.emCveEmpleado);
+                Result result=new Result();
+                if (!string.IsNullOrEmpty(pathFormato))
+                {
+                    result = new ComprobacionGastosDAO().GuardarPathArchivoComprobacionGasto(id,archivoComprobacionGasto, pathFormato);
+                }
+                else
+                    result.mensaje = "No se logro subir el formato: "+archivoComprobacionGasto.ToString()+", intente mas tarde.";
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpPost, SessionExpire]
         public ActionResult RegistrarFacturaComprobacion(ComprobacionGasto comprobacionGasto_)
         {
