@@ -43,6 +43,7 @@ namespace IICA.Models.Entidades.Viaticos
         public decimal tarifaDeVuelta { get; set; }
         public NivelMando nivelMando { get; set; }
         public DateTime  fechaCheque { get; set; }
+        public Usuario autorizador { get; set; }
 
         public Usuario autorizador { get; set; }
 
