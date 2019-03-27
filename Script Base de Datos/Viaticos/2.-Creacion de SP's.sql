@@ -477,6 +477,7 @@ as
 					,coalesce(emp.Em_Nombre,'')Em_Nombre
 					,coalesce(emp.Em_Apellido_Paterno,'')Em_Apellido_Paterno
 					,coalesce(emp.Em_Apellido_Materno,'') Em_Apellido_Materno
+					,Em_Email
 				from 
 					DT_TBL_VIATICO_SOLICITUD  vs
 					join DT_CAT_MEDIO_TRANSPORTE mt
@@ -650,6 +651,7 @@ BEGIN
 		,coalesce(em.Em_Nombre,'')Em_Nombre
 		,coalesce(em.Em_Apellido_Paterno,'')Em_Apellido_Paterno
 		,coalesce(em.Em_Apellido_Materno,'') Em_Apellido_Materno
+		,em.Em_Email
 		,Monto_Viatico_Autorizado
 	from 
 		DT_TBL_VIATICO_SOLICITUD  vs
@@ -726,7 +728,8 @@ BEGIN
 		@Id_Tipo_Divisa INT,
 		@Duracion_Viaje DECIMAL(5,2),
 		@Monto_Viatico_Autorizado MONEY,
-		@Tarifa_Viatico MONEY
+		@Tarifa_Viatico MONEY,
+		@Monto_Gastos_Extras MONEY
 
 
 	SELECT 
@@ -753,9 +756,14 @@ BEGIN
 		GOTO ERROR_1
 	END
 	
+	SELECT @Monto_Gastos_Extras=SUM(Total)
+	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
+	WHERE Id_Solicitud=@Id_Solicitud
+
+
 	UPDATE DT_TBL_VIATICO_SOLICITUD 
 	SET 
-		Monto_Viatico_Autorizado=@Tarifa_Viatico*(Duracion_Viaje-.5),
+		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(Duracion_Viaje-.5))+@Monto_Gastos_Extras,
 		Pernocta=@Pernocta,
 		Marginal=@Marginal,
 		Tarifa_de_Ida=@Tarifa_Viatico*(@Duracion_Viaje-1),
@@ -1056,4 +1064,81 @@ GO
 
 GRANT EXECUTE ON DT_SP_OBTENER_COMPROBACION_GASTO TO public;  
 GO
+--==========================================================================================================================
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_GUARDA_COMPROBACION_GASTOS')
+BEGIN
+	DROP PROCEDURE DT_SP_GUARDA_COMPROBACION_GASTOS
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_GUARDA_COMPROBACION_GASTOS
+	-- Add the parameters for the stored procedure here
+	@Id_Solicitud INT,
+	@Path_Archivo_Reintegro INT NULL
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    DECLARE
+		@status INT=1,
+		@mensaje VARCHAR(100)='COMPROBACIÓN GUARDADA DE MANERA CORRECTA.',
+		@Total_Comprobacion MONEY,
+		@Monto_Viatico_Autorizado MONEY
+
+	SELECT @Total_Comprobacion=SUM(Total)
+	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
+	WHERE Id_Solicitud=@Id_Solicitud
+
+	SELECT @Monto_Viatico_Autorizado=Monto_Viatico_Autorizado
+	FROM DT_TBL_VIATICO_SOLICITUD
+	WHERE Id_Solicitud=@Id_Solicitud
+
+
+	IF (@Total_Comprobacion<@Monto_Viatico_Autorizado) AND (@Path_Archivo_Reintegro IS NULL)
+	BEGIN
+		SET @mensaje='ES NECESARIO EL DOCUMENTO DE REINTEGRÓ. FAVOR DE REVISAR.'
+		SET @status=0
+		GOTO EXIT_
+	END
+
+	--SE COMIENZAN LAS AFECTACIONES
+	UPDATE DT_TBL_VIATICO_SOLICITUD
+	SET 
+		Monto_Viatico_Reintegro=@Monto_Viatico_Autorizado-@Total_Comprobacion,
+		Id_Estatus_Solicitud=1,
+		Path_Archivo_Reintegro=COALESCE(@Path_Archivo_Reintegro,''),
+		Id_Etapa_Solicitud=Id_Etapa_Solicitud+1
+	WHERE Id_Solicitud=@Id_Solicitud
+
+	EXIT_: SELECT @status STATUS, @mensaje MENSAJE
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_GUARDA_COMPROBACION_GASTOS TO public;  
+GO
+
 --==========================================================================================================================

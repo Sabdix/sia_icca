@@ -45,6 +45,16 @@ namespace IICA.Models.Entidades.Viaticos
         public DateTime  fechaCheque { get; set; }
         public Usuario autorizador { get; set; }
 
+        public Usuario autorizador { get; set; }
+
+        public List<ComprobacionGasto> comprobacionesGasto { get; set; }
+		/*Nuevos campos*/
+		public string pathComprobanteEstancia { get; set; }
+		public string pathArchivo10NoComprobable { get; set; }
+		public DateTime fechaReintegro { get; set; }
+		public decimal Importe_Reintegro { get; set; }
+		/*Nuevos campos*/
+        public string pathArchivoReintegro { get; set; }
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();
@@ -58,6 +68,8 @@ namespace IICA.Models.Entidades.Viaticos
             etapaSolicitud = new EtapaSolicitud();
             nivelMando = new NivelMando();
             autorizador = new Usuario();
+            autorizador.tipoUsuario = EnumTipoUsuario.AUTORIZADOR_PVI;
+            comprobacionesGasto = new List<ComprobacionGasto>();
         }
     }
 }

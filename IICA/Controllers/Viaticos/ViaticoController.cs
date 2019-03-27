@@ -235,6 +235,21 @@ namespace IICA.Controllers.Viaticos
                 return new HttpStatusCodeResult(500, ex.Message);
             }
         }
+        [HttpPost]
+        public ActionResult DetalleSolicitudJson(int id)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerDetalleSol(id);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
         [SessionExpire]
         public ActionResult SolicitudesGenerarCheque()
         {
@@ -355,7 +370,7 @@ namespace IICA.Controllers.Viaticos
                 ViewBag.GastosComprobacion = new GastoComprobacionDAO().ObtenerGastosComprobacion().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idGastoComprobacion.ToString() });
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
 
-                return View(solicitudViaticoDAO.ObtenerSolPorComprobar(usuarioSesion.emCveEmpleado));
+                return View(solicitudViaticoDAO.ObtenerSolicitudesPorComprobar(usuarioSesion.emCveEmpleado));
             }
             catch (Exception ex)
             {
@@ -369,7 +384,7 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                Result result = ObtenerFactura(Request, "Factura_sol-" + id + "-", usuarioSesion.emCveEmpleado);
+                Result result = ObtenerFactura(Request, "Factura_sol-" + id, usuarioSesion.emCveEmpleado);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -431,6 +446,30 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        [HttpPost, SessionExpire]
+        public ActionResult ConluirComprobacionSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.pathArchivoReintegro = ObtenerFormatosTempHttpPost(Request, "Reintegro_sol-" + solicitudViatico_.idSolitud, usuarioSesion.emCveEmpleado);
+                Result result = solicitudViaticoDAO.ConluirComprobacionSolicitud(solicitudViatico_);
+                if (result.status)
+                {
+                    try {
+                        result.objeto = solicitudViaticoDAO.ObtenerDetalleSol(solicitudViatico_.idSolitud).objeto;
+                        Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto);
+                    }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
 
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)

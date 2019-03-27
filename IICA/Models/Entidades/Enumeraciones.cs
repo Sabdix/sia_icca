@@ -11,6 +11,7 @@ namespace IICA.Models.Entidades
 
     public enum EnumTipoUsuario
     {
+        NINGUNO=0,
         ADMINISTRADOR = 1,
         EMPLEADO = 2,
         AUTORIZADOR_PVI = 3 //autorizadores para el sistema de Permisos,Vacaciones,Incapacidades
@@ -18,6 +19,7 @@ namespace IICA.Models.Entidades
 
     public enum EstatusSolicitud
     {
+        NINGUNA=0,
         SOLICITUD_ENVIADA = 1,
         SOLICITUD_APROBADA = 2,
         SOLICITUD_CANCELADA = 3,
@@ -26,6 +28,7 @@ namespace IICA.Models.Entidades
 
     public enum EnumEtapaSolicitudViaticos
     {
+        NINGUNO=0,
         GENERADA = 1,
         ENVIADA = 2,
         COMPLETAR_DATOS = 3,
@@ -54,6 +57,13 @@ namespace IICA.Models.Entidades
     {
         FORMATO_AUTORIZACION = 1
     }
+
+    public enum EnumTipoSalida
+    {
+        NINGUNO =0,
+        TERRESTRE=1,
+        AEREO=2
+    }
     static class Constants
     {
         public const string notificacionPermiso = "Notificación de la solicitud de un permiso";
@@ -66,6 +76,7 @@ namespace IICA.Models.Entidades
         public const string procesoIncapacidad = "Creación de una solicitud de incapacidad";
         public const string procesoSolViatico = "Creación de una solicitud de viaticos";
         public const string procesoCompDatosSolViatico = "Autorización de solicitud";
+        public const string procesoFinComprobacionGastosSolViatico = "Finalización de comprobación de gastos";
 
         public const string especificacionPermiso = "Se finaliza la solicitud de un pemiso";
         public const string especificacionVacacion = "Se finaliza la solicitud de las vacaciones";

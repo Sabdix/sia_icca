@@ -1,5 +1,12 @@
 ﻿var solSeleccionada = {};
 var comprobanteGasto = {};
+var totalComprobacion = 0;
+
+//variable para validar el flujo de acuerdo a las condiciones de marginal con gastos extras y no marginal
+var validarSolamenteInforme;
+
+//variable para validar que se suban todos los archivos de pases de abordar de los itinerarios aereos
+var validarCargaPasesDeAbordar;
 
 $(document).ready(function () {
 
@@ -11,7 +18,6 @@ $(document).ready(function () {
 
 
     $("#dropZoneXmlComprobacion").append("<form id='dZUploadXmlComp' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
-
     DropzoneXml = {
         url: rootUrl("/Viatico/ValidarFacturaComprobacion"),
         addRemoveLinks: true,
@@ -58,7 +64,6 @@ $(document).ready(function () {
     } // FIN myAwesomeDropzone
     xmlComprobacionDropzone = new Dropzone("#dZUploadXmlComp", DropzoneXml);
     xmlComprobacionDropzone.on("complete", function (file, response) {
-
     });
 
     $("#btn-cargarFactura").click(function () {
@@ -70,6 +75,46 @@ $(document).ready(function () {
             else
                 swal("Notificación", "Por favor anexe los archivos correspondientes de la factura (No coinciden)", "error");
         }
+    });
+
+
+    $("#dropZoneReintegro").append("<form id='dZUploadReintegro' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+    DropzoneReintegro = {
+        url: rootUrl("/Viatico/ConluirComprobacionSolicitud"),
+        addRemoveLinks: true,
+        paramName: "archivo",
+        maxFilesize: 4, // MB
+        dictRemoveFile: "Remover",
+        acceptedFiles: ".pdf,image/*",
+        maxFiles: 1,
+        uploadMultiple: true,
+        autoProcessQueue: false,
+        init: function () {
+            this.on("maxfilesexceeded", function (file) {
+                this.removeFile(file);
+                swal("Error", "No se puede subir mas de un archivo", "error");
+            });
+        },
+        sending: function (file, xhr, formData) {
+            for (var key in solSeleccionada) {
+                formData.append(key, solSeleccionada[key]);
+            }
+        },
+        success: function (file, data) {
+            file.previewElement.classList.add("dz-success");
+            if (data.status) {
+                //Asdad
+            } else {
+                swal("Notificación", data.mensaje, "error");
+            }
+        },
+        error: function (file, response) {
+            file.previewElement.classList.add("dz-error");
+            //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
+        }
+    } // FIN myAwesomeDropzone
+    reintegroDropzone = new Dropzone("#dZUploadReintegro", DropzoneReintegro);
+    reintegroDropzone.on("complete", function (file, response) {
     });
 
 });
@@ -140,7 +185,6 @@ function OnSuccesAgregarComprobacion(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Viatico/MisSolicitudesPorComprobar"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
@@ -228,60 +272,107 @@ function OnSuccesEliminarGasto(data) {
 }
 
 
-/*=============================================================================================
-======================================      CANCELAR SOL     ====================================
-===============================================================================================*/
+/*==============================================================================================
+=============================      CONLUIR COMPROBACIÓN     ====================================
+================================================================================================*/
 
 
-function MostrarModalCanSol(solicitud) {
-    solSeleccionada = solicitud;
-    ObtenerFechasJsonSolSeleccionada(solicitud);
-
-    $("#modal-can-idSol").val(solicitud.idSolitud);
-    $("#modal-can-viaticante").val(solicitud.usuario.nombreCompleto);
-    $("#modal-can-duracionViaje").val(solicitud.duracionViaje);
-    $("#modal-can-resultadosEsperados").val(solicitud.resultadosEsperados);
-    $("#modal-can-medioTransporte").val(solicitud.medioTransporte.descripcion);
-    $("#modal-can-fechaInicio").val(solSeleccionada.fechaInicio);
-    $("#modal-can-fechaFin").val(solSeleccionada.fechaFin);
-}
-
-
-function CancelarSol() {
-    if (solSeleccionada === null || solSeleccionada === undefined) {
-        MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
-        return;
-    }
-    solSeleccionada.etapaSolicitud.idEtapaSolicitud = 2;
-    solSeleccionada.estatusSolicitud.idEstatusSolicitud = 3;
+function MostrarModalConluirComprobacion(id) {
     $.ajax({
-        data: { solicitudViatico_: solSeleccionada },
-        url: rootUrl("/Viatico/CancelarDatosSolicitud"),
+        data: { id: id },
+        url: rootUrl("/Viatico/DetalleSolicitudJson"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
-            $("#modal-cancelar").modal("hide");
             MostrarLoading();
         },
         success: function (data) {
-            OnSuccesCancelarSol(data);
+            OcultarLoading();
+            OnSuccessMostrarConluirComprobacion(data);
         },
         error: function (xhr, status, error) {
-            $("#modal-cancelar").modal("hide");
+            $("#modal-concluir").modal("hide");
+            ControlErrores(xhr, status, error);
+        }
+    });
+
+}
+
+
+function OnSuccessMostrarConluirComprobacion(data) {
+    OcultarLoading();
+    if (data.status === true) {
+        solSeleccionada = data.objeto;
+        $("#modal-concluir-idSol").val(solSeleccionada.idSolitud);
+        $("#modal-concluir-viaticante").val(solSeleccionada.usuario.nombreCompleto);
+        $("#modal-concluir-fechaInicio").val(new Date(solSeleccionada.fechaInicio.match(/\d+/)[0] * 1).toLocaleDateString());
+        $("#modal-concluir-fechaFin").val(new Date(solSeleccionada.fechaFin.match(/\d+/)[0] * 1).toLocaleDateString());
+        $("#modal-concluir-montoAut").val(accounting.formatMoney(solSeleccionada.montoAutorizado));
+        totalComprobacion = 0;
+        $.grep(solSeleccionada.comprobacionesGasto, function (comprobacion) {
+            totalComprobacion = comprobacion.total + totalComprobacion;
+        });
+
+        if (totalComprobacion < solSeleccionada.montoAutorizado) {
+            $("#content-reintegro").show();
+            $("#modal-conluir-reintegro").text(accounting.formatMoney(solSeleccionada.montoAutorizado - totalComprobacion));
+        } else {
+            $("#content-reintegro").hide();
+        }
+
+        $("#modal-concluir-montoCompr").val(accounting.formatMoney(totalComprobacion));
+    } else {
+        $("#modal-concluir").modal("hide");
+        MostrarNotificacionLoad("error", data.mensaje, 3000);
+    }
+}
+
+function OnConluirComprobacion() {
+    if (totalComprobacion < solSeleccionada.montoAutorizado) {
+        if (reintegroDropzone.files.length < 1) {
+            swal("Notificación", "Por favor anexe el archivo del reintegro", "error");
+        } else {
+            reintegroDropzone.processQueue();
+        }
+    } else {
+        ConluirComprobacion();
+    }
+}
+
+function ConluirComprobacion() {
+    $.ajax({
+        data: { solicitudViatico_: solSeleccionada },
+        url: rootUrl("/Viatico/ConluirComprobacionSolicitud"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            OnSuccessConluirComprobacion(data);
+        },
+        error: function (xhr, status, error) {
+            $("#modal-concluir").modal("hide");
             ControlErrores(xhr, status, error);
         }
     });
 }
 
-function OnSuccesCancelarSol(data) {
+function OnSuccessConluirComprobacion(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesPorAutorizar"); }, 2000);
+        setTimeout(function () { window.location = rootUrl("/Viatico/MisSolicitudesPorComprobar"); }, 500);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
 }
+
+/*==============================================================================================
+=============================      FUNCIONES GENERALES     =====================================
+================================================================================================*/
+
 
 function ObtenerFechasJsonSolSeleccionada(solicitud) {
     var fechaInicio = new Date(solicitud.fechaInicio.match(/\d+/)[0] * 1);
