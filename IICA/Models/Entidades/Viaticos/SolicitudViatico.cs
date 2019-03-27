@@ -43,6 +43,7 @@ namespace IICA.Models.Entidades.Viaticos
         public decimal tarifaDeVuelta { get; set; }
         public NivelMando nivelMando { get; set; }
         public DateTime  fechaCheque { get; set; }
+        public Usuario autorizador { get; set; }
 
         public SolicitudViatico()
         {
@@ -56,6 +57,7 @@ namespace IICA.Models.Entidades.Viaticos
             justificacion = new Justificacion();
             etapaSolicitud = new EtapaSolicitud();
             nivelMando = new NivelMando();
+            autorizador = new Usuario();
         }
     }
 }
