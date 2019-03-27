@@ -97,7 +97,7 @@ $(document).ready(function () {
         success: function (file, data) {
             file.previewElement.classList.add("dz-success");
             if (data.status) {
-
+                //Asdad
             } else {
                 swal("Notificación", data.mensaje, "error");
             }
