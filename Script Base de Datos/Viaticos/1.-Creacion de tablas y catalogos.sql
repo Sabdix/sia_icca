@@ -243,6 +243,10 @@ Monto_Viatico_Comprobado MONEY,
 Fecha_Cheque DATETIME,
 Path_Archivo_Autorizacion VARCHAR(300) NULL,
 Monto_Viatico_Reintegro MONEY NULL,
+Path_Comprobante_Estancia VARCHAR(300) NULL,
+Path_Archivo_10_No_Comprobable VARCHAR(300) NULL,
+Fecha_Reintegro DATETIME,
+Importe_Reintegro MONEY,
 Path_Archivo_Reintegro VARCHAR(300) NULL,
 Id_Medio_Transporte INT,
 Id_Justificacion INT,
@@ -273,7 +277,8 @@ Fecha_Llegada DATETIME NULL,
 Dias DECIMAL(3,1),
 Path_Boleto VARCHAR(250) NULL,
 Id_Solicitud INT,
-Id_Tipo_Salida INT
+Id_Tipo_Salida INT,
+Path_Pasaje_Abordar VARCHAR(300)
 )
 GO
 --==========================================================================================================================
@@ -289,18 +294,6 @@ Id_Solicitud INT
 )
 GO
 
---==========================================================================================================================
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD]') AND type in (N'U'))
-DROP TABLE [dbo].[DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD]
-GO
-
-CREATE TABLE DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD (
-Contador INT IDENTITY(1,1),
-Descripcion VARCHAR(100),
-Monto MONEY,
-Id_Solicitud INT
-)
-GO
 --==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VIATICO_COMPROBACION_GASTOS]') AND type in (N'U'))
 DROP TABLE [dbo].[DT_TBL_VIATICO_COMPROBACION_GASTOS]
@@ -312,6 +305,8 @@ Id_Solicitud INT,
 Comentario VARCHAR(500),
 Path_Archivo_XML VARCHAR(500),
 Path_Archivo_PDF VARCHAR(500),
+Path_Archivo_SAT VARCHAR(500),
+Path_Archivo_Otros VARCHAR(500),
 Id_Gasto_Comprobacion INT,
 Emisor VARCHAR(500),
 Subtotal MONEY,
@@ -319,3 +314,4 @@ Total MONEY,
 Lugar VARCHAR(500)
 )
 GO
+--==========================================================================================================================

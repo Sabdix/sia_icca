@@ -728,7 +728,8 @@ BEGIN
 		@Id_Tipo_Divisa INT,
 		@Duracion_Viaje DECIMAL(5,2),
 		@Monto_Viatico_Autorizado MONEY,
-		@Tarifa_Viatico MONEY
+		@Tarifa_Viatico MONEY,
+		@Monto_Gastos_Extras MONEY
 
 
 	SELECT 
@@ -755,9 +756,14 @@ BEGIN
 		GOTO ERROR_1
 	END
 	
+	SELECT @Monto_Gastos_Extras=SUM(Total)
+	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
+	WHERE Id_Solicitud=@Id_Solicitud
+
+
 	UPDATE DT_TBL_VIATICO_SOLICITUD 
 	SET 
-		Monto_Viatico_Autorizado=@Tarifa_Viatico*(Duracion_Viaje-.5),
+		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(Duracion_Viaje-.5))+@Monto_Gastos_Extras,
 		Pernocta=@Pernocta,
 		Marginal=@Marginal,
 		Tarifa_de_Ida=@Tarifa_Viatico*(@Duracion_Viaje-1),
