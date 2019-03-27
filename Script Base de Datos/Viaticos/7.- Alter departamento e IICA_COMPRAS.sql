@@ -472,7 +472,7 @@ BEGIN
 				Em_Apellido_Paterno,
 				Em_Apellido_Materno,
 				b.Sc_Descripcion Programa,
-				COALESCE(NULL,c.Dp_Descripcion,''SIN DEPARTAMENTO'') Departamento
+				COALESCE(NULL,c.De_Descripcion,''SIN DEPARTAMENTO'') Departamento
 			FROM Empleado a
 			LEFT JOIN Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
 			LEFT JOIN Departamento_Empleado c ON a.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
@@ -495,7 +495,7 @@ BEGIN
 				Em_Apellido_Paterno,
 				Em_Apellido_Materno,
 				b.Sc_Descripcion Programa,
-				COALESCE(NULL,c.Dp_Descripcion,''SIN DEPARTAMENTO'') Departamento
+				COALESCE(NULL,c.De_Descripcion,''SIN DEPARTAMENTO'') Departamento
 			FROM Empleado a
 			LEFT JOIN Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
 			LEFT JOIN Departamento_Empleado c ON a.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
@@ -579,7 +579,7 @@ BEGIN
 				Em_Apellido_Materno,
 				CONVERT (VARCHAR,Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
 				b.Sc_Descripcion Programa,
-				COALESCE(NULL,c.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
+				COALESCE(NULL,c.De_Descripcion,'SIN DEPARTAMENTO') Departamento,
 				CONVERT (VARCHAR,d.Fecha_Solicitud,103)Fecha_Alta,
 				d.Id_Tipo_Incapacidad,
 				CONVERT (VARCHAR,d.Fecha_Inicio,103)Fecha_Inicio,
@@ -676,7 +676,7 @@ BEGIN
 				Em_Apellido_Materno,
 				CONVERT (VARCHAR,Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
 				b.Sc_Descripcion Programa,
-				COALESCE(NULL,c.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
+				COALESCE(NULL,c.De_Descripcion,'SIN DEPARTAMENTO') Departamento,
 				CONVERT (VARCHAR,d.Fecha_Permiso,103)Fecha_Permiso,
 				CONVERT (VARCHAR,d.Fecha_Alta,103)Fecha_Alta,
 				d.Hora_Inicio,
@@ -769,7 +769,7 @@ BEGIN
 				Em_Apellido_Materno,
 				CONVERT (VARCHAR,Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
 				b.Sc_Descripcion Programa,
-				COALESCE(NULL,c.Dp_Descripcion,'SIN DEPARTAMENTO') Departamento,
+				COALESCE(NULL,c.De_Descripcion,'SIN DEPARTAMENTO') Departamento,
 				CONVERT (VARCHAR,d.Fecha_Solicitud,103)Fecha_Alta,
 				d.Total_Dias_Saldo_Vacacional,
 				CONVERT (VARCHAR,d.Fecha_Inicio,103)Fecha_Inicio,
