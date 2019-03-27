@@ -104,10 +104,10 @@ function ImprimirFormatoI4(id) {
             setTimeout(function () {
                 $("#content-impresion").html("");
             }, 1000);
-            //setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
+            setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
         },
         error: function (xhr, status, error) {
-            //setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
+            setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
             ControlErrores(xhr, status, error);
         }
     });

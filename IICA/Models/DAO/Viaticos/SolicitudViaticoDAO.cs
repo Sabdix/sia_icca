@@ -236,11 +236,13 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.usuario.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                             solicitudViatico.usuario.email = dbManager.DataReader["Em_Email"] == DBNull.Value ? "" : dbManager.DataReader["Em_Email"].ToString();
                             solicitudViatico.Em_Cve_Empleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
+                            solicitudViatico.usuario.puesto= dbManager.DataReader["Puesto_empleado"] == DBNull.Value ? "" : dbManager.DataReader["Puesto_empleado"].ToString();
 
                             //lectura datos autorizador
                             solicitudViatico.autorizador.nombre = dbManager.DataReader["Em_nombre_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre_autorizador"].ToString();
                             solicitudViatico.autorizador.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno_autorizador"].ToString();
                             solicitudViatico.autorizador.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno_autorizador"].ToString();
+                            solicitudViatico.autorizador.puesto = dbManager.DataReader["Puesto_Autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Puesto_Autorizador"].ToString();
 
                             //lectura de itinerarios
                             dbManager.DataReader.NextResult();

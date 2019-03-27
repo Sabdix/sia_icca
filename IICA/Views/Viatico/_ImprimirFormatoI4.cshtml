@@ -102,23 +102,19 @@
 <div id="content-header" class="md-90">
     <img src="http://localhost:59791/Content/assets/img/logo_iica.png" />
 </div>
-
-<div class="md-90" id="content-fecha-header">
-    <div>
-        <p>AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS</p><br />
-        <table class="md-90">
-            <tr>
-                <td><p>UNIDAD OPERATIVA:</p></td>
-                <td><p>@Model.usuario.programa</p><br /></td>
-            </tr>
-        </table>
-        <table class="md-90">
-            <tr>
-                <td><p>FECHA:</p></td>
-                <td><p>@Model.fechaAlta</p></p><br /></td>
-            </tr>
-        </table>
-    </div>
+<div id="autorizacion" class="md-90">
+<label style="font-weight:bold">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS</label>
+</div>
+<div id="unidad-operativa" class="md-90">
+    <table border="0" class="md-90">
+        <tr>
+            <td><label style="font-weight:bold">UNIDAD OPERATIVA:</label></td>
+            <td><label>@Model.usuario.programa</label></td>
+            <td width="25">&nbsp;</td>
+            <td><label style="font-weight:bold">FECHA:</label></td>
+            <td><label>@Model.fechaAlta</label></td>
+        </tr>
+    </table>
 </div>
 
 <div id="tipo_viaje">
@@ -159,34 +155,34 @@
 </div>
 
 <div id="datos_empleado" class="md-90">
-    <table border="0">
+    <table border="0" class="md-90">
         <tr>
-            <td><label>Nombre:</label></td>
+            <td><label style="font-weight:bold">Nombre:</label></td>
             <td><label>@Model.usuario.nombreCompleto</label></td>
             <td width="25">&nbsp;</td>
-            <td><label>Cargo:</label></td>
-            <td><label>"puesto"</label></td>
+            <td><label style="font-weight:bold">Cargo:</label></td>
+            <td><label>@Model.usuario.puesto</label></td>
         </tr>
     </table>
 </div>
 
 <div id="datos_Viaje" style="font-size: 10px;" class="md-90">
-    <p>Próposito del viaje:</p>
+    <p style="font-weight:bold">Próposito del viaje:</p>
     <p>@Model.proposito</p>
-    <p>Resultados esperados:</p>
+    <p style="font-weight:bold">Resultados esperados:</p>
     <p>@Model.resultadosEsperados</p>
-    <p>Justificación del viaje:</p>
+    <p style="font-weight:bold">Justificación del viaje:</p>
     <p>@Model.justificacion.descripcion</p>
     <table border="0">
         <tr>
-            <td>Relación de gastos pendientes:</td>
+            <td style="font-weight:bold">Relación de gastos pendientes:</td>
             <td>"NO"</td>
             <td width="25">&nbsp;</td>
-            <td>Informe de viaje pendiente:</td>
+            <td style="font-weight:bold">Informe de viaje pendiente:</td>
             <td>"NO"</td>
         </tr>
     </table>
-    <p>Duración estimada del viaje:</p>
+    <p style="font-weight:bold">Duración estimada del viaje:</p>
     <p>@(Model.duracionViaje + " día(s)")</p>
 </div>
 
@@ -275,65 +271,68 @@
 
 
 <div class="md-90">
-    <p>Datos del anticipo de viatico:</p>
-    <table>
+    <label style="font-weight:bold">Datos del anticipo de viatico:</label>
+    <table class="md-90">
         <tr>
-            <td><p>Monto:</p></td>
+            <td><label style="font-weight:bold">Monto</label></td>
+            <td><label style="font-weight:bold">Cheque</label></td>
+            <td><label style="font-weight:bold">Transferencia</label></td>
+            <td><label style="font-weight:bold">Banco</label></td>
+         </tr>
+        <tr>
             <td>@Model.montoAutorizado</td>
-            <td><p>Cheque:</p></td>
-            <td><div class="content-box-white">X</div></td>
-            <td><p>Transferencia:</p></td>
+            <td><label>X</label></td>
             <td></td>
-            <td>Banco:</td>
             <td></td>
         </tr>
     </table>
 </div>
 
 <div class="md-90">
-    <p>RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE 5 DÍAS HABILES POSTERIORES A SU RETORNO:</p>
-    <table border="1" style="text-align: center;" id="tabla-gastos_reintegro">
-        <thead>
-            <tr>
-                <th style="width:10%;text-align: center;">Tipo de Gasto</th>
-                <th style="width:10%;text-align: center;">OGM</th>
-                <th style="width:10%;text-align: center;">Codigo Presupuestario</th>
-                <th style="width:10%;text-align: center;">Monto US/ML</th>
-                <th style="width:10%;text-align: center;">Cuenta para aviso de cargo</th>
-                <th style="width:10%;text-align: center;">Nombre de la fuente de Financiamiento</th>
-                <th style="width:10%;text-align: center;">Nombre de la Unidad Interna o Institución Financiera</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </tbody>
-    </table>
+    <label style="font-weight:bold">
+        RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE 5 DÍAS HABILES POSTERIORES A SU RETORNO:</label>
+        <table border="1" style="text-align: center;" id="tabla-gastos_reintegro">
+            <thead>
+                <tr>
+                    <th style="width:10%;text-align: center;">Tipo de Gasto</th>
+                    <th style="width:10%;text-align: center;">OGM</th>
+                    <th style="width:10%;text-align: center;">Codigo Presupuestario</th>
+                    <th style="width:10%;text-align: center;">Monto US/ML</th>
+                    <th style="width:10%;text-align: center;">Cuenta para aviso de cargo</th>
+                    <th style="width:10%;text-align: center;">Nombre de la fuente de Financiamiento</th>
+                    <th style="width:10%;text-align: center;">Nombre de la Unidad Interna o Institución Financiera</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
 </div>
 
 <div id="content-firmas" class="md-90">
