@@ -14,8 +14,8 @@ $(document).ready(function () {
 
 function VerDetalleSolViatico(sol) {
     $.ajax({
-        data: { solicitudViatico_: sol },
-        url: rootUrl("/Viatico/_ResumenSolicitudViatico"),
+        data: { id: sol.idSolitud },
+        url: rootUrl("/Viatico/DetalleSolicitud"),
         dataType: "html",
         method: "post",
         beforeSend: function () {
