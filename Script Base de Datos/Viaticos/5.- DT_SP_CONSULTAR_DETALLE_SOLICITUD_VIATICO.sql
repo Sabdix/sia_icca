@@ -21,6 +21,8 @@ CREATE PROCEDURE DT_SP_CONSULTAR_DETALLE_SOLICITUD_VIATICO
 AS
 BEGIN
 	
+	DECLARE
+		@Aplica_Reintegro INT=0
 			
 	IF NOT EXISTS (SELECT * FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)
 	BEGIN 
@@ -28,6 +30,30 @@ BEGIN
 	END
 	ELSE
 	BEGIN
+		
+		--Se define si aplica el reintegro o no para una solicitud
+
+		
+		IF EXISTS (SELECT 1 FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud AND Id_Etapa_Solicitud>=5)
+		BEGIN
+
+			IF (SELECT Marginal FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)=1
+			BEGIN
+				IF (SELECT SUM(Monto) FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)>=(SELECT SUM(Total) FROM DT_TBL_VIATICO_COMPROBACION_GASTOS WHERE Id_Solicitud=@Id_solicitud)
+					SET @Aplica_Reintegro=0
+				ELSE
+					SET @Aplica_Reintegro=1
+			END
+			ELSE
+			BEGIN
+				IF( (SELECT (Tarifa_de_Ida+Tarifa_de_Vuelta)+((Tarifa_de_Ida+Tarifa_de_Vuelta)*.1) FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)+(SELECT SUM(Monto) FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD WHERE Id_Solicitud=@Id_solicitud) )>=(SELECT SUM(Total) FROM DT_TBL_VIATICO_COMPROBACION_GASTOS WHERE Id_Solicitud=@Id_solicitud)
+					SET @Aplica_Reintegro=0
+				ELSE
+					SET @Aplica_Reintegro=1
+			END
+
+		END
+
 		select 
 			1 as status,
 			'Solicitud encontra' mensaje,
@@ -51,7 +77,8 @@ BEGIN
 			autorizador.Em_Apellido_Paterno Em_Apellido_Paterno_autorizador,
 			autorizador.Em_Apellido_Materno Em_Apellido_Materno_autorizador,
 			pe.Pe_Descripcion puesto_empleado,
-			pea.Pe_Descripcion puesto_autorizador
+			pea.Pe_Descripcion puesto_autorizador,
+			@Aplica_Reintegro Aplica_Reintegro
 		from 
 			DT_TBL_VIATICO_SOLICITUD  vs
 			join DT_CAT_MEDIO_TRANSPORTE mt
@@ -109,5 +136,3 @@ GO
 
 GRANT EXECUTE ON DT_SP_CONSULTAR_DETALLE_SOLICITUD_VIATICO TO public;  
 GO
-
-
