@@ -263,6 +263,7 @@
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolViaticos.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtNuevaSolViatico.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtSolCheque.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtVerificarSolicitudes.js" />
     <Content Include="Content\assets\js\form_elements.js" />
     <Content Include="Content\assets\js\form_validations.js" />
     <Content Include="Content\assets\js\google_maps.js" />
@@ -556,6 +557,7 @@
     <Content Include="Views\Viatico\_ImprimirFormatoI4.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudesPorComprobar.cshtml" />
     <Content Include="Views\Viatico\_ObtenerComprobaciones.cshtml" />
+    <Content Include="Views\Viatico\SolicitudesPorVerificar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -93,6 +93,7 @@ namespace IICA.Models.Entidades
         public const string procesoSolViatico = "Creación de una solicitud de viaticos";
         public const string procesoCompDatosSolViatico = "Autorización de solicitud";
         public const string procesoFinComprobacionGastosSolViatico = "Finalización de comprobación de gastos";
+        public const string procesoVerificacionGastos = "Autorización de comprobación de gastos";
 
         public const string especificacionPermiso = "Se finaliza la solicitud de un pemiso";
         public const string especificacionVacacion = "Se finaliza la solicitud de las vacaciones";

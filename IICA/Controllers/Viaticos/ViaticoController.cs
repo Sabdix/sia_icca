@@ -494,6 +494,62 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+
+        [SessionExpire]
+        public ActionResult SolicitudesPorVerificar()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(solicitudViaticoDAO.ObtenerSolicitudePorVerificar());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult DevolverSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        public ActionResult AutorizarSolicitud(SolicitudViatico solicitudViatico_)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
+                Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                if (result.status)
+                {
+                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
         {
