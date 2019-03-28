@@ -756,8 +756,8 @@ BEGIN
 		GOTO ERROR_1
 	END
 	
-	SELECT @Monto_Gastos_Extras=SUM(Total)
-	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
+	SELECT @Monto_Gastos_Extras=SUM(Monto)
+	FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD
 	WHERE Id_Solicitud=@Id_Solicitud
 
 
@@ -1240,7 +1240,112 @@ GRANT EXECUTE ON DT_SP_ACTUALIZAR_PATH_ARCHIVOS_COMPROBACION_GASTO TO public;
 GO
 
 --==========================================================================================================================
-IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTAR_SOLICITUDES_POR_VERIFICAR')
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_ACTUALIZAR_PATH_ARCHIVOS_VIATICOS_SOLICITUD')
+BEGIN
+	DROP PROCEDURE DT_SP_ACTUALIZAR_PATH_ARCHIVOS_VIATICOS_SOLICITUD
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_ACTUALIZAR_PATH_ARCHIVOS_VIATICOS_SOLICITUD
+	-- Add the parameters for the stored procedure here
+	@Id_Solicitud int,
+	@Id_Archivo int,
+	@Path_Archivo VARCHAR(500)
+	
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE
+		@status INT=1,
+		@mensaje VARCHAR(100)='ARCHIVO GUARDADO DE MANERA CORRECTA'
+
+		/*==========================
+		1	Archivo de autorización
+		2	Comprobante de instancia
+		3	Archivo 10% no comprobable
+		4	Informe de viatico
+		5	Archivo de reintegro
+
+		==========================*/
+		IF(@Id_Archivo= 1)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_Archivo_Autorizacion = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
+		IF(@Id_Archivo= 2)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_Comprobante_Estancia = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
+		IF(@Id_Archivo= 3)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_Archivo_10_No_Comprobable = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+		
+		IF(@Id_Archivo= 4)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_Informe_Viaje = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
+		IF(@Id_Archivo= 5)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_Archivo_Reintegro = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
+		IF @@ERROR<>0
+		BEGIN
+			SET @mensaje='ERROR AL GUARDAR EL ARCHIVO DE LA COMPROBACION DE GASTO.'
+			GOTO ERROR_1
+		END
+
+
+	GOTO EXIT_
+
+	ERROR_1:
+		SET @status=0
+		GOTO EXIT_
+	EXIT_:
+		SELECT @status STATUS, @mensaje MENSAJE
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_ACTUALIZAR_PATH_ARCHIVOS_VIATICOS_SOLICITUD TO public;  
+GO
+
+--==========================================================================================================================IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTAR_SOLICITUDES_POR_VERIFICAR')
 BEGIN
 	DROP PROCEDURE DT_SP_CONSULTAR_SOLICITUDES_POR_VERIFICAR
 END

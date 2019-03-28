@@ -87,16 +87,22 @@
                                                 </li>
                                                 <li>
                                                     <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
-                                                       onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                                        Cargar archivo del 10%
+                                                       onclick="MostrarModalSubirArchivo(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                        Subir archivo del 10%
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
+                                                       onclick="MostrarModalSubirArchivo(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                        Subir informe del viaje
                                                     </a>
                                                 </li>
                                             }
                                             @if (solicitud.comprobarItinerarioAereo)
                                             {
                                                 <li>
-                                                    <a href="#" data-toggle="modal" data-target="#modal-itinerario"
-                                                       onclick="MostrarModalItinerario(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                    <a href="#" data-toggle="modal" data-target="#modal-itinerariosAereos"
+                                                       onclick="MostrarModalItinerarioAereos(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                                         Subir pases de abordar
                                                     </a>
                                                 </li>
@@ -244,6 +250,25 @@
                 <br />
             </div>
             <div class="modal-body" id="modal-content-comprobaciones">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="modal-itinerariosAereos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br />
+            </div>
+            <div class="modal-body" id="modal-content-itinerariosAereos">
 
             </div>
             <div class="modal-footer">
