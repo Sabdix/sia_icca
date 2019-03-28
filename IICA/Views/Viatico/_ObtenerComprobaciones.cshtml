@@ -32,8 +32,8 @@
                         <td>@comprobacion.total.ToString("C")</td>
                         <td>
                             <div class="btn-group">
-                                <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" 
-                                   href="#" style="font-size: 11px;"> Ver formatos <span class="caret"></span> </a>
+                                <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown"
+                                   href="#" style="font-size: 11px;">Ver formatos<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     @if (!string.IsNullOrEmpty(comprobacion.pathArchivoPDF))
                                     {
@@ -48,6 +48,22 @@
                                         <li>
                                             <a href="#" onclick="mostrarFactura('@comprobacion.pathArchivoXML')">
                                                 Factura XML
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(comprobacion.pathArchivoSAT))
+                                    {
+                                        <li>
+                                            <a href="#" onclick="mostrarFactura('@comprobacion.pathArchivoSAT')">
+                                                Comprobación del sat
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(comprobacion.pathArchivoOtros))
+                                    {
+                                        <li>
+                                            <a href="#" onclick="mostrarFactura('@comprobacion.pathArchivoOtros')">
+                                                Otros (Ticket)
                                             </a>
                                         </li>
                                     }

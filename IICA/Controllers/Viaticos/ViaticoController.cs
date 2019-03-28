@@ -385,7 +385,7 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                Result result = ObtenerFactura(Request, "Factura_sol-" + id, usuarioSesion.emCveEmpleado);
+                Result result = ObtenerFactura(Request, "Factura", usuarioSesion.emCveEmpleado,id);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -395,12 +395,12 @@ namespace IICA.Controllers.Viaticos
         }
 
         [SessionExpire]
-        public ActionResult SubirArchivoComprobacionGasto(int id,EnumArchivosComprobacionGastos archivoComprobacionGasto)
+        public ActionResult SubirArchivoComprobacionGasto(int idSolicitud,int id,EnumArchivosComprobacionGastos archivoComprobacionGasto)
         {
             try
             {
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                string pathFormato = ObtenerFormatosTempHttpPost(Request,archivoComprobacionGasto.ToString()+"_sol-" + id, usuarioSesion.emCveEmpleado);
+                string pathFormato = ObtenerFormatosSolicitud(Request,idSolicitud,archivoComprobacionGasto.ToString()+"-" + id+"-", usuarioSesion.emCveEmpleado);
                 Result result=new Result();
                 if (!string.IsNullOrEmpty(pathFormato))
                 {
@@ -529,7 +529,41 @@ namespace IICA.Controllers.Viaticos
             return string.Empty;
         }
 
-        private Result ObtenerFactura(HttpRequestBase httpRequestBase, string formato, string usuario)
+        private string ObtenerFormatosSolicitud(HttpRequestBase httpRequestBase, int idSolicitudViatico, string formato, string usuario)
+        {
+            try
+            {
+                string idAleatorio = Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
+                if (httpRequestBase.Files.Count > 0)
+                {
+                    for (int i = 0; i < httpRequestBase.Files.Count; i++)
+                    {
+                        var file = httpRequestBase.Files[i];
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            string pathViaticosFormatos = WebConfigurationManager.AppSettings["pathViaticosFormatos"].ToString();
+                            //string pathGeneral = pathFormatosIncapacidades + @"\" + usuario + @"\";
+                            string pathGeneral = Server.MapPath("~" + pathViaticosFormatos + "/" + usuario + "/" + "solicitud_" + idSolicitudViatico);
+                            if (!System.IO.Directory.Exists(pathGeneral))
+                                System.IO.Directory.CreateDirectory(pathGeneral);
+
+                            string nombre = Path.GetFileName(formato + "_" + idAleatorio + "" + Path.GetExtension(file.FileName));
+                            string pathFormato = Path.Combine(pathGeneral, nombre);
+
+                            file.SaveAs(pathFormato);
+                            return pathViaticosFormatos + "/" + usuario + "/" + "solicitud_" + idSolicitudViatico + "/" + nombre;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return string.Empty;
+        }
+
+        private Result ObtenerFactura(HttpRequestBase httpRequestBase, string formato, string usuario,int idSolViatico)
         {
             Result result = new Result();
             try
@@ -553,7 +587,7 @@ namespace IICA.Controllers.Viaticos
                         }
                         if (result.status)
                         {
-                            if (!GuardarFactura(httpRequestBase.Files, formato, comprobacionGasto, usuario))
+                            if (!GuardarFactura(httpRequestBase.Files, formato, comprobacionGasto, usuario,idSolViatico))
                             {
                                 result.status = false;
                                 result.mensaje = "Error al guardar los achivos de la factura, intente mas tarde.";
@@ -630,7 +664,7 @@ namespace IICA.Controllers.Viaticos
             return result;
         }
 
-        private bool GuardarFactura(HttpFileCollectionBase files, string formato, ComprobacionGasto comprobacion, string usuario)
+        private bool GuardarFactura(HttpFileCollectionBase files, string formato, ComprobacionGasto comprobacion, string usuario,int idSolicitudViatico)
         {
             string idAleatorio = Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
             try
@@ -641,7 +675,7 @@ namespace IICA.Controllers.Viaticos
                     if (file != null && file.ContentLength > 0)
                     {
                         string pathViaticosFormatos = WebConfigurationManager.AppSettings["pathViaticosFormatos"].ToString();
-                        string pathGeneral = Server.MapPath("~" + pathViaticosFormatos + "/" + usuario + "/");
+                        string pathGeneral = Server.MapPath("~" + pathViaticosFormatos + "/" + usuario + "/" + "solicitud_" + idSolicitudViatico);
                         if (!System.IO.Directory.Exists(pathGeneral))
                             System.IO.Directory.CreateDirectory(pathGeneral);
 
@@ -651,11 +685,11 @@ namespace IICA.Controllers.Viaticos
                         file.SaveAs(pathFormato);
                         if (string.Compare(file.ContentType,"Application/pdf",true)==0)
                         {
-                            comprobacion.pathArchivoPDF = pathViaticosFormatos + "/" + usuario + "/" + nombre;
+                            comprobacion.pathArchivoPDF = pathViaticosFormatos + "/" + usuario + "/" + "solicitud_" + idSolicitudViatico + "/" + nombre;
                         }
                         if (string.Compare(file.ContentType,"text/xml")==0)
                         {
-                            comprobacion.pathArchivoXML = pathViaticosFormatos + "/" + usuario + "/" + nombre;
+                            comprobacion.pathArchivoXML = pathViaticosFormatos + "/" + usuario + "/" + "solicitud_" + idSolicitudViatico + "/" + nombre;
                         }
                     }
                 }
@@ -673,6 +707,8 @@ namespace IICA.Controllers.Viaticos
             {
                 var pathFacturaXML = Server.MapPath("~" + comprobacionGasto.pathArchivoXML);
                 var pathFacturaPDF = Server.MapPath("~" + comprobacionGasto.pathArchivoPDF);
+                var pathArchivoSAT = Server.MapPath("~" + comprobacionGasto.pathArchivoSAT);
+                var pathArchivoOtros = Server.MapPath("~" + comprobacionGasto.pathArchivoOtros);
                 if (System.IO.File.Exists(pathFacturaXML))
                 {
                     System.IO.File.Delete(pathFacturaXML);
@@ -680,6 +716,14 @@ namespace IICA.Controllers.Viaticos
                 if (System.IO.File.Exists(pathFacturaPDF))
                 {
                     System.IO.File.Delete(pathFacturaPDF);
+                }
+                if (System.IO.File.Exists(pathArchivoSAT))
+                {
+                    System.IO.File.Delete(pathArchivoSAT);
+                }
+                if (System.IO.File.Exists(pathArchivoOtros))
+                {
+                    System.IO.File.Delete(pathArchivoOtros);
                 }
             }
             catch (Exception ex)

@@ -58,6 +58,8 @@ namespace IICA.Models.DAO.Viaticos
                         comprobacionGasto.comentario = dbManager.DataReader["Comentario"] == DBNull.Value ? "" : dbManager.DataReader["Comentario"].ToString();
                         comprobacionGasto.pathArchivoXML = dbManager.DataReader["Path_Archivo_XML"] == DBNull.Value ? "" : dbManager.DataReader["Path_Archivo_XML"].ToString();
                         comprobacionGasto.pathArchivoPDF = dbManager.DataReader["Path_Archivo_PDF"] == DBNull.Value ? "" : dbManager.DataReader["Path_Archivo_PDF"].ToString();
+                        comprobacionGasto.pathArchivoSAT = dbManager.DataReader["Path_Archivo_SAT"] == DBNull.Value ? "" : dbManager.DataReader["Path_Archivo_SAT"].ToString();
+                        comprobacionGasto.pathArchivoOtros = dbManager.DataReader["Path_Archivo_Otros"] == DBNull.Value ? "" : dbManager.DataReader["Path_Archivo_Otros"].ToString();
                         comprobacionGasto.gastoComprobacion.idGastoComprobacion = dbManager.DataReader["Id_Gasto_Comprobacion"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Gasto_Comprobacion"].ToString());
                         comprobacionGasto.gastoComprobacion.descripcion = dbManager.DataReader["gasto_comprobacion"] == DBNull.Value ? "" : dbManager.DataReader["gasto_comprobacion"].ToString();
                         comprobacionGasto.emisor = dbManager.DataReader["Emisor"] == DBNull.Value ? "" : dbManager.DataReader["Emisor"].ToString();
@@ -143,9 +145,9 @@ namespace IICA.Models.DAO.Viaticos
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(2);
+                    dbManager.CreateParameters(3);
                     dbManager.AddParameters(0, "id_comprobacion_gasto", idComprobacionGasto);
-                    dbManager.AddParameters(1, "archivo", archivoComprobacionGasto);
+                    dbManager.AddParameters(1, "archivo",(int) archivoComprobacionGasto);
                     dbManager.AddParameters(2, "path_archivo", pathArchivo);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_PATH_ARCHIVOS_COMPROBACION_GASTO");
                     if (dbManager.DataReader.Read())
