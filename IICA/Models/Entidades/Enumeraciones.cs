@@ -90,6 +90,15 @@ namespace IICA.Models.Entidades
         public const string especificacionVacacion = "Se finaliza la solicitud de las vacaciones";
         public const string especificacionIncapacidad = "Se finaliza la solicitud de la incapacidad";
     }
+	
+	public enum EnumArchivosViaticoSOlicitud
+    {
+        ARCHIVO_AUTORIZACION = 1,
+		ARCHIVO_COMPROBANTE_INSTANCIA = 2,
+		ARCHIVO_10_NO_COMPROBABLE = 3,
+		ARCHIVO_INFORME_VIATICO = 4,
+		ARCHIVO_REINTEGRO = 5
+    }
 
 
 }
