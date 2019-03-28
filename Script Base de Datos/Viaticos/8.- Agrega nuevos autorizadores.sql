@@ -1,3 +1,6 @@
+USE IICA_1
+GO
+
 TRUNCATE TABLE Viaticos_Autorizadores
 
 SELECT *
