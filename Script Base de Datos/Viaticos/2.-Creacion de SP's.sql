@@ -756,14 +756,15 @@ BEGIN
 		GOTO ERROR_1
 	END
 	
-	SELECT @Monto_Gastos_Extras=SUM(Monto)
+	SELECT @Monto_Gastos_Extras=coalesce (SUM(Monto),0)
 	FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD
 	WHERE Id_Solicitud=@Id_Solicitud
 
+	SELECT @Tarifa_Viatico Tarifa_Viatico,@Duracion_Viaje Duracion_Viaje,@Monto_Gastos_Extras Monto_Gastos_Extras
 
 	UPDATE DT_TBL_VIATICO_SOLICITUD 
 	SET 
-		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(Duracion_Viaje-.5))+@Monto_Gastos_Extras,
+		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(@Duracion_Viaje-.5))+@Monto_Gastos_Extras,
 		Pernocta=@Pernocta,
 		Marginal=@Marginal,
 		Tarifa_de_Ida=@Tarifa_Viatico*(@Duracion_Viaje-1),
