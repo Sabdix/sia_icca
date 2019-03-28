@@ -52,6 +52,12 @@ namespace IICA.Models.Entidades.Viaticos
 		public decimal Importe_Reintegro { get; set; }
 		/*Nuevos campos*/
         public string pathArchivoReintegro { get; set; }
+
+
+        /*Variables para validar flujo en la comprobacion de gastos*/
+        public bool realizarComprobacionGastos { get; set; }
+        public bool comprobarItinerarioAereo { get; set; }
+
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();

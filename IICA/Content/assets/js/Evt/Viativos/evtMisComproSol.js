@@ -3,10 +3,8 @@ var comprobanteGasto = {};
 var totalComprobacion = 0;
 
 //variable para validar el flujo de acuerdo a las condiciones de marginal con gastos extras y no marginal
-var validarSolamenteInforme;
-
 //variable para validar que se suban todos los archivos de pases de abordar de los itinerarios aereos
-var validarCargaPasesDeAbordar;
+
 
 $(document).ready(function () {
 
@@ -86,6 +84,7 @@ $(document).ready(function () {
         },
         sending: function (file, xhr, formData) {
             formData.append("id", comprobanteGasto.idComprobacionGasto);
+            formData.append("idSolicitud", solSeleccionada.idSolitud);
             formData.append("archivoComprobacionGasto",3);
         },
         success: function (file, data) {
@@ -98,11 +97,11 @@ $(document).ready(function () {
             //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
         }
     } // FIN myAwesomeDropzone
-    SatDropzone = new Dropzone("#dZUploadSat", DropzoneSat);
+    satDropzone = new Dropzone("#dZUploadSat", DropzoneSat);
 
     $("#dropZoneOtros").append("<form id='dZUploadOtros' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
     DropzoneOtros = {
-        url: rootUrl("/Viatico/ValidarFacturaComprobacion"),
+        url: rootUrl("/Viatico/SubirArchivoComprobacionGasto"),
         addRemoveLinks: true,
         paramName: "archivo",
         maxFilesize: 4, // MB
@@ -119,7 +118,8 @@ $(document).ready(function () {
         },
         sending: function (file, xhr, formData) {
             formData.append("id", comprobanteGasto.idComprobacionGasto);
-            formData.append("archivoComprobacionGasto", 3);
+            formData.append("idSolicitud", solSeleccionada.idSolitud);
+            formData.append("archivoComprobacionGasto", 4);
         },
         success: function (file, data) {
             file.previewElement.classList.add("dz-success");
@@ -131,7 +131,7 @@ $(document).ready(function () {
             //swal("Error", "No se ha logrado subir correctamente el archivo, intente mas tarde", "error");
         }
     } // FIN myAwesomeDropzone
-    OtrosDropzone = new Dropzone("#dZUploadOtros", DropzoneOtros);
+    otrosDropzone = new Dropzone("#dZUploadOtros", DropzoneOtros);
 
     $("#btn-cargarFactura").click(function () {
         if (xmlComprobacionDropzone.files.length < 2) {
@@ -216,6 +216,8 @@ function MostrarModalAgregarComprobacion(solicitud) {
 
     $("#form-comprobacion").trigger("reset");
     xmlComprobacionDropzone.removeAllFiles(true);
+    otrosDropzone.removeAllFiles(true);
+    satDropzone.removeAllFiles(true);
 
     $("#modal-comp-idSol").val(solicitud.idSolitud);
     $("#modal-comp-viaticante").val(solicitud.usuario.nombreCompleto);
@@ -229,12 +231,12 @@ function OnAgregarComprobacion() {
         MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
         return;
     }
-    if (SatDropzone.files.length < 1) {
-        MostrarNotificacionLoad("error", "Es necesario anexar el archivo respectivo al comprobante del sat.", 3000);
+    if (satDropzone.files.length < 1 || !satDropzone.files[0].accepted) {
+        swal("Notificación", "Es necesario anexar el archivo respectivo al comprobante del sat.","error");
         return;
     }
-    if (OtrosDropzone.files.length < 1) {
-        MostrarNotificacionLoad("error", "Es necesario anexar el archivo: Otros (ticket).", 3000);
+    if (otrosDropzone.files.length < 1 || !otrosDropzone.files[0].accepted) {
+        swal("Notificación", "Es necesario anexar el archivo: Otros (ticket).","error");
         return;
     }
 
@@ -260,9 +262,10 @@ function OnAgregarComprobacion() {
 function OnSuccesAgregarComprobacion(data) {
     OcultarLoading();
     if (data.status === true) {
+        comprobanteGasto.idComprobacionGasto = data.id;
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        SatDropzone.processQueue();
-        OtrosDropzone.processQueue();
+        satDropzone.processQueue();
+        otrosDropzone.processQueue();
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }

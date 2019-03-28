@@ -7,9 +7,6 @@
         nodoMenu = "misSolicitudes";
         submenu = "misCompro";
     </script>
-
-    bool validarSolamenteInforme=true;
-    bool validarCargaPasesDeAbordar = false;
 }
 @using System.Globalization;
 @using IICA.Models.Entidades.Viaticos
@@ -74,9 +71,8 @@
                                                     Ver Solicitud
                                                 </a>
                                             </li>
-                                            @if (!solicitud.marginal || (solicitud.marginal && solicitud.gastosExtrasSol.Count > 0))
+                                            @if (solicitud.realizarComprobacionGastos)
                                             {
-                                                validarSolamenteInforme = false;
                                                 <li>
                                                     <a href="#"
                                                        onclick="MostrarModalAgregarComprobacion(@(new JavaScriptSerializer().Serialize(solicitud)))">
@@ -89,10 +85,15 @@
                                                         Ver comprobaciones
                                                     </a>
                                                 </li>
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
+                                                       onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                        Cargar archivo del 10%
+                                                    </a>
+                                                </li>
                                             }
-                                            @if (solicitud.itinerario.Exists(x => x.tipoSalida.idTipoSalida ==(int) EnumTipoSalida.AEREO))
+                                            @if (solicitud.comprobarItinerarioAereo)
                                             {
-                                                validarCargaPasesDeAbordar = true;
                                                 <li>
                                                     <a href="#" data-toggle="modal" data-target="#modal-itinerario"
                                                        onclick="MostrarModalItinerario(@(new JavaScriptSerializer().Serialize(solicitud)))">
@@ -128,14 +129,13 @@
                 <h4 id="myModalLabel" class="semi-bold">Agregar comprobación.</h4>
             </div>
             <div class="modal-body">
-
                 <div class="row form-row">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="active" id="item-factura">
                             <a href="#tabfactura" role="tab" data-toggle="tab">Factura</a>
                         </li>
                         <li id="item-archivosAdicionales">
-                            <a href="#tabArchivosAdicionales" role="tab" data-toggle="tab">Validación sat y otros(ticket)</a>
+                            <a href="#tabArchivosAdicionales" role="tab" data-toggle="tab">Archivos: Factura,Validación sat y otros(ticket)</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -155,26 +155,23 @@
                                     <div class="col-md-12">
                                         <label class="form-label">Tipo de gasto:</label>
                                         @Html.DropDownList("modalcompGasto", (IEnumerable<SelectListItem>)ViewBag.GastosComprobacion,
-                                                      new
-                                                      {
-                                                          @class = "select-iica",
-                                                          id = "modal-comp-tipoGasto",
-                                                          style = "width: 100%;",
-                                                          data_val_required = "Seleccione un nivel de mando.",
-                                                          data_val = "true"
-                                                      })
+                                                        new
+                                                        {
+                                                            @class = "select-iica",
+                                                            id = "modal-comp-tipoGasto",
+                                                            style = "width: 100%;",
+                                                            data_val_required = "Seleccione un nivel de mando.",
+                                                            data_val = "true"
+                                                        })
                                     </div>
                                 </div>
-                                <br />
                                 <div class="row form-row">
                                     <div class="col-md-12">
-                                        <label class="form-label">Factura en Xml y Pdf</label>
-                                        <div style="height: 100px;">
-                                            <div class="col-md-12" id="dropZoneXmlComprobacion"></div>
-                                        </div>
+                                        <label class="form-label">Comentario:</label>
+                                        <textarea id="modal-comp-comentario" type="text" class="form-control" placeholder="Comentario"></textarea>
                                     </div>
                                 </div>
-                                <br />
+                                <!--aqui iba el dropzone-->
                                 <div class="row form-row">
                                     <div class="col-md-6">
                                         <label class="form-label">Emisor:</label>
@@ -195,12 +192,6 @@
                                         <input id="modal-comp-total" type="text" class="form-control" placeholder="Total" readonly>
                                     </div>
                                 </div>
-                                <div class="row form-row">
-                                    <div class="col-md-12">
-                                        <label class="form-label">Comentario:</label>
-                                        <textarea id="modal-comp-comentario" type="text" class="form-control" placeholder="Comentario"></textarea>
-                                    </div>
-                                </div>
                             </form>
                         </div>
                         <div class="tab-pane" id="tabArchivosAdicionales">
@@ -208,14 +199,21 @@
                                 <div class="col-md-12" id="content-formato">
                                     <div class="row form-row">
                                         <div class="col-md-12">
+                                            <label class="form-label">Factura en Xml y Pdf</label>
+                                            <div style="height: 100px;">
+                                                <div class="col-md-12" id="dropZoneXmlComprobacion"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row form-row">
+                                        <div class="col-md-6">
                                             <label class="form-label">Comprobación del SAT</label>
                                             <div style="height: 100px;">
                                                 <div class="col-md-12" id="dropZoneSat"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row form-row">
-                                        <div class="col-md-12">
+                                        <br />
+                                        <div class="col-md-6">
                                             <label class="form-label">Otros (ticket)</label>
                                             <div style="height: 100px;">
                                                 <div class="col-md-12" id="dropZoneOtros"></div>
@@ -227,7 +225,6 @@
                         </div>
                     </div>
                 </div>
-
 
             </div>
             <div class="modal-footer">
@@ -325,11 +322,13 @@
 @section scripts{
     <style>
 
-        #dZUploadXmlComp, #dZUploadReintegro {
+        #dZUploadXmlComp, #dZUploadReintegro, #dZUploadSat, #dZUploadOtros {
             min-height: 150px !important;
         }
 
-            #dZUploadXmlComp .dz-details {
+            #dZUploadXmlComp .dz-details,
+            #dZUploadSat .dz-details,
+            #dZUploadOtros .dz-details {
                 height: 25px !important;
             }
     </style>
@@ -356,12 +355,5 @@
     <script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
 
     <script src="~/Content/assets/js/Evt/Viativos/evtMisComproSol.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            validarSolamenteInforme = @validarSolamenteInforme;
-            validarCargaPasesDeAbordar = @validarCargaPasesDeAbordar;
-        });
-    </script>
 }
 

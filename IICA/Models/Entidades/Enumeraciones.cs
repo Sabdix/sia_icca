@@ -69,9 +69,17 @@ namespace IICA.Models.Entidades
     public enum EnumTipoSalida
     {
         NINGUNO =0,
+        IDA=1,
+        REGRESO=2
+    }
+
+    public enum EnumMedioTransporte
+    {
+        NINGUNO=0,
         TERRESTRE=1,
         AEREO=2
     }
+
     static class Constants
     {
         public const string notificacionPermiso = "Notificación de la solicitud de un permiso";
