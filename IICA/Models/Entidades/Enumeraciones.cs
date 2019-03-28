@@ -99,7 +99,7 @@ namespace IICA.Models.Entidades
         public const string especificacionIncapacidad = "Se finaliza la solicitud de la incapacidad";
     }
 	
-	public enum EnumArchivosViaticoSOlicitud
+	public enum EnumArchivosViaticoSolicitud
     {
         ARCHIVO_AUTORIZACION = 1,
 		ARCHIVO_COMPROBANTE_INSTANCIA = 2,
