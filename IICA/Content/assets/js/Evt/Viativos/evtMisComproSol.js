@@ -178,11 +178,7 @@ $(document).ready(function () {
         },
         success: function (file, data) {
             file.previewElement.classList.add("dz-success");
-            if (data.status) {
-                //Asdad
-            } else {
-                swal("Notificación", data.mensaje, "error");
-            }
+            OnSuccessConluirComprobacion(data);
         },
         error: function (file, response) {
             file.previewElement.classList.add("dz-error");
@@ -549,8 +545,8 @@ function OnSuccessMostrarConluirComprobacion(data) {
 function OnConluirComprobacion() {
     if (ValidarConcluirComprobacion(solSeleccionada)) {
         if (solSeleccionada.aplicaReintegro) {
-            solSeleccionada.importeReintegro = $("modal-concluir-montoReintegro").val();
-            solSeleccionada.fechaReintegro = $("modal-concluir-fechaReintegro").val();
+            solSeleccionada.importeReintegro = $("#modal-concluir-montoReintegro").val();
+            solSeleccionada.fechaReintegro = $("#modal-concluir-fechaReintegro").val();
             reintegroDropzone.processQueue();
         }
         else {
@@ -601,7 +597,7 @@ function ValidarConcluirComprobacion(solSeleccionada) {
                 return false;
             }
         }
-        var importeReintegro = parseFloat($("modal-concluir-montoReintegro").val());
+        var importeReintegro = parseFloat($("#modal-concluir-montoReintegro").val());
         if (importeReintegro <= 0 || isNaN(importeReintegro)) {
             swal("Notificación", "Ingrese un importe valido para el importe del reintegro", "error");
             return false;

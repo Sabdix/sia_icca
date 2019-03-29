@@ -1100,7 +1100,7 @@ GO
 CREATE PROCEDURE DT_SP_GUARDA_COMPROBACION_GASTOS
 	-- Add the parameters for the stored procedure here
 	@Id_Solicitud INT,
-	@Path_Archivo_Reintegro INT=NULL,
+	@Path_Archivo_Reintegro VARCHAR(300)=NULL,
 	@Fecha_Reintegro VARCHAR(30)=NULL,
 	@Importe_Reintegro MONEY=NULL
 AS
@@ -1119,7 +1119,7 @@ BEGIN
 	SET 
 		Id_Estatus_Solicitud=1,
 		Fecha_Reintegro=COALESCE(@Fecha_Reintegro,GETDATE()),
-		Importe_Reintegro=COALESCE(Importe_Reintegro,0),
+		Importe_Reintegro=COALESCE(@Importe_Reintegro,0),
 		Path_Archivo_Reintegro=COALESCE(@Path_Archivo_Reintegro,''),
 		Id_Etapa_Solicitud=Id_Etapa_Solicitud+1
 	WHERE Id_Solicitud=@Id_Solicitud
