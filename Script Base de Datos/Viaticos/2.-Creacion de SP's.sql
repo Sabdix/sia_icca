@@ -760,8 +760,6 @@ BEGIN
 	FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD
 	WHERE Id_Solicitud=@Id_Solicitud
 
-	SELECT @Tarifa_Viatico Tarifa_Viatico,@Duracion_Viaje Duracion_Viaje,@Monto_Gastos_Extras Monto_Gastos_Extras
-
 	UPDATE DT_TBL_VIATICO_SOLICITUD 
 	SET 
 		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(@Duracion_Viaje-.5))+@Monto_Gastos_Extras,
@@ -1102,7 +1100,9 @@ GO
 CREATE PROCEDURE DT_SP_GUARDA_COMPROBACION_GASTOS
 	-- Add the parameters for the stored procedure here
 	@Id_Solicitud INT,
-	@Path_Archivo_Reintegro INT NULL
+	@Path_Archivo_Reintegro INT=NULL,
+	@Fecha_Reintegro VARCHAR(30)=NULL,
+	@Importe_Reintegro MONEY=NULL
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -1111,34 +1111,24 @@ BEGIN
 
     DECLARE
 		@status INT=1,
-		@mensaje VARCHAR(100)='COMPROBACIÓN GUARDADA DE MANERA CORRECTA.',
-		@Total_Comprobacion MONEY,
-		@Monto_Viatico_Autorizado MONEY
+		@mensaje VARCHAR(100)='COMPROBACIÓN GUARDADA DE MANERA CORRECTA.'
 
-	SELECT @Total_Comprobacion=SUM(Total)
-	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
-	WHERE Id_Solicitud=@Id_Solicitud
-
-	SELECT @Monto_Viatico_Autorizado=Monto_Viatico_Autorizado
-	FROM DT_TBL_VIATICO_SOLICITUD
-	WHERE Id_Solicitud=@Id_Solicitud
-
-
-	IF (@Total_Comprobacion<@Monto_Viatico_Autorizado) AND (@Path_Archivo_Reintegro IS NULL)
-	BEGIN
-		SET @mensaje='ES NECESARIO EL DOCUMENTO DE REINTEGRÓ. FAVOR DE REVISAR.'
-		SET @status=0
-		GOTO EXIT_
-	END
 
 	--SE COMIENZAN LAS AFECTACIONES
 	UPDATE DT_TBL_VIATICO_SOLICITUD
 	SET 
-		Monto_Viatico_Reintegro=@Monto_Viatico_Autorizado-@Total_Comprobacion,
 		Id_Estatus_Solicitud=1,
+		Fecha_Reintegro=COALESCE(@Fecha_Reintegro,GETDATE()),
+		Importe_Reintegro=COALESCE(Importe_Reintegro,0),
 		Path_Archivo_Reintegro=COALESCE(@Path_Archivo_Reintegro,''),
 		Id_Etapa_Solicitud=Id_Etapa_Solicitud+1
 	WHERE Id_Solicitud=@Id_Solicitud
+
+	IF @@ERROR<>0
+	BEGIN
+		SET @status=0
+		SET @mensaje ='ERROR AL GUARDAR LA COMPROBACIÓN.'
+	END
 
 	EXIT_: SELECT @status STATUS, @mensaje MENSAJE
 
@@ -1482,6 +1472,3 @@ END
 GO
 
 GRANT EXECUTE ON DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO TO public;  
-
-
-EXEC DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO 1,'SDFSDF'
