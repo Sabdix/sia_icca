@@ -17,7 +17,10 @@
                     <th style="width:10%;text-align: center;">Subtotal</th>
                     <th style="width:10%;text-align: center;">Total</th>
                     <th style="width:10%;text-align: center;">Facturas</th>
+                    @if (Model.etapaSolicitud.idEtapaSolicitud != 5)
+                    {
                     <th style="width:10%;text-align: center;">Acciones</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +73,7 @@
                                 </ul>
                             </div>
                         </td>
+                        @if (Model.etapaSolicitud.idEtapaSolicitud!=5) {
                         <td>
                             <span>
                                 <button data-toggle="tooltip" title="Eliminar comprobación" class="btn btn-warning btn-mini"
@@ -78,6 +82,7 @@
                                 </button>
                             </span>
                         </td>
+                        }
                     </tr>
                 }
             </tbody>
