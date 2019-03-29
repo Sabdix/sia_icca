@@ -233,6 +233,15 @@ $(document).ready(function () {
         archivosDropZone.removeAllFiles(true);
     });
 
+
+    $("#modal-concluir-fechaReintegro").datepicker({
+        startView: 1,
+        format: 'yyyy/mm/dd',
+        //startDate: "today",
+        autoclose: true,
+        todayHighlight: true
+    });
+    
 });
 
 
@@ -268,10 +277,10 @@ function MostrarModalAgregarComprobacion(solicitud) {
     $("#form-comprobacionFactura").trigger("reset");
 
     $("#ul-tabsComprobacion li").removeClass("active");
-    $(".tab-content .tab-pane").removeClass("active");
+    $("#tabsContent-comprobaciones .tab-pane").removeClass("active");
 
-    $("ul.nav-tabs li:first").addClass("active");
-    $(".tab-content .tab-pane:first").addClass("active");
+    $("#ul-tabsComprobacion li:first").addClass("active");
+    $("#tabsContent-comprobaciones .tab-pane:first").addClass("active");
 
     xmlComprobacionDropzone.removeAllFiles(true);
     otrosDropzone.removeAllFiles(true);
@@ -520,6 +529,10 @@ function OnSuccessMostrarConluirComprobacion(data) {
         });
         $("#modal-concluir-montoCompr").val(accounting.formatMoney(totalComprobacion));
 
+        $("#modal-concluir-montoReintegro").val(0);
+        $("#modal-concluir-fechaReintegro").val(moment().format("YYYY/MM/DD"));
+        reintegroDropzone.removeAllFiles(true);
+
         if (solSeleccionada.aplicaReintegro) {
             $("#content-reintegro").show();
         } else {
@@ -535,9 +548,11 @@ function OnSuccessMostrarConluirComprobacion(data) {
 
 function OnConluirComprobacion() {
     if (ValidarConcluirComprobacion(solSeleccionada)) {
-        solSeleccionada.importeReintegro = $("modal-concluir-montoReintegro").val();
-        if (solSeleccionada.aplicaReintegro)
+        if (solSeleccionada.aplicaReintegro) {
+            solSeleccionada.importeReintegro = $("modal-concluir-montoReintegro").val();
+            solSeleccionada.fechaReintegro = $("modal-concluir-fechaReintegro").val();
             reintegroDropzone.processQueue();
+        }
         else {
             ConluirComprobacion();
         }
@@ -569,17 +584,32 @@ function ValidarConcluirComprobacion(solSeleccionada) {
     //validación para comprobar que cada itinerario aereo tenga anexo su pase de abordar
     if (solSeleccionada.comprobarItinerarioAereo) {
         var itinerarioAereo = $.grep(solSeleccionada.itinerario, function (itinerario) { return itinerario.medioTransporte.idMedioTransporte == 2 });
-        itinerarioAereo = $.grep(itinerarioAereo, function (itinerario) { return (itinerario.pathPasajeAbordar != null || itinerario.pathPasajeAbordar != "") });
+        itinerarioAereo = $.grep(itinerarioAereo, function (itinerario) { return (itinerario.pathPasajeAbordar != null && itinerario.pathPasajeAbordar != "") });
         if (itinerarioAereo.length == 0) {
             swal("Notificación", "Para concluir debe anexar los pases de abordar de cada viaje aéreo.", "error");
             return false;
         }
     }
-    //validación para comprobar que se enexo el archivo de reintegro en caso de necesitarse
-    if (solSeleccionada.aplicaReintegro && reintegroDropzone.files.length < 1 && !satDropzone.files[0].accepted) {
-        swal("Notificación", "Por favor anexe el archivo del reintegro", "error");
-        return false;
+    //validación para comprobar que se enexo el archivo de reintegro en caso de necesitarse y el importe del mismo
+    if (solSeleccionada.aplicaReintegro) {
+        if (reintegroDropzone.files.length < 1) {
+            swal("Notificación", "Por favor anexe el archivo del reintegro", "error");
+            return false;
+        } else {
+            if (!reintegroDropzone.files[0].accepted) {
+                swal("Notificación", "Por favor anexe un archivo correcto", "error");
+                return false;
+            }
+        }
+        var importeReintegro = parseFloat($("modal-concluir-montoReintegro").val());
+        if (importeReintegro <= 0 || isNaN(importeReintegro)) {
+            swal("Notificación", "Ingrese un importe valido para el importe del reintegro", "error");
+            return false;
+        }
     }
+
+    
+
     return true;
 }
 

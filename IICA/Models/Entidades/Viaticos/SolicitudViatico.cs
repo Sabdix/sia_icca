@@ -49,7 +49,7 @@ namespace IICA.Models.Entidades.Viaticos
 		public string pathComprobanteEstancia { get; set; }
 		public string pathArchivo10NoComprobable { get; set; }
         public string pathInformeViaje { get; set; }
-        public DateTime fechaReintegro { get; set; }
+        public DateTime ? fechaReintegro { get; set; }
         public bool aplicaReintegro { get; set; }
         public decimal importeReintegro { get; set; }
         public string pathArchivoReintegro { get; set; }

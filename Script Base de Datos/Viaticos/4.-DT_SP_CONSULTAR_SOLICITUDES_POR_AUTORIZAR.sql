@@ -57,7 +57,7 @@ BEGIN
 		join Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
 		join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
 		LEFT JOIN Departamento_Empleado c ON em.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
-		join IICA_COMPRAS..Viaticos_Autorizadores autorizadores on autorizadores.aut_proyecto = s.Sc_UserDef_2
+		join Viaticos_Autorizadores autorizadores on autorizadores.aut_proyecto = s.Sc_UserDef_2
 	where 
 		vs.Id_etapa_solicitud = 2
 		and vs.Id_estatus_solicitud <> 3

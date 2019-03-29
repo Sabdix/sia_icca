@@ -34,7 +34,7 @@ BEGIN
 		--Se define si aplica el reintegro o no para una solicitud
 
 		
-		IF EXISTS (SELECT 1 FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud AND Id_Etapa_Solicitud>=5)
+		IF EXISTS (SELECT 1 FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud AND Id_Etapa_Solicitud>=4)
 		BEGIN
 
 			IF (SELECT Marginal FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)=1

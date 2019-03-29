@@ -156,7 +156,7 @@
                                 <a href="#tabfactura" role="tab" data-toggle="tab">Factura</a>
                             </li>
                         </ul>
-                        <div class="tab-content">
+                        <div class="tab-content" id="tabsContent-comprobaciones">
                             <div class="tab-pane active" id="tabDatosComprobacion">
                                 <form id="form-comprobacion">
                                     <div class="row form-row">
@@ -456,8 +456,14 @@
                     <div id="content-reintegro">
                         <div class="row form-row">
                             <div class="col-md-6">
-                                <label class="form-label">Monto de reintegro:</label>
-                                <input id="modal-concluir-montoReintegro" type="text" class="form-control" placeholder="Monto de reintegro">
+                                <label class="form-label">Importe de reintegro:</label>
+                                <input id="modal-concluir-montoReintegro" name="modal-concluir-montoReintegro" type="text" class="form-control" placeholder="Importe de reintegro"
+                                       valid" data-val-required="Ingrese el importe del reintegro." data-val-number="Este campo debe ser númerico" data-val="true">
+                                <span class="error field-validation-valid" data-valmsg-for="modal-concluir-montoReintegro" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha de deposito del reintegro:</label>
+                                <input id="modal-concluir-fechaReintegro" type="text" class="form-control" placeholder="Importe de reintegro">
                             </div>
                         </div>
                         <div class="row form-row">
@@ -515,6 +521,10 @@
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <script src="~/Content/assets/js/datatables.js"></script>
+
+    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+    <link href="~/Content/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
 
     <script src="~/Content/assets/plugins/accounting/accounting.min.js"></script>
 
