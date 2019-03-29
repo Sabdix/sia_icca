@@ -520,11 +520,11 @@ function OnSuccessMostrarConluirComprobacion(data) {
         });
         $("#modal-concluir-montoCompr").val(accounting.formatMoney(totalComprobacion));
 
-        //if (solSeleccionada.aplicaReintegro) {
+        if (solSeleccionada.aplicaReintegro) {
             $("#content-reintegro").show();
-        //} else {
-        //    $("#content-reintegro").hide();
-        //}
+        } else {
+            $("#content-reintegro").hide();
+        }
 
 
     } else {

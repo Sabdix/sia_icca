@@ -1,4 +1,4 @@
-﻿@model List<IICA.Models.Entidades.Viaticos.ComprobacionGasto>
+﻿@model IICA.Models.Entidades.Viaticos.SolicitudViatico
 @using System.Web.Script.Serialization;
 
 
@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var comprobacion in Model)
+                @foreach (var comprobacion in Model.comprobacionesGasto)
                 {
                     <tr>
                         <td>@comprobacion.idComprobacionGasto </td>

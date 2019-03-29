@@ -438,8 +438,9 @@ namespace IICA.Controllers.Viaticos
         {
             try
             {
-                ComprobacionGastosDAO comprobacionGastosDAO = new ComprobacionGastosDAO();
-                return PartialView(comprobacionGastosDAO.ObtenerComprobacionGastos(id));
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+
+                return PartialView(solicitudViaticoDAO.ObtenerDetalleSol(id).objeto);
             }
             catch (Exception ex)
             {
