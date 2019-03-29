@@ -133,3 +133,30 @@ function OnSuccesAutorizarSol(data) {
     }
 }
 //Fin Autorizar solicitud
+
+//Mostrar comprobaciones
+function MostrarModalComprobaciones(solicitud) {
+    solSeleccionada = solicitud;
+    ObtenerFechasJsonSolSeleccionada(solicitud);
+    $.ajax({
+        data: { id: solSeleccionada.idSolitud },
+        url: rootUrl("/Viatico/_ObtenerComprobaciones"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#modal-content-comprobaciones").html(data);
+        },
+        error: function (xhr, status, error) {
+            $("#modal-comprobaciones").modal("hide");
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function mostrarFactura(url) {
+    window.open(url, '_blank');
+}

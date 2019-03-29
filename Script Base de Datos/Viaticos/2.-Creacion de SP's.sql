@@ -756,14 +756,15 @@ BEGIN
 		GOTO ERROR_1
 	END
 	
-	SELECT @Monto_Gastos_Extras=SUM(Monto)
+	SELECT @Monto_Gastos_Extras=coalesce (SUM(Monto),0)
 	FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD
 	WHERE Id_Solicitud=@Id_Solicitud
 
+	SELECT @Tarifa_Viatico Tarifa_Viatico,@Duracion_Viaje Duracion_Viaje,@Monto_Gastos_Extras Monto_Gastos_Extras
 
 	UPDATE DT_TBL_VIATICO_SOLICITUD 
 	SET 
-		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(Duracion_Viaje-.5))+@Monto_Gastos_Extras,
+		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(@Duracion_Viaje-.5))+@Monto_Gastos_Extras,
 		Pernocta=@Pernocta,
 		Marginal=@Marginal,
 		Tarifa_de_Ida=@Tarifa_Viatico*(@Duracion_Viaje-1),
@@ -1345,7 +1346,8 @@ GO
 GRANT EXECUTE ON DT_SP_ACTUALIZAR_PATH_ARCHIVOS_VIATICOS_SOLICITUD TO public;  
 GO
 
---==========================================================================================================================IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTAR_SOLICITUDES_POR_VERIFICAR')
+--==========================================================================================================================
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTAR_SOLICITUDES_POR_VERIFICAR')
 BEGIN
 	DROP PROCEDURE DT_SP_CONSULTAR_SOLICITUDES_POR_VERIFICAR
 END
@@ -1406,3 +1408,80 @@ GO
 
 GRANT EXECUTE ON DT_SP_CONSULTAR_SOLICITUDES_POR_VERIFICAR TO public
 GO
+
+--==========================================================================================================================
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO')
+BEGIN
+	DROP PROCEDURE DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO
+END
+GO
+
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO
+	-- Add the parameters for the stored procedure here
+	@Id_Itinerario int,
+	@Path_Archivo VARCHAR(500)
+	
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE
+		@status INT=1,
+		@mensaje VARCHAR(100)='ARCHIVO GUARDADO DE MANERA CORRECTA'
+
+
+		IF (@Path_Archivo IS NULL) OR (NOT EXISTS(SELECT 1 FROM DT_TBL_VIATICO_ITINERARIO  WHERE Id_Itinerario = @Id_Itinerario))
+		BEGIN
+			SET @mensaje='DATOS INCOMPLETOS, FAVOR DE REVISAR.'
+			GOTO ERROR_1
+		END
+		IF(@Path_Archivo IS NOT NULL)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_ITINERARIO 
+			SET Path_Pasaje_Abordar = @Path_Archivo
+			WHERE Id_Itinerario = @Id_Itinerario
+		END
+
+		IF @@ERROR<>0
+		BEGIN
+			SET @mensaje='ERROR AL GUARDAR EL ARCHIVO DEl ITINERARIO.'
+			GOTO ERROR_1
+		END
+
+
+	GOTO EXIT_
+
+	ERROR_1:
+		SET @status=0
+		GOTO EXIT_
+	EXIT_:
+		SELECT @status STATUS, @mensaje MENSAJE
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO TO public;  
+
+
+EXEC DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO 1,'SDFSDF'
