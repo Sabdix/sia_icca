@@ -3,6 +3,7 @@ using IICA.Models.Entidades;
 using IICA.Models.Entidades.Viaticos;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -225,7 +226,16 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.pernocta = dbManager.DataReader["pernocta"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["pernocta"].ToString());
                             solicitudViatico.marginal = dbManager.DataReader["marginal"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["marginal"].ToString());
                             solicitudViatico.pathArchivoAutorizacion = dbManager.DataReader["Path_Archivo_Autorizacion"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Autorizacion"].ToString());
+                            solicitudViatico.pathArchivo10NoComprobable = dbManager.DataReader["Path_Archivo_10_No_Comprobable"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_10_No_Comprobable"].ToString());
+                            solicitudViatico.pathComprobanteEstancia = dbManager.DataReader["Path_Comprobante_Estancia"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Comprobante_Estancia"].ToString());
+                            solicitudViatico.pathInformeViaje = dbManager.DataReader["Path_Informe_Viaje"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Informe_Viaje"].ToString());
+                            solicitudViatico.pathArchivoReintegro = dbManager.DataReader["Path_Archivo_Reintegro"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Reintegro"].ToString());
                             solicitudViatico.montoAutorizado = dbManager.DataReader["monto_viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["monto_viatico_Autorizado"].ToString());
+                            solicitudViatico.aplicaReintegro = dbManager.DataReader["Aplica_Reintegro"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["Aplica_Reintegro"]);
+
+                            solicitudViatico.realizarComprobacionGastos = dbManager.DataReader["realizar_comprobacion_gastos"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["realizar_comprobacion_gastos"]);
+                            solicitudViatico.comprobarItinerarioAereo = dbManager.DataReader["comprobar_itinerario_aereo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["comprobar_itinerario_aereo"]);
+
 
                             solicitudViatico.usuario.nombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
                             solicitudViatico.usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
@@ -236,7 +246,7 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.usuario.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                             solicitudViatico.usuario.email = dbManager.DataReader["Em_Email"] == DBNull.Value ? "" : dbManager.DataReader["Em_Email"].ToString();
                             solicitudViatico.Em_Cve_Empleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
-                            solicitudViatico.usuario.puesto= dbManager.DataReader["Puesto_empleado"] == DBNull.Value ? "" : dbManager.DataReader["Puesto_empleado"].ToString();
+                            solicitudViatico.usuario.puesto = dbManager.DataReader["Puesto_empleado"] == DBNull.Value ? "" : dbManager.DataReader["Puesto_empleado"].ToString();
 
                             //lectura datos autorizador
                             solicitudViatico.autorizador.nombre = dbManager.DataReader["Em_nombre_autorizador"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre_autorizador"].ToString();
@@ -263,6 +273,7 @@ namespace IICA.Models.DAO.Viaticos
                                 itinerario.fechaLLegada = dbManager.DataReader["Fecha_Llegada"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Llegada"].ToString());
                                 itinerario.dias = dbManager.DataReader["Dias"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["Dias"].ToString());
                                 itinerario.pathBoleto = dbManager.DataReader["Path_Boleto"] == DBNull.Value ? "" : dbManager.DataReader["Path_Boleto"].ToString();
+                                itinerario.pathPasajeAbordar = dbManager.DataReader["path_Pasaje_Abordar"] == DBNull.Value ? "" : dbManager.DataReader["path_Pasaje_Abordar"].ToString();
                                 itinerario.tipoSalida.idTipoSalida = dbManager.DataReader["id_tipo_salida"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["id_tipo_salida"].ToString());
                                 itinerario.tipoSalida.descripcion = dbManager.DataReader["tipo_salida"] == DBNull.Value ? "" : dbManager.DataReader["tipo_salida"].ToString();
                                 solicitudViatico.itinerario.Add(itinerario);
@@ -284,7 +295,8 @@ namespace IICA.Models.DAO.Viaticos
                             //lectura de comprobaciones de gasto
                             dbManager.DataReader.NextResult();
                             ComprobacionGasto comprobacionGasto;
-                            while (dbManager.DataReader.Read()) {
+                            while (dbManager.DataReader.Read())
+                            {
                                 comprobacionGasto = new ComprobacionGasto();
                                 comprobacionGasto.idComprobacionGasto = dbManager.DataReader["Id_Comprobacion_Gasto"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Comprobacion_Gasto"].ToString());
                                 comprobacionGasto.solicitud.idSolitud = dbManager.DataReader["id_solicitud"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["id_solicitud"].ToString());
@@ -347,7 +359,7 @@ namespace IICA.Models.DAO.Viaticos
                     dbManager.AddParameters(0, "id_etapa_solicitud", solicitudViatico.etapaSolicitud.idEtapaSolicitud);
                     dbManager.AddParameters(1, "id_estatus_solicitud", solicitudViatico.estatusSolicitud.idEstatusSolicitud);
                     dbManager.AddParameters(2, "id_solicitud", solicitudViatico.idSolitud);
-                    dbManager.AddParameters(3, "Em_Cve_Empleado", solicitudViatico.emCveEmpleadoAutoriza); 
+                    dbManager.AddParameters(3, "Em_Cve_Empleado", solicitudViatico.emCveEmpleadoAutoriza);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD");
                     if (dbManager.DataReader.Read())
                     {
@@ -544,6 +556,60 @@ namespace IICA.Models.DAO.Viaticos
             }
             return solicitudes;
         }
+
+        public Result ActualizarArchivoSolViatico(int idSolicitudViatico, EnumArchivosViaticoSolicitud archivoViaticoSolicitud, string pathFormato)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(3);
+                    dbManager.AddParameters(0, "Id_Solicitud", idSolicitudViatico);
+                    dbManager.AddParameters(1, "Id_Archivo", archivoViaticoSolicitud);
+                    dbManager.AddParameters(2, "Path_Archivo", pathFormato);
+                    dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_PATH_ARCHIVOS_VIATICOS_SOLICITUD");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["mensaje"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        public Result SubirPaseAbordarItinerario(int idItinerario, string pathFormato)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(2);
+                    dbManager.AddParameters(0, "Id_Itinerario", idItinerario);
+                    dbManager.AddParameters(1, "Path_Archivo", pathFormato);
+                    dbManager.ExecuteReader(CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["mensaje"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
 
         public Result ConluirComprobacionSolicitud(SolicitudViatico solicitudViatico)
         {

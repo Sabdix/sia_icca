@@ -53,10 +53,6 @@ $(document).ready(function () {
                 swal("Error", "No se puede subir mas de un archivo", "error");
             });
         },
-        //sending: function (file, xhr, formData) {
-        //    formData.append("idIncapacidad", idIncapacidad);
-        //    formData.append("formato", formato);
-        //},
         success: function (file, nombreArchivo) {
             file.previewElement.classList.add("dz-success");
             if (nombreArchivo.mensaje != undefined) {

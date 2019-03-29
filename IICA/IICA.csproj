@@ -558,6 +558,7 @@
     <Content Include="Views\Viatico\MisSolicitudesPorComprobar.cshtml" />
     <Content Include="Views\Viatico\_ObtenerComprobaciones.cshtml" />
     <Content Include="Views\Viatico\SolicitudesPorVerificar.cshtml" />
+    <Content Include="Views\Viatico\_ItinerarioAereo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

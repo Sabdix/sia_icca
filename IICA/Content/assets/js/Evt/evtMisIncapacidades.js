@@ -34,12 +34,11 @@ $(document).ready(function () {
             formData.append("formato", formato);
         },
         success: function (file, data) {
-            swal("Subida Exitosa", data.mensaje, "success");
             file.previewElement.classList.add("dz-success");
             if (data.status === true) {
-                MostrarNotificacionLoad("success", data.mensaje, 3000);
+                swal("Notificación", data.mensaje, "success");
             } else {
-                MostrarNotificacionLoad("error", data.mensaje, 3000);
+                swal("Notificación", data.mensaje, "Error");
             }
             $("#modal-subir-archivo").modal("hide");
         },

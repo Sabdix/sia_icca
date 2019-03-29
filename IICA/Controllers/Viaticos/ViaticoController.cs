@@ -362,6 +362,7 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        #region Comprobacion de gastos
         [SessionExpire]
         public ActionResult MisSolicitudesPorComprobar()
         {
@@ -400,7 +401,7 @@ namespace IICA.Controllers.Viaticos
             try
             {
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                string pathFormato = ObtenerFormatosSolicitud(Request,idSolicitud,archivoComprobacionGasto.ToString()+"-" + id+"-", usuarioSesion.emCveEmpleado);
+                string pathFormato = ObtenerFormatosSolicitud(Request,idSolicitud,archivoComprobacionGasto.ToString()+"-" + id, usuarioSesion.emCveEmpleado,false);
                 Result result=new Result();
                 if (!string.IsNullOrEmpty(pathFormato))
                 {
@@ -470,6 +471,76 @@ namespace IICA.Controllers.Viaticos
         }
 
         [HttpPost, SessionExpire]
+        public ActionResult SubirArchivoSolicitudViatico(int idSolicitudViatico, EnumArchivosViaticoSolicitud formato)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                Result result = new Result();
+                string pathFormato = ObtenerFormatosSolicitud(Request, idSolicitudViatico, formato.ToString(), usuarioSesion.emCveEmpleado,false);
+                if (!string.IsNullOrEmpty(pathFormato))
+                {
+                    result = solicitudViaticoDAO.ActualizarArchivoSolViatico(idSolicitudViatico, formato, pathFormato);
+                }
+                else
+                    result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult _ItinerarioAereo(int id)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Result result = solicitudViaticoDAO.ObtenerDetalleSol(id);
+                if (result.status)
+                {
+                    SolicitudViatico solicitudViatico = (SolicitudViatico)result.objeto;
+                    return PartialView(solicitudViatico);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult SubirPaseDeAbordar(int idSolicitudViatico,int idItinerario)
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                Result result = new Result();
+                string pathFormato = ObtenerFormatosSolicitud(Request, idSolicitudViatico, "PASE_ABORDAR-"+idItinerario, usuarioSesion.emCveEmpleado, false);
+                if (!string.IsNullOrEmpty(pathFormato))
+                {
+                    result = solicitudViaticoDAO.SubirPaseAbordarItinerario(idItinerario,pathFormato);
+                }
+                else
+                    result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost, SessionExpire]
         public ActionResult ConluirComprobacionSolicitud(SolicitudViatico solicitudViatico_)
         {
             try
@@ -494,6 +565,7 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        #endregion Comprobacion de gastos
 
         [SessionExpire]
         public ActionResult SolicitudesPorVerificar()
@@ -585,11 +657,11 @@ namespace IICA.Controllers.Viaticos
             return string.Empty;
         }
 
-        private string ObtenerFormatosSolicitud(HttpRequestBase httpRequestBase, int idSolicitudViatico, string formato, string usuario)
+        private string ObtenerFormatosSolicitud(HttpRequestBase httpRequestBase, int idSolicitudViatico, string formato, string usuario, bool ConcatenarIdDinamico)
         {
             try
             {
-                string idAleatorio = Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm");
+                string idAleatorio = (ConcatenarIdDinamico? ("_"+Guid.NewGuid().ToString().Substring(0, 5) + DateTime.Now.ToString("yyyy_dd_MM_hh_mm")) : "");
                 if (httpRequestBase.Files.Count > 0)
                 {
                     for (int i = 0; i < httpRequestBase.Files.Count; i++)
@@ -603,7 +675,7 @@ namespace IICA.Controllers.Viaticos
                             if (!System.IO.Directory.Exists(pathGeneral))
                                 System.IO.Directory.CreateDirectory(pathGeneral);
 
-                            string nombre = Path.GetFileName(formato + "_" + idAleatorio + "" + Path.GetExtension(file.FileName));
+                            string nombre = Path.GetFileName(formato + idAleatorio + "" + Path.GetExtension(file.FileName));
                             string pathFormato = Path.Combine(pathGeneral, nombre);
 
                             file.SaveAs(pathFormato);

@@ -1,0 +1,186 @@
+﻿@model IICA.Models.Entidades.Viaticos.SolicitudViatico
+
+@using System.Web.Script.Serialization;
+@using IICA.Models.Entidades;
+
+<div class="row form-row">
+    <div class="col-md-12">
+        <div class="grid simple vertical green">
+            <div class="grid-title">
+                <h4>Lista <span class="semi-bold">de itinerario <b>Aéreo</b></span></h4>
+            </div>
+            <div class="grid-body">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-gastosExtras">
+                    <thead>
+                        <tr>
+                            <th style="width:10%;text-align: center;">Tipo</th>
+                            <th style="width:10%;text-align: center;">Origen</th>
+                            <th style="width:10%;text-align: center;">Destino</th>
+                            <th style="width:10%;text-align: center;">Medio de transporte</th>
+                            <th style="width:10%;text-align: center;">Linea / No. de vuelo</th>
+                            <th style="width:10%;text-align: center;">Hora de salida</th>
+                            <th style="width:10%;text-align: center;">Hora de llegada</th>
+                            <th style="width:10%;text-align: center;">Boleto</th>
+                            <th style="width:10%;text-align: center;">Pase de abordar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itinerario in Model.itinerario.FindAll(x => x.medioTransporte.idMedioTransporte == (int)EnumMedioTransporte.AEREO))
+                        {
+                            <tr>
+                                <td>@(itinerario.tipoSalida.idTipoSalida == 1 ? "Ida" : "Regreso")</td>
+                                <td>@itinerario.origen</td>
+                                <td>@itinerario.destino</td>
+                                <td>@itinerario.medioTransporte.descripcion</td>
+                                <td>@(itinerario.linea + "/" + itinerario.numeroAsiento)</td>
+                                <td>@(string.IsNullOrEmpty(itinerario.horaSalida) ? "N/A" : itinerario.horaSalida )</td>
+                                <td>@(string.IsNullOrEmpty(itinerario.horaLLegada) ? "N/A" : itinerario.horaLLegada )</td>
+                                <td>
+                                    <span data-toggle="modal" data-target="#modal-itinBoleto" onclick="mostrarBoletoItinerario(@(new JavaScriptSerializer().Serialize(itinerario)))">
+                                        <button data-toggle="tooltip" title="Ver boleto" class="btn btn-info btn-mini">
+                                            <i class="fa fa-print"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span data-toggle="modal" data-target="#modal-itinerarioSubirArchivo" data-nombreArchivo="Pase de abordar"
+                                          data-itinerario="@(new JavaScriptSerializer().Serialize(itinerario))" class="itinerarioSubirArchivo">
+                                        <button data-toggle="tooltip" title="Subir pase de abordar" class="btn btn-success btn-mini">
+                                            <i class="fa fa-upload"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .blueIICA {
+        color: #1f3853;
+    }
+
+    #content-solViatico .grid-body {
+        padding: 0px !important;
+    }
+
+    table tr th {
+        font-size: 11px !important;
+    }
+
+    table td {
+        font-size: 11px !important;
+    }
+
+    #dZUploadItinerio {
+        min-height: 150px !important;
+    }
+</style>
+
+<script>
+    var _itinerario;
+    var _solicitudViatico = {};
+    _solicitudViatico.idSolitud = @(Model.idSolitud);
+    var archivosItinerarioDropZone;
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        if (archivosItinerarioDropZone != undefined) {
+            archivosItinerarioDropZone.destroy();
+        }
+
+        $(".itinerarioSubirArchivo").click(function () {
+            _itinerario = JSON.parse($(this).attr("data-itinerario"));
+            $("#modal-itinerarioSubir-nombreArchivo").text($(this).attr("data-nombreArchivo"));
+
+            MostrarDatosItinerario(_itinerario);
+        });
+
+        /*===============================================================================================
+          ==============================      ARCHIVOS ITINERARIO AEREO   ===============================
+          ===============================================================================================*/
+
+        $("#formDropZoneItinerario").html("<form id='dZUploadItinerio' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+        objArchivosItinerarioDropzone = {
+            url: rootUrl("/Viatico/SubirPaseDeAbordar"),
+            addRemoveLinks: true,
+            paramName: "archivo",
+            maxFilesize: 4, // MB
+            dictRemoveFile: "Remover",
+            acceptedFiles: ".pdf",
+            sending: function (file, xhr, formData) {
+                formData.append("idSolicitudViatico", _solicitudViatico.idSolitud);
+                formData.append("idItinerario", _itinerario.idItinerario);
+            },
+            success: function (file, data) {
+                file.previewElement.classList.add("dz-success");
+                if (data.status === true) {
+                    swal("Notificación", data.mensaje, "success");
+                    MostrarModalItinerarioAereos(_solicitudViatico);
+                } else {
+                    swal("Notificación", data.mensaje, "Error");
+                }
+                $("#modal-itinerarioSubirArchivo").modal("hide");
+            },
+            error: function (file, response) {
+                file.previewElement.classList.add("dz-error");
+                swal("Error", "No se ha logrado subir correctamente el formato, intente mas tarde", "error");
+            }
+        } // FIN myAwesomeDropzone
+        archivosItinerarioDropZone = new Dropzone("#dZUploadItinerio", objArchivosItinerarioDropzone);
+
+
+
+    });
+
+    function mostrarBoletoItinerario(itinerario) {
+        var url = itinerario.pathBoleto;
+        if (url !== "") {
+            url = rootUrl(url);
+            $('div #content-boleto').html("");
+            $("div #bol-ida").text(itinerario.origen);
+            $("div #bol-regreso").text(itinerario.destino);
+            var iframe = $('<iframe style="width: 100%;height:600px;">');
+            iframe.attr('src', url);
+            $('div #content-boleto').append(iframe);
+            iframe[0].contentWindow.location.reload();
+        }
+        else {
+            $("div #content-boleto").html("");
+            $("div #bol-ida").text("-");
+            $("div #bol-regreso").text("-");
+        }
+    }
+
+    function MostrarDatosItinerario(itinerario) {
+
+        var url = itinerario.pathPasajeAbordar;
+        if (url !== "" && url != undefined) {
+            url = rootUrl(url);
+            $("#item-verArchivoItinerario").show();
+            $('#content-archivosItinerario').html("");
+            var iframe = $('<iframe style="width: 100%;height:600px;">');
+            iframe.attr('src', url);
+            $('#content-archivosItinerario').append(iframe);
+            iframe[0].contentWindow.location.reload();
+        }
+        else {
+            $("#item-verArchivoItinerario").hide();
+            $("#content-archivosItinerario").html("");
+        }
+
+
+        $(".modal-itinerarioId").val(itinerario.idItinerario);
+        $(".modal-itinerarioOrigen").val(itinerario.origen);
+        $(".modal-itinerarioDestino").val(itinerario.destino);
+
+    }
+</script>
+
+
+

@@ -78,7 +78,14 @@ BEGIN
 			autorizador.Em_Apellido_Materno Em_Apellido_Materno_autorizador,
 			pe.Pe_Descripcion puesto_empleado,
 			pea.Pe_Descripcion puesto_autorizador,
-			@Aplica_Reintegro Aplica_Reintegro
+			@Aplica_Reintegro Aplica_Reintegro,
+			case 
+			when vs.marginal = 0 then 1
+			when vs.marginal = 1 and COALESCE(
+				(select 1 from DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD where Id_Solicitud = vs.Id_Solicitud),0) =1 then 1
+			else 0
+			end realizar_comprobacion_gastos,
+			COALESCE((select 1 from DT_TBL_VIATICO_ITINERARIO where Id_Solicitud = vs.Id_Solicitud and  Id_Medio_Transporte=2),0) comprobar_itinerario_aereo
 		from 
 			DT_TBL_VIATICO_SOLICITUD  vs
 			join DT_CAT_MEDIO_TRANSPORTE mt

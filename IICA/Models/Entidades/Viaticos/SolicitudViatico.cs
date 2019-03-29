@@ -48,9 +48,10 @@ namespace IICA.Models.Entidades.Viaticos
 		/*Nuevos campos*/
 		public string pathComprobanteEstancia { get; set; }
 		public string pathArchivo10NoComprobable { get; set; }
-		public DateTime fechaReintegro { get; set; }
-		public decimal Importe_Reintegro { get; set; }
-		/*Nuevos campos*/
+        public string pathInformeViaje { get; set; }
+        public DateTime fechaReintegro { get; set; }
+        public bool aplicaReintegro { get; set; }
+        public decimal importeReintegro { get; set; }
         public string pathArchivoReintegro { get; set; }
 
 

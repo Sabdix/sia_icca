@@ -1,9 +1,12 @@
 ﻿var solSeleccionada = {};
 var comprobanteGasto = {};
-var totalComprobacion = 0;
 
 //variable para validar el flujo de acuerdo a las condiciones de marginal con gastos extras y no marginal
 //variable para validar que se suban todos los archivos de pases de abordar de los itinerarios aereos
+
+/*variables para subir los archivos adicionales a la solicitud*/
+var idSolicitud;
+var formato;
 
 
 $(document).ready(function () {
@@ -13,6 +16,10 @@ $(document).ready(function () {
         width: '100%' // need to override the changed default
     });
 
+
+    /*=============================================================================================
+    ======================================      AGREGAR COMPROBACIÓN     ==========================
+    ===============================================================================================*/
 
     $("#dropZoneXmlComprobacion").append("<form id='dZUploadXmlComp' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
     DropzoneXml = {
@@ -49,6 +56,7 @@ $(document).ready(function () {
                 comprobanteGasto.gastoComprobacion = {};
                 comprobanteGasto.gastoComprobacion.idGastoComprobacion = $("#modal-comp-tipoGasto").val();
                 comprobanteGasto.comentario = $("#modal-comp-comentario").val();
+                $("#dZUploadXmlComp .dz-remove").hide();
             } else {
                 comprobanteGasto = {};
                 swal("Notificación", data.mensaje, "error");
@@ -60,8 +68,6 @@ $(document).ready(function () {
         }
     } // FIN myAwesomeDropzone
     xmlComprobacionDropzone = new Dropzone("#dZUploadXmlComp", DropzoneXml);
-    xmlComprobacionDropzone.on("complete", function (file, response) {
-    });
 
 
     $("#dropZoneSat").append("<form id='dZUploadSat' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
@@ -84,7 +90,7 @@ $(document).ready(function () {
         sending: function (file, xhr, formData) {
             formData.append("id", comprobanteGasto.idComprobacionGasto);
             formData.append("idSolicitud", solSeleccionada.idSolitud);
-            formData.append("archivoComprobacionGasto",3);
+            formData.append("archivoComprobacionGasto", 3);
         },
         success: function (file, data) {
             file.previewElement.classList.add("dz-success");
@@ -122,7 +128,7 @@ $(document).ready(function () {
         },
         success: function (file, data) {
             file.previewElement.classList.add("dz-success");
-            if (!data.status) 
+            if (!data.status)
                 swal("Notificación", data.mensaje, "error");
         },
         error: function (file, response) {
@@ -136,13 +142,17 @@ $(document).ready(function () {
         if (xmlComprobacionDropzone.files.length < 2) {
             swal("Notificación", "Por favor anexe los archivos de la factura", "error");
         } else {
-            if (xmlComprobacionDropzone.files[0].name.split('.').slice(0, -1).join('.') == xmlComprobacionDropzone.files[1].name.split('.').slice(0, -1).join('.'))
+            if (xmlComprobacionDropzone.files[0].name.split('.').slice(0, -1).join('.') == xmlComprobacionDropzone.files[1].name.split('.').slice(0, -1).join('.')) {
                 xmlComprobacionDropzone.processQueue();
+            }
             else
                 swal("Notificación", "Por favor anexe los archivos correspondientes de la factura (No coinciden)", "error");
         }
     });
 
+    /*=============================================================================================
+   ========================================      REINTEGRO     ====================================
+   ===============================================================================================*/
 
     $("#dropZoneReintegro").append("<form id='dZUploadReintegro' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
     DropzoneReintegro = {
@@ -180,10 +190,51 @@ $(document).ready(function () {
         }
     } // FIN myAwesomeDropzone
     reintegroDropzone = new Dropzone("#dZUploadReintegro", DropzoneReintegro);
-    reintegroDropzone.on("complete", function (file, response) {
+
+    /*=============================================================================================
+   ===================================      ARCHIVOS ADICIONALES   ================================
+   ===============================================================================================*/
+
+    $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+    objArchivosDropzone = {
+        url: rootUrl("/Viatico/SubirArchivoSolicitudViatico"),
+        addRemoveLinks: true,
+        paramName: "archivo",
+        maxFilesize: 4, // MB
+        dictRemoveFile: "Remover",
+        acceptedFiles: ".pdf",
+        sending: function (file, xhr, formData) {
+            formData.append("idSolicitudViatico", idSolicitud);
+            formData.append("formato", formato);
+        },
+        success: function (file, data) {
+            file.previewElement.classList.add("dz-success");
+            if (data.status === true) {
+                swal("Notificación", data.mensaje, "success");
+            } else {
+                swal("Notificación", data.mensaje, "Error");
+            }
+            $("#modal-subir-archivo").modal("hide");
+        },
+        error: function (file, response) {
+            file.previewElement.classList.add("dz-error");
+            swal("Error", "No se ha logrado subir correctamente el formato, intente mas tarde", "error");
+        }
+    } // FIN myAwesomeDropzone
+    var archivosDropZone = new Dropzone("#dZUpload", objArchivosDropzone);
+
+    $(".subirFormato").click(function () {
+        idSolicitud = $(this).attr("data-solicitud");
+        formato = $(this).attr("data-formato");
+        formatoText = $(this).attr("data-formato-text");
+        $("#modal-subirArchivo-nombreArchivo").text($(this).attr("data-nombreArchivo"));
+        MostrarFormato(idSolicitud, formatoText);
+        $("#item-dropzone a").trigger("click");
+        archivosDropZone.removeAllFiles(true);
     });
 
 });
+
 
 function VerDetalleSolViatico(sol) {
     $.ajax({
@@ -206,7 +257,7 @@ function VerDetalleSolViatico(sol) {
 }
 
 /*=============================================================================================
-======================================      AGREGAR COMPROBACIÓN     ====================================
+======================================      AGREGAR COMPROBACIÓN     ==========================
 ===============================================================================================*/
 
 function MostrarModalAgregarComprobacion(solicitud) {
@@ -214,12 +265,23 @@ function MostrarModalAgregarComprobacion(solicitud) {
     ObtenerFechasJsonSolSeleccionada(solicitud);
 
     $("#form-comprobacion").trigger("reset");
+    $("#form-comprobacionFactura").trigger("reset");
+
+    $("#ul-tabsComprobacion li").removeClass("active");
+    $(".tab-content .tab-pane").removeClass("active");
+
+    $("ul.nav-tabs li:first").addClass("active");
+    $(".tab-content .tab-pane:first").addClass("active");
+
     xmlComprobacionDropzone.removeAllFiles(true);
     otrosDropzone.removeAllFiles(true);
     satDropzone.removeAllFiles(true);
 
-    $("#modal-comp-idSol").val(solicitud.idSolitud);
-    $("#modal-comp-viaticante").val(solicitud.usuario.nombreCompleto);
+    //xmlComprobacionDropzone.destroy();
+    //xmlComprobacionDropzone = new Dropzone("#dZUploadXmlComp", DropzoneXml);
+
+
+    MostrarInfoSolModal(solicitud);
     $("#btn-cargarFactura").show();
     $("#btn-agregarComprobacion").hide();
     $("#modal-agregarComprobacion").modal({ backdrop: 'static', keyboard: false, show: true });
@@ -231,11 +293,11 @@ function OnAgregarComprobacion() {
         return;
     }
     if (satDropzone.files.length < 1 || !satDropzone.files[0].accepted) {
-        swal("Notificación", "Es necesario anexar el archivo respectivo al comprobante del sat.","error");
+        swal("Notificación", "Es necesario anexar el archivo respectivo al comprobante del sat.", "error");
         return;
     }
     if (otrosDropzone.files.length < 1 || !otrosDropzone.files[0].accepted) {
-        swal("Notificación", "Es necesario anexar el archivo: Otros (ticket).","error");
+        swal("Notificación", "Es necesario anexar el archivo: Otros (ticket).", "error");
         return;
     }
 
@@ -356,15 +418,65 @@ function OnSuccesEliminarGasto(data) {
 ===============================================================================================*/
 
 function MostrarModalItinerarioAereos(solicitud) {
-    swal("Notificicación", "Apartado en desarrollo");
+    $.ajax({
+        data: { id: solicitud.idSolitud },
+        url: rootUrl("/Viatico/_ItinerarioAereo"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+            $("#modal-content-itinerariosAereos").html("");
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#modal-content-itinerariosAereos").html(data);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
 }
 
 /*=============================================================================================
-===============================     ARCHIVOS INFORME -10%   ===================================
+===============================     ARCHIVOS (INFORME,10%)   ===================================
 ===============================================================================================*/
 
-function MostrarModalSubirArchivo(solicitud) {
-    swal("Notificicación", "Apartado en desarrollo");
+function MostrarFormato(idSolicitud, formato) {
+    $.ajax({
+        data: { id: idSolicitud },
+        url: rootUrl("/Viatico/DetalleSolicitudJson"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            if (data.status) {
+                MostrarInfoSolModal(data.objeto);
+                var url = data.objeto[formato];
+                if (url !== "" && url != undefined) {
+                    url = rootUrl(url);
+                    $("#item-verArchivo").show();
+                    $('#content-archivosSolicitud').html("");
+                    var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    iframe.attr('src', url);
+                    $('#content-archivosSolicitud').append(iframe);
+                    iframe[0].contentWindow.location.reload();
+                }
+                else {
+                    $("#item-verArchivo").hide();
+                    $("#content-archivosSolicitud").html("");
+                }
+            } else {
+                $("#item-verArchivo").hide();
+                $("#content-archivosSolicitud").html("");
+            }
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
 }
 
 /*==============================================================================================
@@ -393,7 +505,6 @@ function MostrarModalConluirComprobacion(id) {
 
 }
 
-
 function OnSuccessMostrarConluirComprobacion(data) {
     OcultarLoading();
     if (data.status === true) {
@@ -407,15 +518,15 @@ function OnSuccessMostrarConluirComprobacion(data) {
         $.grep(solSeleccionada.comprobacionesGasto, function (comprobacion) {
             totalComprobacion = comprobacion.total + totalComprobacion;
         });
-
-        if (totalComprobacion < solSeleccionada.montoAutorizado) {
-            $("#content-reintegro").show();
-            $("#modal-conluir-reintegro").text(accounting.formatMoney(solSeleccionada.montoAutorizado - totalComprobacion));
-        } else {
-            $("#content-reintegro").hide();
-        }
-
         $("#modal-concluir-montoCompr").val(accounting.formatMoney(totalComprobacion));
+
+        //if (solSeleccionada.aplicaReintegro) {
+            $("#content-reintegro").show();
+        //} else {
+        //    $("#content-reintegro").hide();
+        //}
+
+
     } else {
         $("#modal-concluir").modal("hide");
         MostrarNotificacionLoad("error", data.mensaje, 3000);
@@ -423,15 +534,53 @@ function OnSuccessMostrarConluirComprobacion(data) {
 }
 
 function OnConluirComprobacion() {
-    if (totalComprobacion < solSeleccionada.montoAutorizado) {
-        if (reintegroDropzone.files.length < 1) {
-            swal("Notificación", "Por favor anexe el archivo del reintegro", "error");
-        } else {
+    if (ValidarConcluirComprobacion(solSeleccionada)) {
+        solSeleccionada.importeReintegro = $("modal-concluir-montoReintegro").val();
+        if (solSeleccionada.aplicaReintegro)
             reintegroDropzone.processQueue();
+        else {
+            ConluirComprobacion();
         }
-    } else {
-        ConluirComprobacion();
     }
+}
+
+function ValidarConcluirComprobacion(solSeleccionada) {
+    //Validaciones de acuerdo al flujo en la comprobacion de gastos*/
+    if (solSeleccionada.realizarComprobacionGastos) {//validamos que por lo menos tenga una comprobación añadida
+        if (solSeleccionada.comprobacionesGasto.length == 0) {
+            swal("Notificación", "Para concluir debe ingrese por lo menos una comprobación de gastos.", "error");
+            return false;
+        }
+        if (solSeleccionada.pathArchivo10NoComprobable == null || solSeleccionada.pathArchivo10NoComprobable == "") {
+            swal("Notificación", "Para concluir debe anexar el archivo correspondiente al 10% no comprobable.", "error");
+            return false;
+        }
+    }
+    //validación para comprobar que se subio el informe de viaje
+    if (solSeleccionada.pathInformeViaje == undefined || solSeleccionada.pathInformeViaje == "") {
+        swal("Notificación", "Para concluir debe anexar el informe del viaje.", "error");
+        return false;
+    }
+    //validación para las solicitudes marginales, que estan se alla cargado el comprobante de estancia
+    if (solSeleccionada.marginal && (solSeleccionada.pathComprobanteEstancia == null || pathComprobanteEstancia == "")) {
+        swal("Notificación", "Para concluir debe anexar el comprobante de estancia.", "error");
+        return false;
+    }
+    //validación para comprobar que cada itinerario aereo tenga anexo su pase de abordar
+    if (solSeleccionada.comprobarItinerarioAereo) {
+        var itinerarioAereo = $.grep(solSeleccionada.itinerario, function (itinerario) { return itinerario.medioTransporte.idMedioTransporte == 2 });
+        itinerarioAereo = $.grep(itinerarioAereo, function (itinerario) { return (itinerario.pathPasajeAbordar != null || itinerario.pathPasajeAbordar != "") });
+        if (itinerarioAereo.length == 0) {
+            swal("Notificación", "Para concluir debe anexar los pases de abordar de cada viaje aéreo.", "error");
+            return false;
+        }
+    }
+    //validación para comprobar que se enexo el archivo de reintegro en caso de necesitarse
+    if (solSeleccionada.aplicaReintegro && reintegroDropzone.files.length < 1 && !satDropzone.files[0].accepted) {
+        swal("Notificación", "Por favor anexe el archivo del reintegro", "error");
+        return false;
+    }
+    return true;
 }
 
 function ConluirComprobacion() {
@@ -468,6 +617,10 @@ function OnSuccessConluirComprobacion(data) {
 =============================      FUNCIONES GENERALES     =====================================
 ================================================================================================*/
 
+function MostrarInfoSolModal(solicitud) {
+    $(".modal-idSol").val(solicitud.idSolitud);
+    $(".modal-viaticante").val(solicitud.usuario.nombreCompleto);
+}
 
 function ObtenerFechasJsonSolSeleccionada(solicitud) {
     var fechaInicio = new Date(solicitud.fechaInicio.match(/\d+/)[0] * 1);
