@@ -111,7 +111,7 @@ $(document).ready(function () {
         paramName: "archivo",
         maxFilesize: 4, // MB
         dictRemoveFile: "Remover",
-        acceptedFiles: ".pdf,.xml",
+        acceptedFiles: ".pdf,image/*",
         maxFiles: 1,
         uploadMultiple: true,
         autoProcessQueue: false,
@@ -301,8 +301,8 @@ function OnAgregarComprobacion() {
         swal("Notificación", "Es necesario anexar el archivo respectivo al comprobante del sat.", "error");
         return;
     }
-    if (otrosDropzone.files.length < 1 || !otrosDropzone.files[0].accepted) {
-        swal("Notificación", "Es necesario anexar el archivo: Otros (ticket).", "error");
+    if (otrosDropzone.files.length > 0 && !otrosDropzone.files[0].accepted) {
+        swal("Notificación", "El archivo del ticket no cumple con las caracteristicas para cargarlo (.pdf o imagen e inferior a 4.0 MB)", "error");
         return;
     }
 
@@ -365,7 +365,7 @@ function MostrarModalComprobaciones(solicitud) {
 }
 
 function mostrarFactura(url) {
-    window.open(url, '_blank');
+    window.open(rootUrl(url), '_blank');
 }
 
 function ConfirmarEliminarComprobacion(comprobacionGasto) {

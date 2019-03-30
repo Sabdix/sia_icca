@@ -51,6 +51,9 @@ function MostrarCompletarDatosSol(solicitud) {
 
     $("#modal-comp-idSol").val(solicitud.idSolitud);
     $("#modal-comp-viaticante").val(solicitud.usuario.nombreCompleto);
+    $("#modal-comp-fechaInicio").val(solicitud.fechaInicio);
+    $("#modal-comp-fechaFin").val(solicitud.fechaFin);
+    $("#modal-comp-duracionViaje").val(solicitud.duracionViaje);
     $("#modal-comp-mando").trigger("change");
 
 }

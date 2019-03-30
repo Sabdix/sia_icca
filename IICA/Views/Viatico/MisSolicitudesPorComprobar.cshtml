@@ -37,6 +37,7 @@
                             <th style="width:8%;text-align: center;">Fecha inicio</th>
                             <th style="width:8%;text-align: center;">Fecha fin</th>
                             <th style="width:5%;text-align: center;">Duración viaje</th>
+                            <th style="width:10%;text-align: center;">Monto a comprobar</th>
                             <th style="width:10%;text-align: center;">Medio transporte</th>
                             <th style="width:10%;text-align: center;">Acciones</th>
                         </tr>
@@ -44,88 +45,89 @@
                     <tbody>
                         @foreach (SolicitudViatico solicitud in Model)
                         {
-                            <tr>
-                                <td>@solicitud.idSolitud</td>
-                                <td>@solicitud.proposito</td>
-                                <td>
-                                    <span class="muted">
-                                        @(solicitud.fechaInicio == DateTime.MinValue ? "N/A" : solicitud.fechaInicio.ToShortDateString())
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="muted">
-                                        @(solicitud.fechaFin == DateTime.MinValue ? "N/A" : solicitud.fechaFin.ToShortDateString())
-                                    </span>
-                                </td>
-                                <td><span class="muted">@solicitud.duracionViaje</span></td>
-                                <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" href="#" style="font-size: 11px;">
-                                            Ver acciones <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu" style="margin-left: -55px !important;">
+                        <tr>
+                            <td>@solicitud.idSolitud</td>
+                            <td>@solicitud.proposito</td>
+                            <td>
+                                <span class="muted">
+                                    @(solicitud.fechaInicio == DateTime.MinValue ? "N/A" : solicitud.fechaInicio.ToShortDateString())
+                                </span>
+                            </td>
+                            <td>
+                                <span class="muted">
+                                    @(solicitud.fechaFin == DateTime.MinValue ? "N/A" : solicitud.fechaFin.ToShortDateString())
+                                </span>
+                            </td>
+                            <td><span class="muted">@solicitud.duracionViaje</span></td>
+                            <td><span class="muted">@solicitud.montoAutorizado.ToString("C")</span></td>
+                            <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" href="#" style="font-size: 11px;">
+                                        Ver acciones <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" style="margin-left: -55px !important;">
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-solViatico"
+                                               onclick="VerDetalleSolViatico( @(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                Ver Solicitud
+                                            </a>
+                                        </li>
+                                        @if (solicitud.realizarComprobacionGastos)
+                                        {
                                             <li>
-                                                <a href="#" data-toggle="modal" data-target="#modal-solViatico"
-                                                   onclick="VerDetalleSolViatico( @(new JavaScriptSerializer().Serialize(solicitud)))">
-                                                    Ver Solicitud
+                                                <a href="#"
+                                                   onclick="MostrarModalAgregarComprobacion(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                    Agregar comprobación
                                                 </a>
                                             </li>
-                                            @if (solicitud.realizarComprobacionGastos)
-                                            {
-                                                <li>
-                                                    <a href="#"
-                                                       onclick="MostrarModalAgregarComprobacion(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                                        Agregar comprobación
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
-                                                       onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                                        Ver comprobaciones
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3"
-                                                       data-formato-text="pathArchivo10NoComprobable" data-nombreArchivo="archivo del 10% no comprobable" data-solicitud="@solicitud.idSolitud">
-                                                        Archivo del 10% no comprobable
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="4"
-                                                       data-formato-text="pathInformeViaje" data-nombreArchivo="archivo del informe de viaje" data-solicitud="@solicitud.idSolitud">
-                                                        Informe del viaje
-                                                    </a>
-                                                </li>
-                                            }
-                                            @if (solicitud.marginal)
-                                            {
-                                                <li>
-                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2"
-                                                       data-formato-text="pathComprobanteEstancia" data-nombreArchivo="archivo del comprobante de instancia" data-solicitud="@solicitud.idSolitud">
-                                                        Comprobante de instancia
-                                                    </a>
-                                                </li>
-                                            }
-                                            @if (solicitud.comprobarItinerarioAereo)
-                                            {
-                                                <li>
-                                                    <a href="#" data-toggle="modal" data-target="#modal-itinerariosAereos"
-                                                       onclick="MostrarModalItinerarioAereos(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                                        Pases de abordar
-                                                    </a>
-                                                </li>
-                                            }
                                             <li>
-                                                <a href="#" data-toggle="modal" data-target="#modal-concluir"
-                                                   onclick="MostrarModalConluirComprobacion(@solicitud.idSolitud)">
-                                                    Concluir comprobación
+                                                <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
+                                                   onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                    Ver comprobaciones
                                                 </a>
                                             </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3"
+                                                   data-formato-text="pathArchivo10NoComprobable" data-nombreArchivo="archivo del 10% no comprobable" data-solicitud="@solicitud.idSolitud">
+                                                    Archivo del 10% no comprobable
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="4"
+                                                   data-formato-text="pathInformeViaje" data-nombreArchivo="archivo del informe de viaje" data-solicitud="@solicitud.idSolitud">
+                                                    Informe del viaje
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (solicitud.marginal)
+                                        {
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2"
+                                                   data-formato-text="pathComprobanteEstancia" data-nombreArchivo="archivo del comprobante de instancia" data-solicitud="@solicitud.idSolitud">
+                                                    Comprobante de instancia
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (solicitud.comprobarItinerarioAereo)
+                                        {
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-itinerariosAereos"
+                                                   onclick="MostrarModalItinerarioAereos(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                    Pases de abordar
+                                                </a>
+                                            </li>
+                                        }
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-concluir"
+                                               onclick="MostrarModalConluirComprobacion(@solicitud.idSolitud)">
+                                                Concluir comprobación
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -312,7 +314,7 @@
                                 <a href="#tabDropzoneItine" role="tab" data-toggle="tab">Subir archivo</a>
                             </li>
                             <li id="item-verArchivoItinerario">
-                                <a href="#tabVerArchivoItine" role="tab" data-toggle="tab">Visualizar archivo subido</a>
+                                <a href="#tabVerArchivoItine" role="tab" data-toggle="tab">Visualizar archivo cargado</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -372,7 +374,7 @@
                                     <a href="#tabDropzone" role="tab" data-toggle="tab">Subir archivo</a>
                                 </li>
                                 <li id="item-verArchivo">
-                                    <a href="#tabVerArchivo" role="tab" data-toggle="tab">Visualizar archivo subido</a>
+                                    <a href="#tabVerArchivo" role="tab" data-toggle="tab">Visualizar archivo cargado</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -445,7 +447,7 @@
                     </div>
                     <div class="row form-row">
                         <div class="col-md-6">
-                            <label class="form-label">Monto autorizado:</label>
+                            <label class="form-label">Monto a comprobar:</label>
                             <input id="modal-concluir-montoAut" type="text" class="form-control" placeholder="Duración del viaje" readonly>
                         </div>
                         <div class="col-md-6">

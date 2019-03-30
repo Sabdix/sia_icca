@@ -115,6 +115,20 @@
                     </div>
                 </div>
                 <div class="row form-row">
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha de inicio:</label>
+                        <input id="modal-comp-fechaInicio" type="text" class="form-control" placeholder="" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha de fin:</label>
+                        <input id="modal-comp-fechaFin" type="text" class="form-control" placeholder="" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Duración del viaje:</label>
+                        <input id="modal-comp-duracionViaje" type="text" class="form-control" placeholder="" readonly>
+                    </div>
+                </div>
+                <div class="row form-row">
                     <div class="col-md-12">
                         <label class="form-label">Nivel de mando:</label>
                         @Html.DropDownList("modalcompmando", (IEnumerable<SelectListItem>)ViewBag.NivelMandos,
@@ -130,10 +144,10 @@
                 </div>
                 <div class="row form-row">
                     <div class="col-md-6">
-                        <label class="form-label">Pernota:</label>
+                        <label class="form-label">Pernocta:</label>
                         <select id="modal-comp-pernota" class="select-iica">
-                            <option value="false">SIN PERNOTA</option>
-                            <option value="true">CON PERNOTA</option>
+                            <option value="false">SIN PERNOCTA</option>
+                            <option value="true">CON PERNOCTA</option>
                         </select>
                     </div>
                     <div class="col-md-6">

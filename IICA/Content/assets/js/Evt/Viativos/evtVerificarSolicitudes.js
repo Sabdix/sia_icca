@@ -163,7 +163,7 @@ function MostrarModalComprobaciones(solicitud) {
 }
 
 function mostrarFactura(url) {
-    window.open(url, '_blank');
+    window.open(rootUrl(url), '_blank');
 }
 /*=============================================================================================
    ===================================      ARCHIVOS ADICIONALES   ================================

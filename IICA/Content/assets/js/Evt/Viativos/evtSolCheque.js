@@ -44,6 +44,7 @@ function MostrarModalRefSol(solicitud) {
     $("#modal-referencia-fechaFin").val(solSeleccionada.fechaFin);
     $("#modal-referencia-solicitud").val(solSeleccionada.idSolitud);
     $("#modal-referencia-viaticante").val(solSeleccionada.usuario.nombreCompleto);
+    $("#modal-referencia_importeAutorizado").val(accounting.formatMoney(solSeleccionada.montoAutorizado));
 }
 
 function ObtenerFechasJsonSolSeleccionada(solicitud) {
