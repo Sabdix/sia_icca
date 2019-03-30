@@ -169,8 +169,6 @@ function mostrarFactura(url) {
    ===================================      ARCHIVOS ADICIONALES   ================================
    ===============================================================================================*/
 
-$("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
-
 $(".subirFormato").click(function () {
     idSolicitud = $(this).attr("data-solicitud");
     formato = $(this).attr("data-formato");
@@ -178,7 +176,6 @@ $(".subirFormato").click(function () {
     $("#modal-subirArchivo-nombreArchivo").text($(this).attr("data-nombreArchivo"));
     MostrarFormato(idSolicitud, formatoText);
     $("#item-dropzone a").trigger("click");
-    archivosDropZone.removeAllFiles(true);
 });
 
 /*=============================================================================================

@@ -125,31 +125,31 @@
                                     </div>
                                 </td>
                                 @*<td>
-                                    <span data-toggle="modal" data-target="#modal-solViatico">
-                                        <button data-toggle="tooltip" title="Ver Solicitud" class="btn btn-info btn-mini"
-                                                onclick="VerDetalleSolViatico(@(new JavaScriptSerializer().Serialize(solicitud)) )">
-                                            <i class="fa fa-list"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-comprobaciones">
-                                        <button data-toggle="tooltip" title="Ver Comprobaciones" class="btn btn-info btn-mini"
-                                                onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-autorizar">
-                                        <button data-toggle="tooltip" title="Autorizar solicitud" class="btn btn-success btn-mini" 
-                                                onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                            <i class="fa fa-check-square-o"></i>
-                                        </button>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#modal-devolver">
-                                        <button data-toggle="tooltip" title="Devolver solicitud" class="btn btn-warning btn-mini" 
-                                         onclick="MostrarModalDevSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                            <i class="fa fa-close"></i>
-                                        </button>
-                                    </span>
-                                </td>*@
+                                        <span data-toggle="modal" data-target="#modal-solViatico">
+                                            <button data-toggle="tooltip" title="Ver Solicitud" class="btn btn-info btn-mini"
+                                                    onclick="VerDetalleSolViatico(@(new JavaScriptSerializer().Serialize(solicitud)) )">
+                                                <i class="fa fa-list"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modal-comprobaciones">
+                                            <button data-toggle="tooltip" title="Ver Comprobaciones" class="btn btn-info btn-mini"
+                                                    onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modal-autorizar">
+                                            <button data-toggle="tooltip" title="Autorizar solicitud" class="btn btn-success btn-mini"
+                                                    onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                <i class="fa fa-check-square-o"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modal-devolver">
+                                            <button data-toggle="tooltip" title="Devolver solicitud" class="btn btn-warning btn-mini"
+                                             onclick="MostrarModalDevSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                <i class="fa fa-close"></i>
+                                            </button>
+                                        </span>
+                                    </td>*@
                             </tr>
                         }
                     </tbody>
@@ -159,215 +159,237 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-comprobaciones" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <br />
-            </div>
-            <div class="modal-body" id="modal-content-comprobaciones">
+@section modals{
 
+    <div class="modal fade" id="modal-comprobaciones" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br />
+                </div>
+                <div class="modal-body" id="modal-content-comprobaciones">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
+
         </div>
 
     </div>
 
-</div>
+    <div class="modal fade" id="modal-devolver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br>
+                    <i class="fa fa-question-circle fa-7x"></i>
+                    <h4 id="myModalLabel" class="semi-bold">Realmente desea DEVOLVER la siguiente solicitud.</h4>
+                    <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
+                    <br>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">No. de solicitud:</label>
+                            <input id="modal-dev-solicitud" type="text" class="form-control" placeholder="No. de solicitud" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Viaticante:</label>
+                            <input id="modal-dev-viaticante" type="text" class="form-control" placeholder="Viaticante" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha inicio:</label>
+                            <input id="modal-dev-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha fin:</label>
+                            <input id="modal-dev-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Duración del viaje:</label>
+                            <input id="modal-dev-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Resultados esperados:</label>
+                            <input id="modal-dev-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Monto autorizado:</label>
+                            <input id="modal-dev-montoAut" type="text" class="form-control" placeholder="Monto autorizado" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Monto comprobado:</label>
+                            <input id="modal-dev-montoCompr" type="text" class="form-control" placeholder="Monto comprobado" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Medio de transporte:</label>
+                            <input id="modal-dev-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="DevolverSol()">Devolver solicitud</button>
+                </div>
+            </div>
 
-<div class="modal fade" id="modal-devolver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <br>
-                <i class="fa fa-question-circle fa-7x"></i>
-                <h4 id="myModalLabel" class="semi-bold">Realmente desea DEVOLVER la siguiente solicitud.</h4>
-                <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
-                <br>
-            </div>
-            <div class="modal-body">
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">No. de solicitud:</label>
-                        <input id="modal-dev-solicitud" type="text" class="form-control" placeholder="No. de solicitud" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Viaticante:</label>
-                        <input id="modal-dev-viaticante" type="text" class="form-control" placeholder="Viaticante" readonly>
-                    </div>
-                  </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Fecha inicio:</label>
-                        <input id="modal-dev-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Fecha fin:</label>
-                        <input id="modal-dev-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
-                    </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Duración del viaje:</label>
-                        <input id="modal-dev-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Resultados esperados:</label>
-                        <input id="modal-dev-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
-                    </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Monto autorizado:</label>
-                        <input id="modal-dev-montoAut" type="text" class="form-control" placeholder="Monto autorizado" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Monto comprobado:</label>
-                        <input id="modal-dev-montoCompr" type="text" class="form-control" placeholder="Monto comprobado" readonly>
-                    </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Medio de transporte:</label>
-                        <input id="modal-dev-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="DevolverSol()">Devolver solicitud</button>
-            </div>
         </div>
 
     </div>
 
-</div>
+    <div class="modal fade" id="modal-autorizar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br>
+                    <i class="fa fa-question-circle fa-7x"></i>
+                    <h4 id="myModalLabel" class="semi-bold">Realmente desea AUTORIZAR la siguiente solicitud.</h4>
+                    <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
+                    <br>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">No. de solicitud:</label>
+                            <input id="modal-aut-solicitud" type="text" class="form-control" placeholder="No. de solicitud" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Viaticante:</label>
+                            <input id="modal-aut-viaticante" type="text" class="form-control" placeholder="Viaticante" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha inicio:</label>
+                            <input id="modal-aut-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha fin:</label>
+                            <input id="modal-aut-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Duración del viaje:</label>
+                            <input id="modal-aut-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Resultados esperados:</label>
+                            <input id="modal-aut-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Monto autorizado:</label>
+                            <input id="modal-aut-montoAut" type="text" class="form-control" placeholder="Monto autorizado" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Monto comprobado:</label>
+                            <input id="modal-aut-montoCompr" type="text" class="form-control" placeholder="Monto comprobado" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Medio de transporte:</label>
+                            <input id="modal-aut-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="AutorizarSolViatico()">Autorizar solicitud</button>
+                </div>
+            </div>
 
-<div class="modal fade" id="modal-autorizar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <br>
-                <i class="fa fa-question-circle fa-7x"></i>
-                <h4 id="myModalLabel" class="semi-bold">Realmente desea AUTORIZAR la siguiente solicitud.</h4>
-                <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
-                <br>
-            </div>
-            <div class="modal-body">
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">No. de solicitud:</label>
-                        <input id="modal-aut-solicitud" type="text" class="form-control" placeholder="No. de solicitud" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Viaticante:</label>
-                        <input id="modal-aut-viaticante" type="text" class="form-control" placeholder="Viaticante" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Fecha inicio:</label>
-                        <input id="modal-aut-fechaInicio" type="text" class="form-control" placeholder="Fecha inicio" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Fecha fin:</label>
-                        <input id="modal-aut-fechaFin" type="text" class="form-control" placeholder="Fecha fin" readonly>
-                    </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Duración del viaje:</label>
-                        <input id="modal-aut-duracionViaje" type="text" class="form-control" placeholder="Duración del viaje" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Resultados esperados:</label>
-                        <input id="modal-aut-resultadosEsperados" type="text" class="form-control" placeholder="Resultados esperados:" readonly>
-                    </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Monto autorizado:</label>
-                        <input id="modal-aut-montoAut" type="text" class="form-control" placeholder="Monto autorizado" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Monto comprobado:</label>
-                        <input id="modal-aut-montoCompr" type="text" class="form-control" placeholder="Monto comprobado" readonly>
-                    </div>
-                </div>
-                <div class="row form-row">
-                    <div class="col-md-6">
-                        <label class="form-label">Medio de transporte:</label>
-                        <input id="modal-aut-medioTransporte" type="text" class="form-control" placeholder="Medio de transporte" readonly>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="AutorizarSolViatico()">Autorizar solicitud</button>
-            </div>
         </div>
 
     </div>
 
-</div>
-
-<div class="modal fade" id="modal-subir-archivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <br>
-                <i class="fa fa-cloud-download fa-5x"></i>
-                <h4 id="myModalLabel" class="semi-bold">Formulario para visualizar formatos.</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row form-row">
-                    <div class="col-md-12">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li id="item-verArchivo">
-                                <a href="#tabVerArchivo" role="tab" data-toggle="tab">Visualizar archivo cargado</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            @*<div class="tab-pane active" id="tabDropzone">
-                                <div class="row form-row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">No. de solicitud:</label>
-                                        <input type="text" class="form-control modal-idSol" placeholder="" readonly>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Viaticante:</label>
-                                        <input type="text" class="form-control modal-viaticante" placeholder="" readonly>
-                                    </div>
-                                </div>
-                                <br />
-                                <div class="row form-row">
-                                    <div class="col-md-12" id="formDropZone"></div>
-                                </div>
-                            </div>*@
-                            <div class="tab-pane" id="tabVerArchivo">
-                                <div class="row">
-                                    <div class="col-md-12" id="content-archivosSolicitud">
+    <div class="modal fade" id="modal-subir-archivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br>
+                    <i class="fa fa-cloud-download fa-5x"></i>
+                    <h4 id="myModalLabel" class="semi-bold">Formulario para visualizar formatos.</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-row">
+                        <div class="col-md-12">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li id="item-verArchivo">
+                                    <a href="#tabVerArchivo" role="tab" data-toggle="tab">Visualizar archivo cargado</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                @*<div class="tab-pane active" id="tabDropzone">
+                                        <div class="row form-row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">No. de solicitud:</label>
+                                                <input type="text" class="form-control modal-idSol" placeholder="" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Viaticante:</label>
+                                                <input type="text" class="form-control modal-viaticante" placeholder="" readonly>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row form-row">
+                                            <div class="col-md-12" id="formDropZone"></div>
+                                        </div>
+                                    </div>*@
+                                <div class="tab-pane" id="tabVerArchivo">
+                                    <div class="row">
+                                        <div class="col-md-12" id="content-archivosSolicitud">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
+
         </div>
 
     </div>
 
-</div>
+    <div class="modal fade" id="modal-itinerariosAereos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br />
+                </div>
+                <div class="modal-body" id="modal-content-itinerariosAereos">
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+}
 
 
 
