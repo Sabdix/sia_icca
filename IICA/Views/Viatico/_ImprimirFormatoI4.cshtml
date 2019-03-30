@@ -99,21 +99,16 @@
     }
 </style>
 
-<div id="content-header" class="md-90">
-    <img src="http://localhost:59791/Content/assets/img/logo_iica.png" />
-</div>
-<div id="autorizacion" class="md-90">
-<label style="font-weight:bold">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS</label>
-</div>
-<div id="unidad-operativa" class="md-90">
-    <table border="0" class="md-90">
-        <tr>
-            <td><label style="font-weight:bold">UNIDAD OPERATIVA:</label></td>
-            <td><label>@Model.usuario.programa</label></td>
-            <td width="25">&nbsp;</td>
-            <td><label style="font-weight:bold">FECHA:</label></td>
-            <td><label>@Model.fechaAlta</label></td>
+   <div id="encabezado"> 
+    <table>
+        <tr class="text-left">
+            <td rowspan="3"><img src="http://localhost:59791/Content/assets/img/logo_iica.png" width="200" height="180" /></td>
         </tr>
+        <tr class="text-right">
+            <td><label class="text-left">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS </label><br/> 
+            <label class="text-center">UNIDAD OPERATIVA:@Model.usuario.programa @Model.usuario.departamento</label> <br/>
+            <label class="text-center">FECHA:@Model.fechaAlta</label>
+         </td>
     </table>
 </div>
 
@@ -123,30 +118,34 @@
             <td>
                 <table border="1">
                     <tr>
-                        <td colspan="2" align="center">VIAJES INTERNACIONALES</td>
+                        <td width="25" rowspan="2">&nbsp;</td>
+                        <td colspan="2" class="text-center">VIAJES INTERNACIONALES</td>
                     </tr>
                     <tr>
-                        <td>Código de empleado</td>
-                        <td>CONSECUTIVO ANUAL</td>
+                        <td class="text-center">Código de empleado</td>
+                        <td class="text-center">CONSECUTIVO ANUAL</td>
                     </tr>
                     <tr>
-                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? @Model.usuario.emCveEmpleado : "")</td>
-                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? "1" : " ")</td>
+                        <td class="text-center">VI</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 2 ? @Model.usuario.emCveEmpleado : "")</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 2 ? "1" : " ")</td>
                     </tr>
                 </table>
             </td>
             <td>
                 <table border="1">
                     <tr>
-                        <td colspan="2" align="center">VIAJES NACIONALES</td>
+                        <td width="25" rowspan="2">&nbsp;</td>
+                        <td colspan="2" class="text-center">VIAJES NACIONALES</td>
                     </tr>
                     <tr>
-                        <td>Código de empleado</td>
-                        <td>CONSECUTIVO ANUAL</td>
+                        <td class="text-center">Código de empleado</td>
+                        <td class="text-center">CONSECUTIVO ANUAL</td>
                     </tr>
                     <tr>
-                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? @Model.usuario.emCveEmpleado : "")</td>
-                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? "1" : "")</td>
+                        <td class="text-center">VN</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 1 ? @Model.usuario.emCveEmpleado : "")</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 1 ? "1" : "")</td>
                     </tr>
                 </table>
             </td>
@@ -154,153 +153,282 @@
     </table><br />
 </div>
 
-<div id="datos_empleado" class="md-90">
-    <table border="0" class="md-90">
+<div id="datos_empleado" style="font-size: 10px;" class="md-90">
+    <table border="0">
         <tr>
-            <td><label style="font-weight:bold">Nombre:</label></td>
+            <td><label>Nombre: </label></td>
             <td><label>@Model.usuario.nombreCompleto</label></td>
             <td width="25">&nbsp;</td>
-            <td><label style="font-weight:bold">Cargo:</label></td>
+            <td><label>Cargo:</label></td>
             <td><label>@Model.usuario.puesto</label></td>
         </tr>
     </table>
 </div>
 
 <div id="datos_Viaje" style="font-size: 10px;" class="md-90">
-    <p style="font-weight:bold">Próposito del viaje:</p>
-    <p>@Model.proposito</p>
-    <p style="font-weight:bold">Resultados esperados:</p>
-    <p>@Model.resultadosEsperados</p>
-    <p style="font-weight:bold">Justificación del viaje:</p>
-    <p>@Model.justificacion.descripcion</p>
-    <table border="0">
+    <table>
         <tr>
-            <td style="font-weight:bold">Relación de gastos pendientes:</td>
-            <td>"NO"</td>
-            <td width="25">&nbsp;</td>
-            <td style="font-weight:bold">Informe de viaje pendiente:</td>
-            <td>"NO"</td>
+            <td><label>Próposito del viaje:</label></td>
+           <td><label>@Model.proposito</label></td>
+        </tr>
+        <tr>
+            <td><label>Resultados esperados:</label></td>
+            <td><label>@Model.resultadosEsperados</label></td>
+        </tr>
+        <tr>
+            <table>
+                <tr>
+                    <td rowspan="3"><label>Justificación del viaje:</label></td>
+                    <td>
+                    <table border="1">
+                            <tr>
+                                  @if (Model.justificacion.idJustificacion == 1)
+                                  {
+                                    <td><label> X </label></td>}
+                                  else
+                                  {
+                                    <td>-</td>
+                                  }
+                            </tr>
+                    </table>
+                    </td>
+                    <td><label class="text-left">Solicitud del Representante o Institución (adjuntar documentación)</label></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table border="1">
+                            <tr>
+                                @if (Model.justificacion.idJustificacion == 2)
+                                { <td><label> X </label></td>}
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                           </tr>
+                    </table>
+                </td>
+                    <td><label>Ofrecimiento del Director y/o Coordinados (adjuntar documentación)</label></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table border="1">
+                            <tr>
+                                @if (Model.justificacion.idJustificacion == 3)
+                                { <td><label> X </label></td>}
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                            </tr>
+                        </table>
+                    </td>
+                    <td><label>Mecanismo de Programación, Supervisión, Auditoría y Evaluación</label></td>
+                </tr>
+                
+            </table>
         </tr>
     </table>
-    <p style="font-weight:bold">Duración estimada del viaje:</p>
-    <p>@(Model.duracionViaje + " día(s)")</p>
+    <table border="0">
+        <tr>
+            <td>Relación de gastos pendientes:</td>
+            <td>"NO"</td>
+            <td width="25">&nbsp;</td>
+            <td>Informe de viaje pendiente:</td>
+            <td>"NO"</td>
+        </tr>
+        <tr>
+            <td>ITINERARIO:</td>
+            <td></td>
+            <td width="25">&nbsp;</td>
+            <td>Duración estimada del viaje:</td>
+            <td><label>@(Model.duracionViaje + " día(s)")</label></td>
+        </tr>
+    </table>
 </div>
 
-<div class="md-90">
-    <div class="col-md-12">
-        <div class="grid simple vertical green">
-            <div class="grid-title">
-                <h4>Lista <span class="semi-bold">de itinerario</span></h4>
-            </div>
-            <div class="grid-body">
-                <table style="text-align: center;" id="tabla-itinerarios">
+<div id="itinerario" style="font-size: 10px;"  class="md-90">
+                <table style="text-align: center;" id="tabla-itinerarios" border="1">
                     <thead>
                         <tr>
-                            <th style="width:10%;text-align: center;">Tipo</th>
-                            <th style="width:10%;text-align: center;">Origen</th>
-                            <th style="width:10%;text-align: center;">Destino</th>
-                            <th style="width:10%;text-align: center;">Medio de transporte</th>
-                            <th style="width:10%;text-align: center;">Linea / No. de vuelo</th>
-                            <th style="width:10%;text-align: center;">Hora de salida</th>
-                            <th style="width:10%;text-align: center;">Hora de llegada</th>
-                            <th style="width:10%;text-align: center;">Boleto</th>
+                            
+                            <td style="width:10%;text-align: center;">Origen</td>
+                            <td style="width:10%;text-align: center;">Destino</td>
+                            <td style="width:10%;text-align: center;">Fecha</td>
+                            <td style="width:10%;text-align: center;">Medio</td>
+                            <td style="width:10%;text-align: center;">Linea</td>
+                            <td style="width:10%;text-align: center;">Hora de salida</td>
+                            <td style="width:10%;text-align: center;">Hora de llegada</td>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var itinerario in Model.itinerario)
                         {
                             <tr>
-                                <td>@(itinerario.tipoSalida.idTipoSalida == 1 ? "Ida" : "Regreso")</td>
                                 <td>@itinerario.origen</td>
                                 <td>@itinerario.destino</td>
+                                <td>@Convert.ToDateTime(itinerario.fechaSalida).ToShortDateString()</td>
                                 <td>@itinerario.medioTransporte.descripcion</td>
                                 <td>@(itinerario.linea + "/" + itinerario.numeroAsiento)</td>
                                 <td>@(string.IsNullOrEmpty(itinerario.horaSalida) ? "N/A" : itinerario.horaSalida )</td>
                                 <td>@(string.IsNullOrEmpty(itinerario.horaLLegada) ? "N/A" : itinerario.horaLLegada )</td>
-                                <td>
-                                    @if (itinerario.medioTransporte.idMedioTransporte == 2)
-                                    {
-                                        <span data-toggle="modal" data-target="#modal-itinBoleto" onclick="mostrarBoletoItinerario(@(new JavaScriptSerializer().Serialize(itinerario)))">
-                                            <button data-toggle="tooltip" title="Ver boleto" class="btn btn-warning btn-mini">
-                                                <i class="fa fa-print"></i>
-                                            </button>
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span>N/A</span>
-                                    }
-                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
 </div>
 
-<div class="md-90">
-    <div class="col-md-12">
-        <div class="grid simple vertical red">
-            <div class="grid-title">
-                <h4>Lista <span class="semi-bold">de gastos</span></h4>
-            </div>
-            <div class="grid-body">
-                <table style="text-align: center;" id="tabla-gastosExtras">
-                    <thead>
-                        <tr>
-                            <th style="width:10%;text-align: center;">Gasto</th>
-                            <th style="width:10%;text-align: center;">Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var gasto in Model.gastosExtrasSol)
-                        {
+<div id="condiciones especiales" style="font-size: 10px;"  class="md-90">
+    <label style="font-size:x-small">CONDICIONES ESPECIALES:</label>
+    <div class="md-90">
+        <table>
+            <tr>
+                <td>
+                    <table style="text-align: center;" id="tabla-condiciones" border="1">
                             <tr>
-                                <td>@gasto.descripcion</td>
-                                <td>@(gasto.monto.ToString("C") + " " + (Model.tipoViaje.idTipoViaje == 2 ? "USD" : "MXN"))</td>
+                                <td style="width:10%;text-align: center;">País Ciudad</td>
+                                <td style="width:10%;text-align: center;">No. de días</td>
+                                <td style="width:10%;text-align: center;">Viáticos ML $</td>
+                                <td style="width:10%;text-align: center;">Viáticos US $</td>
                             </tr>
+                            @foreach (var itinerario in Model.itinerario)
+                        {
+                                <tr>
+                                    @if (itinerario.tipoSalida.idTipoSalida == 1)
+                                {
+                                        <td>@itinerario.origen</td>
+                                        <td>@itinerario.dias</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? Model.tarifaDeIda.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? Model.tarifaDeIda.ToString("C") : "")</td>
+                                }
+                                else
+                                {
+                                        <td>@itinerario.destino</td>
+                                        <td>@itinerario.dias</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? Model.tarifaDeVuelta.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? Model.tarifaDeVuelta.ToString("C") : "")</td>
+                                }
+                                </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    </table>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>
+                    <table style="text-align: center;" id="tabla-resumen" border="1" align="right">
+                            <tr>
+                                <td style="width:10%;text-align: center;">Resumen</td>
+                                <td style="width:10%;text-align: center;">Monto ML $</td>
+                                <td style="width:10%;text-align: center;">Monto US $</td>
+                            </tr>
+                            <tr>
+                                <td>Viáticos</td>
+                                <td>@(Model.tipoViaje.idTipoViaje == 1 ? Model.montoAutorizado.ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje == 2 ? Model.montoAutorizado.ToString("C") : "")</td>
+                            </tr>
+                            <tr>
+                                @foreach (var gasto in Model.gastosExtrasSol)
+                    {
+                                    <td>Transporte</td>
+                                    <td>@(gasto.descripcion == "TRANSPORTE" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
+                                    <td>@(gasto.descripcion == "TRANSPORTE" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
+                    }
+
+                            </tr>
+                            <tr>
+                                @foreach (var gasto in Model.gastosExtrasSol)
+                    {
+                                    <td>Peaje / Gasolina</td>
+                                    <td>@(gasto.descripcion == "PEAJE / GASOLINA" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
+                                    <td>@(gasto.descripcion == "PEAJE / GASOLINA" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
+                    }
+
+                            </tr>
+                            <tr>
+                                @foreach (var gasto in Model.gastosExtrasSol)
+                    {
+                                    <td>Autobus</td>
+                                    <td>@(gasto.descripcion == "AUTOBÚS" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
+                                    <td>@(gasto.descripcion == "AUTOBÚS" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
+                    }
+
+                            </tr>
+                            <tr>
+                                @foreach (var gasto in Model.gastosExtrasSol)
+                    {
+                                    <td>Otros</td>
+                                    <td>@(gasto.descripcion == "OTROS" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
+                                    <td>@(gasto.descripcion == "OTROS" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
+                    }
+
+                            </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
-
-<div class="md-90">
-    <label style="font-weight:bold">Datos del anticipo de viatico:</label>
-    <table class="md-90">
+<div id="anticipo" style="font-size: 10px;" class="md-90">
+    <label>Datos del anticipo de viatico:</label>
+    <table>
         <tr>
-            <td><label style="font-weight:bold">Monto</label></td>
-            <td><label style="font-weight:bold">Cheque</label></td>
-            <td><label style="font-weight:bold">Transferencia</label></td>
-            <td><label style="font-weight:bold">Banco</label></td>
-         </tr>
-        <tr>
-            <td>@Model.montoAutorizado</td>
-            <td><label>X</label></td>
+            <td><label>Monto</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td><label> @Model.montoAutorizado </label></td>
+                    </tr>
+                </table>
+            </td>
             <td></td>
             <td></td>
+            <td><label>Cheque</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td><label>-</label></td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td></td>
+            <td><label>Transferencia</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td><label> - </label></td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td></td>
+            <td><label>Banco</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td><label> - </label></td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </table>
 </div>
 
-<div class="md-90">
-    <label style="font-weight:bold">
-        RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE 5 DÍAS HABILES POSTERIORES A SU RETORNO:</label>
+<div id="gastos" style="font-size: 10px;"  class="md-90">
+    <label style="font-size:x-small">
+        RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE 5 DÍAS HABILES POSTERIORES A SU RETORNO</label>
         <table border="1" style="text-align: center;" id="tabla-gastos_reintegro">
             <thead>
                 <tr>
-                    <th style="width:10%;text-align: center;">Tipo de Gasto</th>
-                    <th style="width:10%;text-align: center;">OGM</th>
-                    <th style="width:10%;text-align: center;">Codigo Presupuestario</th>
-                    <th style="width:10%;text-align: center;">Monto US/ML</th>
-                    <th style="width:10%;text-align: center;">Cuenta para aviso de cargo</th>
-                    <th style="width:10%;text-align: center;">Nombre de la fuente de Financiamiento</th>
-                    <th style="width:10%;text-align: center;">Nombre de la Unidad Interna o Institución Financiera</th>
+                    <td style="width:10%;text-align: center;">Tipo de Gasto</td>
+                    <td style="width:10%;text-align: center;">OGM</td>
+                    <td style="width:10%;text-align: center;">Codigo Presupuestario</td>
+                    <td style="width:10%;text-align: center;">Monto US/ML</td>
+                    <td style="width:10%;text-align: center;">Cuenta para aviso de cargo</td>
+                    <td style="width:10%;text-align: center;">Nombre de la fuente de Financiamiento</td>
+                    <td style="width:10%;text-align: center;">Nombre de la Unidad Interna o Institución Financiera</td>
                 </tr>
             </thead>
             <tbody>
@@ -335,18 +463,76 @@
         </table>
 </div>
 
-<div id="content-firmas" class="md-90">
-    <div style="text-align: left; float: left;">
-        <p>___________________________________________</p>
-        <p>@Model.usuario.nombreCompleto</p>
-    </div>
-
-    <div style="text-align: center; float: center;">
-        <p>__________________________________________</p>
-        <p>@Model.autorizador.nombreCompleto</p>
-    </div>
-</div>
-    </div>
+<table border="0">
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>___________________________________________</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>___________________________________________</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>@Model.usuario.nombreCompleto</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>@Model.autorizador.nombreCompleto</td>
+        </tr>
+    </table>
 <style>
     .blueIICA {
         color: #1f3853;
