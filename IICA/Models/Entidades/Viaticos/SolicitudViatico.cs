@@ -53,7 +53,7 @@ namespace IICA.Models.Entidades.Viaticos
         public bool aplicaReintegro { get; set; }
         public decimal importeReintegro { get; set; }
         public string pathArchivoReintegro { get; set; }
-
+        public string consecutivoAnual { get; set; }
 
         /*Variables para validar flujo en la comprobacion de gastos*/
         public bool realizarComprobacionGastos { get; set; }

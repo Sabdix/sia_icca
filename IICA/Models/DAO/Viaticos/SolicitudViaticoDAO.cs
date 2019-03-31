@@ -234,6 +234,7 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.importeReintegro = dbManager.DataReader["Importe_Reintegro"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["Importe_Reintegro"].ToString());
                             solicitudViatico.montoAutorizado = dbManager.DataReader["monto_viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["monto_viatico_Autorizado"].ToString());
                             solicitudViatico.aplicaReintegro = dbManager.DataReader["Aplica_Reintegro"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["Aplica_Reintegro"]);
+                            solicitudViatico.consecutivoAnual = dbManager.DataReader["Consecutivo_Anual"] == DBNull.Value ? "" : (dbManager.DataReader["Consecutivo_Anual"].ToString());
 
                             solicitudViatico.realizarComprobacionGastos = dbManager.DataReader["realizar_comprobacion_gastos"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["realizar_comprobacion_gastos"]);
                             solicitudViatico.comprobarItinerarioAereo = dbManager.DataReader["comprobar_itinerario_aereo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["comprobar_itinerario_aereo"]);
