@@ -66,6 +66,7 @@ namespace IICA.Models.DAO.Viaticos
                         comprobacionGasto.subtotal = dbManager.DataReader["subtotal"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["subtotal"].ToString());
                         comprobacionGasto.total = dbManager.DataReader["total"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["total"].ToString());
                         comprobacionGasto.lugar = dbManager.DataReader["Lugar"] == DBNull.Value ? "" : dbManager.DataReader["Lugar"].ToString();
+                        comprobacionGasto.fecha = dbManager.DataReader["fecha"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["fecha"]);
                         comprobacionGastos.Add(comprobacionGasto);
                     }
                 }
@@ -110,7 +111,7 @@ namespace IICA.Models.DAO.Viaticos
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(9);
+                    dbManager.CreateParameters(10);
                     dbManager.AddParameters(0, "Id_Solicitud", comprobacionGasto.solicitud.idSolitud);
                     dbManager.AddParameters(1, "Comentario", string.IsNullOrEmpty(comprobacionGasto.comentario)? "":comprobacionGasto.comentario);
                     dbManager.AddParameters(2, "Path_Archivo_XML", comprobacionGasto.pathArchivoXML);
@@ -120,6 +121,7 @@ namespace IICA.Models.DAO.Viaticos
                     dbManager.AddParameters(6, "Subtotal", comprobacionGasto.subtotal);
                     dbManager.AddParameters(7, "Total", comprobacionGasto.total);
                     dbManager.AddParameters(8, "lugar", comprobacionGasto.lugar);
+                    dbManager.AddParameters(9, "fecha", comprobacionGasto.fecha);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_INSERTA_COMPROBACION_GASTO");
                     if (dbManager.DataReader.Read())
                     {
