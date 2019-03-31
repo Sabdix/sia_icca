@@ -85,7 +85,8 @@ BEGIN
 				(select top 1 1 from DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD where Id_Solicitud = vs.Id_Solicitud),0) =1 then 1
 			else 0
 			end realizar_comprobacion_gastos,
-			COALESCE((select top 1 1 from DT_TBL_VIATICO_ITINERARIO where Id_Solicitud = vs.Id_Solicitud and  Id_Medio_Transporte=2),0) comprobar_itinerario_aereo
+			COALESCE((select top 1 1 from DT_TBL_VIATICO_ITINERARIO where Id_Solicitud = vs.Id_Solicitud and  Id_Medio_Transporte=2),0) comprobar_itinerario_aereo,
+			vs.consecutivo_anual
 		from 
 			DT_TBL_VIATICO_SOLICITUD  vs
 			join DT_CAT_MEDIO_TRANSPORTE mt

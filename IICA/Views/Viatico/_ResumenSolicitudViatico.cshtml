@@ -96,6 +96,12 @@
                                 <td>?</td>
                             </tr>*@
                         <tr>
+                            <td><span class="bold blueIICA">Fecha de Incio</span></td>
+                            <td>@Model.fechaInicio.ToShortDateString()</td>
+                            <td><span class="bold blueIICA">Fecha de Fin</span></td>
+                            <td>@Model.fechaFin.ToShortDateString()</td>
+                        </tr>
+                        <tr>
                             <td><span class="bold blueIICA">Duración estimada del viaje</span></td>
                             <td colspan="3">@((Model.fechaFin - Model.fechaInicio).Days)</td>
                         </tr>

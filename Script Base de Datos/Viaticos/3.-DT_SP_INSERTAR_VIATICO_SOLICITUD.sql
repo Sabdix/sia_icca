@@ -201,6 +201,70 @@ BEGIN
 			SELECT @Mensaje='Error al guardar información, apartado de gastos extra'
 			GOTO ERROR_
 		END
+
+		/*Se agrega el folio anual consecutivo*/
+
+		
+		DECLARE
+			@Consecutivo INT,
+			@Consecutivo_Anual VARCHAR (100)
+
+		IF (SELECT Id_Tipo_Viaje FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_Solicitud_Viatico)=1
+		BEGIN
+			
+			IF NOT EXISTS (SELECT 1 FROM DT_CAT_CONSECUTIVO_VIAJE_NACIONAL WHERE Ejercicio=DATEPART(YY,GETDATE()))
+			BEGIN
+				INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(DATEPART(YY,GETDATE()),1)
+			END
+			
+			SELECT
+				@Consecutivo=Consecutivo
+			FROM 
+				DT_CAT_CONSECUTIVO_VIAJE_NACIONAL
+			WHERE
+				Ejercicio=DATEPART(YY,GETDATE())
+
+			UPDATE DT_CAT_CONSECUTIVO_VIAJE_NACIONAL
+			SET Consecutivo=Consecutivo+1
+			WHERE Ejercicio=DATEPART(YY,GETDATE())
+
+		END
+		ELSE
+		BEGIN
+			
+			IF NOT EXISTS (SELECT 1 FROM DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL WHERE Ejercicio=DATEPART(YY,GETDATE()))
+			BEGIN
+				INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(DATEPART(YY,GETDATE()),1)
+			END
+			
+			SELECT
+				@Consecutivo=Consecutivo
+			FROM 
+				DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL
+			WHERE
+				Ejercicio=DATEPART(YY,GETDATE())
+
+			UPDATE DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL
+			SET Consecutivo=Consecutivo+1
+			WHERE Ejercicio=DATEPART(YY,GETDATE())
+		END
+		
+		SELECT
+			@Consecutivo_Anual=Sc_Descripcion+'/'+CONVERT(varchar,DATEPART(YY,GETDATE())) +'/I4/'+CONVERT(varchar,@Consecutivo)
+		FROM DT_TBL_VIATICO_SOLICITUD vs
+		JOIN Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
+		JOIN Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
+		LEFT JOIN Departamento_Empleado c ON em.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
+		WHERE Id_Solicitud=@Id_Solicitud_Viatico
+
+		UPDATE DT_TBL_VIATICO_SOLICITUD
+		SET Consecutivo_Anual=@Consecutivo_Anual
+		WHERE Id_Solicitud=@Id_Solicitud_Viatico
+		
+
+
+		/**/
+
 		
 		GOTO EXIT_
 		

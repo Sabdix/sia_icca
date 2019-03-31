@@ -758,7 +758,7 @@ BEGIN
 	
 	SELECT @Monto_Gastos_Extras=coalesce (SUM(Monto),0)
 	FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD
-	WHERE Id_Solicitud=@Id_Solicitud
+	WHERE Id_Solicitud=@Id_Solicitud AND Descripcion NOT LIKE 'TRANSPORTE AÉREO'
 
 	UPDATE DT_TBL_VIATICO_SOLICITUD 
 	SET 
@@ -889,7 +889,8 @@ CREATE PROCEDURE DT_SP_INSERTA_COMPROBACION_GASTO
 	@Emisor VARCHAR(500),
 	@Subtotal MONEY,
 	@Total MONEY,
-	@Lugar VARCHAR(500)
+	@Lugar VARCHAR(500),
+	@Fecha DATETIME
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -914,7 +915,8 @@ BEGIN
 				Emisor,
 				Subtotal,
 				Total,
-				Lugar
+				Lugar,
+				Fecha
 			)
 		VALUES 
 			(
@@ -926,7 +928,8 @@ BEGIN
 				@Emisor,
 				@Subtotal,
 				@Total,
-				@Lugar
+				@Lugar,
+				@Fecha
 			)
 		IF @@ERROR<>0
 		BEGIN
@@ -1111,8 +1114,16 @@ BEGIN
 
     DECLARE
 		@status INT=1,
-		@mensaje VARCHAR(100)='COMPROBACIÓN GUARDADA DE MANERA CORRECTA.'
+		@mensaje VARCHAR(100)='COMPROBACIÓN GUARDADA DE MANERA CORRECTA.',
+		@Monto_Viatico_Comprobado MONEY
 
+
+	--SE OBTIENE EL MONTO COMPROBADO
+
+	SELECT 
+		@Monto_Viatico_Comprobado=SUM(Total)
+	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
+	WHERE Id_Solicitud=@Id_Solicitud
 
 	--SE COMIENZAN LAS AFECTACIONES
 	UPDATE DT_TBL_VIATICO_SOLICITUD
@@ -1121,7 +1132,8 @@ BEGIN
 		Fecha_Reintegro=COALESCE(@Fecha_Reintegro,GETDATE()),
 		Importe_Reintegro=COALESCE(@Importe_Reintegro,0),
 		Path_Archivo_Reintegro=COALESCE(@Path_Archivo_Reintegro,''),
-		Id_Etapa_Solicitud=Id_Etapa_Solicitud+1
+		Id_Etapa_Solicitud=Id_Etapa_Solicitud+1,
+		Monto_Viatico_Comprobado=@Monto_Viatico_Comprobado
 	WHERE Id_Solicitud=@Id_Solicitud
 
 	IF @@ERROR<>0
