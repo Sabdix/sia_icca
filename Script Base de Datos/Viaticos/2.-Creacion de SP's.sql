@@ -1121,7 +1121,7 @@ BEGIN
 	--SE OBTIENE EL MONTO COMPROBADO
 
 	SELECT 
-		@Monto_Viatico_Comprobado=SUM(Total)
+		@Monto_Viatico_Comprobado=COALESCE(SUM(Total),0)
 	FROM DT_TBL_VIATICO_COMPROBACION_GASTOS
 	WHERE Id_Solicitud=@Id_Solicitud
 

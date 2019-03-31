@@ -39,7 +39,7 @@ BEGIN
 
 			IF (SELECT Marginal FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)=1
 			BEGIN
-				IF (SELECT SUM(Monto) FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)<=
+				IF (SELECT SUM(Monto) FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD WHERE Id_Solicitud=@Id_solicitud AND Descripcion NOT LIKE 'TRANSPORTE AÉREO')<=
 				(SELECT SUM(Total) FROM DT_TBL_VIATICO_COMPROBACION_GASTOS WHERE Id_Solicitud=@Id_solicitud)
 					SET @Aplica_Reintegro=0
 				ELSE
@@ -48,7 +48,7 @@ BEGIN
 			ELSE
 			BEGIN
 				IF( (SELECT (Tarifa_de_Ida+Tarifa_de_Vuelta)+((Tarifa_de_Ida+Tarifa_de_Vuelta)*.1) FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)+
-				(SELECT SUM(Monto) FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD WHERE Id_Solicitud=@Id_solicitud) )<=
+				(SELECT SUM(Monto) FROM DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD WHERE Id_Solicitud=@Id_solicitud AND Descripcion NOT LIKE 'TRANSPORTE AÉREO') )<=
 				(SELECT SUM(Total) FROM DT_TBL_VIATICO_COMPROBACION_GASTOS WHERE Id_Solicitud=@Id_solicitud)
 					SET @Aplica_Reintegro=0
 				ELSE
