@@ -132,11 +132,36 @@ function OnSuccesAutorizarSol(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
+        ImprimirFormatoI5(data.objeto.idSolitud);
         setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesPorVerificar"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
 }
+
+function ImprimirFormatoI5(id) {
+    $.ajax({
+        data: { id: id },
+        url: rootUrl("/Viatico/_ImprimirFormatoI5"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
 //Fin Autorizar solicitud
 
 //Mostrar comprobaciones

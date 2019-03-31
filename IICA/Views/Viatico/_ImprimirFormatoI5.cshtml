@@ -1,0 +1,323 @@
+﻿<script src="~/Content/assets/plugins/printThis/printThis.js"></script>
+@model IICA.Models.Entidades.Viaticos.SolicitudViatico
+@using IICA.Models.Entidades.Viaticos
+@using System.Web.Script.Serialization;
+
+
+<style>
+    .md-100 {
+        width: 100%;
+        margin: auto;
+    }
+
+    .md-90 {
+        width: 90%;
+        margin: auto;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .border-solid {
+        border: 1px solid #000;
+    }
+
+    .right {
+        float: right;
+    }
+
+    /*------------------------------------*/
+    #content-header {
+        height: 130px;
+    }
+
+        #content-header img {
+            width: 215px;
+            height: 85px;
+        }
+
+    #header-titulo {
+        width: 270px;
+        float: right;
+        text-align: center;
+    }
+
+    /*------------------------------------*/
+    #content-unidadO {
+        float: right;
+        width: 400px;
+        display: inline-flex;
+    }
+
+    #content-datos-solicitante {
+        margin-top: 25px;
+        float: left;
+        border-bottom: 1px solid #000;
+    }
+
+    .content-datos-solicitante-dato {
+        width: 33%;
+        margin: auto;
+        float: left;
+    }
+    /*------------------------------------*/
+
+    #tabla-gastos {
+        width: 100%;
+        min-height: 250px;
+        font-size: 11px;
+        border-collapse: collapse;
+    }
+
+        #tabla-gastos tbody tr {
+            font-size: 11px;
+        }
+
+            #tabla-gastos tbody tr td {
+                border: 1px solid #000;
+            }
+
+        #tabla-gastos th, td {
+            padding: 5px;
+            border: 1px solid #000;
+        }
+
+        #tabla-gastos tfoot {
+            font-size: 11px;
+        }
+
+    /*------------------------------------*/
+    #tabla-distribucion {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+    }
+
+        #tabla-distribucion tbody tr {
+            font-size: 11px;
+        }
+
+            #tabla-distribucion tbody tr td {
+                border: 1px solid #000;
+                font-size: 11px;
+            }
+
+        #tabla-distribucion th, td {
+            padding: 5px;
+            border: 1px solid #000;
+            font-size: 11px;
+        }
+
+        #tabla-distribucion tfoot {
+            font-size: 11px;
+        }
+
+    /*------------------------------------*/
+    #content-firmas {
+        display: table;
+        margin-top: 20px;
+    }
+
+    /*------------------------------------*/
+
+    #tabla-fin td {
+        border: 0px !important;
+        font-size: 11px !important;
+    }
+</style>
+
+<div style="width: 90%; margin: auto;">
+
+    <div id="content-header" class="md-100">
+        <img src="http://localhost:59791/Content/assets/img/logo_iica.png" />
+        <div id="header-titulo">
+            <h4>FORMULARIO I-5: RELACIÓN DE GASTOS </h4>
+        </div>
+    </div>
+
+
+    <div class="md-100" style="display: inline-table;">
+        <div id="content-unidadO">
+            <div style="margin-right: 5px;">
+                Unidad Operativa:
+            </div>
+            <div style="border-bottom: 1px solid #000; min-width: 250px; text-align: center;">
+                @Model.usuario.programa
+            </div>
+        </div>
+    </div>
+
+    <div id="content-datos-solicitante" class="md-100">
+        <div class="content-datos-solicitante-dato">
+            @Model.usuario.nombreCompleto
+        </div>
+        <div class="content-datos-solicitante-dato">
+            @Model.usuario.puesto
+        </div>
+        <div class="content-datos-solicitante-dato">
+            @Model.usuario.fechaIngreso
+        </div>
+    </div>
+
+    <div class="md-100" style=" margin-top: 30px; display: inline-table;">
+        <table id="tabla-gastos">
+            <thead>
+                <tr>
+                    <th>Fechas</th>
+                    <th>Lugares</th>
+                    <th>Detalle de gastos</th>
+                    <th>Comp. No.</th>
+                    <th>Monedas locales</th>
+                    <th>Dolares</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int i = 1; }
+                @foreach (ComprobacionGasto comprobacion in Model.comprobacionesGasto)
+                {
+                    <tr>
+                        <td>@comprobacion.fecha.ToShortDateString()</td>
+                        <td>@comprobacion.lugar</td>
+                        <td>@(comprobacion.gastoComprobacion.descripcion +" - "+ comprobacion.emisor)</td>
+                        <td>@i</td>
+                        <td>@comprobacion.total.ToString("C")</td>
+                        <td></td>
+                    </tr>
+                    i++;
+                }
+                <tr style="height: 15px;">
+                    <td colspan="4" style="border-bottom:1px solid #fff !important;">Obervaciones: </td>
+                    <td colspan="2" style="border-bottom:1px solid #fff !important;"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4"></td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" rowspan="5" style="border: 0px;">
+                        <table style="width: 100%; text-align: center; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 100px; border: 0px;">Autorizacion de viaje No.</td>
+                                <td style="width: 25px;">VI</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 0px;">@Model.idSolitud</td>
+                                <td>VN</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>Total de gasto:</td>
+                    <td>@Model.montoComprobado.ToString("C")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Menos:  (Anticipos) </td>
+                    <td>@Model.montoAutorizado.ToString("C")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Reintegro</td>
+                    <td>@(Model.montoAutorizado > Model.montoComprobado ? Model.importeReintegro.ToString("C") : "")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Reembolso</td>
+                    <td>@(Model.montoComprobado > Model.montoAutorizado ? (Model.montoComprobado - Model.montoAutorizado).ToString("C") : "")</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+
+
+        </table>
+    </div>
+
+    <div class="md-90" style="margin-top: 20px; font-size: 12px;">
+        <span>Saldo a favor de:</span>&nbsp;&nbsp;IICA:&nbsp;&nbsp;
+        <span style="border-bottom: 1px solid #000; min-width: 100px; display: inline-block; text-align: center;">@(Model.montoAutorizado > Model.montoComprobado ? "X" : " ")</span>
+        <span>&nbsp;&nbsp;Empleado:&nbsp;&nbsp;</span>
+        <span style="border-bottom: 1px solid #000; min-width: 100px; display: inline-block;text-align: center;">@(Model.montoComprobado > Model.montoAutorizado ? "X" : " ")</span>
+    </div>
+
+    <div class="md-90" style="margin-top: 20px; font-size: 12px;">
+        <span>Cheque:&nbsp;&nbsp;</span>
+        <span style="border-bottom: 1px solid #000; min-width: 60px; display: inline-block; text-align: center;"></span>
+        <span>&nbsp;&nbsp;Transferencia:&nbsp;&nbsp;</span>
+        <span style="border-bottom: 1px solid #000; min-width: 60px; display: inline-block;text-align: center;"></span>
+        <span>&nbsp;&nbsp;Nombre del banco:&nbsp;&nbsp;</span>
+        <span style="border-bottom: 1px solid #000; min-width: 60px; display: inline-block;text-align: center;"></span>
+    </div>
+
+    <div class="md-90" style="margin-top: 20px; font-size: 12px;">
+        <table id="tabla-distribucion">
+            <thead>
+                <tr>
+                    <th colspan="4">DISTRIBUCION CONTABLE DEL COSTO DEL VIAJE OFICIAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 12px;">
+                    <td><b>TIPO DE GASTO </b></td>
+                    <td><b>OGM y Menor </b></td>
+                    <td><b>CÓDIGO PRESUPUESTARIO</b></td>
+                    <td><b>MONTO US$/ML</b></td>
+                </tr>
+                <tr>
+                    <td><b>Viáticos</b></td>
+                    <td><b>401</b></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>Pasaje o Transporte</b></td>
+                    <td><b>405</b></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>Otros Gastos</b></td>
+                    <td><b>403</b></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="content-firmas" class="md-90">
+        <div style="text-align: left; float: left; font-size: 12px;">
+            <p>______________________________</p>
+            <p>@Model.usuario.nombreCompleto</p>
+        </div>
+
+        <div style="text-align: right; float: right; font-size: 12px;">
+            <p>______________________________</p>
+            <p>@Model.autorizador.nombreCompleto</p>
+        </div>
+    </div>
+
+    <div class="md-90" style="margin-top: 20px; ">
+        <table id="tabla-fin">
+            <tr>
+                <td rowspan="2">Distribución:</td>
+                <td></td>
+                <td>Original:</td>
+                <td>Finanzas o Contabilidad</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Duplicado:</td>
+                <td>Solicitante</td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>
+

@@ -21,6 +21,7 @@ namespace IICA.Models.Entidades.Viaticos
         public double subtotal { get; set; }
         public double total { get; set; }
         public string lugar { get; set; }
+        public DateTime fecha { get; set; }
 
         public ComprobacionGasto()
         {

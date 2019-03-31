@@ -230,6 +230,8 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.pathComprobanteEstancia = dbManager.DataReader["Path_Comprobante_Estancia"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Comprobante_Estancia"].ToString());
                             solicitudViatico.pathInformeViaje = dbManager.DataReader["Path_Informe_Viaje"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Informe_Viaje"].ToString());
                             solicitudViatico.pathArchivoReintegro = dbManager.DataReader["Path_Archivo_Reintegro"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Reintegro"].ToString());
+                            solicitudViatico.montoComprobado = dbManager.DataReader["Monto_Viatico_Comprobado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Comprobado"].ToString());
+                            solicitudViatico.importeReintegro = dbManager.DataReader["Monto_Viatico_Reintegro"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["Monto_Viatico_Reintegro"].ToString());
                             solicitudViatico.montoAutorizado = dbManager.DataReader["monto_viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["monto_viatico_Autorizado"].ToString());
                             solicitudViatico.aplicaReintegro = dbManager.DataReader["Aplica_Reintegro"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["Aplica_Reintegro"]);
 
@@ -313,6 +315,7 @@ namespace IICA.Models.DAO.Viaticos
                                 comprobacionGasto.subtotal = dbManager.DataReader["subtotal"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["subtotal"].ToString());
                                 comprobacionGasto.total = dbManager.DataReader["total"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["total"].ToString());
                                 comprobacionGasto.lugar = dbManager.DataReader["Lugar"] == DBNull.Value ? "" : dbManager.DataReader["Lugar"].ToString();
+                                comprobacionGasto.fecha = dbManager.DataReader["fecha"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["fecha"]);
                                 solicitudViatico.comprobacionesGasto.Add(comprobacionGasto);
 
                             }
@@ -689,7 +692,9 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.marginal = dbManager.DataReader["marginal"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["marginal"].ToString());
                         solicitudViatico.pathArchivoAutorizacion = dbManager.DataReader["Path_Archivo_Autorizacion"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Autorizacion"].ToString());
                         solicitudViatico.montoAutorizado = dbManager.DataReader["Monto_Viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Autorizado"].ToString());
-                     //solicitudViatico.aplicaReintegro = dbManager.DataReader["Aplica_Reintegro"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["Aplica_Reintegro"]);
+                        solicitudViatico.montoComprobado = dbManager.DataReader["Monto_Viatico_Comprobado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Comprobado"].ToString());
+                        solicitudViatico.importeReintegro = dbManager.DataReader["Monto_Viatico_Reintegro"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["Monto_Viatico_Reintegro"].ToString());
+                        //solicitudViatico.aplicaReintegro = dbManager.DataReader["Aplica_Reintegro"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["Aplica_Reintegro"]);
                         solicitudViatico.realizarComprobacionGastos = dbManager.DataReader["realizar_comprobacion_gastos"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["realizar_comprobacion_gastos"]);
                         solicitudViatico.comprobarItinerarioAereo = dbManager.DataReader["comprobar_itinerario_aereo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["comprobar_itinerario_aereo"]);
                         solicitudes.Add(solicitudViatico);

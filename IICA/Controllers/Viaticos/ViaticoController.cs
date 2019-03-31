@@ -623,6 +623,21 @@ namespace IICA.Controllers.Viaticos
             }
         }
 
+        public ActionResult _ImprimirFormatoI5(Int64 id)
+        {
+            Result result = new Result();
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                ViewBag.Administrador = (Usuario)Session["usuarioSesion"];
+                return PartialView((SolicitudViatico)solicitudViaticoDAO.ObtenerDetalleSol(id).objeto);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
         #region Funciones - Generales
         private string ObtenerFormatosTempHttpPost(HttpRequestBase httpRequestBase, string formato, string usuario)
         {
@@ -758,8 +773,10 @@ namespace IICA.Controllers.Viaticos
                             comprobacionGasto.subtotal = Convert.ToDouble(xn.Value);
                         if (string.Compare(xn.LocalName, "total", true) == 0)
                             comprobacionGasto.total = Convert.ToDouble(xn.Value);
-                        if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
-                            comprobacionGasto.lugar = xn.Value.ToString();
+                        //if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
+                        //    comprobacionGasto.lugar = xn.Value.ToString(); //se comenta porq esta descripcion es muy larga
+                        if (string.Compare(xn.LocalName, "fecha", true) == 0)
+                            comprobacionGasto.fecha = string.IsNullOrEmpty(xn.Value.ToString()) ? DateTime.MinValue : Convert.ToDateTime(xn.Value.ToString());
                     }
 
                     foreach (XmlNode node in xmlElement.ChildNodes)
@@ -770,6 +787,17 @@ namespace IICA.Controllers.Viaticos
                             {
                                 if (string.Compare(xn.LocalName, "nombre", true) == 0)
                                     comprobacionGasto.emisor = xn.Value.ToString();
+                            }
+                            foreach (XmlNode node_ in node.ChildNodes)
+                            {
+                                if(string.Compare(node_.LocalName, "DomicilioFiscal", true) == 0)
+                                {
+                                    foreach (XmlAttribute xn_ in node_.Attributes)
+                                    {
+                                        if (string.Compare(xn_.LocalName, "localidad", true) == 0)
+                                            comprobacionGasto.lugar = xn_.Value.ToString();
+                                    }
+                                }
                             }
                         }
                     }

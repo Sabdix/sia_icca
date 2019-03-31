@@ -47,6 +47,11 @@ $(document).ready(function () {
             if (data.status) {
                 $("#modal-comp-proveedor").val(data.objeto.emisor);
                 $("#modal-comp-lugar").val(data.objeto.lugar);
+
+                var fechaFactura = new Date(data.objeto.fecha.match(/\d+/)[0] * 1);
+                fechaFactura = fechaFactura.toLocaleDateString();
+                $("#modal-comp-fecha").val(fechaFactura);
+
                 $("#modal-comp-subtotal").val(accounting.formatMoney(data.objeto.subtotal));
                 $("#modal-comp-total").val(accounting.formatMoney(data.objeto.total));
                 $("#btn-cargarFactura").hide();
@@ -54,8 +59,6 @@ $(document).ready(function () {
                 comprobanteGasto = data.objeto;
                 comprobanteGasto.solicitud = solSeleccionada;
                 comprobanteGasto.gastoComprobacion = {};
-                comprobanteGasto.gastoComprobacion.idGastoComprobacion = $("#modal-comp-tipoGasto").val();
-                comprobanteGasto.comentario = $("#modal-comp-comentario").val();
                 $("#dZUploadXmlComp .dz-remove").hide();
             } else {
                 comprobanteGasto = {};
@@ -305,6 +308,13 @@ function OnAgregarComprobacion() {
         swal("Notificación", "El archivo del ticket no cumple con las caracteristicas para cargarlo (.pdf o imagen e inferior a 4.0 MB)", "error");
         return;
     }
+
+    comprobanteGasto.gastoComprobacion.idGastoComprobacion = $("#modal-comp-tipoGasto").val();
+    comprobanteGasto.comentario = $("#modal-comp-comentario").val();
+
+    var fechaFactura_ = new Date(comprobanteGasto.fecha.match(/\d+/)[0] * 1);
+    comprobanteGasto.fecha = fechaFactura_.toLocaleDateString();
+ 
 
     $.ajax({
         data: { comprobacionGasto_: comprobanteGasto },
