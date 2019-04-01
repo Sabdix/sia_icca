@@ -44,6 +44,11 @@ function MostrarModalRefSol(solicitud) {
     $("#modal-referencia-fechaFin").val(solSeleccionada.fechaFin);
     $("#modal-referencia-solicitud").val(solSeleccionada.idSolitud);
     $("#modal-referencia-viaticante").val(solSeleccionada.usuario.nombreCompleto);
+
+    $("#modal-tarifa-ida").val(accounting.formatMoney(solSeleccionada.tarifaDeIda));
+    $("#modal-tarifa-vuelta").val(accounting.formatMoney(solSeleccionada.tarifaDeVuelta));
+    $("#modal-total-gastos-extras").val(accounting.formatMoney(solSeleccionada.montoAutorizado - solSeleccionada.tarifaDeVuelta - solSeleccionada.tarifaDeIda));
+
     $("#modal-referencia_importeAutorizado").val(accounting.formatMoney(solSeleccionada.montoAutorizado));
 }
 

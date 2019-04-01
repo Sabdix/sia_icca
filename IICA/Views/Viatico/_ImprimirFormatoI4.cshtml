@@ -128,7 +128,7 @@
                     <tr>
                         <td class="text-center">VI</td>
                         <td class="text-center">@(Model.tipoViaje.idTipoViaje == 2 ? @Model.usuario.emCveEmpleado : "")</td>
-                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 2 ? "1" : " ")</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 2 ? @Model.consecutivoAnual : " ")</td>
                     </tr>
                 </table>
             </td>
@@ -145,7 +145,7 @@
                     <tr>
                         <td class="text-center">VN</td>
                         <td class="text-center">@(Model.tipoViaje.idTipoViaje == 1 ? @Model.usuario.emCveEmpleado : "")</td>
-                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 1 ? "1" : "")</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 1 ? @Model.consecutivoAnual : "")</td>
                     </tr>
                 </table>
             </td>
