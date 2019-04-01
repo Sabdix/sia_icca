@@ -61,26 +61,39 @@
                             <td><span class="muted">@solicitud.duracionViaje</span></td>
                             <td><span class="muted">@solicitud.medioTransporte.descripcion</span></td>
                             <td>
-                                <span data-toggle="modal" data-target="#modal-solViatico">
-                                    <button data-toggle="tooltip" title="Ver Solicitud" class="btn btn-info btn-mini"
-                                            onclick="VerDetalleSolViatico( @(new JavaScriptSerializer().Serialize(solicitud)) )">
-                                        <i class="fa fa-list"></i>
-                                    </button>
-                                </span>
-                                <span data-toggle="modal" data-target="#modal-completarSol">
-                                    <button data-toggle="tooltip" title="Completar Solicitud" class="btn btn-success btn-mini"
-                                            onclick="MostrarCompletarDatosSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                        <i class="fa fa-plus-circle"></i>
-                                    </button>
-                                </span>
-                                <span data-toggle="modal" data-target="#modal-cancelar">
-                                    <button data-toggle="tooltip" title="Cancelar solicitud" class="btn btn-warning btn-mini"
-                                            onclick="MostrarModalCanSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
-                                        <i class="fa fa-close"></i>
-                                    </button>
-                                </span>
+                                <div class="btn-group">
+                                    <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" href="#" style="font-size: 11px;">
+                                        Ver acciones <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" style="margin-left: -55px !important;">
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-solViatico"
+                                               onclick="VerDetalleSolViatico( @(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                Ver Solicitud
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2"
+                                               data-formato-text="pathArchivoAutorizacion" data-nombreArchivo="ver oficio de comisión" data-solicitud="@solicitud.idSolitud">
+                                                Ver oficio de comisión
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-completarSol"
+                                               onclick="MostrarCompletarDatosSol( @(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                Completar Solicitud
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-cancelar"
+                                               onclick="MostrarModalCanSol( @(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                Cancelar solicitud
+                                            </a>
+                                        </li>
+                                           
+                                    </ul>
+                                </div>
                             </td>
-
                         </tr>
                         }
                     </tbody>
@@ -91,6 +104,7 @@
 </div>
 
 
+@section modals{
 
 <div class="modal fade" id="modal-completarSol" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -240,6 +254,45 @@
 
 </div>
 
+<div class="modal fade" id="modal-subir-archivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br>
+                <i class="fa fa-cloud-download fa-5x"></i>
+                <h4 id="myModalLabel" class="semi-bold">Formulario para visualizar formatos.</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li id="item-verArchivo" class="active">
+                                <a href="#tabVerArchivo" role="tab" data-toggle="tab">Visualizar oficio de comisión</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabVerArchivo">
+                                <div class="row">
+                                    <div class="col-md-12" id="content-archivosSolicitud">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+}
 
 @section scripts{
     <link href="~/Content/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet" />
@@ -256,6 +309,5 @@
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <script src="~/Content/assets/js/datatables.js"></script>
-
     <script src="~/Content/assets/js/Evt/Viativos/evtAutSolicitudes.js"></script>
 }
