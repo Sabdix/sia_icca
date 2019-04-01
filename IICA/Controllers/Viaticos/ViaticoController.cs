@@ -147,7 +147,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado));
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado,EnumEtapaSolicitudViaticos.GENERADA));
             }
             catch (Exception ex)
             {
@@ -635,6 +635,20 @@ namespace IICA.Controllers.Viaticos
             catch (Exception ex)
             {
                 return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        public ActionResult MisSolicitudesAutorizadas()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado,EnumEtapaSolicitudViaticos.VERIFICACION_GASTOS));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

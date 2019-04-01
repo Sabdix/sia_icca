@@ -67,7 +67,7 @@ namespace IICA.Models.DAO.Viaticos
             return result;
         }
 
-        public List<SolicitudViatico> ObtenerMisSolicitudes(string emCveEmpleado)
+        public List<SolicitudViatico> ObtenerMisSolicitudes(string emCveEmpleado, EnumEtapaSolicitudViaticos enumEtapaSolicitudViatico)
         {
             List<SolicitudViatico> solicitudes = new List<SolicitudViatico>();
             SolicitudViatico solicitudViatico;
@@ -76,8 +76,9 @@ namespace IICA.Models.DAO.Viaticos
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(1);
+                    dbManager.CreateParameters(2);
                     dbManager.AddParameters(0, "Em_Cve_Empleado", emCveEmpleado);
+                    dbManager.AddParameters(1, "Id_Etapa_Solicitud", enumEtapaSolicitudViatico);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTAR_SOLICITUDES_USUARIO");
                     while (dbManager.DataReader.Read())
                     {

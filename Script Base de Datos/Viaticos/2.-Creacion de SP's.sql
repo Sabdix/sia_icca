@@ -457,8 +457,8 @@ Objetivo		VERIFICA SI SE PUEDE ORIGINAR UNA SOLICITUD
 
 create proc DT_SP_CONSULTAR_SOLICITUDES_USUARIO
 
-	@Em_Cve_Empleado varchar(20)
-	
+	@Em_Cve_Empleado varchar(20),
+	@Id_Etapa_Solicitud int
 		-- parametros
 		-- [aquí van los parámetros]
 
@@ -496,8 +496,9 @@ as
 					on vs.Em_Cve_Empleado=emp.Em_Cve_Empleado
 				where 
 					vs.Em_Cve_Empleado=@Em_Cve_Empleado 
-					and vs.Id_etapa_solicitud = 1
+					--and vs.Id_etapa_solicitud = 1
 					and vs.Id_estatus_solicitud <> 3
+					and vs.Id_Etapa_Solicitud = @Id_Etapa_Solicitud
 			
 	end -- procedimiento
 	
@@ -1290,6 +1291,8 @@ BEGIN
 		3	Archivo 10% no comprobable
 		4	Informe de viatico
 		5	Archivo de reintegro
+		6	Formato i4
+		7	Formato i5
 
 		==========================*/
 		IF(@Id_Archivo= 1)
@@ -1326,6 +1329,21 @@ BEGIN
 			SET Path_Archivo_Reintegro = @Path_Archivo
 			WHERE Id_Solicitud = @Id_Solicitud
 		END
+
+		IF(@Id_Archivo= 6)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_i4 = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
+		IF(@Id_Archivo= 7)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_i5 = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
 
 		IF @@ERROR<>0
 		BEGIN

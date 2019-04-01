@@ -59,6 +59,9 @@ namespace IICA.Models.Entidades.Viaticos
         public bool realizarComprobacionGastos { get; set; }
         public bool comprobarItinerarioAereo { get; set; }
 
+        public string pathI4 { get; set; }
+        public string pathI5 { get; set; }
+
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();

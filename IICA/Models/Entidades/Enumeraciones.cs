@@ -106,7 +106,9 @@ namespace IICA.Models.Entidades
 		ARCHIVO_COMPROBANTE_INSTANCIA = 2,
 		ARCHIVO_10_NO_COMPROBABLE = 3,
 		ARCHIVO_INFORME_VIATICO = 4,
-		ARCHIVO_REINTEGRO = 5
+		ARCHIVO_REINTEGRO = 5,
+        ARCHIVO_I4 = 6,
+        ARCHIVO_I5 = 7
     }
     public enum JustificacionViaticoSolcitud
     {
