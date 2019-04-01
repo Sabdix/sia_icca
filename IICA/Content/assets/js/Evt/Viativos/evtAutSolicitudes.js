@@ -205,3 +205,48 @@ function ObtenerFechasJsonSolSeleccionada(solicitud) {
     solSeleccionada.fechaInicio = fechaInicio.toLocaleDateString();
     solSeleccionada.fechaFin = fechaFin.toLocaleDateString();
 }
+
+/*=============================================================================================
+======================================      MOSTRAR ARCHIVO_SOL     ====================================
+===============================================================================================*/
+
+function MostrarFormato(idSolicitud, formato) {
+    $.ajax({
+        data: { id: idSolicitud },
+        url: rootUrl("/Viatico/DetalleSolicitudJson"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            if (data.status) {
+
+                var url = data.objeto[formato];
+                if (url !== "" && url != undefined) {
+                    url = rootUrl(url);
+                    $("#item-verArchivo").show();
+                    $('#content-archivosSolicitud').html("");
+
+                    var iframe = $('<embed src="" width="100%" height="600" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+                    iframe.innerHTML = "";
+                    iframe.attr('src', url);
+                    $('#content-archivosSolicitud').append(iframe);
+                    var content = iframe.innerHTML;
+                    iframe.innerHTML = content;
+                }
+                else {
+                    $("#item-verArchivo").hide();
+                    $("#content-archivosSolicitud").html("");
+                }
+            } else {
+                $("#item-verArchivo").hide();
+                $("#content-archivosSolicitud").html("");
+            }
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
