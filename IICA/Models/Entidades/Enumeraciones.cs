@@ -59,6 +59,7 @@ namespace IICA.Models.Entidades
         FORMATO_ADICIONAL = 2,
         FoRMATO_ST7_CALIFICACION_RT,
         FORMATO_ST7_ALTA_RT,
+        FORMATO_RT_CUESTIONARIO
     }
 
     public enum FormatosPermiso

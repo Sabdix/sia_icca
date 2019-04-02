@@ -180,10 +180,16 @@ function MostrarFormato(idIncapacidad,formato) {
                     url = rootUrl(url);
                     $("#item-verArchivo").show();
                     $('#content-formato').html("");
-                    var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    //var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    //iframe.attr('src', url);
+                    //$('#content-formato').append(iframe);
+                    //iframe[0].contentWindow.location.reload();
+                    var iframe = $('<embed src="" width="100%" height="600" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+                    iframe.innerHTML = "";
                     iframe.attr('src', url);
                     $('#content-formato').append(iframe);
-                    iframe[0].contentWindow.location.reload();
+                    var content = iframe.innerHTML;
+                    iframe.innerHTML = content;
                 }
                 else {
                     $("#item-verArchivo").hide();

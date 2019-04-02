@@ -170,6 +170,7 @@ namespace IICA.Models.DAO.PVI
                         incapacidad.formatoAdicional = dbManager.DataReader["Formato_Adicional"] == DBNull.Value ? "" : dbManager.DataReader["Formato_Adicional"].ToString();
                         incapacidad.formatoST7AltaRT = dbManager.DataReader["Formato_ST7_Alta_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Alta_RT"].ToString();
                         incapacidad.formatoST7CalificacionRT = dbManager.DataReader["Formato_ST7_Calificacion_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Calificacion_RT"].ToString();
+                        incapacidad.formatoRTCuestionario = dbManager.DataReader["Formato_RT_cuestionario"] == DBNull.Value ? "" : dbManager.DataReader["Formato_RT_cuestionario"].ToString();
                         incapacidades.Add(incapacidad);
                     }
                 }
@@ -244,6 +245,7 @@ namespace IICA.Models.DAO.PVI
                             incapacidad.formatoAdicional = dbManager.DataReader["Formato_Adicional"] == DBNull.Value ? "" : dbManager.DataReader["Formato_Adicional"].ToString();
                             incapacidad.formatoST7AltaRT = dbManager.DataReader["Formato_ST7_Alta_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Alta_RT"].ToString();
                             incapacidad.formatoST7CalificacionRT = dbManager.DataReader["Formato_ST7_Calificacion_RT"] == DBNull.Value ? "" : dbManager.DataReader["Formato_ST7_Calificacion_RT"].ToString();
+                            incapacidad.formatoRTCuestionario = dbManager.DataReader["Formato_RT_cuestionario"] == DBNull.Value ? "" : dbManager.DataReader["Formato_RT_cuestionario"].ToString();
                             result.status = true;
                             result.objeto = incapacidad;
                         }else

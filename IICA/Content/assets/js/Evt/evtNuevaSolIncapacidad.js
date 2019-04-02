@@ -35,7 +35,8 @@ $(document).ready(function () {
     });
 
     $("#fechaInicio").datepicker('setDate', moment().toDate());
-    $("#fechaFin").datepicker('setDate', moment().add('days', 1).toDate());
+    //$("#fechaFin").datepicker('setDate', moment().add('days', 1).toDate());
+    $("#fechaFin").val(moment().add('days', 1).format('YYYY/MM/DD'));
 
     $("#btn-guardar-sol").click(function (e) {
         if ($("#form-nuevaSol").valid()) {
