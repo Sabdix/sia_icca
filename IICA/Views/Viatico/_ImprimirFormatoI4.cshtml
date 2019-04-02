@@ -2,6 +2,7 @@
 @model IICA.Models.Entidades.Viaticos.SolicitudViatico
 @using IICA.Models.Entidades.Viaticos
 @using System.Web.Script.Serialization;
+@using IICA.Models.Entidades;
 
 
 <style>
@@ -105,7 +106,8 @@
             <td rowspan="3"><img src="http://www.iicarhmexico.com/Sia_IICA/Content/assets/img/logo_iica.png" width="200" height="180" /></td>
         </tr>
         <tr class="text-right">
-            <td><label class="text-left">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS </label><br/> 
+            <td><label class="text-center">FORMULARIO I4 </label><br /> 
+                <label class="text-left">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS </label><br/> 
             <label class="text-center">UNIDAD OPERATIVA:@Model.usuario.programa @Model.usuario.departamento</label> <br/>
             <label class="text-center">FECHA:@Model.fechaAlta</label>
          </td>
@@ -184,10 +186,10 @@
                             <tr>
                                   @if (Model.justificacion.idJustificacion == 1)
                                   {
-                                    <td><label> X </label></td>}
+                                    <td style="width:20px; text-align:center;"><label> X </label></td>}
                                   else
                                   {
-                                    <td>-</td>
+                                    <td style="width:20px; text-align:center;">-</td>
                                   }
                             </tr>
                     </table>
@@ -199,10 +201,10 @@
                         <table border="1">
                             <tr>
                                 @if (Model.justificacion.idJustificacion == 2)
-                                { <td><label> X </label></td>}
+                                { <td style="width:20px; text-align:center;"><label> X </label></td>}
                                 else
                                 {
-                                    <td>-</td>
+                                    <td style="width:20px; text-align:center;">-</td>
                                 }
                            </tr>
                     </table>
@@ -214,10 +216,10 @@
                         <table border="1">
                             <tr>
                                 @if (Model.justificacion.idJustificacion == 3)
-                                { <td><label> X </label></td>}
+                                { <td style="width:20px; text-align:center;"><label> X </label></td>}
                                 else
                                 {
-                                    <td>-</td>
+                                    <td style="width:20px; text-align:center;">-</td>
                                 }
                             </tr>
                         </table>
@@ -230,17 +232,17 @@
     </table>
     <table border="0">
         <tr>
-            <td>Relación de gastos pendientes:</td>
-            <td>"NO"</td>
+            <td><label>Relación de gastos pendientes:</label></td>
+            <td><label>"NO"</label></td>
             <td width="25">&nbsp;</td>
-            <td>Informe de viaje pendiente:</td>
-            <td>"NO"</td>
+            <td><label>Informe de viaje pendiente:</label></td>
+            <td><label>"NO"</label></td>
         </tr>
         <tr>
-            <td>ITINERARIO:</td>
+            <td><label>ITINERARIO:</label></td>
             <td></td>
             <td width="25">&nbsp;</td>
-            <td>Duración estimada del viaje:</td>
+            <td><label>Duración estimada del viaje:</label></td>
             <td><label>@(Model.duracionViaje + " día(s)")</label></td>
         </tr>
     </table>
@@ -266,7 +268,7 @@
                             <tr>
                                 <td>@itinerario.origen</td>
                                 <td>@itinerario.destino</td>
-                                <td>@Convert.ToDateTime(itinerario.fechaSalida).ToShortDateString()</td>
+                                <td>@(itinerario.tipoSalida.idTipoSalida==Convert.ToInt32(EnumTipoSalida.IDA) ? Convert.ToDateTime(Model.fechaInicio).ToShortDateString(): Convert.ToDateTime(Model.fechaFin).ToShortDateString())</td>
                                 <td>@itinerario.medioTransporte.descripcion</td>
                                 <td>@(itinerario.linea + "/" + itinerario.numeroAsiento)</td>
                                 <td>@(string.IsNullOrEmpty(itinerario.horaSalida) ? "N/A" : itinerario.horaSalida )</td>
@@ -378,7 +380,7 @@
             <td>
                 <table border="1">
                     <tr>
-                        <td><label> @Model.montoAutorizado </label></td>
+                        <td style="width:80px;text-align:center;"><label> @Model.montoAutorizado </label></td>
                     </tr>
                 </table>
             </td>
@@ -388,7 +390,7 @@
             <td>
                 <table border="1">
                     <tr>
-                        <td><label>-</label></td>
+                        <td style="width:80px;text-align:center;"><label>-</label></td>
                     </tr>
                 </table>
             </td>
@@ -398,7 +400,7 @@
             <td>
                 <table border="1">
                     <tr>
-                        <td><label> - </label></td>
+                        <td style="width:80px;text-align:center;";><label> - </label></td>
                     </tr>
                 </table>
             </td>
@@ -408,14 +410,14 @@
             <td>
                 <table border="1">
                     <tr>
-                        <td><label> - </label></td>
+                        <td style="width:80px;text-align:center;";><label> - </label></td>
                     </tr>
                 </table>
             </td>
         </tr>
     </table>
 </div>
-
+<br />
 <div id="gastos" style="font-size: 10px;"  class="md-90">
     <label style="font-size:x-small">
         RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE 5 DÍAS HABILES POSTERIORES A SU RETORNO</label>
@@ -462,7 +464,8 @@
             </tbody>
         </table>
 </div>
-
+<br/>
+<br/>
 <table border="0">
         <tr>
             <td>&nbsp;</td>

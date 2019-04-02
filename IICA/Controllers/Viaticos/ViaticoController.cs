@@ -130,7 +130,7 @@ namespace IICA.Controllers.Viaticos
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days;
+                solicitudViatico_.duracionViaje = Convert.ToDecimal((solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days)+Convert.ToDecimal(0.5);
                 Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
