@@ -125,7 +125,7 @@ namespace IICA.Models.DAO.Viaticos
 		
 		//Historial de solicitudes del empleado
 		
-		        public List<SolicitudViatico> ObtenerMisSolicitudesHistorial(string emCveEmpleado)
+		public List<SolicitudViatico> ObtenerMisSolicitudesHistorial(string emCveEmpleado)
         {
             List<SolicitudViatico> solicitudes = new List<SolicitudViatico>();
             SolicitudViatico solicitudViatico;
@@ -134,7 +134,7 @@ namespace IICA.Models.DAO.Viaticos
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(2);
+                    dbManager.CreateParameters(1);
                     dbManager.AddParameters(0, "Em_Cve_Empleado", emCveEmpleado);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTAR_HISTORIAL_SOLICITUDES_USUARIO");
                     while (dbManager.DataReader.Read())
