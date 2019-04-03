@@ -7,54 +7,9 @@ $(document).ready(function () {
     $('#tabla-solicitud-vacaciones').dataTable();
 
     ///============================ SUBIDA DE ARCHIVO DE AUTORIZACION   ============================
-    $(".subirFormato").click(function () {
+    $(".mostrarFormato").click(function () {
         solSeleccionada = JSON.parse($(this).attr("data-vacacion"));
-        formato = $(this).attr("data-formato");
-        formatoText = $(this).attr("data-formato-text");
         MostrarFormato(solSeleccionada.idVacacion);
-        $("#item-dropzone a").trigger("click");
-        myDropzone.removeAllFiles(true);
-        //$("#formDropZone").empty();
-    });
-
-
-    $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
-    myAwesomeDropzone = {
-        url: rootUrl("/Vacacion/ActualizarFormatoVacacion"),
-        addRemoveLinks: true,
-        paramName: "archivo",
-        maxFilesize: 4, // MB
-        dictRemoveFile: "Remover",
-        acceptedFiles: ".pdf",
-        //params: {
-        //    idIncapacidad: idIncapacidad,
-        //    formato: formato
-        //},
-        sending: function (file, xhr, formData) {
-            for (var key in solSeleccionada) {
-                formData.append(key, solSeleccionada[key]);
-            }
-            //formData.append("permiso_", permiso);
-            formData.append("formato", formato);
-        },
-        success: function (file, data) {
-            swal("Subida Exitosa", data.mensaje, "success");
-            file.previewElement.classList.add("dz-success");
-            if (data.status === true) {
-                MostrarNotificacionLoad("success", data.mensaje, 3000);
-            } else {
-                MostrarNotificacionLoad("error", data.mensaje, 3000);
-            }
-            $("#modal-subir-archivo").modal("hide");
-        },
-        error: function (file, response) {
-            file.previewElement.classList.add("dz-error");
-            swal("Error", "No se ha logrado subir correctamente el formato, intente mas tarde", "error");
-        }
-    } // FIN myAwesomeDropzone
-    var myDropzone = new Dropzone("#dZUpload", myAwesomeDropzone);
-    myDropzone.on("complete", function (file, response) {
-
     });
     //---------------------------------------------------------------------------------------------------
 
@@ -82,18 +37,22 @@ function MostrarFormato(idVacacion) {
                     url = rootUrl(url);
                     $("#item-verArchivo").show();
                     $('#content-formato').html("");
-                    var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    //var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    //iframe.attr('src', url);
+                    //$('#content-formato').append(iframe);
+                    //iframe[0].contentWindow.location.reload();
+                    var iframe = $('<embed src="" width="100%" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+                    iframe.innerHTML = "";
                     iframe.attr('src', url);
                     $('#content-formato').append(iframe);
-                    iframe[0].contentWindow.location.reload();
+                    var content = iframe.innerHTML;
+                    iframe.innerHTML = content;
                 }
                 else {
-                    $("#item-verArchivo").hide();
-                    $("#content-formato").html("");
+                    $("#content-formato").html("<h3>No se encontro ningun archivo</h3>");
                 }
             } else {
-                $("#item-verArchivo").hide();
-                $("#content-formato").html("");
+                $("#content-formato").html("<h3>No se encontro ningun archivo</h3>");
             }
         },
         error: function (xhr, status, error) {

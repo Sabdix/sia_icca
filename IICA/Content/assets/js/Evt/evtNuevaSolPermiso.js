@@ -1,4 +1,6 @@
 ﻿var totalHoras;
+var solSeleccionada;
+var formatoAutDropzone;
 
 $(document).ready(function () {
 
@@ -31,9 +33,54 @@ $(document).ready(function () {
 
     $("#btn-guardar-sol").click(function (e) {
         if ($("#form-nuevaSol").valid()) {
+            if (formatoAutDropzone.files.length < 1 || !formatoAutDropzone.files[0].accepted) {
+                swal("Notificación", "Es necesario anexar el archivo respectivo a la autorización del permiso.", "error");
+                return;
+            }
+            solSeleccionada = castFormToJson($("#form-nuevaSol").serializeArray());
             ConfirmarEnviarSolicitud();
         }
     });
+
+
+    ///============================ SUBIDA DE ARCHIVO DE AUTORIZACION   ============================
+    $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+    myAwesomeDropzone = {
+        url: rootUrl("/Permiso/RegistrarSolicitud"),
+        addRemoveLinks: true,
+        paramName: "archivo",
+        maxFilesize: 4, // MB
+        dictRemoveFile: "Remover",
+        acceptedFiles: ".pdf",
+        maxFiles: 1,
+        autoProcessQueue: false,
+        //params: {
+        //    idIncapacidad: idIncapacidad,
+        //    formato: formato
+        //},
+        init: function () {
+            this.on("maxfilesexceeded", function (file) {
+                this.removeFile(file);
+                swal("Error", "No se puede subir mas de un archivo", "error");
+                });
+        },
+        sending: function (file, xhr, formData) {
+            for (var key in solSeleccionada) {
+                formData.append(key, solSeleccionada[key]);
+            }
+        },
+        success: function (file, data) {
+            file.previewElement.classList.add("dz-success");
+            OnSuccesRegistrarSolicitud(data);
+        },
+        error: function (file, response) {
+            file.previewElement.classList.add("dz-error");
+            swal("Error",response, "error");
+        }
+    } // FIN myAwesomeDropzone
+    formatoAutDropzone = new Dropzone("#dZUpload", myAwesomeDropzone);
+    //---------------------------------------------------------------------------------------------------
+
     
 
 });
@@ -52,7 +99,8 @@ function ConfirmarEnviarSolicitud() {
     }, function (isConfirm) {
         if (isConfirm) {
             swal.close();
-            $("#form-nuevaSol").submit();
+            formatoAutDropzone.processQueue();
+            //$("#form-nuevaSol").submit();
         } else {
             swal("Cancelado", "Se ha cancelado la operación", "error");
         }
@@ -111,4 +159,59 @@ function ImprimirFormatoPermiso(id) {
         }
     });
 
+}
+
+/*==========================================================================================================*/
+/*=============================     SUBIDA DE ARCHIVO DE AUTORIZACION   ====================================*/
+/*==========================================================================================================*/
+
+function MostrarFormato(idPermiso) {
+    $.ajax({
+        data: { id: idPermiso },
+        url: rootUrl("/Permiso/ObtenerPermiso"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            if (data.status) {
+                var url = data.objeto.PathFormatoAutorizacion;
+                if (url !== "") {
+                    url = rootUrl(url);
+                    $("#item-verArchivo").show();
+                    $('#content-formato').html("");
+                    var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    iframe.attr('src', url);
+                    $('#content-formato').append(iframe);
+                    iframe[0].contentWindow.location.reload();
+                }
+                else {
+                    $("#item-verArchivo").hide();
+                    $("#content-formato").html("");
+                }
+            } else {
+                $("#item-verArchivo").hide();
+                $("#content-formato").html("");
+            }
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function castFormToJson(formArray) {
+    var obj = {};
+    $.each(formArray, function (i, pair) {
+        var cObj = obj, pObj = {}, cpName;
+        $.each(pair.name.split("."), function (i, pName) {
+            pObj = cObj;
+            cpName = pName;
+            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
+        });
+        pObj[cpName] = pair.value;
+    });
+    return obj;
 }

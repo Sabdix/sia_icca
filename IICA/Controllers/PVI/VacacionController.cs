@@ -44,6 +44,15 @@ namespace IICA.Controllers.PVI
                 Result result = vacacionDAO.ActualizarVacacion(vacacion_);
                 if (result.status)
                 {
+                    string pathFormato = ObtenerFormatoHttpPost(Request, 
+                        (Vacacion)result.objeto,FormatosPermiso.FORMATO_AUTORIZACION.ToString(), 
+                        vacacion_.emCveEmpleado);
+                    if (!string.IsNullOrEmpty(pathFormato))
+                    {
+                       vacacionDAO.ActualizarFormatoPermiso(vacacion_, pathFormato);
+                    }
+                    else
+                        result.mensaje = "No se logro subir el formato, intente mas tarde.";
                     try { Email.NotificacionVacacion((Vacacion)result.objeto); }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }

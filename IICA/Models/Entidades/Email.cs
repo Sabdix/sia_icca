@@ -167,7 +167,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoVacacion(vacacion);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Permiso", cuerpo, vacacion.emCveEmpleado);
+                EnviarCorreExterno("Sistema Integral IICA México - Vacación", cuerpo, vacacion.emCveEmpleado);
             }
             catch (Exception ex)
             {
