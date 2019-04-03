@@ -261,6 +261,7 @@
     <Content Include="Content\assets\js\Evt\Viativos\evtMisComproSol.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolAutorizadas.js" />
+    <Content Include="Content\assets\js\Evt\Viativos\evtMisSolHistorial.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolViaticos.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtNuevaSolViatico.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtSolCheque.js" />
@@ -562,6 +563,7 @@
     <Content Include="Views\Viatico\_ItinerarioAereo.cshtml" />
     <Content Include="Views\Viatico\_ImprimirFormatoI5.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudesAutorizadas.cshtml" />
+    <Content Include="Views\Viatico\MisSolicitudesHistorial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
