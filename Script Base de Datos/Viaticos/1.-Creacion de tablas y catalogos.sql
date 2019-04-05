@@ -257,7 +257,9 @@ Id_Etapa_Solicitud INT,
 Id_Estatus_Solicitud INT,
 Em_Cve_Empleado VARCHAR(20),
 Em_Cve_Empleado_Autoriza VARCHAR(20) NULL,
-Id_Tipo_Viaje INT
+Id_Tipo_Viaje INT,
+Path_i4 VARCHAR(300) NULL,
+Path_i5 VARCHAR(300) NULL,
 )
 GO
 --==========================================================================================================================

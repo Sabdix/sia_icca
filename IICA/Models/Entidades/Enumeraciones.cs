@@ -59,6 +59,7 @@ namespace IICA.Models.Entidades
         FORMATO_ADICIONAL = 2,
         FoRMATO_ST7_CALIFICACION_RT,
         FORMATO_ST7_ALTA_RT,
+        FORMATO_RT_CUESTIONARIO
     }
 
     public enum FormatosPermiso
@@ -106,7 +107,9 @@ namespace IICA.Models.Entidades
 		ARCHIVO_COMPROBANTE_INSTANCIA = 2,
 		ARCHIVO_10_NO_COMPROBABLE = 3,
 		ARCHIVO_INFORME_VIATICO = 4,
-		ARCHIVO_REINTEGRO = 5
+		ARCHIVO_REINTEGRO = 5,
+        ARCHIVO_I4 = 6,
+        ARCHIVO_I5 = 7
     }
     public enum JustificacionViaticoSolcitud
     {

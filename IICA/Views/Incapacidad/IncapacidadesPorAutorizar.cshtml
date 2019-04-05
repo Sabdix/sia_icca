@@ -88,7 +88,7 @@
                                             @if (!string.IsNullOrEmpty(incapacidad.formatoST7CalificacionRT))
                                             {
                                                 <li>
-                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato(@incapacidad.formatoST7CalificacionRT)" data-target="#modal-formato">
+                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato('@incapacidad.formatoST7CalificacionRT')" data-target="#modal-formato">
                                                         ST7 calificacion RT
                                                     </a>
                                                 </li>
@@ -97,8 +97,16 @@
                                             @if (!string.IsNullOrEmpty(incapacidad.formatoST7AltaRT))
                                             {
                                                 <li>
-                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato(@incapacidad.formatoST7AltaRT)" data-target="#modal-formato">
+                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato('@incapacidad.formatoST7AltaRT')" data-target="#modal-formato">
                                                         ST7 alta RT
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(incapacidad.formatoRTCuestionario))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" onclick="mostrarFormato('@incapacidad.formatoRTCuestionario')" data-target="#modal-formato">
+                                                        RT Cuestionario
                                                     </a>
                                                 </li>
                                             }

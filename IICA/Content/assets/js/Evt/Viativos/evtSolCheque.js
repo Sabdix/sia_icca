@@ -90,6 +90,7 @@ function OnSuccesGenerarCheque(data) {
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
         ImprimirFormatoI4(data.objeto.idSolitud);
+        setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
@@ -110,7 +111,7 @@ function ImprimirFormatoI4(id) {
             setTimeout(function () {
                 $("#content-impresion").html("");
             }, 1000);
-            setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);
+            
         },
         error: function (xhr, status, error) {
             setTimeout(function () { window.location = rootUrl("/Viatico/SolicitudesGenerarCheque"); }, 2000);

@@ -43,6 +43,11 @@ $(document).ready(function () {
 
     $("#btn-guardar-sol").click(function (e) {
         if ($("#form-nuevaSol").valid()) {
+            if (formatoAutDropzone.files.length < 1 || !formatoAutDropzone.files[0].accepted) {
+                swal("Notificación", "Es necesario anexar el archivo respectivo a la autorización del permiso.", "error");
+                return;
+            }
+            solSeleccionada = castFormToJson($("#form-nuevaSol").serializeArray());
             ConfirmarEnviarSolicitud();
         }
     });
@@ -51,6 +56,41 @@ $(document).ready(function () {
         if ($("#diasFestivos").val() > 0)
             CalcularTotalDias();
     });
+
+    ///============================ SUBIDA DE ARCHIVO DE AUTORIZACION   ============================
+    $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
+    myAwesomeDropzone = {
+        url: rootUrl("/Vacacion/RegistrarSolicitud"),
+        addRemoveLinks: true,
+        paramName: "archivo",
+        maxFilesize: 4, // MB
+        dictRemoveFile: "Remover",
+        acceptedFiles: ".pdf",
+        maxFiles: 1,
+        autoProcessQueue: false,
+        init: function () {
+            this.on("maxfilesexceeded", function (file) {
+                this.removeFile(file);
+                swal("Error", "No se puede subir mas de un archivo", "error");
+            });
+        },
+        sending: function (file, xhr, formData) {
+            for (var key in solSeleccionada) {
+                formData.append(key, solSeleccionada[key]);
+            }
+        },
+        success: function (file, data) {
+            file.previewElement.classList.add("dz-success");
+            OnSuccesRegistrarSolicitud(data);
+        },
+        error: function (file, response) {
+            file.previewElement.classList.add("dz-error");
+            swal("Error", response, "error");
+        }
+    } // FIN myAwesomeDropzone
+    formatoAutDropzone = new Dropzone("#dZUpload", myAwesomeDropzone);
+    //---------------------------------------------------------------------------------------------------
+
 
 });
 
@@ -68,7 +108,8 @@ function ConfirmarEnviarSolicitud() {
     }, function (isConfirm) {
         if (isConfirm) {
             swal.close();
-            $("#form-nuevaSol").submit();
+            formatoAutDropzone.processQueue();
+            //$("#form-nuevaSol").submit();
         } else {
             swal("Cancelado", "Se ha cancelado la operación", "error");
         }
@@ -183,4 +224,18 @@ function ImprimirReporteVacaciones(id) {
             ControlErrores(xhr, status, error);
         }
     });
+}
+
+function castFormToJson(formArray) {
+    var obj = {};
+    $.each(formArray, function (i, pair) {
+        var cObj = obj, pObj = {}, cpName;
+        $.each(pair.name.split("."), function (i, pName) {
+            pObj = cObj;
+            cpName = pName;
+            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
+        });
+        pObj[cpName] = pair.value;
+    });
+    return obj;
 }

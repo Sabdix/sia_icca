@@ -89,7 +89,9 @@ BEGIN
 			else 0
 			end realizar_comprobacion_gastos,
 			COALESCE((select top 1 1 from DT_TBL_VIATICO_ITINERARIO where Id_Solicitud = vs.Id_Solicitud and  Id_Medio_Transporte=2),0) comprobar_itinerario_aereo,
-			vs.consecutivo_anual
+			vs.consecutivo_anual,
+			Coalesce( Path_i4, '') Path_i4,
+			Coalesce( Path_i5, '') Path_i5
 		from 
 			DT_TBL_VIATICO_SOLICITUD  vs
 			join DT_CAT_MEDIO_TRANSPORTE mt
@@ -131,14 +133,49 @@ BEGIN
 			Id_Solicitud = @Id_solicitud
 
 		-------------comprobaciones-------------
-		SELECT 
-			cg.*,
-			catGC.Descripcion gasto_comprobacion
-		FROM 
-			DT_TBL_VIATICO_COMPROBACION_GASTOS cg
-		inner join 
-			DT_CAT_GASTO_COMPROBACION catGC on cg.Id_Gasto_Comprobacion = catGC.Id_Gasto_Comprobacion
-		WHERE Id_Solicitud=@Id_Solicitud
+		IF (SELECT Marginal FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud)=0
+		BEGIN
+			--Hago el select orginal (el del else) y luego hago un union a un query con todo esto
+			SELECT 
+				cg.*,
+				catGC.Descripcion gasto_comprobacion
+			FROM 
+				DT_TBL_VIATICO_COMPROBACION_GASTOS cg
+			inner join 
+				DT_CAT_GASTO_COMPROBACION catGC on cg.Id_Gasto_Comprobacion = catGC.Id_Gasto_Comprobacion
+			WHERE Id_Solicitud=@Id_Solicitud
+			
+			union
+
+			SELECT
+				0 Id_Comprobacion_Gasto,
+				@Id_solicitud Id_Solicitud,
+				'' Comentario,
+				'' Path_Archivo_XML,
+				'' Path_Archivo_PDF,
+				'' Path_Archivo_SAT,
+				'' Path_Archivo_Otros,
+				0 Id_Gasto_Comprobacion,
+				'' Emisor,
+				(SELECT (Tarifa_de_Ida+Tarifa_de_Vuelta)+((Tarifa_de_Ida+Tarifa_de_Vuelta)*.1) FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud) Subtotal,
+				(SELECT (Tarifa_de_Ida+Tarifa_de_Vuelta)+((Tarifa_de_Ida+Tarifa_de_Vuelta)*.1) FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud) Total,
+				'' Lugar,
+				'10% No Comprobable (No aplica)' Descripcion
+
+		END
+		ELSE
+		BEGIN
+			SELECT 
+				cg.*,
+				catGC.Descripcion gasto_comprobacion
+			FROM 
+				DT_TBL_VIATICO_COMPROBACION_GASTOS cg
+			inner join 
+				DT_CAT_GASTO_COMPROBACION catGC on cg.Id_Gasto_Comprobacion = catGC.Id_Gasto_Comprobacion
+			WHERE Id_Solicitud=@Id_Solicitud
+		END
+
+		
 
 	END
 

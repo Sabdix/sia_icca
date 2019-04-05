@@ -130,7 +130,7 @@ namespace IICA.Controllers.Viaticos
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
-                solicitudViatico_.duracionViaje = (solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days;
+                solicitudViatico_.duracionViaje = Convert.ToDecimal((solicitudViatico_.fechaFin - solicitudViatico_.fechaInicio).Days)+Convert.ToDecimal(0.5);
                 Result result = solicitudViaticoDAO.GuardarSolicitudViatico(solicitudViatico_);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -147,7 +147,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado));
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado,EnumEtapaSolicitudViaticos.GENERADA));
             }
             catch (Exception ex)
             {
@@ -635,6 +635,35 @@ namespace IICA.Controllers.Viaticos
             catch (Exception ex)
             {
                 return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        public ActionResult MisSolicitudesAutorizadas()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudes(usuarioSesion.emCveEmpleado,EnumEtapaSolicitudViaticos.VERIFICACION_GASTOS));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult MisSolicitudesHistorial()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudesHistorial(usuarioSesion.emCveEmpleado));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

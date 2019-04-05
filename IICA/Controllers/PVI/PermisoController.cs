@@ -46,6 +46,15 @@ namespace IICA.Controllers.PVI
                 Result result = permisoDAO.ActualizarPermiso(permiso_);
                 if (result.status)
                 {
+                    string pathFormato = ObtenerFormatoHttpPost(Request,(Permiso) result.objeto,
+                        FormatosPermiso.FORMATO_AUTORIZACION.ToString()
+                        ,permiso_.emCveEmpleado);
+                    if (!string.IsNullOrEmpty(pathFormato))
+                    {
+                        permisoDAO.ActualizarFormatoPermiso(permiso_, pathFormato);
+                    }
+                    else
+                        result.mensaje = "No se logro subir el formato, intente mas tarde.";
                     try { Email.NotificacionPermiso((Permiso)result.objeto); }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }

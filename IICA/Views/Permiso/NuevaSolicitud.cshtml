@@ -25,9 +25,9 @@
             <div class="grid-body no-border">
                 <br>
                 <div class="row">
-                    <div class="col-md-8 col-sm-8 col-md-8 col-vlg-offset-4">
+                    <div class="col-md-10 col-sm-10 col-md-10 col-vlg-offset-2">
                         @using (Ajax.BeginForm("RegistrarSolicitud", "Permiso",
-new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" }, new { autocomplete = "off", id="form-nuevaSol" }))
+new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegistrarSolicitud", OnFailure = "ControlErrores" }, new { autocomplete = "off", id = "form-nuevaSol" }))
                         {
                             <div class="row form-row">
                                 <div class="col-md-6">
@@ -57,11 +57,19 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-8">
+                                    <label class="form-label">Formato de autorización</label>
+                                    <div  id="formDropZone"></div>
+                                </div>
+                                
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-md-8">
                                     <label class="form-label">Motivo de permiso</label>
                                     @Html.TextAreaFor(x => x.motivoPermiso, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.fechaPermiso, "", new { @class = "error" })
+                                    @Html.ValidationMessageFor(x => x.motivoPermiso, "", new { @class = "error" })
                                 </div>
                             </div>
+                            <br />
                             <div class="row form-row">
                                 <div class="col-md-10">
                                     <button type="button" id="btn-guardar-sol" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>&nbsp;Guardar</button>
@@ -76,6 +84,11 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
     </div>
 </div>
 
+<style>
+    #dZUpload {
+        min-height: 150px !important;
+    }
+</style>
 
 @section scripts {
 
@@ -92,7 +105,8 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
-
+    <link href="~/Content/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" />
+    <script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
 
     <script src="~/Content/assets/js/Evt/evtNuevaSolPermiso.js"></script>
 }

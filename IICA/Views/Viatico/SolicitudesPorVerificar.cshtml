@@ -109,6 +109,15 @@
                                                     </a>
                                                 </li>
                                             }
+                                            @if (!string.IsNullOrEmpty(solicitud.pathArchivoReintegro))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="5"
+                                                       data-formato-text="pathArchivoReintegro" data-nombreArchivo="archivo de reintegro" data-solicitud="@solicitud.idSolitud">
+                                                        Archivo de reintegro
+                                                    </a>
+                                                </li>
+                                            }
                                             <li>
                                                 <a href="#" data-toggle="modal" data-target="#modal-devolver"
                                                    onclick="MostrarModalDevSol(@(new JavaScriptSerializer().Serialize(solicitud)))">

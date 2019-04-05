@@ -457,8 +457,8 @@ Objetivo		VERIFICA SI SE PUEDE ORIGINAR UNA SOLICITUD
 
 create proc DT_SP_CONSULTAR_SOLICITUDES_USUARIO
 
-	@Em_Cve_Empleado varchar(20)
-	
+	@Em_Cve_Empleado varchar(20),
+	@Id_Etapa_Solicitud int
 		-- parametros
 		-- [aquí van los parámetros]
 
@@ -496,8 +496,9 @@ as
 					on vs.Em_Cve_Empleado=emp.Em_Cve_Empleado
 				where 
 					vs.Em_Cve_Empleado=@Em_Cve_Empleado 
-					and vs.Id_etapa_solicitud = 1
+					--and vs.Id_etapa_solicitud = 1
 					and vs.Id_estatus_solicitud <> 3
+					and vs.Id_Etapa_Solicitud = @Id_Etapa_Solicitud
 			
 	end -- procedimiento
 	
@@ -762,10 +763,10 @@ BEGIN
 
 	UPDATE DT_TBL_VIATICO_SOLICITUD 
 	SET 
-		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(@Duracion_Viaje-.5))+@Monto_Gastos_Extras,
+		Monto_Viatico_Autorizado=(@Tarifa_Viatico*(@Duracion_Viaje))+@Monto_Gastos_Extras,
 		Pernocta=@Pernocta,
 		Marginal=@Marginal,
-		Tarifa_de_Ida=@Tarifa_Viatico*(@Duracion_Viaje-1),
+		Tarifa_de_Ida=@Tarifa_Viatico*(@Duracion_Viaje-.5),
 		Tarifa_de_Vuelta=@Tarifa_Viatico*(.5)
 	WHERE Id_Solicitud=@Id_Solicitud
 
@@ -776,7 +777,7 @@ BEGIN
 		SET @Tarifa_Viatico=0
 		GOTO EXIT_
 	EXIT_:
-		SELECT @status STATUS, @mensaje MENSAJE, (@Tarifa_Viatico*(@Duracion_Viaje-1)) TARIFA_DE_IDA,(@Tarifa_Viatico*(.5))TARIFA_DE_VUELTA
+		SELECT @status STATUS, @mensaje MENSAJE, (@Tarifa_Viatico*(@Duracion_Viaje-.5)) TARIFA_DE_IDA,(@Tarifa_Viatico*(.5))TARIFA_DE_VUELTA
 
 END
 GO
@@ -1290,6 +1291,8 @@ BEGIN
 		3	Archivo 10% no comprobable
 		4	Informe de viatico
 		5	Archivo de reintegro
+		6	Formato i4
+		7	Formato i5
 
 		==========================*/
 		IF(@Id_Archivo= 1)
@@ -1326,6 +1329,21 @@ BEGIN
 			SET Path_Archivo_Reintegro = @Path_Archivo
 			WHERE Id_Solicitud = @Id_Solicitud
 		END
+
+		IF(@Id_Archivo= 6)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_i4 = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
+		IF(@Id_Archivo= 7)
+		BEGIN
+			UPDATE DT_TBL_VIATICO_SOLICITUD 
+			SET Path_i5 = @Path_Archivo
+			WHERE Id_Solicitud = @Id_Solicitud
+		END
+
 
 		IF @@ERROR<>0
 		BEGIN
@@ -1385,10 +1403,10 @@ BEGIN
 		,case 
 			when vs.marginal = 0 then 1
 			when vs.marginal = 1 and COALESCE(
-				(select 1 from DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD where Id_Solicitud = vs.Id_Solicitud),0) =1 then 1
+				(select top 1 1 from DT_TBL_VIATICO_GASTO_EXTRA_SOLICITUD where Id_Solicitud = vs.Id_Solicitud),0) =1 then 1
 			else 0
 			end realizar_comprobacion_gastos,
-			COALESCE((select 1 from DT_TBL_VIATICO_ITINERARIO where Id_Solicitud = vs.Id_Solicitud and  Id_Medio_Transporte=2),0) comprobar_itinerario_aereo
+			COALESCE((select top 1 1 from DT_TBL_VIATICO_ITINERARIO where Id_Solicitud = vs.Id_Solicitud and  Id_Medio_Transporte=2),0) comprobar_itinerario_aereo
 	from 
 		DT_TBL_VIATICO_SOLICITUD  vs
 		join DT_CAT_MEDIO_TRANSPORTE mt
@@ -1490,3 +1508,70 @@ END
 GO
 
 GRANT EXECUTE ON DT_SP_ACTUALIZAR_PATH_ARCHIVO_ITINERARIO TO public;  
+
+--==========================================================================================================================
+-- se crea procedimiento DT_SP_CONSULTAR_SOLICITUDES_USUARIO
+if exists (select * from sysobjects where name like 'DT_SP_CONSULTAR_HISTORIAL_SOLICITUDES_USUARIO' and xtype = 'p')
+	drop proc DT_SP_CONSULTAR_HISTORIAL_SOLICITUDES_USUARIO
+go
+
+/*
+
+Autor			PICHARDO HURTADO OSCAR
+Fecha			20190319
+Objetivo		VERIFICA SI SE PUEDE ORIGINAR UNA SOLICITUD
+
+
+*/
+
+create proc DT_SP_CONSULTAR_HISTORIAL_SOLICITUDES_USUARIO
+
+	@Em_Cve_Empleado varchar(20)
+		-- parametros
+		-- [aquí van los parámetros]
+
+as
+
+	begin -- procedimiento
+				select vs.*
+					,mt.Descripcion medio_transporte
+					,j.Descripcion justificacion
+					,td.Descripcion tipo_divisa
+					,etapa.Id_etapa_solicitud
+					,etapa.Descripcion desc_etapa
+					,es.Id_estatus_solicitud
+					,es.Descripcion desc_estatus
+					,tv.Descripcion tipo_viaje
+					,coalesce(emp.Em_Nombre,'')Em_Nombre
+					,coalesce(emp.Em_Apellido_Paterno,'')Em_Apellido_Paterno
+					,coalesce(emp.Em_Apellido_Materno,'') Em_Apellido_Materno
+					,Em_Email
+				from 
+					DT_TBL_VIATICO_SOLICITUD  vs
+					join DT_CAT_MEDIO_TRANSPORTE mt
+					on vs.Id_Medio_Transporte=mt.Id_Medio_Transporte
+					join DT_CAT_JUSTIFICACION j
+					on vs.Id_Justificacion=j.Id_Justificacion
+					join DT_CAT_TIPO_DIVISA td
+					on vs.Id_Tipo_Divisa=td.Id_Tipo_Divisa
+					join DT_CAT_ETAPAS_SOLICITUD_VIATICO etapa
+					on vs.Id_etapa_solicitud=etapa.Id_etapa_solicitud
+					join DT_CAT_ESTATUS_SOLICITUD_VIATICO es
+					on vs.Id_Estatus_Solicitud=es.Id_estatus_solicitud
+					join DT_CAT_TIPO_VIAJE tv
+					on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
+					join Empleado emp
+					on vs.Em_Cve_Empleado=emp.Em_Cve_Empleado
+				where 
+					vs.Em_Cve_Empleado=@Em_Cve_Empleado 
+					--and vs.Id_etapa_solicitud = 1
+					--and vs.Id_estatus_solicitud <> 3
+					--and vs.Id_Etapa_Solicitud = @Id_Etapa_Solicitud
+			
+	end -- procedimiento
+	
+go
+
+grant exec on DT_SP_CONSULTAR_HISTORIAL_SOLICITUDES_USUARIO to public
+go
+--==========================================================================================================================
