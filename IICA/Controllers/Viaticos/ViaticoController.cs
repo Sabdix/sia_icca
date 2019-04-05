@@ -773,8 +773,8 @@ namespace IICA.Controllers.Viaticos
                             comprobacionGasto.subtotal = Convert.ToDouble(xn.Value);
                         if (string.Compare(xn.LocalName, "total", true) == 0)
                             comprobacionGasto.total = Convert.ToDouble(xn.Value);
-                        //if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
-                        //    comprobacionGasto.lugar = xn.Value.ToString(); //se comenta porq esta descripcion es muy larga
+                        if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
+                            comprobacionGasto.lugar = xn.Value.ToString(); //se lee tambien aqui el lugar porque en ocasiones no viene en el atributo de "localidad" del nodo del emisor
                         if (string.Compare(xn.LocalName, "fecha", true) == 0)
                             comprobacionGasto.fecha = string.IsNullOrEmpty(xn.Value.ToString()) ? DateTime.MinValue : Convert.ToDateTime(xn.Value.ToString());
                     }
