@@ -16,7 +16,7 @@ namespace IICA.Models.Entidades
         [Required(ErrorMessage = "Ingrese una contraseña")]
         public string contrasena { get; set; }
         public string email { get; set; }
-        public EnumTipoUsuario tipoUsuario { get; set; }
+        public RolUsuario rol { get; set; }
         public string rolUsuario { get; set; }
         public string programa { get; set; }
         public string departamento { get; set; }
@@ -27,5 +27,11 @@ namespace IICA.Models.Entidades
         public string CorreoProveedor { get; set; }
         public string ContrasenaProveedor { get; set; }
         public string puesto { get; set; }
+        public string usuario { get; set; }
+
+        public Usuario()
+        {
+            rol = new RolUsuario();
+        }
     }
 }

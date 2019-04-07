@@ -27,12 +27,12 @@ namespace IICA.Models.DAO
                     if (dbManager.DataReader.Read())
                     {
                         result.mensaje = usuario.programa = dbManager.DataReader["MENSAJE"] == DBNull.Value ? "" : dbManager.DataReader["MENSAJE"].ToString();
-                        if (Convert.ToInt32(dbManager.DataReader["STATUS"])==1)
+                        if (Convert.ToInt32(dbManager.DataReader["STATUS"]) == 1)
                         {
                             usuarioSesion = new Usuario();
                             usuarioSesion.emCveEmpleado = usuario.emCveEmpleado;
-                            usuario.tipoUsuario = dbManager.DataReader["Id_Tipo_Usuario"] == DBNull.Value ? EnumTipoUsuario.EMPLEADO : (EnumTipoUsuario)Convert.ToInt32(dbManager.DataReader["Id_Tipo_Usuario"].ToString());
-                            usuario.rolUsuario = dbManager.DataReader["Rol_Usuario"] == DBNull.Value ? "" : dbManager.DataReader["Rol_Usuario"].ToString();
+                            usuario.rol.idRol = dbManager.DataReader["Id_Tipo_Usuario"] == DBNull.Value ? Convert.ToInt32(EnumRolUsuario.EMPLEADO) : Convert.ToInt32(dbManager.DataReader["Id_Tipo_Usuario"]);
+                            usuario.rol.descripcion = dbManager.DataReader["Rol_Usuario"] == DBNull.Value ? "" : dbManager.DataReader["Rol_Usuario"].ToString();
                             usuario.nombre = dbManager.DataReader["Em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_nombre"].ToString();
                             usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
                             usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();

@@ -75,7 +75,7 @@ namespace IICA.Models.Entidades.Viaticos
             etapaSolicitud = new EtapaSolicitud();
             nivelMando = new NivelMando();
             autorizador = new Usuario();
-            autorizador.tipoUsuario = EnumTipoUsuario.AUTORIZADOR_PVI;
+            autorizador.rol.descripcion = EnumRolUsuario.AUTORIZADOR_PVI.ToString();
             comprobacionesGasto = new List<ComprobacionGasto>();
         }
     }
