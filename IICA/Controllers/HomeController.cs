@@ -64,6 +64,32 @@ namespace IICA.Controllers
             }
         }
 
+        [SessionExpire]
+        public ActionResult _MenuLeftRolesUsuario()
+        {
+            try
+            {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                if (usuarioSesion != null)
+                    return PartialView(usuarioSesion);
+                else
+                    return RedirectToAction("Index", "IICA");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult RolesUsuario()
+        {
+            Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+            if (usuarioSesion != null)
+                return View(usuarioSesion);
+            else
+                return RedirectToAction("Index", "IICA");
+        }
         public ActionResult SitioEnConstruccion()
         {
             return View();

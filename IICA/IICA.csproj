@@ -150,6 +150,7 @@
     <Compile Include="Controllers\PVI\IncapacidadController.cs" />
     <Compile Include="Controllers\PVI\PermisoController.cs" />
     <Compile Include="Controllers\PVI\VacacionController.cs" />
+    <Compile Include="Controllers\RolesUsuario\RolController.cs" />
     <Compile Include="Controllers\Viaticos\ViaticoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -158,6 +159,7 @@
     <Compile Include="Models\DAO\PVI\IncapacidadDAO.cs" />
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
+    <Compile Include="Models\DAO\RolesUsuario\RolDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\ComprobacionGastosDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\GastoComprobacionDAO.cs" />
@@ -165,6 +167,7 @@
     <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\NivelMandoDAO.cs" />
+    <Compile Include="Models\Entidades\RolUsuario.cs" />
     <Compile Include="Models\Entidades\Viaticos\ComprobacionGasto.cs" />
     <Compile Include="Models\Entidades\Viaticos\GastoComprobacion.cs" />
     <Compile Include="Models\Entidades\Viaticos\NivelMando.cs" />
@@ -257,6 +260,7 @@
     <Content Include="Content\assets\js\Evt\evtReporteSolPermisos.js" />
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
+    <Content Include="Content\assets\js\Evt\RolesUsuario\evtAdministradores.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisComproSol.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
@@ -564,6 +568,10 @@
     <Content Include="Views\Viatico\_ImprimirFormatoI5.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudesAutorizadas.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudesHistorial.cshtml" />
+    <Content Include="Views\Home\_MenuLeftRolesUsuario.cshtml" />
+    <Content Include="Views\Shared\_LayoutRolesUsuario.cshtml" />
+    <Content Include="Views\Home\RolesUsuario.cshtml" />
+    <Content Include="Views\Rol\UsuariosAdministradores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
