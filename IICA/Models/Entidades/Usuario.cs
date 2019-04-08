@@ -21,6 +21,7 @@ namespace IICA.Models.Entidades
         public string email { get; set; }
         public string email2 { get; set; }
         public RolUsuario rol { get; set; }
+        public List<RolUsuario> rolesUsuario { get; set; }
         public string rolUsuario { get; set; }
         public string programa { get; set; }
         public string departamento { get; set; }
@@ -40,6 +41,7 @@ namespace IICA.Models.Entidades
         {
             rol = new RolUsuario();
             proyecto = new Proyecto();
+            rolesUsuario = new List<RolUsuario>();
         }
     }
 }

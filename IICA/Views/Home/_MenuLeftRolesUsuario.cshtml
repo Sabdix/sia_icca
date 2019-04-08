@@ -26,7 +26,7 @@
             </li>
 
             <!--    SUPERADMINISTRADOR -->
-            @if (Model.rol.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR))
+            @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR)))
             {
                 <li class="nodo-menu" id="nodo-administradores">
                     <a href="javascript:;"> <i class="material-icons">gavel</i> <span class="title">Administradores</span> <span class=" arrow"></span> </a>

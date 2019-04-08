@@ -126,7 +126,7 @@
                         <p>Te brindara la facilidad de tramitar y administrar tus periodos vacacionales como solicitar todos aquellos permisos o incapacidades que llegases a requerir durante tu estadia en IICA</p>
                         <p><a class="btn btn-default" href="@Url.Action("Index","Home")">Ingresar</a></p>
                     </div>
-                    @if (Model.rol.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH))
+                    @if(Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
                     {
                         <div class="col-md-4">
                             <h3>IICA - PASIVO LABORAL</h3>
@@ -139,7 +139,7 @@
                             <p><a class="btn btn-default" href="@WebConfigurationManager.AppSettings["urlControlAsistencias"].ToString()">Ingresar</a></p>
                         </div>
                     }
-                    @if (Model.rol.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR))
+                    @if (Model.rolesUsuario.Exists(r=>r.idRol== Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR)))
                     {
                         <div class="col-md-4">
                             <h3>IICA - ADMINISTRACIÓN DE PERFILES</h3>

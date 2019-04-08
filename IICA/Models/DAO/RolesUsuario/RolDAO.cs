@@ -150,6 +150,31 @@ namespace IICA.Models.DAO.RolesUsuario
             return result;
         }
 
+        public List<Proyecto> ObtenerProyectos()
+        {
+            List<Proyecto> proyectos = new List<Proyecto>();
+            Proyecto proyecto;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTA_SUCURSALES_PROYECTOS");
+                    while (dbManager.DataReader.Read())
+                    {
+                        proyecto = new Proyecto();
+                        proyecto.idProyecto = dbManager.DataReader["sc_Cve_Sucursal"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["sc_Cve_Sucursal"].ToString());
+                        proyecto.descripcion = dbManager.DataReader["Sc_Descripcion"] == DBNull.Value ? "" : dbManager.DataReader["Sc_Descripcion"].ToString();
+                        proyectos.Add(proyecto);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return proyectos;
+        }
         public List<Usuario> ObtenerUsuariosAutorizadores(EnumRolUsuario enumRolUsuario)
         {
             List<Usuario> autorizadores = new List<Usuario>();
@@ -160,18 +185,18 @@ namespace IICA.Models.DAO.RolesUsuario
                 {
                     dbManager.Open();
                     dbManager.CreateParameters(1);
-                    dbManager.AddParameters(0, "id_rol_usuario", enumRolUsuario);
-                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_ADMINISTRADORES");
+                    dbManager.AddParameters(0, "id_rol", Convert.ToInt32(enumRolUsuario));
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTA_AUTORIZADORES_ROL");
                     while (dbManager.DataReader.Read())
                     {
                         usuario = new Usuario();
                         usuario.idUsuario = dbManager.DataReader["Id_Autorizador"] == DBNull.Value ? Convert.ToInt32(EnumRolUsuario.NINGUNO) : Convert.ToInt32(dbManager.DataReader["Id_Autorizador"]);
-                        usuario.nombre = dbManager.DataReader["nombre"] == DBNull.Value ? "" : dbManager.DataReader["nombre"].ToString();
-                        usuario.rol.idRol = dbManager.DataReader["Id_rol_Usuario"] == DBNull.Value ? Convert.ToInt32(EnumRolUsuario.NINGUNO) : Convert.ToInt32(dbManager.DataReader["Id_rol_Usuario"]);
-                        usuario.rol.descripcion = dbManager.DataReader["descripcion"] == DBNull.Value ? "" : dbManager.DataReader["descripcion"].ToString();
-                        usuario.apellidoPaterno = dbManager.DataReader["Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Apellido_Paterno"].ToString();
-                        usuario.apellidoMaterno = dbManager.DataReader["Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Apellido_Materno"].ToString();
+                        usuario.nombre = dbManager.DataReader["em_nombre"] == DBNull.Value ? "" : dbManager.DataReader["em_nombre"].ToString();
+                        usuario.apellidoPaterno = dbManager.DataReader["em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["em_Apellido_Paterno"].ToString();
+                        usuario.apellidoMaterno = dbManager.DataReader["em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["em_Apellido_Materno"].ToString();
                         usuario.usuario_ = dbManager.DataReader["usuario"] == DBNull.Value ? "" : dbManager.DataReader["usuario"].ToString();
+                        usuario.email = dbManager.DataReader["em_email"] == DBNull.Value ? "" : dbManager.DataReader["em_email"].ToString();
+                        usuario.programa = dbManager.DataReader["programa"] == DBNull.Value ? "" : dbManager.DataReader["programa"].ToString();
                         autorizadores.Add(usuario);
                     }
                 }
@@ -180,7 +205,7 @@ namespace IICA.Models.DAO.RolesUsuario
             {
                 throw ex;
             }
-            return administradores;
+            return autorizadores;
         }
 
 
@@ -193,10 +218,73 @@ namespace IICA.Models.DAO.RolesUsuario
                 {
                     dbManager.Open();
                     dbManager.CreateParameters(3);
-                    dbManager.AddParameters(0, "Em_Cve_Empleado", usuario.usuario_);
+                    dbManager.AddParameters(0, "Em_Cve_Empleado", usuario.emCveEmpleado);
                     dbManager.AddParameters(1, "Proyecto", usuario.proyecto.idProyecto);
                     dbManager.AddParameters(2, "Id_Rol_Usuario", usuario.rol.idRol);
-                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZA_USUARIO_AUTORIZADOR");
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ALTA_AUTORIZADOR_PROYECTO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        public Result ObtenerInformacionEmpleado(string cveEmpleado)
+        {
+            Result result = new Result();
+            Usuario usuario;
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Em_Cve_Empleado ", cveEmpleado);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTA_INFORMACION_EMPLEADO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        usuario = new Usuario();
+                        usuario.nombre = dbManager.DataReader["Em_Nombre"] == DBNull.Value ? "" : dbManager.DataReader["Em_Nombre"].ToString();
+                        usuario.departamento = dbManager.DataReader["departamento"] == DBNull.Value ? "" : dbManager.DataReader["departamento"].ToString();
+                        usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
+                        usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
+                        usuario.email = dbManager.DataReader["em_email"] == DBNull.Value ? "" : dbManager.DataReader["em_email"].ToString();
+                        usuario.programa = dbManager.DataReader["programa"] == DBNull.Value ? "" : dbManager.DataReader["programa"].ToString();
+                        result.status = true;
+                        result.objeto = usuario;
+                    }
+                    else
+                    {
+                        result.status = false;
+                        result.mensaje = "El empleado no existe";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        public Result EliminarAutorizador(int idUsuario)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Id_Autorizador", idUsuario);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ELIMINAR_USUARIO_AUTORIZADOR");
                     if (dbManager.DataReader.Read())
                     {
                         result.mensaje = dbManager.DataReader["MENSAJE"].ToString();

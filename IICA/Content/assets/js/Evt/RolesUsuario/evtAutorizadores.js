@@ -1,11 +1,12 @@
 ﻿var usuario;
 var idUsuario;
+var usuarioSeleccionado;
 
 $(document).ready(function () {
 
     $('#tabla-autorizadores').dataTable();
 
-
+    $("#cveEmp").removeAttr("disabled");
     $(".select-iica").select2({
         width: '100%' // need to override the changed default
     });
@@ -19,9 +20,8 @@ function MostrarModalAddUsuario() {
 
 function OnGuardarUsuario() {
 
-    if ($("#form-registrar-usuario").valid()) {
+if ($("#form-registrar-usuario").valid()) {
         usuario = ObtenerUsuarioJson();
-        usuario.idUsuario = idUsuario;
         $.ajax({
             data: { usuario: usuario },
             url: rootUrl("/Rol/RegistrarUsuarioAutorizador"),
@@ -51,55 +51,85 @@ function OnSuccessGuardarUsuario(data) {
     }
 }
 
+function ObtenerUsuarioJson() {
+    var usuario_ = castFormToJson($("#form-registrar-usuario").serializeArray());
+    usuario_.rol = rolUsuario;
+    return usuario_;
+}
 
-function MostrarModalEditarUsuario(id) {
+function MostrarInformacionEmpleado()
+{
+    var cveEmpleado_ = $("#cveEmp").val();
+    $("#cveEmp").attr("disabled");
     $.ajax({
-        data: { id: id, idRolUsuario: rolUsuario.idRol },
-        url: rootUrl("/Rol/ObtenerUsuarioRol"),
+        data: { cveEmpleado: cveEmpleado_},
+        url: rootUrl("/Rol/ObtenerInformacionEmpleado"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
             MostrarLoading();
         },
         success: function (data) {
-            OnSuccessMostrarEditarUsuario(data);
+            OnSuccessMostrarInformacionUsuario(data);
         },
         error: function (xhr, status, error) {
             ControlErrores(xhr, status, error);
         }
     });
-
-
 }
 
-function OnSuccessMostrarEditarUsuario(data) {
+function OnSuccessMostrarInformacionUsuario(data) {
     OcultarLoading();
     if (data.status === true) {
-        MostrarDatosUsuario(data.objeto);
+        $("#modal-nombre").val (data.objeto.nombre);
+        $("#modal-apellidop").val(data.objeto.apellidoPaterno);
+        $("#modal-apellidom").val(data.objeto.apellidoMaterno);
+        $("#modal-correo").val(data.objeto.email);
+    } else {
+        swal("Notificación", data.mensaje, "info");
+    }
+}
+
+function MostrarModalElmSol(usuario) {
+    usuarioSeleccionado = usuario;
+    $("#modal-elm-numero").val(usuario.idUsuario);
+    $("#modal-elm-nombre").val(usuario.nombre);
+    $("#modal-elm-usuario").val(usuario.usuario_);
+    $("#modal-elm-correo").val(usuario.email);
+    $("#modal-elm-proyecto").val(usuario.programa);
+}
+
+
+function EliminarAut() {
+    if (usuarioSeleccionado === null || usuarioSeleccionado === undefined) {
+        MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
+        return;
+    }
+    $.ajax({
+        data: { idAutorizador: usuarioSeleccionado.idUsuario },
+        url: rootUrl("/Rol/EliminarAutorizador"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            $("#modal-eliminar").modal("hide");
+            MostrarLoading();
+        },
+        success: function (data) {
+            OnSuccesEliminarSol(data);
+        },
+        error: function (xhr, status, error) {
+            $("#modal-eliminar").modal("hide");
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function OnSuccesEliminarSol(data) {
+    OcultarLoading();
+    if (data.status === true) {
+        MostrarNotificacionLoad("success", data.mensaje, 3000);
+        setTimeout(function () { window.location = rootUrl("/Rol/UsuariosAutorizadoresPVI"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
-    }
-}
-
-function MostrarDatosUsuario(usuario) {
-    for (var key in usuario) {
-        $('[name="' + key + '"]').val(usuario[key]);
-    }
-    idUsuario = usuario.idUsuario;
-}
-
-function ObtenerUsuarioJson() {
-    var usuario_ = castFormToJson($("#form-registrar-usuario").serializeArray());
-    usuario_.rol = rolUsuario;
-    usuario_.proyecto = proyecto;
-    return usuario_;
-}
-
-function MostrarContraseña() {
-    var x = document.getElementById("contrasena");
-    if (x.type === "password") {
-        x.type = "text";
-    } else {
-        x.type = "password";
     }
 }
