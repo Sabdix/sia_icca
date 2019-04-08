@@ -275,3 +275,38 @@ GO
 GRANT EXECUTE ON DT_SP_OBTENER_ADMINISTRADORES TO public;  
 GO
 --==========================================================================================================================
+IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_CONSULTA_SUCURSALES_PROYECTOS')
+BEGIN
+	DROP PROCEDURE DT_SP_CONSULTA_SUCURSALES_PROYECTOS
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Christian Peña Romero>
+
+-- Description:	<OBTIENE CATALOGO DE>
+-- =============================================
+CREATE PROCEDURE DT_SP_CONSULTA_SUCURSALES_PROYECTOS
+	
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+	SELECT 
+		Sc_Descripcion,
+		Sc_UserDef_2
+	FROM Sucursal
+	WHERE Sc_UserDef_2<>''
+	ORDER BY Sc_Descripcion ASC
+
+END
+GO
+
+GRANT EXECUTE ON DT_SP_CONSULTA_SUCURSALES_PROYECTOS TO public;  
+GO
+--==========================================================================================================================
