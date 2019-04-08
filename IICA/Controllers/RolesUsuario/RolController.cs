@@ -98,5 +98,44 @@ namespace IICA.Controllers
                 throw ex;
             }
         }
+
+
+        [SessionExpire]
+        public ActionResult UsuariosAutorizadoresPVI()
+        {
+            try
+            {
+                Usuario usuario = new Usuario();
+                usuario.rol = new RolUsuario() { idRol = (int)EnumRolUsuario.AUTORIZADOR_PVI };
+                ViewBag.Usuarios = new RolDAO().ObtenerUsuariosAutorizadores(EnumRolUsuario.AUTORIZADOR_PVI);
+                ViewBag.Proyectos = new RolDAO().ObtenerUsuariosAutorizadores(EnumRolUsuario.AUTORIZADOR_PVI);
+                return View(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult RegistrarUsuarioAutorizador(Usuario usuario)
+        {
+            try
+            {
+                try
+                {
+                    Result result = new RolDAO().ActualizarUsuarioAdmin(usuario);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return new HttpStatusCodeResult(500, ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

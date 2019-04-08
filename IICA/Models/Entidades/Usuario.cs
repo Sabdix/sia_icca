@@ -34,9 +34,12 @@ namespace IICA.Models.Entidades
         [Required (ErrorMessage ="Ingrese un usuario")]
         public string usuario_ { get; set; }
 
+        public Proyecto proyecto { get; set; }
+
         public Usuario()
         {
             rol = new RolUsuario();
+            proyecto = new Proyecto();
         }
     }
 }
