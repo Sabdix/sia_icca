@@ -571,7 +571,9 @@
     <Content Include="Views\Home\_MenuLeftRolesUsuario.cshtml" />
     <Content Include="Views\Shared\_LayoutRolesUsuario.cshtml" />
     <Content Include="Views\Home\RolesUsuario.cshtml" />
-    <Content Include="Views\Rol\UsuariosAdministradores.cshtml" />
+    <Content Include="Views\Rol\UsuariosSuperAdministradores.cshtml" />
+    <Content Include="Views\Rol\UsuariosAdministradoresRH.cshtml" />
+    <Content Include="Views\Rol\UsuariosAdministradoresViaticos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

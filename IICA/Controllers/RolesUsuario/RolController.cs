@@ -18,14 +18,80 @@ namespace IICA.Controllers
         }
 
         [SessionExpire]
-        public ActionResult UsuariosAdministradores()
+        public ActionResult UsuariosSuperAdministradores()
         {
             try
             {
-                rolDAO = new RolDAO();
-                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                ViewBag.RolesUsuario = new RolDAO().ObtenerRolesUsuario().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idRol.ToString() });
-                return View(rolDAO.ObtenerAdministradores());
+                Usuario usuario = new Usuario();
+                usuario.rol = new RolUsuario() {idRol = (int)EnumRolUsuario.SUPERADMINISTRADOR };
+                ViewBag.Usuarios = new RolDAO().ObtenerUsuariosAdmin(EnumRolUsuario.SUPERADMINISTRADOR);
+                return View(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult UsuariosAdministradoresRH()
+        {
+            try
+            {
+                Usuario usuario = new Usuario();
+                usuario.rol = new RolUsuario() { idRol = (int)EnumRolUsuario.ADMINISTRADOR_RH };
+                ViewBag.Usuarios = new RolDAO().ObtenerUsuariosAdmin(EnumRolUsuario.ADMINISTRADOR_RH);
+                return View(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult UsuariosAdministradoresViaticos()
+        {
+            try
+            {
+                Usuario usuario = new Usuario();
+                usuario.rol = new RolUsuario() { idRol = (int)EnumRolUsuario.ADMINISTRADOR_VIATICOS };
+                ViewBag.Usuarios = new RolDAO().ObtenerUsuariosAdmin(EnumRolUsuario.ADMINISTRADOR_VIATICOS);
+                return View(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult RegistrarUsuarioAdmin(Usuario usuario)
+        {
+            try
+            {
+                try
+                {
+                    Result result = new RolDAO().ActualizarUsuarioAdmin(usuario);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return new HttpStatusCodeResult(500, ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult ObtenerUsuarioRol(int id, EnumRolUsuario idRolUsuario)
+        {
+            try
+            {
+                return Json(new RolDAO().ObtenerUsuarioRol(id, idRolUsuario), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
