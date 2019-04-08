@@ -432,21 +432,6 @@ function MostrarResumen() {
 ======================================      FUNCIONES GENERALES     =================================
 ===============================================================================================*/
 
-function castFormToJson(formArray) {
-    var obj = {};
-    $.each(formArray, function (i, pair) {
-        var cObj = obj, pObj = {}, cpName;
-        $.each(pair.name.split("."), function (i, pName) {
-            pObj = cObj;
-            cpName = pName;
-            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
-        });
-        pObj[cpName] = pair.value;
-    });
-    //obj["idRow"] = 0;
-    return obj;
-}
-
 function castFormViaticoToJson(formTipoViaje,formProposito) {
     var obj = {};
 

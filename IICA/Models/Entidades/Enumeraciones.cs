@@ -9,12 +9,15 @@ namespace IICA.Models.Entidades
     {
     }
 
-    public enum EnumTipoUsuario
+    public enum EnumRolUsuario
     {
         NINGUNO=0,
-        ADMINISTRADOR = 1,
-        EMPLEADO = 2,
-        AUTORIZADOR_PVI = 3 //autorizadores para el sistema de Permisos,Vacaciones,Incapacidades
+        EMPLEADO = 1,
+        AUTORIZADOR_PVI, //autorizadores para el sistema de Permisos,Vacaciones,Incapacidades
+        AUTORIZADOR_VIATICOS,
+        ADMINISTRADOR_RH,
+        ADMINISTRADOR_VIATICOS,
+        SUPERADMINISTRADOR
     }
 
     public enum EstatusSolicitud

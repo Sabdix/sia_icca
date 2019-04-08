@@ -1,0 +1,62 @@
+﻿@using System.Web.Configuration;
+
+@model IICA.Models.Entidades.Usuario
+
+
+<div class="page-sidebar " id="main-menu">
+    <div class="page-sidebar-wrapper scroll-scrolly_visible " id="main-menu-wrapper">
+        @*<div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">*@
+        <div class="user-info-wrapper sm">
+            <div class="profile-wrapper sm">
+                <img src="~/Content/assets/img/user.png" alt="" width="69" height="69" />
+                <div class="availability-bubble online"></div>
+            </div>
+            <div class="user-info sm">
+                <div class="username">@Model.nombre <span class="semi-bold">@Model.apellidoPaterno</span></div>
+                <div class="status">@Model.rolUsuario - @Model.programa - @Model.departamento</div>
+            </div>
+        </div>
+
+        <p class="menu-title sm">Menu</p>
+        <ul>
+            <li class="start nodo-menu" id="nodo-dashboard">
+                <a href="@Url.Action("RolesUsuario","Home")">
+                    <i class="material-icons">home</i> <span class="title">Inicio</span> <span class="selected"></span>
+                </a>
+            </li>
+
+            <!--    SUPERADMINISTRADOR -->
+            @if (Model.rol.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR))
+            {
+                <li class="nodo-menu" id="nodo-administradores">
+                    <a href="javascript:;"> <i class="material-icons">gavel</i> <span class="title">Administradores</span> <span class=" arrow"></span> </a>
+                    <ul class="sub-menu">
+                        <li> <a id="submenu-SuperAdministradores" href="@Url.Action("UsuariosSuperAdministradores","Rol")">Super Administradores </a> </li>
+                        <li> <a id="submenu-AdministradoresRH" href="@Url.Action("UsuariosAdministradoresRH","Rol")">RH</a> </li>
+                        <li> <a id="submenu-AdministradoresViaticos" href="@Url.Action("UsuariosAdministradoresViaticos","Rol")">Viaticos</a> </li>
+                    </ul>
+                </li>
+                <li class="nodo-menu" id="nodo-autorizadores">
+                    <a href="javascript:;"> <i class="material-icons">supervised_user_circle</i> <span class="title">Autorizadores</span> <span class=" arrow"></span> </a>
+                    <ul class="sub-menu">
+                        <li> <a id="submenu-autorizadorPVI" href="@Url.Action("UsuariosAdministradores","Rol")">Autorizadores PVI </a> </li>
+                        <li> <a id="submenu-autorizadorViaticos" href="@Url.Action("UsuariosAdministradores","Rol")">Autorizadores Viaticos</a> </li>
+                    </ul>
+                </li>
+            }
+        </ul>
+
+        <br /><br /><br />
+        <div class="side-bar-widgets">
+            <p class="menu-title sm">SIA IICA</p>
+        </div>
+
+        <div class="footer-widget">
+            <div class="pull-right">
+                <div class="details-status"> No. de empleado: @Model.emCveEmpleado</div>
+                <a data-toggle="tooltip" title="Cerrar sesión" href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
