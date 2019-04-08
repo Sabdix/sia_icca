@@ -160,6 +160,7 @@ BEGIN
 				(SELECT (Tarifa_de_Ida+Tarifa_de_Vuelta)+((Tarifa_de_Ida+Tarifa_de_Vuelta)*.1) FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud) Subtotal,
 				(SELECT (Tarifa_de_Ida+Tarifa_de_Vuelta)+((Tarifa_de_Ida+Tarifa_de_Vuelta)*.1) FROM DT_TBL_VIATICO_SOLICITUD WHERE Id_Solicitud=@Id_solicitud) Total,
 				'' Lugar,
+				getdate() Fecha,
 				'10% No Comprobable (No aplica)' Descripcion
 
 		END
