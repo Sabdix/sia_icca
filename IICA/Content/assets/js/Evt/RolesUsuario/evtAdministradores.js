@@ -1,6 +1,9 @@
 ﻿var usuario;
 var idUsuario;
 
+var idUsuarioEstatus;
+var estatusActualizar;
+
 $(document).ready(function () {
 
     $('#tabla-administradores').dataTable();
@@ -9,8 +12,22 @@ $(document).ready(function () {
     $(".select-iica").select2({
         width: '100%' // need to override the changed default
     });
-});
 
+    var Switch = require('ios7-switch');
+    var checkbox = document.querySelector('.chek_activo');
+    var mySwitch = new Switch(checkbox);
+    mySwitch.toggle();
+    mySwitch.el.addEventListener('click', function (e) {
+        e.preventDefault();
+        var id = $(mySwitch.input).attr("data-idUsuario");
+        if (mySwitch.input.checked == true) {
+            OnDeshHabilitarUsuario(id, mySwitch);            
+        } else {
+            OnHabilitarUsuario(id, mySwitch);
+        }
+    }, false);
+
+});
 
 function MostrarModalAddUsuario() {
     $("#form-registrar-usuario").trigger("reset");
@@ -51,7 +68,6 @@ function OnSuccessGuardarUsuario(data) {
     }
 }
 
-
 function MostrarModalEditarUsuario(id) {
     $.ajax({
         data: { id: id, idRolUsuario: rolUsuario.idRol },
@@ -86,6 +102,41 @@ function MostrarDatosUsuario(usuario) {
         $('[name="' + key + '"]').val(usuario[key]);
     }
     idUsuario = usuario.idUsuario;
+}
+
+function OnAsignarUsuarioActualizarEstadoUsuario(id,estatus){
+    idUsuarioEstatus = id;
+    estatusActualizar = estatus;
+    $("#form-registrar-usuario").trigger("reset");
+}
+
+function OnActualizarEstadoUsuario() {
+
+    $.ajax({
+        data: { idUsuario: id, estatus:estatus },
+        url: rootUrl("/Rol/ActualizarEstatusUsuarioAdmin"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            $("#modal-registrar-usuario").modal("hide");
+            MostrarLoading();
+        },
+        success: function (data) {
+            OnSuccessActualizarEstadoUsuario(data);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function OnSuccessActualizarEstadoUsuario(data) {
+    OcultarLoading();
+    if (data.status === true) {
+        MostrarNotificacionLoad("success", data.mensaje, 3000);
+    } else {
+        MostrarNotificacionLoad("error", data.mensaje, 1000);
+    }
 }
 
 function ObtenerUsuarioJson() {

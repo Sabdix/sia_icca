@@ -32,6 +32,7 @@ namespace IICA.Models.DAO.RolesUsuario
                         usuario.apellidoPaterno = dbManager.DataReader["Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Apellido_Paterno"].ToString();
                         usuario.apellidoMaterno = dbManager.DataReader["Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Apellido_Materno"].ToString();
                         usuario.usuario_ = dbManager.DataReader["usuario"] == DBNull.Value ? "" : dbManager.DataReader["usuario"].ToString();
+                        usuario.activo = dbManager.DataReader["activo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["activo"]);
                         administradores.Add(usuario);
                     }
                 }
@@ -88,6 +89,32 @@ namespace IICA.Models.DAO.RolesUsuario
                     dbManager.AddParameters(7, "Contrasena", usuario.contrasena);
                     dbManager.AddParameters(8, "Id_Rol_Usuario", usuario.rol.idRol);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZA_USUARIO_ADMINISTRADOR");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        public Result ActualizarEstatusUsuarioAdmin(int idUsuario,EnumEstatusUsu enumEstatus)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(2);
+                    dbManager.AddParameters(0, "Id_Usuario_Administrador", idUsuario);
+                    dbManager.AddParameters(1, "Activo", enumEstatus);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZA_STATUS_ADMINISTRADOR");
                     if (dbManager.DataReader.Read())
                     {
                         result.mensaje = dbManager.DataReader["MENSAJE"].ToString();

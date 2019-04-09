@@ -34,7 +34,7 @@ namespace IICA.Models.Entidades
         public string puesto { get; set; }
         [Required (ErrorMessage ="Ingrese un usuario")]
         public string usuario_ { get; set; }
-
+        public bool activo { get; set; }
         public Proyecto proyecto { get; set; }
 
         public Usuario()

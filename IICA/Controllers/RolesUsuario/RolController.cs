@@ -99,6 +99,19 @@ namespace IICA.Controllers
             }
         }
 
+        [HttpPost, SessionExpire]
+        public ActionResult ActualizarEstatusUsuarioAdmin(int idUsuario,EnumEstatusUsu estatus)
+        {
+            try
+            {
+                Result result = new RolDAO().ActualizarEstatusUsuarioAdmin(idUsuario,estatus);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
 
         [SessionExpire]
         public ActionResult UsuariosAutorizadoresPVI()
