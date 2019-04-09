@@ -577,6 +577,7 @@
     <Content Include="Views\Rol\UsuariosAdministradoresRH.cshtml" />
     <Content Include="Views\Rol\UsuariosAdministradoresViaticos.cshtml" />
     <Content Include="Views\Rol\UsuariosAutorizadoresPVI.cshtml" />
+    <Content Include="Views\Rol\UsuariosAutorizadoresViaticos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

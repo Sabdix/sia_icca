@@ -12,20 +12,7 @@ $(document).ready(function () {
     $(".select-iica").select2({
         width: '100%' // need to override the changed default
     });
-
-    var Switch = require('ios7-switch');
-    var checkbox = document.querySelector('.chek_activo');
-    var mySwitch = new Switch(checkbox);
-    mySwitch.toggle();
-    mySwitch.el.addEventListener('click', function (e) {
-        e.preventDefault();
-        var id = $(mySwitch.input).attr("data-idUsuario");
-        if (mySwitch.input.checked == true) {
-            OnDeshHabilitarUsuario(id, mySwitch);            
-        } else {
-            OnHabilitarUsuario(id, mySwitch);
-        }
-    }, false);
+    
 
 });
 
@@ -68,6 +55,11 @@ function OnSuccessGuardarUsuario(data) {
     }
 }
 
+/*===================================================================================
+===========================   Editar  IRFOMRACACIÓN =================================
+=====================================================================================
+ */
+
 function MostrarModalEditarUsuario(id) {
     $.ajax({
         data: { id: id, idRolUsuario: rolUsuario.idRol },
@@ -104,21 +96,54 @@ function MostrarDatosUsuario(usuario) {
     idUsuario = usuario.idUsuario;
 }
 
-function OnAsignarUsuarioActualizarEstadoUsuario(id,estatus){
+/*===================================================================================
+==================    FUNCIONES PARA HABILITAR Y DESHABILITAR========================
+=====================================================================================
+ */
+function OnAsignarUsuarioActualizarEstadoUsuario(id, estatus) {
     idUsuarioEstatus = id;
     estatusActualizar = estatus;
     $("#form-registrar-usuario").trigger("reset");
+
+    $.ajax({
+        data: { id: id, idRolUsuario: rolUsuario.idRol },
+        url: rootUrl("/Rol/ObtenerUsuarioRol"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            if (estatus) {
+                $("#m-estatus-actividad").text("habilitar");
+                $("#m-btnAceptar").text("Habilitar");
+            }
+            else {
+                $("#m-estatus-actividad").text("deshabilitar");
+                $("#m-btnAceptar").text("Deshabilitar");
+            }
+            for (var key in data.objeto) {
+                $('[name="' + key + '"]').val(data.objeto[key]);
+            }
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+
+    
 }
 
 function OnActualizarEstadoUsuario() {
 
     $.ajax({
-        data: { idUsuario: id, estatus:estatus },
+        data: { idUsuario: idUsuarioEstatus, estatus: estatusActualizar },
         url: rootUrl("/Rol/ActualizarEstatusUsuarioAdmin"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
-            $("#modal-registrar-usuario").modal("hide");
+            $("#modal-estatus-usuario").modal("hide");
             MostrarLoading();
         },
         success: function (data) {
@@ -134,10 +159,17 @@ function OnSuccessActualizarEstadoUsuario(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
+        setTimeout(function () { location.reload(); }, 1000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 1000);
     }
 }
+
+
+/*===================================================================================
+===========================    FUNCIONES GENERALES =================================
+=====================================================================================
+ */
 
 function ObtenerUsuarioJson() {
     var usuario_ = castFormToJson($("#form-registrar-usuario").serializeArray());
@@ -153,3 +185,20 @@ function MostrarContraseña() {
         x.type = "password";
     }
 }
+
+//function LoadTablaAdministradores() {
+
+//    var oTblReport = $("#tabla-administradores");
+
+//    oTblReport.DataTable({
+//        "data": jsonString,
+//        "columns": [
+//            { "data": "idUsuario" },
+//            { "data": "nombreCompleto" },
+//            { "data": "usuario_" },
+//            { "data": "email" },
+//            { "data": "email2" },
+//            { "data": "rol.descripcion" }
+//        ]
+//    });
+//}

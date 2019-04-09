@@ -158,6 +158,17 @@ function ValidarItinerarios() {
         swal("Notificación", "Faltan de capturar por lo menos un viaje de regreso", "error");
         return false;
     }
+
+    ///si existen itinerarios aereos se valida q por lo menos se alla añadido un gasto extra aereo
+    var itinerarioAereo = $.grep(itinerarios, function (itinerario) { return itinerario.medioTransporte.idMedioTransporte == 2 });
+    if (itinerarioAereo.length > 0) {
+        if ($.grep(gastosExtraSol, function (gastoExtra) { return gastoExtra.idGastoExtra == 1 }).length <= 0) {
+            swal("Notificación", "Faltan especificar el monto extra del transporte aereo.", "error");
+            return false;
+        }
+    }
+
+
     return true;
 }
 
@@ -343,6 +354,7 @@ function OnAddGastoExt(tipoGasto) {
             gastoExtra.idRow = idRowGastoExtra;
             gastoExtra.descripcion = catGastoExt_.Text;
             gastoExtra.monto = parseFloat($("#monto1").val());
+            gastoExtra.idGastoExtra = catGastoExt_.Value;
             gastosExtraSol.push(gastoExtra);
             idRowGastoExtra++;
             MostrarTablaGastos(gastosExtraSol);
@@ -354,6 +366,7 @@ function OnAddGastoExt(tipoGasto) {
             gastoExtra.idRow = idRowGastoExtra;
             gastoExtra.descripcion = $("#gasto_extra2").val();
             gastoExtra.monto = parseFloat($("#monto2").val());
+            gastoExtra.idGastoExtra = -1;
             gastosExtraSol.push(gastoExtra);
             idRowGastoExtra++;
             MostrarTablaGastos(gastosExtraSol);
