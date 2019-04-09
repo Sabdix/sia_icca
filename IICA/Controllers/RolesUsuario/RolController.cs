@@ -166,5 +166,24 @@ namespace IICA.Controllers
             }
         }
 
+
+        [SessionExpire]
+        public ActionResult UsuariosAutorizadoresViaticos()
+        {
+            try
+            {
+                Usuario usuario = new Usuario();
+                usuario.rol = new RolUsuario() { idRol = (int)EnumRolUsuario.AUTORIZADOR_VIATICOS };
+                ViewBag.Usuarios = new List<Usuario>();
+                ViewBag.Usuarios = new RolDAO().ObtenerUsuariosAutorizadores(EnumRolUsuario.AUTORIZADOR_VIATICOS);
+                ViewBag.Proyectos = new RolDAO().ObtenerProyectos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idProyecto.ToString() });
+                return View(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

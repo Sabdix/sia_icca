@@ -127,9 +127,9 @@ function EliminarAut() {
 function OnSuccesEliminarSol(data) {
     OcultarLoading();
     if (data.status === true) {
-        MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Rol/UsuariosAutorizadoresPVI"); }, 2000);
+        swal("Notificación", data.mensaje, "info");
+        setTimeout(function () { location.reload(); }, 1000);
     } else {
-        MostrarNotificacionLoad("error", data.mensaje, 3000);
+        swal("Notificación", data.mensaje, "info");
     }
 }
