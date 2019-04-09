@@ -430,7 +430,7 @@ namespace IICA.Models.DAO.Viaticos
                     dbManager.AddParameters(0, "id_etapa_solicitud", solicitudViatico.etapaSolicitud.idEtapaSolicitud);
                     dbManager.AddParameters(1, "id_estatus_solicitud", solicitudViatico.estatusSolicitud.idEstatusSolicitud);
                     dbManager.AddParameters(2, "id_solicitud", solicitudViatico.idSolitud);
-                    dbManager.AddParameters(3, "Em_Cve_Empleado", solicitudViatico.emCveEmpleadoAutoriza);
+                    dbManager.AddParameters(3, "Em_Cve_Empleado", solicitudViatico.autorizador.emCveEmpleado);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_ESTATUS_SOLICITUD");
                     if (dbManager.DataReader.Read())
                     {
