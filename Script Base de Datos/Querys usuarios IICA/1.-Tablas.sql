@@ -32,7 +32,9 @@ CREATE TABLE DT_TBL_USUARIOS_ADMINISTRADOR(
 	Correo_2 VARCHAR(50),
 	Usuario VARCHAR(12),
 	Contrasena VARCHAR(12),
-	Id_Rol_Usuario INT
+	Id_Rol_Usuario INT,
+	Activo BIT,
+	Fecha_Alta DATETIME DEFAULT GETDATE()
 )
 GO
 --==========================================================================================================================
@@ -44,6 +46,24 @@ CREATE TABLE DT_TBL_USUARIOS_AUTORIZADORES(
 	Id_Autorizador INT IDENTITY(1,1),
 	Em_Cve_Empleado VARCHAR(12),
 	Proyecto VARCHAR(12),
-	Id_Rol_Usuario INT
+	Id_Rol_Usuario INT,
+	Fecha_Alta DATETIME DEFAULT GETDATE()
+)
+GO
+
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VITACORA_ACCESO_SIA_IICA]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_TBL_VITACORA_ACCESO_SIA_IICA]
+GO
+
+CREATE TABLE DT_TBL_VITACORA_ACCESO_SIA_IICA(
+	Contador INT IDENTITY(1,1),
+	Em_Cve_Empleado VARCHAR(20),
+	Nombre VARCHAR(50),
+	Apellido_Paterno VARCHAR(50),
+	Apellido_Materno VARCHAR(50),
+	Proyecto VARCHAR (100),
+	Departamento VARCHAR (100),
+	Fecha_Ingreso DATETIME DEFAULT GETDATE()
 )
 GO
