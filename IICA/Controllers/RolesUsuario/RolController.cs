@@ -98,5 +98,105 @@ namespace IICA.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost, SessionExpire]
+        public ActionResult ActualizarEstatusUsuarioAdmin(int idUsuario,EnumEstatusUsu estatus)
+        {
+            try
+            {
+                Result result = new RolDAO().ActualizarEstatusUsuarioAdmin(idUsuario,estatus);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+        [SessionExpire]
+        public ActionResult UsuariosAutorizadoresPVI()
+        {
+            try
+            {
+                Usuario usuario = new Usuario();
+                usuario.rol = new RolUsuario() { idRol = (int)EnumRolUsuario.AUTORIZADOR_PVI };
+                ViewBag.Usuarios = new List<Usuario>();
+                ViewBag.Usuarios = new RolDAO().ObtenerUsuariosAutorizadores(EnumRolUsuario.AUTORIZADOR_PVI);
+                ViewBag.Proyectos = new RolDAO().ObtenerProyectos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idProyecto.ToString() });
+                return View(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult RegistrarUsuarioAutorizador(Usuario usuario)
+        {
+            try
+            {
+                try
+                {
+                    Result result = new RolDAO().ActualizarUsuarioAutorizador(usuario);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return new HttpStatusCodeResult(500, ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult ObtenerInformacionEmpleado(string cveEmpleado)
+        {
+            try
+            {
+                return Json(new RolDAO().ObtenerInformacionEmpleado(cveEmpleado), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult EliminarAutorizador(int idAutorizador)
+        {
+            try
+            {
+                Result result =new RolDAO().EliminarAutorizador(idAutorizador);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
+            }
+        }
+
+
+        [SessionExpire]
+        public ActionResult UsuariosAutorizadoresViaticos()
+        {
+            try
+            {
+                Usuario usuario = new Usuario();
+                usuario.rol = new RolUsuario() { idRol = (int)EnumRolUsuario.AUTORIZADOR_VIATICOS };
+                ViewBag.Usuarios = new List<Usuario>();
+                ViewBag.Usuarios = new RolDAO().ObtenerUsuariosAutorizadores(EnumRolUsuario.AUTORIZADOR_VIATICOS);
+                ViewBag.Proyectos = new RolDAO().ObtenerProyectos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idProyecto.ToString() });
+                return View(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

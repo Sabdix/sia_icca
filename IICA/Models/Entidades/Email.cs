@@ -28,7 +28,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoPermiso(permiso);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Permiso", cuerpo, permiso.emCveEmpleado);
+                EnviarCorreExterno("Sistema Integral IICA México - Permiso", cuerpo, permiso.emCveEmpleado,EnumRolUsuario.AUTORIZADOR_PVI);
             }
             catch (Exception ex)
             {
@@ -167,7 +167,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoVacacion(vacacion);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Vacación", cuerpo, vacacion.emCveEmpleado);
+                EnviarCorreExterno("Sistema Integral IICA México - Vacación", cuerpo, vacacion.emCveEmpleado,EnumRolUsuario.AUTORIZADOR_PVI);
             }
             catch (Exception ex)
             {
@@ -306,7 +306,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoIncapacidad(incapacidad);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Permiso", cuerpo, incapacidad.emCveEmpleado);
+                EnviarCorreExterno("Sistema Integral IICA México - Permiso", cuerpo, incapacidad.emCveEmpleado, EnumRolUsuario.AUTORIZADOR_PVI);
             }
             catch (Exception ex)
             {
@@ -432,14 +432,14 @@ namespace IICA.Models.Entidades
         #endregion Notificaciones - Incapacidades
 
         #region Notificaciones - SolViaticos
-        public static void NotificacionSolViatico(SolicitudViatico solViatico)
+        public static void NotificacionSolViatico(SolicitudViatico solViatico,EnumRolUsuario rolUsuario)
         {
             try
             {
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoSolViatico(solViatico);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Solicitud Viatico", cuerpo, solViatico.Em_Cve_Empleado);
+                EnviarCorreExterno("Sistema Integral IICA México - Solicitud Viatico", cuerpo, solViatico.Em_Cve_Empleado, EnumRolUsuario.AUTORIZADOR_VIATICOS);
             }
             catch (Exception ex)
             {
@@ -702,7 +702,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoConcluirComprobacionSolViatico(solViatico);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Solicitud de viatico comprobación terminada", cuerpo, solViatico.usuario.emCveEmpleado);
+                EnviarCorreExterno("Sistema Integral IICA México - Solicitud de viatico comprobación terminada", cuerpo, solViatico.usuario.emCveEmpleado, EnumRolUsuario.AUTORIZADOR_VIATICOS);
             }
             catch (Exception ex)
             {
@@ -984,7 +984,7 @@ namespace IICA.Models.Entidades
             return pie.ToString();
         }
 
-        private static void EnviarCorreExterno(string asunto, string cuerpo,string cveEmpleado)
+        private static void EnviarCorreExterno(string asunto, string cuerpo,string cveEmpleado,EnumRolUsuario rolUsuario)
         {
             try
             {
@@ -992,7 +992,7 @@ namespace IICA.Models.Entidades
                 string contrasenaProveedor = WebConfigurationManager.AppSettings["contrasenaProveedor"].ToString(); //ConfigurationManager.AppSettings["contrasenaCorreoExterno"].ToString(); //"Kaneki_54";
 
                 System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
-                AgregarTOExterno(cveEmpleado, mmsg); // cuenta Email a la cual sera dirigido el correo
+                AgregarTOExterno(cveEmpleado,rolUsuario, mmsg); // cuenta Email a la cual sera dirigido el correo
                 mmsg.Subject = asunto; //Asunto del correo
                 mmsg.SubjectEncoding = System.Text.Encoding.UTF8; //cambiamos el tipo de texto a UTF8
                 mmsg.Body = cuerpo; //Cuerpo del mensaje
@@ -1017,14 +1017,14 @@ namespace IICA.Models.Entidades
             }
         }
 
-        private static void AgregarTOExterno(string cveEmpleado, MailMessage mmsg)
+        private static void AgregarTOExterno(string cveEmpleado, EnumRolUsuario rolUsuario, MailMessage mmsg)
         {
             string correosEnvio = string.Empty;
             List<string> TO = new List<string>();
             try
             {
                 emailDAO = new EmailDAO();
-                correosEnvio = emailDAO.ConsultarCorreosEnvio(cveEmpleado);
+                correosEnvio = emailDAO.ConsultarCorreosEnvio(cveEmpleado,rolUsuario);
                 if (!string.IsNullOrEmpty(correosEnvio))
                     TO.AddRange(correosEnvio.Split(',').ToList());
                 TO.RemoveAll(x=>x.Equals(""));

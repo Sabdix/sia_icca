@@ -167,6 +167,7 @@
     <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\NivelMandoDAO.cs" />
+    <Compile Include="Models\Entidades\Proyecto.cs" />
     <Compile Include="Models\Entidades\RolUsuario.cs" />
     <Compile Include="Models\Entidades\Viaticos\ComprobacionGasto.cs" />
     <Compile Include="Models\Entidades\Viaticos\GastoComprobacion.cs" />
@@ -261,6 +262,7 @@
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
     <Content Include="Content\assets\js\Evt\RolesUsuario\evtAdministradores.js" />
+    <Content Include="Content\assets\js\Evt\RolesUsuario\evtAutorizadores.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisComproSol.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
@@ -574,6 +576,8 @@
     <Content Include="Views\Rol\UsuariosSuperAdministradores.cshtml" />
     <Content Include="Views\Rol\UsuariosAdministradoresRH.cshtml" />
     <Content Include="Views\Rol\UsuariosAdministradoresViaticos.cshtml" />
+    <Content Include="Views\Rol\UsuariosAutorizadoresPVI.cshtml" />
+    <Content Include="Views\Rol\UsuariosAutorizadoresViaticos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

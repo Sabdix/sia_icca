@@ -59,6 +59,12 @@
                                             <i class="fa fa-check-square-o"></i>
                                         </button>
                                     </span>
+                                    <span data-toggle="modal" data-target="#modal-estatus-usuario">
+                                        <button data-toggle="tooltip" title="@(usuario.activo ? "Deshabilitar":"Habilitar") usuario" class="btn @(usuario.activo? "btn-warning": " btn-info") btn-mini" 
+                                                onclick="OnAsignarUsuarioActualizarEstadoUsuario(@usuario.idUsuario,@(usuario.activo? 0: 1))">
+                                            <i class="fa @(usuario.activo? "fa-lock" :  "fa-unlock-alt")"></i>
+                                        </button>
+                                    </span>
                                 </td>
 
                             </tr>
@@ -124,9 +130,9 @@
                                     <input id="checkbox2" type="checkbox" value="1" onclick="MostrarContraseña()">
                                     <label for="checkbox2"> Mostrar contraseña</label>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
-                        
+
                     </div>
                 </form>
             </div>
@@ -136,6 +142,61 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="modal-estatus-usuario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br>
+                <i class="fa fa-question-circle fa-7x"></i>
+                <h4 id="myModalLabel" class="semi-bold">Realmente desea <span id="m-estatus-actividad"></span> el siguiente usuario.</h4>
+                <p class="no-margin">A continuación se muestran los detalles del usuario </p>
+                <br>
+            </div>
+            <div class="modal-body">
+                <form id="form-estatus-usuario">
+                    <div class="row form-row">
+                        <div class="col-md-4">
+                            <label class="form-label">Nombre:</label>
+                            @Html.TextBoxFor(x => x.nombre, new { @class = "form-control", placeholder = "Nombre",@readonly= "readonly " })
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Apellido paterno:</label>
+                            @Html.TextBoxFor(x => x.apellidoPaterno, new { @class = "form-control", placeholder = "Apellido paterno", @readonly = "readonly " })
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Apellido materno:</label>
+                            @Html.TextBoxFor(x => x.apellidoMaterno, new { @class = "form-control", placeholder = "Apellido materno", @readonly = "readonly " })
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Correo:</label>
+                            @Html.TextBoxFor(x => x.email, new { @class = "form-control", placeholder = "Correo", @readonly = "readonly " })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Correo (opcional):</label>
+                            @Html.TextBoxFor(x => x.email2, new { @class = "form-control", @readonly = "readonly " })
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6">
+                            <label class="form-label">Usuario: (identificador para iniciar sesión)</label>
+                            @Html.TextBoxFor(x => x.usuario_, new { @class = "form-control", placeholder = "Usuario", @readonly = "readonly " })
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="m-btnAceptar" onclick="OnActualizarEstadoUsuario()">Activar</button>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 @section scripts{
@@ -164,6 +225,6 @@
 
     </script>
     <script src="~/Content/assets/js/Evt/RolesUsuario/evtAdministradores.js"></script>
-    
+
 }
 

@@ -20,6 +20,12 @@ namespace IICA.Models.Entidades
         SUPERADMINISTRADOR
     }
 
+    public enum EnumEstatusUsu
+    {
+        DESHABILITADO = 0,
+        ACTIVO =1
+    }
+
     public enum EstatusSolicitud
     {
         NINGUNA=0,
