@@ -42,14 +42,16 @@ namespace IICA.Models.DAO
                             usuario.programa = dbManager.DataReader["Programa"] == DBNull.Value ? "" : dbManager.DataReader["Programa"].ToString();
 
                             //Lectura de los roles del usuario
-                            dbManager.DataReader.NextResult();
-                            while (dbManager.DataReader.Read())
-                            {
+                            //dbManager.DataReader.NextResult();
+                            //while (dbManager.DataReader.Read())
+                            //{
                                 rol = new RolUsuario();
-                                rol.idRol = dbManager.DataReader["Id_Tipo_Usuario"] == DBNull.Value ? Convert.ToInt32(EnumRolUsuario.EMPLEADO) : Convert.ToInt32(dbManager.DataReader["Id_Tipo_Usuario"]);
-                                rol.descripcion = dbManager.DataReader["Rol_Usuario"] == DBNull.Value ? "" : dbManager.DataReader["Rol_Usuario"].ToString();
+                                rol.idRol = 5;
+                                rol.descripcion = EnumRolUsuario.ADMINISTRADOR_VIATICOS.ToString();
+                                //rol.idRol = dbManager.DataReader["Id_Tipo_Usuario"] == DBNull.Value ? Convert.ToInt32(EnumRolUsuario.EMPLEADO) : Convert.ToInt32(dbManager.DataReader["Id_Tipo_Usuario"]);
+                                //rol.descripcion = dbManager.DataReader["Rol_Usuario"] == DBNull.Value ? "" : dbManager.DataReader["Rol_Usuario"].ToString();
                                 rolesUsuario.Add(rol);
-                            }
+                            //}
                             usuario.rolesUsuario = rolesUsuario;
                             result.objeto = usuario;
                             result.status = true;

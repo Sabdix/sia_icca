@@ -184,7 +184,7 @@ namespace IICA.Controllers.Viaticos
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {
-                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
+                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto,EnumRolUsuario.AUTORIZADOR_VIATICOS); }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -612,7 +612,7 @@ namespace IICA.Controllers.Viaticos
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {
-                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
+                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto,EnumRolUsuario.EMPLEADO); }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
