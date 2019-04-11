@@ -337,7 +337,11 @@ namespace IICA.Controllers.Viaticos
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 Result resulta = solicitudViaticoDAO.ActualizarFechaCheque(solicitudViatico_);
                 if (resulta.status)
+                {
                     result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                    try { Email.NotificacionElaboracionCheque((SolicitudViatico)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -612,7 +616,7 @@ namespace IICA.Controllers.Viaticos
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {
-                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto,EnumRolUsuario.EMPLEADO); }
+                    try { Email.NotificacionVerificarSolicitud((SolicitudViatico)result.objeto); }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);

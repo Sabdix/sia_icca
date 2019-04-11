@@ -702,7 +702,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoConcluirComprobacionSolViatico(solViatico);
                 cuerpo += PiePagina();
-                EnviarCorreExterno("Sistema Integral IICA México - Solicitud de viatico comprobación terminada", cuerpo, solViatico.usuario.emCveEmpleado, EnumRolUsuario.AUTORIZADOR_VIATICOS);
+                EnviarCorreExternoUsuario("Sistema Integral IICA México - Solicitud de viatico comprobación terminada", cuerpo, solViatico.usuario.email);
             }
             catch (Exception ex)
             {
@@ -879,6 +879,137 @@ namespace IICA.Models.Entidades
 															            <tr>
 																            <td>
 																	            <b>Proceso: </b>" + Constants.procesoVerificacionGastos + @"
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+	                                                                    <tr style='text-align: center; height: 30px;'>
+																            <td style='background-color: #1e8e3e; color: #fff'>
+																	            <b>Especificaciones</b>
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Empleado: </b>" + Utils.usuarioSesion.nombreCompleto + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de Empleado: </b>" + solViatico.Em_Cve_Empleado + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Departamento: </b>" + Utils.usuarioSesion.departamento + @"
+	                                                                        </td>
+															            </tr>
+                                                                        <tr>
+																            <td>
+																	            <b>Programa: </b>" + Utils.usuarioSesion.programa + @"
+	                                                                        </td>
+															            </tr>
+															            <tr>
+																            <td>
+																	            <b>No. de solicitud: </b>" + solViatico.idSolitud + @"
+	                                                                        </td>
+															            </tr>
+															            <tr><td><br/><br/><br/></td></tr>
+															            <tr style='text-align: center;'>
+																            <td>
+										            							<a style='background-color: #1f3853; color: #fff; padding: 8px;text-decoration: none; font-size: 13px;' 
+										            							href='" + urlSolicitudes + @"'>
+										            								Click, para ver bandeja de solicitudes
+										            							</a>
+									            							</td>
+															            </tr>
+	                                                    	            </table>
+														            </td>
+													            </tr>
+												            </table>
+											            </td>
+											            <td style='font-size: 0; line-height: 0;' width='20'>
+												            &nbsp;
+											            </td>
+										            </tr>
+									            </table>
+								            </td>
+							            </tr>
+						            </table>
+					            </td>
+				            </tr>
+				            <tr>
+					            <td bgcolor='#70bbd9' style='padding: 30px 30px 30px 30px;'>
+						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+							            <tr style='text-align: center;'>
+								            <td style='color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; width='75%'>
+									            &reg; Copyright © 2019. Servicio proporcionado por <br/>
+									            <a href='www.dsimorelia.com' style='color: #ffffff;'><font color='#ffffff'>Desarrollo de Soluciones Informáticas</font></a>
+								            </td>
+							            </tr>
+						            </table>
+					            </td>
+				            </tr>
+			            </table>
+		            </td>
+	            </tr>
+            </table>");
+            return cuerpo.ToString();
+        }
+
+        public static void NotificacionElaboracionCheque(SolicitudViatico solViatico)
+        {
+            try
+            {
+                string cuerpo = Cabecera();
+                cuerpo += CuerpoElaboracionCheque(solViatico);
+                cuerpo += PiePagina();
+                EnviarCorreExternoUsuario("Sistema Integral IICA México - Elaboración de cheque de solicitud de viatico", cuerpo, solViatico.usuario.email);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static string CuerpoElaboracionCheque(SolicitudViatico solViatico)
+        {
+            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"] + "Viatico/SolicitudesGenerarCheque";
+            StringBuilder cuerpo = new StringBuilder();
+            cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
+	            <tr>
+		            <td style='padding: 10px 0 30px 0;'>
+			            <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border: 1px solid #cccccc; border-collapse: collapse;'>
+				            <tr>
+					            <td bgcolor='#ffffff' style='padding: 40px 30px 40px 30px;'>
+						            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+							            <tr>
+								            <td style='color: #153643; font-family: Arial, sans-serif; font-size: 24px;'>
+									            <b>" + Constants.notificacionSolViatico + @"!</b>
+								            </td>
+							            </tr>
+							            <tr>
+								            <td style='padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;'>
+									            A quien corresponda:
+								            </td>
+							            </tr>
+							            <tr>
+								            <td>
+									            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+										            <tr>
+											            <td width='260' valign='top'>
+												            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+													            <tr>
+														            <td style='padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 14px; line-height: 20px;'>
+															            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+															            <tr>
+																            <td>
+																	            <b>Fecha: </b>" + DateTime.Now.ToString("MM/dd/yyyy h:mm tt") + @"
+																            </td>
+															            </tr>
+															            <tr><td><br/></td></tr>
+															            <tr>
+																            <td>
+																	            <b>Proceso: </b>" + Constants.procesoElaboracionCheque + @"
 	                                                                        </td>
 															            </tr>
 															            <tr><td><br/></td></tr>
