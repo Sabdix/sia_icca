@@ -1,10 +1,10 @@
 ﻿
 function OnSuccesIniciarSesion(data) {
     if (data.status === true) {
-       
-        if ($.grep(data.objeto.rolesUsuario, function (rol) {
+        var rol_ = $.grep(data.objeto.rolesUsuario, function (rol) {
             return rol.idRol == 6;
-        }).length > 0)
+        }).length;
+        if (rol_ > 0)
             window.location = rootUrl("/Home/RolesUsuario");
         else
             window.location = rootUrl("/IICA/Sistemas");
