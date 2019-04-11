@@ -326,8 +326,8 @@
                             </tr>
                             <tr>
                                 <td>Viáticos</td>
-                                <td>@(Model.tipoViaje.idTipoViaje == 1 ? Model.montoAutorizado.ToString("C") : "")</td>
-                                <td>@(Model.tipoViaje.idTipoViaje == 2 ? Model.montoAutorizado.ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje == 1 ? (Model.tarifaDeIda + Model.tarifaDeVuelta).ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje == 2 ? (Model.tarifaDeIda + Model.tarifaDeVuelta).ToString("C") : "")</td>
                             </tr>
                             <tr>
                                 @foreach (var gasto in Model.gastosExtrasSol)

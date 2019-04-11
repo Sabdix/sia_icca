@@ -196,7 +196,7 @@ namespace IICA.Models.DAO.PVI
             return vacacion;
         }
 
-        public List<ReporteVacacion> ObtenerReporteVacaciones()
+        public List<ReporteVacacion> ObtenerReporteVacaciones(Usuario usuario)
         {
             ReporteVacacion reporteVacacion = null;
             List<ReporteVacacion> reporteVacaciones = new List<ReporteVacacion>();
@@ -205,6 +205,8 @@ namespace IICA.Models.DAO.PVI
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "Em_Cve_Empleado", usuario.emCveEmpleado);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_GENERAR_REPORTE_VACACIONES_GENERAL");
                     while (dbManager.DataReader.Read())
                     {

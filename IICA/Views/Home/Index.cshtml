@@ -20,7 +20,7 @@
         <p>
             El módulo de permisos te permitirá realizar solicitudes para gestionar tus permisos que llegases a necesitar durante tu estadía en IICA.
         </p>
-        @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+        @if (Model.empleado)
         {
             <p><a class="btn btn-default" href="@Url.Action("NuevaSolicitud", "Permiso")">Generar solicitud &raquo;</a></p>
         }
@@ -28,7 +28,7 @@
     <div class="col-md-4">
         <h2>Vacaciones</h2>
         <p>Es un módulo más que te facilitara dar de alta solicitudes de tus vacaciones y permitir así programarlas en la fecha más indicada a tus necesidades.</p>
-        @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+        @if (Model.empleado)
         {
             <p><a class="btn btn-default" href="@Url.Action("NuevaSolicitud", "Vacacion")">Generar solicitud &raquo;</a></p>
         }
@@ -36,7 +36,7 @@
     <div class="col-md-4">
         <h2>Incapacidades</h2>
         <p>Para aquellas ocasiones que necesites gestionar tus incapacidades, lo podrás realizar de la manera más sencilla desde el módulo de Incapacidades.</p>
-        @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+        @if (Model.empleado)
         {
             <p><a class="btn btn-default" href="@Url.Action("NuevaSolicitud", "Incapacidad")">Generar solicitud &raquo;</a></p>
         }

@@ -25,7 +25,7 @@ namespace IICA.Models.DAO
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTAR_AUTORIZADORES_PROYECTO");
                     while (dbManager.DataReader.Read())
                     {
-                           correosReceptor+=(dbManager.DataReader["aut_Correo"] == DBNull.Value ? "" : dbManager.DataReader["aut_Correo"].ToString()+",");
+                           correosReceptor+=(dbManager.DataReader["em_email"] == DBNull.Value ? "" : dbManager.DataReader["em_email"].ToString()+",");
                     }
                 }
             }

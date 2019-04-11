@@ -36,6 +36,7 @@ namespace IICA.Models.Entidades
         public string usuario_ { get; set; }
         public bool activo { get; set; }
         public Proyecto proyecto { get; set; }
+        public bool empleado { get; set; }
 
         public Usuario()
         {
