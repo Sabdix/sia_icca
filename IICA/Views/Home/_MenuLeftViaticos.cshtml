@@ -26,10 +26,7 @@
             </li>
 
             <!--    SOLICITUD -->
-            @if (Model.rol.idRol != Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH) &&
-                Model.rol.idRol != Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_VIATICOS) &&
-                Model.rol.idRol != Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR)
-                )
+            @if (Model.empleado)
             {
                 <li class="nodo-menu" id="nodo-solicitud">
                     <a href="@Url.Action("NuevaSolicitud", "Viatico")">
@@ -38,7 +35,7 @@
                 </li>
             }
             <!--    SOLICITUDES    -->
-            @if (Model.rol.idRol != Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.EMPLEADO))
+            @if (Model.empleado)
             {
                 <li class="nodo-menu" id="nodo-misSolicitudes">
                     <a href="javascript:;"> <i class="material-icons">account_balance_wallet</i> <span class="title">Mis Solicitudes</span> <span class=" arrow"></span> </a>
