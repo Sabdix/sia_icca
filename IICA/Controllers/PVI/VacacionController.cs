@@ -148,7 +148,8 @@ namespace IICA.Controllers.PVI
             try
             {
                 vacacionDAO = new VacacionDAO();
-                return View(vacacionDAO.ObtenerReporteVacaciones());
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return View(vacacionDAO.ObtenerReporteVacaciones(usuarioSesion));
             }
             catch (Exception ex)
             {

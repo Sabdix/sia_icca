@@ -6,7 +6,6 @@ $(document).ready(function () {
 
     $('#tabla-autorizadores').dataTable();
 
-    $("#cveEmp").removeAttr("disabled");
     $(".select-iica").select2({
         width: '100%' // need to override the changed default
     });
@@ -15,6 +14,7 @@ $(document).ready(function () {
 
 function MostrarModalAddUsuario() {
     $("#form-registrar-usuario").trigger("reset");
+    $("#cveEmp").removeAttr("readonly");
     idUsuario = 0;
 }
 
@@ -60,7 +60,6 @@ function ObtenerUsuarioJson() {
 function MostrarInformacionEmpleado()
 {
     var cveEmpleado_ = $("#cveEmp").val();
-    $("#cveEmp").attr("disabled");
     $.ajax({
         data: { cveEmpleado: cveEmpleado_},
         url: rootUrl("/Rol/ObtenerInformacionEmpleado"),
@@ -85,6 +84,7 @@ function OnSuccessMostrarInformacionUsuario(data) {
         $("#modal-apellidop").val(data.objeto.apellidoPaterno);
         $("#modal-apellidom").val(data.objeto.apellidoMaterno);
         $("#modal-correo").val(data.objeto.email);
+        $("#cveEmp").attr("readonly","readonly");
     } else {
         swal("Notificación", data.mensaje, "info");
     }
