@@ -1,3 +1,5 @@
+USE IICA_1
+GO
 --==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_ROL_USUARIO]') AND type in (N'U'))
 DROP TABLE [dbo].[DT_CAT_ROL_USUARIO]
@@ -58,7 +60,7 @@ GO
 
 CREATE TABLE DT_TBL_VITACORA_ACCESO_SIA_IICA(
 	Contador INT IDENTITY(1,1),
-	Em_Cve_Empleado VARCHAR(20),
+	Em_Cve_Empleado VARCHAR(50),
 	Nombre VARCHAR(50),
 	Apellido_Paterno VARCHAR(50),
 	Apellido_Materno VARCHAR(50),

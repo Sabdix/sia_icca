@@ -1,3 +1,5 @@
+USE IICA_1
+GO
 --==========================================================================================================================
 IF EXISTS (SELECT * FROM sysobjects WHERE name='DT_SP_OBTENER_ROL_USUARIO')
 BEGIN
