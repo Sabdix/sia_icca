@@ -17,7 +17,7 @@
                     <th style="width:10%;text-align: center;">Subtotal</th>
                     <th style="width:10%;text-align: center;">Total</th>
                     <th style="width:10%;text-align: center;">Facturas</th>
-                    @if (Model.etapaSolicitud.idEtapaSolicitud != 5)
+                    @if (Model.etapaSolicitud.idEtapaSolicitud != 5 && Model.etapaSolicitud.idEtapaSolicitud != 7)
                     {
                     <th style="width:10%;text-align: center;">Acciones</th>
                     }
@@ -73,7 +73,7 @@
                                 </ul>
                             </div>
                         </td>
-                        @if (Model.etapaSolicitud.idEtapaSolicitud!=5) {
+                        @if (Model.etapaSolicitud.idEtapaSolicitud != 5 && Model.etapaSolicitud.idEtapaSolicitud != 7){
                         <td>
                             <span>
                                 <button data-toggle="tooltip" title="Eliminar comprobación" class="btn btn-warning btn-mini"
