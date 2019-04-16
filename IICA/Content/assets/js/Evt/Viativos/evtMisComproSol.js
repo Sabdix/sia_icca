@@ -587,7 +587,7 @@ function ValidarConcluirComprobacion(solSeleccionada) {
         return false;
     }
     //validación para las solicitudes marginales, que estan se alla cargado el comprobante de estancia
-    if (solSeleccionada.marginal && (solSeleccionada.pathComprobanteEstancia == null || pathComprobanteEstancia == "")) {
+    if (solSeleccionada.marginal && (solSeleccionada.pathComprobanteEstancia == null || solSeleccionada.pathComprobanteEstancia == "")) {
         swal("Notificación", "Para concluir debe anexar el comprobante de estancia.", "error");
         return false;
     }

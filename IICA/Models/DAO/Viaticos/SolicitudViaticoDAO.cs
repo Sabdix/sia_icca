@@ -494,6 +494,7 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.montoAutorizado = dbManager.DataReader["Monto_Viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Autorizado"].ToString());
                         solicitudViatico.tarifaDeIda = dbManager.DataReader["tarifa_de_ida"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["tarifa_de_ida"].ToString());
                         solicitudViatico.tarifaDeVuelta = dbManager.DataReader["tarifa_de_vuelta"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["tarifa_de_vuelta"].ToString());
+                        solicitudViatico.totalGastosExtras = dbManager.DataReader["gastos_extras"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["gastos_extras"].ToString());
                         solicitudes.Add(solicitudViatico);
                     }
                 }
