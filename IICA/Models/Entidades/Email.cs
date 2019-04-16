@@ -580,7 +580,7 @@ namespace IICA.Models.Entidades
 
         private static string CuerpoCompDatosSolViatico(SolicitudViatico solViatico)
         {
-            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"] + "Viatico/Comprobacion";
+            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"] + "Viatico/MisSolicitudesPorComprobar";
             StringBuilder cuerpo = new StringBuilder();
             cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
 	            <tr>
@@ -702,7 +702,8 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoConcluirComprobacionSolViatico(solViatico);
                 cuerpo += PiePagina();
-                EnviarCorreExternoUsuario("Sistema Integral IICA México - Solicitud de viatico comprobación terminada", cuerpo, solViatico.usuario.email);
+                EnviarCorreExterno("Sistema Integral IICA México - Solicitud Viatico", cuerpo, solViatico.Em_Cve_Empleado, EnumRolUsuario.AUTORIZADOR_VIATICOS);
+                //EnviarCorreExterno("Sistema Integral IICA México - Solicitud de viatico comprobación terminada", cuerpo, solViatico.usuario.email);
             }
             catch (Exception ex)
             {
@@ -842,7 +843,7 @@ namespace IICA.Models.Entidades
 
         private static string CuerpoSolViaticoVerificado(SolicitudViatico solViatico)
         {
-            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"] + "Viatico/SolicitudesPorVerificar";
+            string urlSolicitudes = WebConfigurationManager.AppSettings["UrlDominioSiaIICa"] + "Viatico/MisSolicitudesAutorizadas";
             StringBuilder cuerpo = new StringBuilder();
             cuerpo.Append(@"<table border='0' cellpadding='0' cellspacing='0' width='100%'>	
 	            <tr>

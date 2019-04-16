@@ -42,20 +42,20 @@ namespace IICA.Controllers.PVI
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
                 vacacion_.emCveEmpleado = usuarioSesion.emCveEmpleado;
                 Result result = vacacionDAO.ActualizarVacacion(vacacion_);
-                if (result.status)
-                {
-                    string pathFormato = ObtenerFormatoHttpPost(Request, 
-                        (Vacacion)result.objeto,FormatosPermiso.FORMATO_AUTORIZACION.ToString(), 
-                        vacacion_.emCveEmpleado);
-                    if (!string.IsNullOrEmpty(pathFormato))
-                    {
-                       vacacionDAO.ActualizarFormatoPermiso(vacacion_, pathFormato);
-                    }
-                    else
-                        result.mensaje = "No se logro subir el formato, intente mas tarde.";
-                    try { Email.NotificacionVacacion((Vacacion)result.objeto); }
-                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
-                }
+                //if (result.status)
+                //{
+                //    string pathFormato = ObtenerFormatoHttpPost(Request, 
+                //        (Vacacion)result.objeto,FormatosPermiso.FORMATO_AUTORIZACION.ToString(), 
+                //        vacacion_.emCveEmpleado);
+                //    if (!string.IsNullOrEmpty(pathFormato))
+                //    {
+                //       vacacionDAO.ActualizarFormatoPermiso(vacacion_, pathFormato);
+                //    }
+                //    else
+                //        result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                //    try { Email.NotificacionVacacion((Vacacion)result.objeto); }
+                //    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                //}
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -191,6 +191,36 @@ namespace IICA.Controllers.PVI
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult EnviarVacacion(Vacacion vacacion_)
+        {
+            try
+            {
+                vacacionDAO = new VacacionDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                vacacion_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                vacacion_.estatusVacacion.idEstatusVacacion = (int)EstatusSolicitud.SOLICITUD_ENVIADA;
+                Result result = vacacionDAO.ActualizarVacacion(vacacion_);
+                if (result.status)
+                {
+                    string pathFormato = ObtenerFormatoHttpPost(Request, vacacion_, FormatosPermiso.FORMATO_AUTORIZACION.ToString(), vacacion_.emCveEmpleado);
+                    if (!string.IsNullOrEmpty(pathFormato))
+                    {
+                        vacacionDAO.ActualizarFormatoPermiso(vacacion_, pathFormato);
+                    }
+                    else
+                        result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                    try { Email.NotificacionVacacion((Vacacion)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
             }
         }
 

@@ -92,22 +92,13 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
                                 </div>
                             </div>
                             <div class="row form-row">
-                                <div class="col-md-6">
-                                    <label class="form-label">Formato de autorización</label>
-                                    <div id="formDropZone"></div>
+                                <div class="col-md-8">
+                                    <label class="form-label">Motivo de vacaciones</label>
+                                    @Html.TextAreaFor(x => x.motivoVacaciones, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.motivoVacaciones, "", new { @class = "error" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="row form-row">
-                                        <div class="col-md-12">
-                                            <label class="form-label">Motivo de vacaciones</label>
-                                            @Html.TextAreaFor(x => x.motivoVacaciones, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(x => x.motivoVacaciones, "", new { @class = "error" })
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button type="button" id="btn-guardar-sol" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>&nbsp;Guardar</button>
-                                        </div>
-                                    </div>
-
+                                <div class="col-md-8">
+                                    <button type="button" id="btn-guardar-sol" class="btn btn-info btn-cons"><i class="fa fa-paste"></i>&nbsp;Guardar</button>
                                 </div>
                             </div>
                         }
@@ -118,13 +109,6 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "MostrarLoading", OnSuccess = "
         </div>
     </div>
 </div>
-
-<style>
-    #dZUpload {
-        min-height: 150px !important;
-    }
-</style>
-
 
 @section scripts {
 
