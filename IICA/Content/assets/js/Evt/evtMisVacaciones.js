@@ -1,13 +1,14 @@
 ﻿var solSeleccionada = {};
 
+
 $(document).ready(function () {
-    $('#tabla-mis-permisos').dataTable();
+    $('#tabla-mis-vacaciones').dataTable();
 
 
     ///============================ SUBIDA DE ARCHIVO DE AUTORIZACION   ============================
     $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
     myAwesomeDropzone = {
-        url: rootUrl("/Permiso/EnviarPermiso"),
+        url: rootUrl("/Vacacion/EnviarVacacion"),
         addRemoveLinks: true,
         paramName: "archivo",
         maxFilesize: 4, // MB
@@ -38,10 +39,10 @@ $(document).ready(function () {
 
 });
 
-function ImprimirFormatoPermiso(id) {
+function ImprimirFormatoVacacion(id) {
     $.ajax({
         data: { id: id },
-        url: rootUrl("/Permiso/_ImprimirFormatoPermiso"),
+        url: rootUrl("/Vacacion/_ImprimirFormatoVacacion"),
         dataType: "html",
         method: "post",
         beforeSend: function () {
@@ -65,10 +66,10 @@ function ImprimirFormatoPermiso(id) {
 /*==========================================     ENVIAR SOLICITUD    =======================================*/
 /*==========================================================================================================*/
 
-function MostrarModalEnvSol(idPermiso) {
+function MostrarModalEnvSol(idVacacion) {
     $.ajax({
-        data: { id: idPermiso },
-        url: rootUrl("/Permiso/ObtenerPermiso"),
+        data: { id: idVacacion },
+        url: rootUrl("/Vacacion/ObtenerVacacion"),
         dataType: "json",
         method: "post",
         beforeSend: function () {
@@ -79,9 +80,9 @@ function MostrarModalEnvSol(idPermiso) {
             solSeleccionada = data.objeto;
             ObtenerFechasJsonSolSeleccionada(solSeleccionada);
 
-            $("#modal-env-motivo").val(solSeleccionada.motivoPermiso);
-            $("#modal-env-horaIni").val(solSeleccionada.horaInicio + " hrs.");
-            $("#modal-env-horaFin").val(solSeleccionada.horaFin + " hrs.");
+            $("#modal-env-motivo").val(solSeleccionada.motivoVacaciones);
+            $("#modal-env-fechaIni").val(solSeleccionada.fechaInicio);
+            $("#modal-env-fechaFin").val(solSeleccionada.fechaFin);
         },
         error: function (xhr, status, error) {
             ControlErrores(xhr, status, error);
@@ -95,7 +96,7 @@ function EnviarSol() {
         return;
     }
     if (formatoAutDropzone.files.length < 1 || !formatoAutDropzone.files[0].accepted) {
-        swal("Notificación", "Es necesario anexar el archivo respectivo a la autorización del permiso.", "error");
+        swal("Notificación", "Es necesario anexar el archivo respectivo a la autorización de las vacaciones.", "error");
         return;
     }
     $("#modal-enviar").modal("hide");
@@ -106,7 +107,7 @@ function OnSuccesEnviarSol(data) {
     OcultarLoading();
     if (data.status === true) {
         MostrarNotificacionLoad("success", data.mensaje, 3000);
-        setTimeout(function () { window.location = rootUrl("/Permiso/MisPermisos"); }, 2000);
+        setTimeout(function () { window.location = rootUrl("/Vacacion/MisVacaciones"); }, 2000);
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
@@ -117,13 +118,14 @@ function OnSuccesEnviarSol(data) {
 /*======================================       FUNCIONES GENERALES     =====================================*/
 /*==========================================================================================================*/
 
-function ObtenerFechasJsonSolSeleccionada(permiso) {
-    var fechaPermiso = convertDate(new Date(parseInt(permiso.fechaPermiso.substr(6))));
-    var fechaAlta = convertDate(new Date(parseInt(permiso.fechaAlta.substr(6))));
-    var fechaAutorizacion = convertDate(new Date(parseInt(permiso.fechaAutorizacion.substr(6))));
-    solSeleccionada.fechaPermiso = fechaPermiso;
-    solSeleccionada.fechaAlta = fechaAlta;
-    solSeleccionada.fechaAutorizacion = fechaAutorizacion;
+
+function ObtenerFechasJsonSolSeleccionada(vacacion) {
+    var fechaSolicitud = convertDate(new Date(parseInt(vacacion.fechaSolicitud.substr(6))));
+    var fechaInicio = convertDate(new Date(parseInt(vacacion.fechaInicio.substr(6))));
+    var fechaFin = convertDate(new Date(parseInt(vacacion.fechaFin.substr(6))));
+    solSeleccionada.fechaSolicitud = fechaSolicitud;
+    solSeleccionada.fechaInicio = fechaInicio;
+    solSeleccionada.fechaFin = fechaFin;
 }
 
 function convertDate(inputFormat) {
@@ -134,7 +136,7 @@ function convertDate(inputFormat) {
 
 function appendFormdata(FormData, data, name) {
     name = name || '';
-    if (typeof data === 'object' && data!=null) {
+    if (typeof data === 'object' && data != null) {
         $.each(data, function (index, value) {
             if (name == '') {
                 appendFormdata(FormData, value, index);

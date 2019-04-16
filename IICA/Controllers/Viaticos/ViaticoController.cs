@@ -556,7 +556,7 @@ namespace IICA.Controllers.Viaticos
                 {
                     try {
                         result.objeto = solicitudViaticoDAO.ObtenerDetalleSol(solicitudViatico_.idSolitud).objeto;
-                        Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto);
+                        Email.NotificacionConcluirComprobacionSolViatico((SolicitudViatico)result.objeto);
                     }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
