@@ -58,37 +58,21 @@ function MostrarCompletarDatosSol(solicitud) {
 
 }
 
-function OnObtenerTarifasViaticos() {
-    if (solSeleccionada === null || solSeleccionada === undefined) {
-        MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
-        validCompletarDatos = false;
-        $("#btn-onCompletarDatosSol").attr("disabled");
-        return;
-    }
-
-    solSeleccionada.nivelMando.idNivelMando = parseInt($("#modal-comp-mando").val());
-    solSeleccionada.pernocta = $("#modal-comp-pernota").val();
-    solSeleccionada.marginal = $("#modal-comp-marginal").val();
-
-    if (isNaN(solSeleccionada.nivelMando.idNivelMando) || solSeleccionada.pernocta == null || solSeleccionada.marginal == null) {
-        validCompletarDatos = false;
-        $("#btn-onCompletarDatosSol").attr("disabled");
-        return;
-    }
-
+function MostrarTarifasViaticos() {
     $.ajax({
-        data: { solicitudViatico_: solSeleccionada },
-        url: rootUrl("/Viatico/ObtenerTarifasViaticos"),
-        dataType: "json",
+        data: {},
+        url: rootUrl("/Viatico/_ObtenerTarifasViaticos"),
+        dataType: "html",
         method: "post",
         beforeSend: function () {
+            MostrarLoading();
         },
         success: function (data) {
-            OnSuccesObtenerTarifasViaticos(data);
+            OcultarLoading();
+            $("#modal-content-tarifas").html(data);
         },
         error: function (xhr, status, error) {
-            $("#modal-completarSol").modal("hide");
-            $("#btn-onCompletarDatosSol").attr("disabled");
+            $("#modal-tarifas").modal("hide");
             ControlErrores(xhr, status, error);
         }
     });
@@ -142,6 +126,33 @@ function OnSuccesCompletarDatosSol(data) {
     } else {
         MostrarNotificacionLoad("error", data.mensaje, 3000);
     }
+}
+
+function OnVisualizarTarifas() {
+    if (solSeleccionada === null || solSeleccionada === undefined || !validCompletarDatos) {
+        MostrarNotificacionLoad("error", "Ocurrio un error, intente mas tarde", 3000);
+        return;
+    }
+
+    solSeleccionada.etapaSolicitud.idEtapaSolicitud = 3;
+    solSeleccionada.estatusSolicitud.idEstatusSolicitud = 1;
+    $.ajax({
+        data: { solicitudViatico_: solSeleccionada },
+        url: rootUrl("/Viatico/CompletarDatosSolicitud"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            $("#modal-completarSol").modal("hide");
+            MostrarLoading();
+        },
+        success: function (data) {
+            OnSuccesCompletarDatosSol(data);
+        },
+        error: function (xhr, status, error) {
+            $("#modal-completarSol").modal("hide");
+            ControlErrores(xhr, status, error);
+        }
+    });
 }
 
 /*=============================================================================================

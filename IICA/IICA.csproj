@@ -202,6 +202,7 @@
     <Compile Include="Models\Entidades\Viaticos\Itinerario.cs" />
     <Compile Include="Models\Entidades\Viaticos\Justificacion.cs" />
     <Compile Include="Models\Entidades\Viaticos\MedioTransporte.cs" />
+    <Compile Include="Models\Entidades\Viaticos\TarifaViatico.cs" />
     <Compile Include="Models\Entidades\Viaticos\TipoDivisa.cs" />
     <Compile Include="Models\Entidades\Viaticos\TipoSalida.cs" />
     <Compile Include="Models\Entidades\Viaticos\TipoViaje.cs" />
@@ -580,6 +581,7 @@
     <Content Include="Views\Rol\UsuariosAdministradoresViaticos.cshtml" />
     <Content Include="Views\Rol\UsuariosAutorizadoresPVI.cshtml" />
     <Content Include="Views\Rol\UsuariosAutorizadoresViaticos.cshtml" />
+    <Content Include="Views\Viatico\_ObtenerTarifasViaticos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

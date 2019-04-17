@@ -661,7 +661,23 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                return View(solicitudViaticoDAO.ObtenerMisSolicitudesHistorial(usuarioSesion.emCveEmpleado));
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudesHistorial(usuarioSesion.emCveEmpleado,usuarioSesion));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost, SessionExpire]
+        public ActionResult _ObtenerTarifasViaticos()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+
+                return PartialView(solicitudViaticoDAO.ConsultarTarifasViaticos());
             }
             catch (Exception ex)
             {
