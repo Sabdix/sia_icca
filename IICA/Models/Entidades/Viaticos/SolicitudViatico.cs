@@ -64,6 +64,8 @@ namespace IICA.Models.Entidades.Viaticos
 
         public Int64 noCuenta { get; set; }
         public string banco { get; set; }
+        public double totalGastosExtras { get; set; }
+
 
         public SolicitudViatico()
         {

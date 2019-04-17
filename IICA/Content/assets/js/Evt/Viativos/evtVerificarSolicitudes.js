@@ -290,3 +290,4 @@ function ObtenerFechasJsonSolSeleccionada(solicitud) {
     solSeleccionada.fechaInicio = fechaInicio.toLocaleDateString();
     solSeleccionada.fechaFin = fechaFin.toLocaleDateString();
 }
+

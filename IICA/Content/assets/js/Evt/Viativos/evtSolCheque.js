@@ -47,7 +47,7 @@ function MostrarModalRefSol(solicitud) {
 
     $("#modal-tarifa-ida").val(accounting.formatMoney(solSeleccionada.tarifaDeIda));
     $("#modal-tarifa-vuelta").val(accounting.formatMoney(solSeleccionada.tarifaDeVuelta));
-    $("#modal-total-gastos-extras").val(accounting.formatMoney(solSeleccionada.montoAutorizado - solSeleccionada.tarifaDeVuelta - solSeleccionada.tarifaDeIda));
+    $("#modal-total-gastos-extras").val(accounting.formatMoney(solSeleccionada.totalGastosExtras));
 
     $("#modal-referencia_importeAutorizado").val(accounting.formatMoney(solSeleccionada.montoAutorizado));
 }

@@ -609,7 +609,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
+                //solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)

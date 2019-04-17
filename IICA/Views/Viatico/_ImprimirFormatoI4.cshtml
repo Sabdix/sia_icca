@@ -333,40 +333,51 @@
                                 <td>@(Model.tipoViaje.idTipoViaje == 2 ? (Model.tarifaDeIda + Model.tarifaDeVuelta).ToString("C") : "")</td>
                             </tr>
                             <tr>
+                                <td>Transporte</td>
                                 @foreach (var gasto in Model.gastosExtrasSol)
-                    {
-                                    <td>Transporte</td>
-                                    <td>@(gasto.descripcion == "TRANSPORTE" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
-                                    <td>@(gasto.descripcion == "TRANSPORTE" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
-                    }
+                                {
+                                    if (@gasto.descripcion == "TRANSPORTE AÉREO")
+                                    {
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
+                                    }
+                                }
 
                             </tr>
                             <tr>
+                                <td>Peaje / Gasolina</td>
                                 @foreach (var gasto in Model.gastosExtrasSol)
-                    {
-                                    <td>Peaje / Gasolina</td>
-                                    <td>@(gasto.descripcion == "PEAJE / GASOLINA" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
-                                    <td>@(gasto.descripcion == "PEAJE / GASOLINA" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
-                    }
+                                {
+                                    if (@gasto.descripcion == "PEAJE / GASOLINA")
+                                    {
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
+                                    }
+                                }
 
                             </tr>
                             <tr>
+                                <td>Autobus</td>
                                 @foreach (var gasto in Model.gastosExtrasSol)
-                    {
-                                    <td>Autobus</td>
-                                    <td>@(gasto.descripcion == "AUTOBÚS" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
-                                    <td>@(gasto.descripcion == "AUTOBÚS" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
-                    }
-
+                                {
+                                    if (@gasto.descripcion == "AUTOBÚS")
+                                    {
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
+                                    }
+                                }
                             </tr>
                             <tr>
+                                <td>Otros</td>
                                 @foreach (var gasto in Model.gastosExtrasSol)
-                    {
-                                    <td>Otros</td>
-                                    <td>@(gasto.descripcion == "OTROS" ? Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "" : "")</td>
-                                    <td>@(gasto.descripcion == "OTROS" ? Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "" : "")</td>
-                    }
-
+                                {
+                                    if (@gasto.descripcion == "OTROS")
+                                    {
+                                        <td>@(Model.tipoViaje.idTipoViaje ==1 ? gasto.monto.ToString("C"): "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
+                                    }
+                                }
+                                }
                             </tr>
                     </table>
                 </td>
