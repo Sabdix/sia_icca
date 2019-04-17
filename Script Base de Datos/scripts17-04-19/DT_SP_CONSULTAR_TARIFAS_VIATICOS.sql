@@ -41,7 +41,13 @@ as
 			end -- inicio
 			
 			begin -- ámbito de la actualización
-				select * from DT_CAT_TARIFA_VIATICO tv
+				select *
+				,tviaje.Descripcion tipo_viaje
+				,td.Descripcion tipo_divisa
+				,nm.Descripcion nivel_mando 
+				,case Pernocta when 1 then 'CON PERNOCTA' else 'SIN PERNOCTA' end descripcion_pernocta
+				,case Marginal when 1 then 'MARGINAL' else 'NO MARGINAL' end descripcion_marginal
+				from DT_CAT_TARIFA_VIATICO tv
 				join DT_CAT_TIPO_VIAJE tviaje
 				on tv.id_tipo_viaje=tviaje.id_tipo_viaje
 				join DT_CAT_TIPO_DIVISA td
