@@ -52,6 +52,10 @@ namespace IICA.Models.Entidades.Viaticos
         public DateTime ? fechaReintegro { get; set; }
         public bool aplicaReintegro { get; set; }
         public decimal importeReintegro { get; set; }
+        /// <summary>
+        /// importe calculado por sistema, ya que sera un dato a mostrar y recomendar dicha cantidad al empleado
+        /// </summary>
+        public decimal importeReintegroPorSistema { get; set; }
         public string pathArchivoReintegro { get; set; }
         public string consecutivoAnual { get; set; }
 
