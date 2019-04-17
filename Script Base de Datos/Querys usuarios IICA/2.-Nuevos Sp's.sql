@@ -348,7 +348,7 @@ BEGIN
 			a.Em_Apellido_Materno,
 			a.Em_UserDef_1 usuario,
 			a.Em_Email,
-			b.Sc_Descripcion Programa
+			d.proyecto Programa
 		FROM Empleado a
 		LEFT JOIN Sucursal b ON a.Sc_Cve_Sucursal=b.Sc_Cve_Sucursal
 		LEFT JOIN DT_TBL_USUARIOS_AUTORIZADORES d ON a.Em_Cve_Empleado=d.Em_Cve_Empleado
