@@ -333,8 +333,6 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
-                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 Result resulta = solicitudViaticoDAO.ActualizarFechaCheque(solicitudViatico_);
                 if (resulta.status)
                 {
@@ -558,7 +556,7 @@ namespace IICA.Controllers.Viaticos
                 {
                     try {
                         result.objeto = solicitudViaticoDAO.ObtenerDetalleSol(solicitudViatico_.idSolitud).objeto;
-                        Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto);
+                        Email.NotificacionConcluirComprobacionSolViatico((SolicitudViatico)result.objeto);
                     }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
@@ -611,7 +609,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
+                //solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)

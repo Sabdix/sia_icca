@@ -253,6 +253,7 @@
     <Content Include="Content\assets\js\Evt\evtAutSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtAutSolPermiso.js" />
     <Content Include="Content\assets\js\Evt\evtMisIncapacidades.js" />
+    <Content Include="Content\assets\js\Evt\evtMisVacaciones.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolIncapacidad.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolVacacion.js" />
     <Content Include="Content\assets\js\Evt\evtNuevaSolPermiso.js" />
@@ -266,6 +267,7 @@
     <Content Include="Content\assets\js\Evt\Utils.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisComproSol.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtAutSolicitudes.js" />
+    <Content Include="Content\assets\js\Evt\evtMisPermisos.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolAutorizadas.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolHistorial.js" />
     <Content Include="Content\assets\js\Evt\Viativos\evtMisSolViaticos.js" />

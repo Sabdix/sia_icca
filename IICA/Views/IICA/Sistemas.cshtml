@@ -51,20 +51,20 @@
             </div>
             <div class="header-quick-nav">
                 @*<div class="pull-right">
-                    <ul class="nav quick-section ">
-                        <li class="quicklinks">
-                            <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
-                                <i class="material-icons">tune</i>
-                            </a>
-                            <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-                                <li>
-                                    <a href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="quicklinks"> <span class="h-seperate"></span></li>
-                    </ul>
-                </div>*@
+                        <ul class="nav quick-section ">
+                            <li class="quicklinks">
+                                <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
+                                    <i class="material-icons">tune</i>
+                                </a>
+                                <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                    <li>
+                                        <a href="javascript: CerrarSesion();"><i class="material-icons">power_settings_new</i>&nbsp;&nbsp;Cerrar sesión</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="quicklinks"> <span class="h-seperate"></span></li>
+                        </ul>
+                    </div>*@
             </div>
         </div>
     </div>
@@ -103,30 +103,39 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <h3>IICA - ACTUALIZACIÓN DE EXPEDIENTE</h3>
-                        <p>
-                            Es un sistema en donde encontrara todo lo referente a su perfil profesional como empleado.
-                        </p>
-                        <p>
-                            <form action="@WebConfigurationManager.AppSettings["urlDocumentos"].ToString()" method="post">
-                                <input hidden name="email" value="@(Model.emCveEmpleado)" />
-                                <input hidden name="password" value="@(Model.contrasena)" />
-                                <button type="submit" class="btn btn-default">Ingresar</button>
-                            </form>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <h3>IICA - VIATICOS</h3>
-                        <p>IICA-VIATICOS le permitira llevar a cabo el proceso de la solicitud y comprobación de viaticos.</p>
-                        <p><a class="btn btn-default" href="@Url.Action("Viaticos","Home")">Ingresar</a></p>
-                    </div>
-                    <div class="col-md-4">
-                        <h3>IICA - PERMISOS, VACACIONES E INCAPACIDADES</h3>
-                        <p>Te brindara la facilidad de tramitar y administrar tus periodos vacacionales como solicitar todos aquellos permisos o incapacidades que llegases a requerir durante tu estadia en IICA</p>
-                        <p><a class="btn btn-default" href="@Url.Action("Index","Home")">Ingresar</a></p>
-                    </div>
-                    @if(Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
+                    @if (Model.empleado || Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)) )
+                    {
+                        <div class="col-md-4">
+                            <h3>IICA - ACTUALIZACIÓN DE EXPEDIENTE</h3>
+                            <p>
+                                Es un sistema en donde encontrara todo lo referente a su perfil profesional como empleado.
+                            </p>
+                            <p>
+                                <form action="@WebConfigurationManager.AppSettings["urlDocumentos"].ToString()" method="post">
+                                    <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                                    <input hidden name="password" value="@(Model.contrasena)" />
+                                    <button type="submit" class="btn btn-default">Ingresar</button>
+                                </form>
+                            </p>
+                        </div>
+                    }
+                    @if (Model.empleado || Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_VIATICOS)))
+                    {
+                        <div class="col-md-4">
+                            <h3>IICA - VIATICOS</h3>
+                            <p>IICA-VIATICOS le permitira llevar a cabo el proceso de la solicitud y comprobación de viaticos.</p>
+                            <p><a class="btn btn-default" href="@Url.Action("Viaticos", "Home")">Ingresar</a></p>
+                        </div>
+                    }
+                    @if (Model.empleado)
+                    {
+                        <div class="col-md-4">
+                            <h3>IICA - PERMISOS, VACACIONES E INCAPACIDADES</h3>
+                            <p>Te brindara la facilidad de tramitar y administrar tus periodos vacacionales como solicitar todos aquellos permisos o incapacidades que llegases a requerir durante tu estadia en IICA</p>
+                            <p><a class="btn btn-default" href="@Url.Action("Index", "Home")">Ingresar</a></p>
+                        </div>
+                    }
+                    @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
                     {
                         <div class="col-md-4">
                             <h3>IICA - PASIVO LABORAL</h3>
@@ -139,7 +148,7 @@
                             <p><a class="btn btn-default" href="@WebConfigurationManager.AppSettings["urlControlAsistencias"].ToString()">Ingresar</a></p>
                         </div>
                     }
-                    @if (Model.rolesUsuario.Exists(r=>r.idRol== Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR)))
+                    @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR)))
                     {
                         <div class="col-md-4">
                             <h3>IICA - ADMINISTRACIÓN DE PERFILES</h3>

@@ -43,10 +43,9 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span data-toggle="modal" data-target="#modal-itinerarioSubirArchivo" data-nombreArchivo="Pase de abordar"
-                                          data-itinerario="@(new JavaScriptSerializer().Serialize(itinerario))" class="itinerarioSubirArchivo">
-                                        <button data-toggle="tooltip" title="Subir pase de abordar" class="btn btn-success btn-mini">
-                                            <i class="fa fa-upload"></i>
+                                    <span data-toggle="modal" data-target="#modal-itinPaseAbordar" onclick="MostrarPaseAbordarIti(@(new JavaScriptSerializer().Serialize(itinerario)))">
+                                        <button data-toggle="tooltip" title="Ver pase de abordar" class="btn btn-success btn-mini">
+                                            <i class="fa fa-print"></i>
                                         </button>
                                     </span>
                                 </td>
@@ -179,6 +178,26 @@
         $(".modal-itinerarioOrigen").val(itinerario.origen);
         $(".modal-itinerarioDestino").val(itinerario.destino);
 
+    }
+
+
+    function MostrarPaseAbordarIti(itinerario) {
+        var url = itinerario.pathPasajeAbordar;
+        if (url !== "") {
+            url = rootUrl(url);
+            $('div #content-pase').html("");
+            $("div #pase-ida").text(itinerario.origen);
+            $("div #pase-regreso").text(itinerario.destino);
+            var iframe = $('<iframe style="width: 100%;height:600px;">');
+            iframe.attr('src', url);
+            $('div #content-pase').append(iframe);
+            iframe[0].contentWindow.location.reload();
+        }
+        else {
+            $("div #content-pase").html("");
+            $("div #pase-ida").text("-");
+            $("div #pase-regreso").text("-");
+        }
     }
 </script>
 

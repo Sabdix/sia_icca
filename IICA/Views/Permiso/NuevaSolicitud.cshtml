@@ -57,13 +57,6 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
                             </div>
                             <div class="row form-row">
                                 <div class="col-md-8">
-                                    <label class="form-label">Formato de autorización</label>
-                                    <div  id="formDropZone"></div>
-                                </div>
-                                
-                            </div>
-                            <div class="row form-row">
-                                <div class="col-md-8">
                                     <label class="form-label">Motivo de permiso</label>
                                     @Html.TextAreaFor(x => x.motivoPermiso, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.motivoPermiso, "", new { @class = "error" })
@@ -84,11 +77,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
     </div>
 </div>
 
-<style>
-    #dZUpload {
-        min-height: 150px !important;
-    }
-</style>
+
 
 @section scripts {
 
@@ -105,8 +94,7 @@ new AjaxOptions { HttpMethod = "POST", OnBegin = "", OnSuccess = "OnSuccesRegist
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
-    <link href="~/Content/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" />
-    <script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
+    
 
     <script src="~/Content/assets/js/Evt/evtNuevaSolPermiso.js"></script>
 }

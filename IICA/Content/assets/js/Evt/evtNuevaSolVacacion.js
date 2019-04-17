@@ -43,11 +43,11 @@ $(document).ready(function () {
 
     $("#btn-guardar-sol").click(function (e) {
         if ($("#form-nuevaSol").valid()) {
-            if (formatoAutDropzone.files.length < 1 || !formatoAutDropzone.files[0].accepted) {
-                swal("Notificación", "Es necesario anexar el archivo respectivo a la autorización del permiso.", "error");
-                return;
-            }
-            solSeleccionada = castFormToJson($("#form-nuevaSol").serializeArray());
+            //if (formatoAutDropzone.files.length < 1 || !formatoAutDropzone.files[0].accepted) {
+            //    swal("Notificación", "Es necesario anexar el archivo respectivo a la autorización del permiso.", "error");
+            //    return;
+            //}
+            //solSeleccionada = castFormToJson($("#form-nuevaSol").serializeArray());
             ConfirmarEnviarSolicitud();
         }
     });
@@ -57,59 +57,26 @@ $(document).ready(function () {
             CalcularTotalDias();
     });
 
-    ///============================ SUBIDA DE ARCHIVO DE AUTORIZACION   ============================
-    $("#formDropZone").append("<form id='dZUpload' class='dropzone borde-dropzone' style='cursor: pointer;'></form>");
-    myAwesomeDropzone = {
-        url: rootUrl("/Vacacion/RegistrarSolicitud"),
-        addRemoveLinks: true,
-        paramName: "archivo",
-        maxFilesize: 4, // MB
-        dictRemoveFile: "Remover",
-        acceptedFiles: ".pdf",
-        maxFiles: 1,
-        autoProcessQueue: false,
-        init: function () {
-            this.on("maxfilesexceeded", function (file) {
-                this.removeFile(file);
-                swal("Error", "No se puede subir mas de un archivo", "error");
-            });
-        },
-        sending: function (file, xhr, formData) {
-            for (var key in solSeleccionada) {
-                formData.append(key, solSeleccionada[key]);
-            }
-        },
-        success: function (file, data) {
-            file.previewElement.classList.add("dz-success");
-            OnSuccesRegistrarSolicitud(data);
-        },
-        error: function (file, response) {
-            file.previewElement.classList.add("dz-error");
-            swal("Error", response, "error");
-        }
-    } // FIN myAwesomeDropzone
-    formatoAutDropzone = new Dropzone("#dZUpload", myAwesomeDropzone);
-    //---------------------------------------------------------------------------------------------------
-
+   
 
 });
 
 function ConfirmarEnviarSolicitud() {
     swal({
-        title: "Está Usted seguro de enviar la solicitud de vacaciones?",
-        text: "Al enviar la solicitud un autorizador la revisara para aprobarla o rechazarla",
+        title: "Está Usted seguro de guardar la solicitud de vacaciones?",
+        text: "Al guardar se observara en su bandeja de solicitudes",
         type: "warning",
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         confirmButtonColor: "#1f3853",
-        confirmButtonText: "Si, deseo enviarla",
+        confirmButtonText: "Si, deseo guardarla",
         closeOnConfirm: false,
         closeOnCancel: false
     }, function (isConfirm) {
         if (isConfirm) {
             swal.close();
-            formatoAutDropzone.processQueue();
-            //$("#form-nuevaSol").submit();
+            //formatoAutDropzone.processQueue();
+            $("#form-nuevaSol").submit();
         } else {
             swal("Cancelado", "Se ha cancelado la operación", "error");
         }

@@ -168,6 +168,8 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.emCveEmpleadoAutoriza = dbManager.DataReader["Em_Cve_Empleado_autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_autoriza"].ToString();
                         solicitudViatico.pernocta = dbManager.DataReader["pernocta"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["pernocta"].ToString());
                         solicitudViatico.marginal = dbManager.DataReader["marginal"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["marginal"].ToString());
+                        solicitudViatico.realizarComprobacionGastos = dbManager.DataReader["realizar_comprobacion_gastos"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["realizar_comprobacion_gastos"]);
+                        solicitudViatico.comprobarItinerarioAereo = dbManager.DataReader["comprobar_itinerario_aereo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["comprobar_itinerario_aereo"]);
                         solicitudViatico.pathArchivoAutorizacion = dbManager.DataReader["Path_Archivo_Autorizacion"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Autorizacion"].ToString());
                         solicitudes.Add(solicitudViatico);
                     }
@@ -492,6 +494,7 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.montoAutorizado = dbManager.DataReader["Monto_Viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Autorizado"].ToString());
                         solicitudViatico.tarifaDeIda = dbManager.DataReader["tarifa_de_ida"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["tarifa_de_ida"].ToString());
                         solicitudViatico.tarifaDeVuelta = dbManager.DataReader["tarifa_de_vuelta"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["tarifa_de_vuelta"].ToString());
+                        solicitudViatico.totalGastosExtras = dbManager.DataReader["gastos_extras"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["gastos_extras"].ToString());
                         solicitudes.Add(solicitudViatico);
                     }
                 }
