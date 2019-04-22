@@ -11,7 +11,7 @@ namespace IICA.Models.DAO
     {
         private DBManager dbManager;
 
-        public string ConsultarCorreosEnvio(string cveEmpleado)
+        public string ConsultarCorreosEnvio(string cveEmpleado, EnumRolUsuario rolUsuario)
         {
            string correosReceptor = string.Empty;
             try
@@ -19,12 +19,13 @@ namespace IICA.Models.DAO
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(1);
+                    dbManager.CreateParameters(2);
                     dbManager.AddParameters(0, "Em_Cve_Empleado", cveEmpleado);
+                    dbManager.AddParameters(1, "id_rol_usuario", Convert.ToInt32(rolUsuario));
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTAR_AUTORIZADORES_PROYECTO");
                     while (dbManager.DataReader.Read())
                     {
-                           correosReceptor+=(dbManager.DataReader["aut_Correo"] == DBNull.Value ? "" : dbManager.DataReader["aut_Correo"].ToString()+",");
+                           correosReceptor+=(dbManager.DataReader["em_email"] == DBNull.Value ? "" : dbManager.DataReader["em_email"].ToString()+",");
                     }
                 }
             }

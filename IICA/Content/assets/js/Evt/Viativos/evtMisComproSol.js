@@ -539,7 +539,7 @@ function OnSuccessMostrarConluirComprobacion(data) {
         });
         $("#modal-concluir-montoCompr").val(accounting.formatMoney(totalComprobacion));
 
-        $("#modal-concluir-montoReintegro").val(0);
+        $("#modal-concluir-montoReintegro").val(solSeleccionada.importeReintegroPorSistema);
         $("#modal-concluir-fechaReintegro").val(moment().format("YYYY/MM/DD"));
         reintegroDropzone.removeAllFiles(true);
 
@@ -587,7 +587,7 @@ function ValidarConcluirComprobacion(solSeleccionada) {
         return false;
     }
     //validación para las solicitudes marginales, que estan se alla cargado el comprobante de estancia
-    if (solSeleccionada.marginal && (solSeleccionada.pathComprobanteEstancia == null || pathComprobanteEstancia == "")) {
+    if (solSeleccionada.marginal && (solSeleccionada.pathComprobanteEstancia == null || solSeleccionada.pathComprobanteEstancia == "")) {
         swal("Notificación", "Para concluir debe anexar el comprobante de estancia.", "error");
         return false;
     }

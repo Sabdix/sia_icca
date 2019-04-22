@@ -72,7 +72,9 @@
                                                     Ver Solicitud
                                                 </a>
                                             </li>
-                                                @*<li>
+                                            @if (solicitud.realizarComprobacionGastos)
+                                            {
+                                                <li>
                                                     <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
                                                        onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                                         Ver comprobaciones
@@ -90,24 +92,46 @@
                                                         Informe del viaje
                                                     </a>
                                                 </li>
+                                              }
+                                            @if (solicitud.marginal)
+                                            {
                                                 <li>
                                                     <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2"
-                                                       data-formato-text="pathComprobanteEstancia" data-nombreArchivo="archivo del comprobante de instancia" data-solicitud="@solicitud.idSolitud">
-                                                        Comprobante de instancia
+                                                       data-formato-text="pathComprobanteEstancia" data-nombreArchivo="archivo del comprobante de estancia" data-solicitud="@solicitud.idSolitud">
+                                                        Comprobante de estancia
                                                     </a>
                                                 </li>
+                                            }
+                                            @if (solicitud.comprobarItinerarioAereo)
+                                            {
                                                 <li>
                                                     <a href="#" data-toggle="modal" data-target="#modal-itinerariosAereos"
                                                        onclick="MostrarModalItinerarioAereos(@(new JavaScriptSerializer().Serialize(solicitud)))">
                                                         Pases de abordar
                                                     </a>
                                                 </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(solicitud.pathArchivoReintegro))
+                                            {
                                                 <li>
                                                     <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="5"
                                                        data-formato-text="pathArchivoReintegro" data-nombreArchivo="archivo de reintegro" data-solicitud="@solicitud.idSolitud">
                                                         Archivo de reintegro
                                                     </a>
-                                                </li>*@
+                                                </li>
+                                             }
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3"
+                                                   data-formato-text="pathI4" data-nombreArchivo="formato i4" data-solicitud="@solicitud.idSolitud">
+                                                    Formato I4
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3"
+                                                   data-formato-text="pathI5" data-nombreArchivo="formato i5" data-solicitud="@solicitud.idSolitud">
+                                                    Formato I5
+                                                </a>
+                                            </li>
                                             </ul>
                             </tr>
                         }

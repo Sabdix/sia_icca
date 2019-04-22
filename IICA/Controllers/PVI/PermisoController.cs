@@ -46,17 +46,17 @@ namespace IICA.Controllers.PVI
                 Result result = permisoDAO.ActualizarPermiso(permiso_);
                 if (result.status)
                 {
-                    string pathFormato = ObtenerFormatoHttpPost(Request,(Permiso) result.objeto,
-                        FormatosPermiso.FORMATO_AUTORIZACION.ToString()
-                        ,permiso_.emCveEmpleado);
-                    if (!string.IsNullOrEmpty(pathFormato))
-                    {
-                        permisoDAO.ActualizarFormatoPermiso(permiso_, pathFormato);
-                    }
-                    else
-                        result.mensaje = "No se logro subir el formato, intente mas tarde.";
-                    try { Email.NotificacionPermiso((Permiso)result.objeto); }
-                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                    //string pathFormato = ObtenerFormatoHttpPost(Request,(Permiso) result.objeto,
+                    //    FormatosPermiso.FORMATO_AUTORIZACION.ToString()
+                    //    ,permiso_.emCveEmpleado);
+                    //if (!string.IsNullOrEmpty(pathFormato))
+                    //{
+                    //    permisoDAO.ActualizarFormatoPermiso(permiso_, pathFormato);
+                    //}
+                    //else
+                    //    result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                    //try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                    //catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -177,6 +177,36 @@ namespace IICA.Controllers.PVI
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult EnviarPermiso(Permiso permiso_)
+        {
+            try
+            {
+                permisoDAO = new PermisoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                permiso_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                permiso_.estatusPermiso.idEstatusPermiso = (int)EstatusSolicitud.SOLICITUD_ENVIADA;
+                Result result = permisoDAO.ActualizarPermiso(permiso_);
+                if (result.status)
+                {
+                    string pathFormato = ObtenerFormatoHttpPost(Request, permiso_,FormatosPermiso.FORMATO_AUTORIZACION.ToString(), permiso_.emCveEmpleado);
+                    if (!string.IsNullOrEmpty(pathFormato))
+                    {
+                        permisoDAO.ActualizarFormatoPermiso(permiso_, pathFormato);
+                    }
+                    else
+                        result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                    try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
             }
         }
 

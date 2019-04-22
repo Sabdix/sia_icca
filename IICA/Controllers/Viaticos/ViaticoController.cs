@@ -184,7 +184,7 @@ namespace IICA.Controllers.Viaticos
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {
-                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
+                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto,EnumRolUsuario.AUTORIZADOR_VIATICOS); }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -309,7 +309,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
+                solicitudViatico_.autorizador = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 //if (result.status)
@@ -333,11 +333,13 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
-                solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 Result resulta = solicitudViaticoDAO.ActualizarFechaCheque(solicitudViatico_);
                 if (resulta.status)
+                {
                     result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
+                    try { Email.NotificacionElaboracionCheque((SolicitudViatico)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -554,7 +556,7 @@ namespace IICA.Controllers.Viaticos
                 {
                     try {
                         result.objeto = solicitudViaticoDAO.ObtenerDetalleSol(solicitudViatico_.idSolitud).objeto;
-                        Email.NotificacionCompDatosSolViatico((SolicitudViatico)result.objeto);
+                        Email.NotificacionConcluirComprobacionSolViatico((SolicitudViatico)result.objeto);
                     }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
@@ -607,12 +609,12 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                solicitudViatico_.usuario = usuarioSesion;
+                //solicitudViatico_.usuario = usuarioSesion;
                 solicitudViatico_.Em_Cve_Empleado = usuarioSesion.emCveEmpleado;
                 Result result = solicitudViaticoDAO.ActualizarEstatusSolicitud(solicitudViatico_);
                 if (result.status)
                 {
-                    try { Email.NotificacionSolViatico((SolicitudViatico)result.objeto); }
+                    try { Email.NotificacionVerificarSolicitud((SolicitudViatico)result.objeto); }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -659,7 +661,23 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                return View(solicitudViaticoDAO.ObtenerMisSolicitudesHistorial(usuarioSesion.emCveEmpleado));
+                return View(solicitudViaticoDAO.ObtenerMisSolicitudesHistorial(usuarioSesion.emCveEmpleado,usuarioSesion));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost, SessionExpire]
+        public ActionResult _ObtenerTarifasViaticos()
+        {
+            try
+            {
+                solicitudViaticoDAO = new SolicitudViaticoDAO();
+
+                return PartialView(solicitudViaticoDAO.ConsultarTarifasViaticos());
             }
             catch (Exception ex)
             {
@@ -802,8 +820,8 @@ namespace IICA.Controllers.Viaticos
                             comprobacionGasto.subtotal = Convert.ToDouble(xn.Value);
                         if (string.Compare(xn.LocalName, "total", true) == 0)
                             comprobacionGasto.total = Convert.ToDouble(xn.Value);
-                        //if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
-                        //    comprobacionGasto.lugar = xn.Value.ToString(); //se comenta porq esta descripcion es muy larga
+                        if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
+                            comprobacionGasto.lugar = xn.Value.ToString(); //se lee tambien aqui el lugar porque en ocasiones no viene en el atributo de "localidad" del nodo del emisor
                         if (string.Compare(xn.LocalName, "fecha", true) == 0)
                             comprobacionGasto.fecha = string.IsNullOrEmpty(xn.Value.ToString()) ? DateTime.MinValue : Convert.ToDateTime(xn.Value.ToString());
                     }

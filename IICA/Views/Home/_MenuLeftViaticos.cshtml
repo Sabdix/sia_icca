@@ -26,7 +26,7 @@
             </li>
 
             <!--    SOLICITUD -->
-            @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+            @if (Model.empleado)
             {
                 <li class="nodo-menu" id="nodo-solicitud">
                     <a href="@Url.Action("NuevaSolicitud", "Viatico")">
@@ -35,7 +35,7 @@
                 </li>
             }
             <!--    SOLICITUDES    -->
-            @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+            @if (Model.empleado)
             {
                 <li class="nodo-menu" id="nodo-misSolicitudes">
                     <a href="javascript:;"> <i class="material-icons">account_balance_wallet</i> <span class="title">Mis Solicitudes</span> <span class=" arrow"></span> </a>
@@ -49,7 +49,7 @@
                 </li>
             }
             <!--    SOLICITUDES AUTORIZADOR    -->
-            @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.AUTORIZADOR_PVI)
+            @if (Model.rolesUsuario.Exists(r=>r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_VIATICOS)))
             {
                 <li class="nodo-menu" id="nodo-solicitudesAutorizar">
                     <a href="@Url.Action("SolicitudesPorAutorizar", "Viatico")">
@@ -58,7 +58,7 @@
                 </li>
             }
             <!--    SOLICITUDES ADMINISTRADOR    -->
-            @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+            @if (Model.rolesUsuario.Exists(r=>r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_VIATICOS)))
             {
                 <li class="nodo-menu" id="nodo-solicitudCheque">
                     <a href="@Url.Action("SolicitudesGenerarCheque", "Viatico")">
@@ -70,10 +70,15 @@
                         <i class="material-icons">remove_red_eye</i> <span class="title">Sol. para Verificar </span> <span class="selected"></span>
                     </a>
                 </li>
+                <li class="nodo-menu" id="nodo-solicitudesHistorial">
+                    <a href="@Url.Action("MisSolicitudesHistorial", "Viatico")">
+                        <i class="material-icons">reorder</i> <span class="title">Historial solicitudes </span> <span class="selected"></span>
+                    </a>
+                </li>
             }
 
             <!--    REPORTES    -->
-            <li class="nodo-menu" id="nodo-reportes">
+            @*<li class="nodo-menu" id="nodo-reportes">
                 <a href="javascript:;"> <i class="material-icons">assignment</i> <span class="title">Reportes</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
                     @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
@@ -82,7 +87,7 @@
                         <li> <a id="submenu-misIncapacidades" href="@Url.Action("SitioEnConstruccion", "Home")">Depósitos de caja</a> </li>
                     }
                 </ul>
-            </li>
+            </li>*@
         </ul>
 
         <br /><br /><br />
@@ -105,7 +110,7 @@
                         IICA - PVI
                     </a>
                 </li>
-                @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                @if (Model.rol.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH))
                 {
                     <li>
                         <a href="@WebConfigurationManager.AppSettings["urlPasivoLaboral"].ToString()">

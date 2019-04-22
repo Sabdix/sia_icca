@@ -52,6 +52,10 @@ namespace IICA.Models.Entidades.Viaticos
         public DateTime ? fechaReintegro { get; set; }
         public bool aplicaReintegro { get; set; }
         public decimal importeReintegro { get; set; }
+        /// <summary>
+        /// importe calculado por sistema, ya que sera un dato a mostrar y recomendar dicha cantidad al empleado
+        /// </summary>
+        public decimal importeReintegroPorSistema { get; set; }
         public string pathArchivoReintegro { get; set; }
         public string consecutivoAnual { get; set; }
 
@@ -62,6 +66,11 @@ namespace IICA.Models.Entidades.Viaticos
         public string pathI4 { get; set; }
         public string pathI5 { get; set; }
 
+        public Int64 noCuenta { get; set; }
+        public string banco { get; set; }
+        public double totalGastosExtras { get; set; }
+
+     
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();
@@ -75,7 +84,7 @@ namespace IICA.Models.Entidades.Viaticos
             etapaSolicitud = new EtapaSolicitud();
             nivelMando = new NivelMando();
             autorizador = new Usuario();
-            autorizador.tipoUsuario = EnumTipoUsuario.AUTORIZADOR_PVI;
+            autorizador.rol.descripcion = EnumRolUsuario.AUTORIZADOR_PVI.ToString();
             comprobacionesGasto = new List<ComprobacionGasto>();
         }
     }

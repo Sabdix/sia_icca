@@ -186,6 +186,7 @@
 
             </div>
             <div class="modal-footer">
+                <button type="button" id="btn-onVisualizarTarifas" class="btn btn-primary" onclick="MostrarTarifasViaticos()">Visualizar tarifas</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 <button type="button" id="btn-onCompletarDatosSol" class="btn btn-primary" onclick="OnCompletarDatosSol()">Completar solicitud</button>
             </div>
@@ -282,6 +283,24 @@
                     </div>
 
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal fade" id="modal-tarifas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br />
+            </div>
+            <div class="modal-body" id="modal-content-tarifas">
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
