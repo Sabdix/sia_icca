@@ -677,7 +677,7 @@ namespace IICA.Controllers.Viaticos
             {
                 solicitudViaticoDAO = new SolicitudViaticoDAO();
 
-                return PartialView(solicitudViaticoDAO.ConsultarTarifasViaticos());
+                return PartialView(solicitudViaticoDAO.ConsultarTarifasViaticos().objeto);
             }
             catch (Exception ex)
             {

@@ -112,10 +112,9 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <br>
-                <i class="fa fa-question-circle fa-7x"></i>
+                <i class="fa fa-question-circle fa-5x"></i>
                 <h4 id="myModalLabel" class="semi-bold">Completar datos de la solicitud.</h4>
                 <p class="no-margin">A continuación se muestran los datos a completar la solicitud para autorizar.</p>
-                <br>
             </div>
             <div class="modal-body">
                 <div class="row form-row">
@@ -186,9 +185,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" id="btn-onVisualizarTarifas" class="btn btn-primary" onclick="MostrarTarifasViaticos()">Visualizar tarifas</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 <button type="button" id="btn-onCompletarDatosSol" class="btn btn-primary" onclick="OnCompletarDatosSol()">Completar solicitud</button>
+                <button data-toggle="modal" data-target="#modal-tarifas" type="button" id="btn-onVisualizarTarifas" class="btn btn-info" onclick="MostrarTarifasViaticos()">Visualizar tarifas</button>
             </div>
         </div>
 
@@ -202,10 +201,9 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <br>
-                <i class="fa fa-question-circle fa-7x"></i>
+                <i class="fa fa-question-circle fa-5x"></i>
                 <h4 id="myModalLabel" class="semi-bold">Realmente desea CANCELAR la siguiente solicitud.</h4>
                 <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
-                <br>
             </div>
             <div class="modal-body">
                 <div class="row form-row">
@@ -297,7 +295,6 @@
         <div class="modal-content modal-lg">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <br />
             </div>
             <div class="modal-body" id="modal-content-tarifas">
 

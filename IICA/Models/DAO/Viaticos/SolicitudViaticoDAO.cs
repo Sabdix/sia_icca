@@ -177,6 +177,7 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.realizarComprobacionGastos = dbManager.DataReader["realizar_comprobacion_gastos"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["realizar_comprobacion_gastos"]);
                         solicitudViatico.comprobarItinerarioAereo = dbManager.DataReader["comprobar_itinerario_aereo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["comprobar_itinerario_aereo"]);
                         solicitudViatico.pathArchivoAutorizacion = dbManager.DataReader["Path_Archivo_Autorizacion"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Autorizacion"].ToString());
+                        solicitudViatico.montoAutorizado = dbManager.DataReader["Monto_Viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Autorizado"].ToString());
                         solicitudes.Add(solicitudViatico);
                     }
                 }
@@ -324,7 +325,7 @@ namespace IICA.Models.DAO.Viaticos
                             solicitudViatico.usuario.puesto = dbManager.DataReader["Puesto_empleado"] == DBNull.Value ? "" : dbManager.DataReader["Puesto_empleado"].ToString();
                             solicitudViatico.tarifaDeIda = dbManager.DataReader["tarifa_de_ida"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["tarifa_de_ida"].ToString());
                             solicitudViatico.tarifaDeVuelta = dbManager.DataReader["tarifa_de_vuelta"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["tarifa_de_vuelta"].ToString());
-                            solicitudViatico.noCuenta = dbManager.DataReader["Numero_Cuenta_Banco"] == DBNull.Value ? 0 : Convert.ToInt64(dbManager.DataReader["Numero_Cuenta_Banco"].ToString());
+                            solicitudViatico.noCuenta = string.IsNullOrEmpty(dbManager.DataReader["Numero_Cuenta_Banco"].ToString()) ? 0 : Convert.ToInt64(dbManager.DataReader["Numero_Cuenta_Banco"].ToString());
                             solicitudViatico.banco = dbManager.DataReader["Banco"] == DBNull.Value ? "" : (dbManager.DataReader["Banco"].ToString());
 
                             //lectura datos autorizador
@@ -796,7 +797,7 @@ namespace IICA.Models.DAO.Viaticos
                 {
                     dbManager.Open();
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTAR_TARIFAS_VIATICOS");
-                    if (dbManager.DataReader.Read())
+                    while (dbManager.DataReader.Read())
                     {
                         tarifaViatico = new TarifaViatico();
                         tarifaViatico.idTarifa = dbManager.DataReader["id_tarifa_viatico"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["id_tarifa_viatico"].ToString());  
@@ -808,7 +809,7 @@ namespace IICA.Models.DAO.Viaticos
                         tarifaViatico.solicitudViatico.tipoViaje.idTipoViaje = dbManager.DataReader["Id_tipo_viaje"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_tipo_viaje"].ToString());
                         tarifaViatico.solicitudViatico.tipoViaje.descripcion = dbManager.DataReader["tipo_viaje"] == DBNull.Value ? "" : dbManager.DataReader["tipo_viaje"].ToString();
                         tarifaViatico.nivelMando.idNivelMando= dbManager.DataReader["Id_nivel_mando"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_nivel_mando"].ToString());
-                        tarifaViatico.solicitudViatico.nivelMando.descripcion = dbManager.DataReader["nivel_mando"] == DBNull.Value ? "" : dbManager.DataReader["nivel_mando"].ToString();
+                        tarifaViatico.nivelMando.descripcion = dbManager.DataReader["nivel_mando"] == DBNull.Value ? "" : dbManager.DataReader["nivel_mando"].ToString();
                         tarifasViatico.Add(tarifaViatico);
                      }
                     result.objeto = tarifasViatico;

@@ -25,8 +25,8 @@
                     <tr>
                         <td>@tarifa.idTarifa</td>
                         <td>@tarifa.tarifa.ToString("C")</td>
-                        <td>@tarifa.solicitudViatico.pernocta</td>
-                        <td>@tarifa.solicitudViatico.marginal</td>
+                        <td>@tarifa.descripcionPernocta</td>
+                        <td>@tarifa.descripcionMarginal</td>
                         <td>@tarifa.solicitudViatico.tipoViaje.descripcion</td>
                         <td>@tarifa.solicitudViatico.tipoDivisa.descripcion</td>
                         <td>@tarifa.nivelMando.descripcion</td>
@@ -58,7 +58,7 @@
 
 <script>
     $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip()
+        $('#tabla-tarifas').DataTable();
     });
 
 </script>
