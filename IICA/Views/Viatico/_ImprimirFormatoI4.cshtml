@@ -369,14 +369,8 @@
                             </tr>
                             <tr>
                                 <td>Otros</td>
-                                @foreach (var gasto in Model.gastosExtrasSol)
-                                {
-                                    if (@gasto.descripcion == "OTROS")
-                                    {
-                                        <td>@(Model.tipoViaje.idTipoViaje ==1 ? gasto.monto.ToString("C"): "")</td>
-                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
-                                    }
-                                }
+                                <td>@(Model.tipoViaje.idTipoViaje ==1 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion == "OTROS").Sum(g => g.monto).ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje ==2 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion == "OTROS").Sum(g => g.monto).ToString("C") : "")</td>
                             </tr>
                     </table>
                 </td>
