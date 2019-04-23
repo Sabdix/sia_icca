@@ -43,11 +43,23 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span data-toggle="modal" data-target="#modal-itinPaseAbordar" onclick="MostrarPaseAbordarIti(@(new JavaScriptSerializer().Serialize(itinerario)))">
-                                        <button data-toggle="tooltip" title="Ver pase de abordar" class="btn btn-success btn-mini">
-                                            <i class="fa fa-print"></i>
-                                        </button>
-                                    </span>
+                                    @if (Model.etapaSolicitud.idEtapaSolicitud >= (int)EnumEtapaSolicitudViaticos.COMPROBACION_GASTOS)
+                                    {
+                                        <span data-toggle="modal" data-target="#modal-itinPaseAbordar" onclick="MostrarPaseAbordarIti(@(new JavaScriptSerializer().Serialize(itinerario)))">
+                                            <button data-toggle="tooltip" title="Ver pase de abordar" class="btn btn-success btn-mini">
+                                                <i class="fa fa-print"></i>
+                                            </button>
+                                        </span>
+                                    }
+                                    @if (Model.etapaSolicitud.idEtapaSolicitud == (int)EnumEtapaSolicitudViaticos.GENERACION_CHEQUE)
+                                    {
+                                        <span data-toggle="modal" data-target="#modal-itinerarioSubirArchivo" data-nombreArchivo="Pase de abordar"
+                                              data-itinerario="@(new JavaScriptSerializer().Serialize(itinerario))" class="itinerarioSubirArchivo">
+                                            <button data-toggle="tooltip" title="Subir pase de abordar" class="btn btn-success btn-mini">
+                                                <i class="fa fa-upload"></i>
+                                            </button>
+                                        </span>
+                                    }
                                 </td>
                             </tr>
                         }
