@@ -280,7 +280,7 @@
 </div>
 
 <div id="condiciones especiales" style="font-size: 10px;"  class="md-90">
-    <label style="font-size:x-small">CONDICIONES ESPECIALES:</label>
+    <label style="font-size:x-small">CONDICIONES ESPECIALES:  @Model.condicionesEspeciales</label>
     <div class="md-90">
         <table>
             <tr>
@@ -376,7 +376,6 @@
                                         <td>@(Model.tipoViaje.idTipoViaje ==1 ? gasto.monto.ToString("C"): "")</td>
                                         <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
                                     }
-                                }
                                 }
                             </tr>
                     </table>
