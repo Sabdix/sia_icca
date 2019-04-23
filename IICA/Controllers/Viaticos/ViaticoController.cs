@@ -847,11 +847,32 @@ namespace IICA.Controllers.Viaticos
                                 }
                             }
                         }
+
+                        if (string.Compare(node.LocalName, "Complemento", true) == 0)
+                        {
+                            foreach (XmlNode node__ in node.ChildNodes)
+                            {
+                                if (string.Compare(node__.LocalName, "TimbreFiscalDigital", true) == 0)
+                                {
+                                    foreach (XmlAttribute xn__ in node__.Attributes)
+                                    {
+                                        if (string.Compare(xn__.LocalName, "UUID", true) == 0)
+                                            comprobacionGasto.uuid = xn__.Value.ToString();
+                                    }
+                                }
+                            }
+                        }
+
                     }
-                    if (comprobacionGasto.subtotal > 0 && comprobacionGasto.subtotal > 0 && !string.IsNullOrEmpty(comprobacionGasto.lugar) && !string.IsNullOrEmpty(comprobacionGasto.emisor))
+                    if (comprobacionGasto.subtotal > 0 && comprobacionGasto.subtotal > 0 
+                        && !string.IsNullOrEmpty(comprobacionGasto.lugar) 
+                        && !string.IsNullOrEmpty(comprobacionGasto.emisor)
+                        && !string.IsNullOrEmpty(comprobacionGasto.uuid))
                     {
-                        result.objeto = comprobacionGasto;
-                        result.status = true;
+                        //validar UUID en la base de datos
+                        result = new ComprobacionGastosDAO().ConsultarExisteFactura(comprobacionGasto);
+                        if(result.status)
+                            result.objeto = comprobacionGasto;
                     }
                     else
                         result.mensaje = "Los datos de la factura son incorrectos, intente de nuevo.";

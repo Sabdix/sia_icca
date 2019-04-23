@@ -103,7 +103,7 @@
                 </div>
 
                 <div class="row">
-                    @if (Model.empleado || Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)) )
+                    @if (Model.empleado || Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
                     {
                         <div class="col-md-4">
                             <h3>IICA - ACTUALIZACIÓN DE EXPEDIENTE</h3>
@@ -112,6 +112,19 @@
                             </p>
                             <p>
                                 <form action="@WebConfigurationManager.AppSettings["urlDocumentos"].ToString()" method="post">
+                                    <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                                    <input hidden name="password" value="@(Model.contrasena)" />
+                                    <button type="submit" class="btn btn-default">Ingresar</button>
+                                </form>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>IICA - CONTRATOS MASIVOS</h3>
+                            <p>
+                                ---------------------------.
+                            </p>
+                            <p>
+                                <form action="@WebConfigurationManager.AppSettings["urlContratosMasivos"].ToString()" method="post">
                                     <input hidden name="email" value="@(Model.emCveEmpleado)" />
                                     <input hidden name="password" value="@(Model.contrasena)" />
                                     <button type="submit" class="btn btn-default">Ingresar</button>
