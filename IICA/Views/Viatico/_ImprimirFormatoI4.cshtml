@@ -369,7 +369,8 @@
                             </tr>
                             <tr>
                                 <td>Otros</td>
-                                <td>@(Model.tipoViaje.idTipoViaje ==1 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion == "OTROS").Sum(g => g.monto).ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje ==1 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion != "TRANSPORTE AÉREO" && 
+                                ge.descripcion != "PEAJE / GASOLINA" && ge.descripcion != "AUTOBÚS").Sum(g => g.monto).ToString("C") : "")</td>
                                 <td>@(Model.tipoViaje.idTipoViaje ==2 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion == "OTROS").Sum(g => g.monto).ToString("C") : "")</td>
                             </tr>
                     </table>
