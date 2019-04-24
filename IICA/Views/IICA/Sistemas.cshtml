@@ -140,7 +140,7 @@
                             <p><a class="btn btn-default" href="@Url.Action("Viaticos", "Home")">Ingresar</a></p>
                         </div>
                     }
-                    @if (Model.empleado)
+                    @if (Model.empleado || Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
                     {
                         <div class="col-md-4">
                             <h3>IICA - PERMISOS, VACACIONES E INCAPACIDADES</h3>

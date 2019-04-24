@@ -49,7 +49,7 @@
                 </li>
             }
             <!--    SOLICITUDES AUTORIZADOR    -->
-            @if (Model.rolesUsuario.Exists(r=>r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_VIATICOS)))
+            @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_VIATICOS)))
             {
                 <li class="nodo-menu" id="nodo-solicitudesAutorizar">
                     <a href="@Url.Action("SolicitudesPorAutorizar", "Viatico")">
@@ -58,7 +58,7 @@
                 </li>
             }
             <!--    SOLICITUDES ADMINISTRADOR    -->
-            @if (Model.rolesUsuario.Exists(r=>r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_VIATICOS)))
+            @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_VIATICOS)))
             {
                 <li class="nodo-menu" id="nodo-solicitudCheque">
                     <a href="@Url.Action("SolicitudesGenerarCheque", "Viatico")">
@@ -79,37 +79,43 @@
 
             <!--    REPORTES    -->
             @*<li class="nodo-menu" id="nodo-reportes">
-                <a href="javascript:;"> <i class="material-icons">assignment</i> <span class="title">Reportes</span> <span class=" arrow"></span> </a>
-                <ul class="sub-menu">
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
-                    {
-                        <li> <a id="submenu-nvsolInca" href="@Url.Action("SitioEnConstruccion", "Home")">Solicitudes </a> </li>
-                        <li> <a id="submenu-misIncapacidades" href="@Url.Action("SitioEnConstruccion", "Home")">Depósitos de caja</a> </li>
-                    }
-                </ul>
-            </li>*@
+                    <a href="javascript:;"> <i class="material-icons">assignment</i> <span class="title">Reportes</span> <span class=" arrow"></span> </a>
+                    <ul class="sub-menu">
+                        @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                        {
+                            <li> <a id="submenu-nvsolInca" href="@Url.Action("SitioEnConstruccion", "Home")">Solicitudes </a> </li>
+                            <li> <a id="submenu-misIncapacidades" href="@Url.Action("SitioEnConstruccion", "Home")">Depósitos de caja</a> </li>
+                        }
+                    </ul>
+                </li>*@
         </ul>
 
-        <br /><br /><br />
+        <br /><br />
         <div class="side-bar-widgets">
             <p class="menu-title sm">SIA IICA</p>
             <ul class="folders">
-                <li>
-                    <a href="javascript:;" onclick="document.getElementById('form-doc').submit();">
-                        <div class="status-icon green"></div>
-                        IICA - ACT. DE EXPEDIENTE
-                        <form id="form-doc" action="@WebConfigurationManager.AppSettings["urlDocumentos"].ToString()" method="post">
-                            <input hidden name="email" value="@(Model.emCveEmpleado)" />
-                            <input hidden name="password" value="@(Model.contrasena)" />
-                        </form>
-                    </a>
-                </li>
-                <li>
-                    <a href="@Url.Action("Index","Home")">
-                        <div class="status-icon red"></div>
-                        IICA - PVI
-                    </a>
-                </li>
+                @if (Model.empleado)
+                {
+                    <li>
+                        <a href="javascript:;" onclick="document.getElementById('form-doc').submit();">
+                            <div class="status-icon green"></div>
+                            IICA - ACT. DE EXPEDIENTE
+                            <form id="form-doc" action="@WebConfigurationManager.AppSettings["urlDocumentos"].ToString()" method="post">
+                                <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                                <input hidden name="password" value="@(Model.contrasena)" />
+                            </form>
+                        </a>
+                    </li>
+                }
+                @if (Model.empleado || Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
+                {
+                    <li>
+                        <a href="@Url.Action("Index", "Home")">
+                            <div class="status-icon red"></div>
+                            IICA - PVI
+                        </a>
+                    </li>
+                }
                 @if (Model.rol.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH))
                 {
                     <li>
