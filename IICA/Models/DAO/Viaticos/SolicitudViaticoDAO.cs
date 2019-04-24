@@ -170,6 +170,7 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.usuario.apellidoPaterno = dbManager.DataReader["Em_Apellido_Paterno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Paterno"].ToString();
                         solicitudViatico.usuario.apellidoMaterno = dbManager.DataReader["Em_Apellido_Materno"] == DBNull.Value ? "" : dbManager.DataReader["Em_Apellido_Materno"].ToString();
                         solicitudViatico.usuario.email = dbManager.DataReader["Em_Email"] == DBNull.Value ? "" : dbManager.DataReader["Em_Email"].ToString();
+                        solicitudViatico.usuario.proyecto.descripcion = dbManager.DataReader["proyecto"] == DBNull.Value ? "" : dbManager.DataReader["proyecto"].ToString();
                         solicitudViatico.Em_Cve_Empleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         solicitudViatico.emCveEmpleadoAutoriza = dbManager.DataReader["Em_Cve_Empleado_autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_autoriza"].ToString();
                         solicitudViatico.pernocta = dbManager.DataReader["pernocta"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["pernocta"].ToString());
