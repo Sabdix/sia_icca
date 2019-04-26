@@ -156,7 +156,7 @@
             @Model.usuario.puesto
         </div>
         <div class="content-datos-solicitante-dato">
-            @Model.fechaAlta
+            @Model.fechaAlta.ToShortDateString()
         </div>
     </div>
 
@@ -173,7 +173,10 @@
                 </tr>
             </thead>
             <tbody>
-                @{int i = 1; }
+                @{
+                    int i = 1;
+                    double totalComprobacion = 0;
+                    }
                 @foreach (ComprobacionGasto comprobacion in Model.comprobacionesGasto)
                 {
                     <tr>
@@ -185,6 +188,7 @@
                         <td></td>
                     </tr>
                     i++;
+                    totalComprobacion = totalComprobacion + comprobacion.total;
                 }
                 <tr style="height: 15px;">
                     <td colspan="4" style="border-bottom:1px solid #fff !important;">Obervaciones: </td>
@@ -214,7 +218,7 @@
                         </table>
                     </td>
                     <td>Total de gasto:</td>
-                    <td>@Model.montoComprobado.ToString("C")</td>
+                    <td>@totalComprobacion.ToString("C")</td>
                     <td></td>
                 </tr>
                 <tr>
@@ -224,12 +228,12 @@
                 </tr>
                 <tr>
                     <td>Reintegro</td>
-                    <td>@(Model.montoAutorizado > Model.montoComprobado ? Model.importeReintegro.ToString("C") : "")</td>
+                    <td>@(Model.montoAutorizado > totalComprobacion ? Model.importeReintegro.ToString("C") : "")</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Reembolso</td>
-                    <td>@(Model.montoComprobado > Model.montoAutorizado ? (Model.montoComprobado - Model.montoAutorizado).ToString("C") : "")</td>
+                    <td>@(totalComprobacion > Model.montoAutorizado ? (totalComprobacion - Model.montoAutorizado).ToString("C") : "")</td>
                     <td></td>
                 </tr>
             </tfoot>
@@ -240,9 +244,9 @@
 
     <div class="md-90" style="margin-top: 20px; font-size: 12px;">
         <span>Saldo a favor de:</span>&nbsp;&nbsp;IICA:&nbsp;&nbsp;
-        <span style="border-bottom: 1px solid #000; min-width: 100px; display: inline-block; text-align: center;">@(Model.montoAutorizado > Model.montoComprobado ? "X" : " ")</span>
+        <span style="border-bottom: 1px solid #000; min-width: 100px; display: inline-block; text-align: center;">@(Model.montoAutorizado > totalComprobacion ? "X" : " ")</span>
         <span>&nbsp;&nbsp;Empleado:&nbsp;&nbsp;</span>
-        <span style="border-bottom: 1px solid #000; min-width: 100px; display: inline-block;text-align: center;">@(Model.montoComprobado > Model.montoAutorizado ? "X" : " ")</span>
+        <span style="border-bottom: 1px solid #000; min-width: 100px; display: inline-block;text-align: center;">@(totalComprobacion > Model.montoAutorizado ? "X" : " ")</span>
     </div>
 
     <div class="md-90" style="margin-top: 20px; font-size: 12px;">

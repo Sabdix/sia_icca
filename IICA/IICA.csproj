@@ -202,6 +202,7 @@
     <Compile Include="Models\Entidades\Viaticos\Itinerario.cs" />
     <Compile Include="Models\Entidades\Viaticos\Justificacion.cs" />
     <Compile Include="Models\Entidades\Viaticos\MedioTransporte.cs" />
+    <Compile Include="Models\Entidades\Viaticos\TarifaViatico.cs" />
     <Compile Include="Models\Entidades\Viaticos\TipoDivisa.cs" />
     <Compile Include="Models\Entidades\Viaticos\TipoSalida.cs" />
     <Compile Include="Models\Entidades\Viaticos\TipoViaje.cs" />
@@ -562,8 +563,6 @@
     <Content Include="Views\Viatico\MisSolicitudes.cshtml" />
     <Content Include="Views\Viatico\SolicitudesPorAutorizar.cshtml" />
     <Content Include="Views\Viatico\SolicitudesGenerarCheque.cshtml" />
-    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_5cf452019_21_03_12_21.pdf" />
-    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_f88062019_22_03_12_22.pdf" />
     <Content Include="Views\Viatico\_ImprimirFormatoI4.cshtml" />
     <Content Include="Views\Viatico\MisSolicitudesPorComprobar.cshtml" />
     <Content Include="Views\Viatico\_ObtenerComprobaciones.cshtml" />
@@ -580,10 +579,10 @@
     <Content Include="Views\Rol\UsuariosAdministradoresViaticos.cshtml" />
     <Content Include="Views\Rol\UsuariosAutorizadoresPVI.cshtml" />
     <Content Include="Views\Rol\UsuariosAutorizadoresViaticos.cshtml" />
+    <Content Include="Views\Viatico\_ObtenerTarifasViaticos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="PVI\Incapacidades\Formatos\0000000006\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

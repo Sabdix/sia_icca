@@ -111,7 +111,7 @@ namespace IICA.Models.DAO.Viaticos
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(10);
+                    dbManager.CreateParameters(11);
                     dbManager.AddParameters(0, "Id_Solicitud", comprobacionGasto.solicitud.idSolitud);
                     dbManager.AddParameters(1, "Comentario", string.IsNullOrEmpty(comprobacionGasto.comentario)? "":comprobacionGasto.comentario);
                     dbManager.AddParameters(2, "Path_Archivo_XML", comprobacionGasto.pathArchivoXML);
@@ -122,6 +122,7 @@ namespace IICA.Models.DAO.Viaticos
                     dbManager.AddParameters(7, "Total", comprobacionGasto.total);
                     dbManager.AddParameters(8, "lugar", comprobacionGasto.lugar);
                     dbManager.AddParameters(9, "fecha", comprobacionGasto.fecha);
+                    dbManager.AddParameters(10, "uuid", comprobacionGasto.uuid);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_INSERTA_COMPROBACION_GASTO");
                     if (dbManager.DataReader.Read())
                     {
@@ -152,6 +153,31 @@ namespace IICA.Models.DAO.Viaticos
                     dbManager.AddParameters(1, "archivo",(int) archivoComprobacionGasto);
                     dbManager.AddParameters(2, "path_archivo", pathArchivo);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZAR_PATH_ARCHIVOS_COMPROBACION_GASTO");
+                    if (dbManager.DataReader.Read())
+                    {
+                        result.mensaje = dbManager.DataReader["MENSAJE"].ToString();
+                        result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        public Result ConsultarExisteFactura(ComprobacionGasto comprobacionGasto)
+        {
+            Result result = new Result();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "uuid", comprobacionGasto.uuid);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_CONSULTAR_EXISTE_FACTURA");
                     if (dbManager.DataReader.Read())
                     {
                         result.mensaje = dbManager.DataReader["MENSAJE"].ToString();

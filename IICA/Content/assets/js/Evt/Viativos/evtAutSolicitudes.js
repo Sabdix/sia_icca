@@ -94,6 +94,26 @@ function OnObtenerTarifasViaticos() {
     });
 }
 
+function MostrarTarifasViaticos() {
+    $.ajax({
+        data: {},
+        url: rootUrl("/Viatico/_ObtenerTarifasViaticos"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#modal-content-tarifas").html(data);
+        },
+        error: function (xhr, status, error) {
+            $("#modal-tarifas").modal("hide");
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
 function OnSuccesObtenerTarifasViaticos(data) {
     if (data.status === true) {
         $("#modal-comp-importeIDa").val(data.objeto.tarifaDeIda);
@@ -200,6 +220,8 @@ function OnSuccesCancelarSol(data) {
     }
 }
 
+
+
 $(".subirFormato").click(function () {
     idSolicitud = $(this).attr("data-solicitud");
     formato = $(this).attr("data-formato");
@@ -257,6 +279,7 @@ function MostrarInfoSolModal(solicitud) {
     $(".modal-idSol").val(solicitud.idSolitud);
     $(".modal-viaticante").val(solicitud.usuario.nombreCompleto);
 }
+
 function ObtenerFechasJsonSolSeleccionada(solicitud) {
     var fechaInicio = new Date(solicitud.fechaInicio.match(/\d+/)[0] * 1);
     var fechaFin = new Date(solicitud.fechaFin.match(/\d+/)[0] * 1);

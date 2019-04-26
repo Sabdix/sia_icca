@@ -1,6 +1,6 @@
 ﻿@model IICA.Models.Entidades.Viaticos.SolicitudViatico
 @using System.Web.Script.Serialization;
-
+@using IICA.Models.Entidades;
 
 <div class="grid simple vertical green">
     <div class="grid-title">
@@ -73,7 +73,8 @@
                                 </ul>
                             </div>
                         </td>
-                        @if (Model.etapaSolicitud.idEtapaSolicitud != 5 && Model.etapaSolicitud.idEtapaSolicitud != 7){
+                        @if (Model.etapaSolicitud.idEtapaSolicitud == (int)EnumEtapaSolicitudViaticos.GENERACION_CHEQUE)
+                        {
                         <td>
                             <span>
                                 <button data-toggle="tooltip" title="Eliminar comprobación" class="btn btn-warning btn-mini"

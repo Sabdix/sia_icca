@@ -34,10 +34,10 @@
         height: 130px;
     }
 
-        #content-header img {
-            width: 265px;
-            height: 115px;
-        }
+    #content-header img {
+        width: 215px;
+        height: 85px;
+    }
     /*------------------------------------*/
     #content-fecha-header {
         display: flex;
@@ -103,7 +103,7 @@
    <div id="encabezado"> 
     <table>
         <tr class="text-left">
-            <td rowspan="3"><img src="http://www.iicarhmexico.com/Sia_IICA/Content/assets/img/logo_iica.png" width="200" height="180" /></td>
+            <td rowspan="3"><img src="http://www.iicarhmexico.com/Sia_IICA/Content/assets/img/logo_iica.png" width="215" height="85" /></td>
         </tr>
         <tr class="text-right">
             <td><label class="text-center">FORMULARIO I4 </label><br /> 
@@ -280,7 +280,7 @@
 </div>
 
 <div id="condiciones especiales" style="font-size: 10px;"  class="md-90">
-    <label style="font-size:x-small">CONDICIONES ESPECIALES:</label>
+    <label style="font-size:x-small">CONDICIONES ESPECIALES:  @Model.condicionesEspeciales</label>
     <div class="md-90">
         <table>
             <tr>
@@ -293,7 +293,7 @@
                                 <td style="width:10%;text-align: center;">Viáticos ML $</td>
                                 <td style="width:10%;text-align: center;">Viáticos US $</td>
                             </tr>
-                            @foreach (var itinerario in Model.itinerario)
+                            @foreach (var itinerario in Model.itinerario.FindAll(x=> x.dias > 0))
                         {
                                 <tr>
                                     @if (itinerario.tipoSalida.idTipoSalida == 1)
@@ -369,15 +369,9 @@
                             </tr>
                             <tr>
                                 <td>Otros</td>
-                                @foreach (var gasto in Model.gastosExtrasSol)
-                                {
-                                    if (@gasto.descripcion == "OTROS")
-                                    {
-                                        <td>@(Model.tipoViaje.idTipoViaje ==1 ? gasto.monto.ToString("C"): "")</td>
-                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
-                                    }
-                                }
-                                }
+                                <td>@(Model.tipoViaje.idTipoViaje ==1 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion != "TRANSPORTE AÉREO" && 
+                                ge.descripcion != "PEAJE / GASOLINA" && ge.descripcion != "AUTOBÚS").Sum(g => g.monto).ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje ==2 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion == "OTROS").Sum(g => g.monto).ToString("C") : "")</td>
                             </tr>
                     </table>
                 </td>

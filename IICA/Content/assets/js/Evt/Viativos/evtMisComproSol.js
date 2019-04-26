@@ -539,7 +539,7 @@ function OnSuccessMostrarConluirComprobacion(data) {
         });
         $("#modal-concluir-montoCompr").val(accounting.formatMoney(totalComprobacion));
 
-        $("#modal-concluir-montoReintegro").val(0);
+        $("#modal-concluir-montoReintegro").val(solSeleccionada.importeReintegroPorSistema);
         $("#modal-concluir-fechaReintegro").val(moment().format("YYYY/MM/DD"));
         reintegroDropzone.removeAllFiles(true);
 

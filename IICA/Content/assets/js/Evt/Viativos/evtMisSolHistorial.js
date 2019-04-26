@@ -37,6 +37,7 @@ function MostrarModalComprobaciones(solicitud) {
         success: function (data) {
             OcultarLoading();
             $("#modal-content-comprobaciones").html(data);
+            $('#tabla-comprobaciones td:nth-child(8)').remove();
         },
         error: function (xhr, status, error) {
             $("#modal-comprobaciones").modal("hide");
@@ -86,7 +87,7 @@ function MostrarModalItinerarioAereos(solicitud) {
 }
 
 /*=============================================================================================
-===============================     ARCHIVOS (INFORME,10%)   ===================================
+===================================     MOSTRAR FORMATOS  =====================================
 ===============================================================================================*/
 
 function MostrarFormato(idSolicitud, formato) {
@@ -133,6 +134,51 @@ function MostrarFormato(idSolicitud, formato) {
     });
 }
 
+function ImprimirFormatoI4(id) {
+    $.ajax({
+        data: { id: id },
+        url: rootUrl("/Viatico/_ImprimirFormatoI4"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
+
+function ImprimirFormatoI5(id) {
+    $.ajax({
+        data: { id: id },
+        url: rootUrl("/Viatico/_ImprimirFormatoI5"),
+        dataType: "html",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            $("#content-impresion").html(data);
+            $("#content-impresion").printThis({ printContainer: false });
+            setTimeout(function () {
+                $("#content-impresion").html("");
+            }, 1000);
+        },
+        error: function (xhr, status, error) {
+            ControlErrores(xhr, status, error);
+        }
+    });
+}
 /*==============================================================================================
 =============================      FUNCIONES GENERALES     =====================================
 ================================================================================================*/
