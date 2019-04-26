@@ -29,6 +29,18 @@
             <div class="grid-title">
                 <h4>Lista <span class="semi-bold">de empleados</span></h4>
             </div>
+            <div class="col-md-6">
+                <label class="form-label">Departamentos</label>
+                @Html.DropDownList("departamentos", (IEnumerable<SelectListItem>)ViewBag.Departamentos, "SELECCIONE UN DEPARTAMENTO",
+                                                          new
+                                                          {
+                                                              @class = "select-iica",
+                                                              id = "departamento",
+                                                              style = "width: 100%;",
+                                                              data_val_required = "Seleccione un departamento.",
+                                                              data_val = "true"
+                                                          })
+            </div>
             <div class="grid-body ">
                 <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-reporte-solPermisos">
                     <thead>

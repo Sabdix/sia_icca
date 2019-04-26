@@ -148,6 +148,7 @@ namespace IICA.Controllers.PVI
         {
             try
             {
+                ViewBag.TiposViaje = new PermisoDAO().ConsultarDepartamentos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idDepartamento.ToString() });
                 permisoDAO = new PermisoDAO();
                 return View(permisoDAO.ObtenerReporteSolicitudesPermisos());
             }
