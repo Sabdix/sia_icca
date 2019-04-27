@@ -282,5 +282,58 @@ namespace IICA.Models.DAO.PVI
             }
             return result;
         }
+
+        public List<Departamento> ConsultarDepartamentos()
+        {
+            Departamento departamento;
+            List<Departamento> departamentos=new List<Departamento>();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_DEPARTAMENTOS");
+                    if (dbManager.DataReader.Read())
+                    {
+                            departamento = new Departamento();
+                            departamento.idDepartamento = dbManager.DataReader["Id_Departamento"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Departamento"].ToString());
+                            departamento.descripcion = dbManager.DataReader["descripcion"] == DBNull.Value ? "" : dbManager.DataReader["descripcion"].ToString();
+                            departamentos.Add(departamento);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return departamentos;
+        }
+        public List<Proyecto> ConsultarProyectosDepartamento(int id_departamento)
+        {
+            Proyecto proyecto;
+            List<Proyecto> proyectos = new List<Proyecto>();
+            try
+            {
+                using (dbManager = new DBManager(Utils.ObtenerConexion()))
+                {
+                    dbManager.Open();
+                    dbManager.CreateParameters(1);
+                    dbManager.AddParameters(0, "ID_DEPARTAMENTO", id_departamento);
+                    dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_OBTENER_PROYECTOS");
+                    if (dbManager.DataReader.Read())
+                    {
+                        proyecto = new Proyecto();
+                        proyecto.idProyecto = dbManager.DataReader["Id_Departamento"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Departamento"].ToString());
+                        proyecto.descripcion = dbManager.DataReader["descripcion"] == DBNull.Value ? "" : dbManager.DataReader["descripcion"].ToString();
+                        proyectos.Add(proyecto);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return proyectos;
+        }
     }
 }

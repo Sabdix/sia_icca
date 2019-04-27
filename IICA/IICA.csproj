@@ -167,6 +167,7 @@
     <Compile Include="Models\DAO\Viaticos\JustificacionDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\NivelMandoDAO.cs" />
+    <Compile Include="Models\Entidades\Departamento.cs" />
     <Compile Include="Models\Entidades\Proyecto.cs" />
     <Compile Include="Models\Entidades\RolUsuario.cs" />
     <Compile Include="Models\Entidades\Viaticos\ComprobacionGasto.cs" />
@@ -521,6 +522,10 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Viaticos\Formatos\0000000006\Factura_sol-1_c41972019_27_03_01_05.xml" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\Factura_2731c2019_03_04_03_40.xml" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\Factura_1883b2019_16_04_11_34.xml" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\Factura_ba80c2019_10_04_06_00.xml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -580,6 +585,43 @@
     <Content Include="Views\Rol\UsuariosAutorizadoresPVI.cshtml" />
     <Content Include="Views\Rol\UsuariosAutorizadoresViaticos.cshtml" />
     <Content Include="Views\Viatico\_ObtenerTarifasViaticos.cshtml" />
+    <Content Include="Viaticos\Formatos\0000000006\Factura_sol-1_c41972019_27_03_01_05.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_1baa42019_03_04_03_18.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_5cf452019_21_03_12_21.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_6f7d02019_01_04_03_20.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_867862019_22_03_11_40.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_951c82019_27_03_12_36.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\OficioAutorizacion_f88062019_22_03_12_22.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\Reintegro_sol-2_0f7062019_03_04_03_41.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\ARCHIVO_10_NO_COMPROBABLE.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\ARCHIVO_I4.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\ARCHIVO_I5.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\ARCHIVO_INFORME_VIATICO.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\COMPROBACION_SAT-1.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\Factura_2731c2019_03_04_03_40.pdf" />
+    <Content Include="Viaticos\Formatos\0000000006\solicitud_2\OTROS_TICKET-1.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\Boleto_Itinerario_1bd572019_16_04_11_27.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\Boleto_Itinerario_5a60d2019_16_04_11_24.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\Boleto_Itinerario_f05a12019_16_04_11_23.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\Boleto_Itinerario_fa69a2019_16_04_11_27.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\OficioAutorizacion_68c842019_16_04_11_27.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\OficioAutorizacion_d95fe2019_10_04_04_25.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\Reintegro_sol-10_456742019_16_04_12_05.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\ARCHIVO_10_NO_COMPROBABLE.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\ARCHIVO_COMPROBANTE_INSTANCIA.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\ARCHIVO_INFORME_VIATICO.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\COMPROBACION_SAT-13.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\Factura_1883b2019_16_04_11_34.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\OTROS_TICKET-13.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\PASE_ABORDAR-20.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_10\PASE_ABORDAR-21.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\ARCHIVO_10_NO_COMPROBABLE.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\ARCHIVO_I4.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\ARCHIVO_I5.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\ARCHIVO_INFORME_VIATICO.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\COMPROBACION_SAT-12.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\Factura_ba80c2019_10_04_06_00.pdf" />
+    <Content Include="Viaticos\Formatos\0000000010\solicitud_9\OTROS_TICKET-12.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
