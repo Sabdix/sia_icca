@@ -14,8 +14,6 @@
 @using System.Web.Script.Serialization;
 @using IICA.Models.Entidades.PVI
 
-@model List<Permiso>
-
 <ul class="breadcrumb">
     <li>
         <p>PERMISOS</p>
@@ -29,17 +27,28 @@
             <div class="grid-title">
                 <h4>Lista <span class="semi-bold">de empleados</span></h4>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Departamentos</label>
-                @Html.DropDownList("departamentos", (IEnumerable<SelectListItem>)ViewBag.Departamentos, "SELECCIONE UN DEPARTAMENTO",
+            <div class="col-md-3">
+                <p></p>
+                <label class="form-label">Proyecto:</label>
+                @Html.DropDownList("proyecto", (IEnumerable<SelectListItem>)ViewBag.Proyectos, "SELECCIONE UN PROYECTO",
                                                           new
                                                           {
                                                               @class = "select-iica",
-                                                              id = "departamento",
-                                                              style = "width: 100%;",
-                                                              data_val_required = "Seleccione un departamento.",
+                                                              id = "select-proyecto",
+                                                              style = "min-width: 100%;",
+                                                              data_val_required = "Seleccione un proyecto.",
                                                               data_val = "true"
                                                           })
+            </div>
+            <div class="col-md-3">
+                <p></p>
+                <label class="form-label">Departamento:</label>
+                <select class="select-iica" id="select-departamento" name="departamento"
+                        data-val-required = "Seleccione un proyecto."
+                        data-val = "true"
+                        style="min-width: 100%;">
+                    <option>SELECCIONE UN DEPARTAMENTO</option>
+                </select>
             </div>
             <div class="grid-body ">
                 <table class="table table-hover table-condensed" style="text-align: center;" id="tabla-reporte-solPermisos">
@@ -54,23 +63,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (Permiso permiso in Model)
-                        {
-                            <tr>
-                                <td>@(permiso.usuario.nombreCompleto)</td>
-                                <td><span class="muted">@permiso.usuario.programa</span></td>
-                                <td><span>@permiso.usuario.departamento</span></td>
-                                <td><span class="muted">@permiso.fechaPermiso.ToShortDateString()</span></td>
-                                <td><span class="muted">@permiso.motivoPermiso</span></td>
-                                <td>
-                                    <span class="muted">
-                                        <span class="label label-info">
-                                            @permiso.estatusPermiso.descripcion
-                                        </span>
-                                    </span>
-                                </td>
-                            </tr>
-                        }
                     </tbody>
                 </table>
             </div>
@@ -87,7 +79,11 @@
 
 
 
+    @* Son para el estilo de los select ya que estan en el layout pero no funcionan si no estan en cada vista *@
     <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+    <link href="~/Content/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
 
     <script src="~/Content/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>

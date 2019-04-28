@@ -16,7 +16,7 @@ namespace IICA.Models.Entidades.PVI
         public Int64 idVacacion { get; set; }
         public int periodoAnterior { get; set; }
         public int proporcional { get; set; }
-        public int totalDiasSaldoVacacional { get; set; }
+        public decimal totalDiasSaldoVacacional { get; set; }
         [Required(ErrorMessage = "Es necesario capturar la fecha de la solicitud de vacaciones")]
         public DateTime fechaSolicitud { get; set; }
         [Required(ErrorMessage = "Es necesario capturar la fecha de inicio de vacaciones")]

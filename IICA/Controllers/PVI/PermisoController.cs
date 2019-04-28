@@ -144,13 +144,41 @@ namespace IICA.Controllers.PVI
             }
         }
 
+        [SessionExpire]
         public ActionResult ReporteSolicitudesPermisos()
         {
             try
             {
-                ViewBag.TiposViaje = new PermisoDAO().ConsultarDepartamentos().Select(x => new SelectListItem() { Text = x.descripcion, Value = x.idDepartamento.ToString() });
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                ViewBag.Proyectos = new ProyectoDAO().ConsultarProyectosUsuario(usuarioSesion.emCveEmpleado).Select(x => new SelectListItem() { Text = x.descripcion, Value = x.abreviatura });
                 permisoDAO = new PermisoDAO();
-                return View(permisoDAO.ObtenerReporteSolicitudesPermisos());
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DepartamentosPorProyecto(string proyecto)
+        {
+            try
+            {
+                return Json(new DepartamentoDAO().ConsultarDepartamentosPorProyecto(proyecto), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReporteSolicitudesPermisos(string proyecto,string departamento)
+        {
+            try
+            {
+                return Json(new PermisoDAO().ObtenerReporteSolicitudesPermisos(proyecto,departamento), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

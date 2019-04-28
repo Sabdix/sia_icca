@@ -190,7 +190,7 @@ namespace IICA.Models.DAO.RolesUsuario
                     while (dbManager.DataReader.Read())
                     {
                         proyecto = new Proyecto();
-                        proyecto.idProyecto = dbManager.DataReader["sc_Cve_Sucursal"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["sc_Cve_Sucursal"].ToString());
+                        proyecto.idProyecto = dbManager.DataReader["sc_Cve_Sucursal"] == DBNull.Value ? "" : dbManager.DataReader["sc_Cve_Sucursal"].ToString();
                         proyecto.descripcion = dbManager.DataReader["Sc_Descripcion"] == DBNull.Value ? "" : dbManager.DataReader["Sc_Descripcion"].ToString();
                         proyectos.Add(proyecto);
                     }
