@@ -113,7 +113,7 @@
                                 <input id="modal-correo" type="text" class="form-control" placeholder="Correo" readonly>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Tipo de viaje</label>
+                                <label class="form-label">Proyecto:</label>
                                 @Html.DropDownListFor(x => x.proyecto.idProyecto, (IEnumerable<SelectListItem>)ViewBag.Proyectos, "SELECCIONE EL PROYECTO",
                                       new { @class = "select-iica", style = "width: 100%;", id = "tipoProyecto", data_val = "true" })
                                 @Html.ValidationMessageFor(x => x.proyecto.idProyecto, "", new { @class = "error" })

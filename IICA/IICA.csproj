@@ -156,8 +156,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DAO\EmailDAO.cs" />
+    <Compile Include="Models\DAO\PVI\DepartamentoDAO.cs" />
     <Compile Include="Models\DAO\PVI\IncapacidadDAO.cs" />
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
+    <Compile Include="Models\DAO\PVI\ProyectoDAO.cs" />
     <Compile Include="Models\DAO\PVI\VacacionDAO.cs" />
     <Compile Include="Models\DAO\RolesUsuario\RolDAO.cs" />
     <Compile Include="Models\DAO\SesionDAO.cs" />

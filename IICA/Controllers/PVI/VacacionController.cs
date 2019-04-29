@@ -147,9 +147,24 @@ namespace IICA.Controllers.PVI
         {
             try
             {
-                vacacionDAO = new VacacionDAO();
                 Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
-                return View(vacacionDAO.ObtenerReporteVacaciones(usuarioSesion));
+                ViewBag.Proyectos = new ProyectoDAO().ConsultarProyectosUsuario(usuarioSesion.emCveEmpleado).Select(x => new SelectListItem() { Text = x.descripcion, Value = x.abreviatura });
+                return View();
+                //return View(vacacionDAO.ObtenerReporteVacaciones(usuarioSesion));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [SessionExpire,HttpPost]
+        public ActionResult ReporteSaldosVacacionales(string proyecto, string departamento)
+        {
+            try
+            {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                return Json(new VacacionDAO().ObtenerReporteVacaciones(usuarioSesion,proyecto, departamento), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -162,14 +177,42 @@ namespace IICA.Controllers.PVI
         {
             try
             {
-                vacacionDAO = new VacacionDAO();
-                return View(vacacionDAO.ObtenerReporteSolicitudesVacaciones());
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                ViewBag.Proyectos = new ProyectoDAO().ConsultarProyectosUsuario(usuarioSesion.emCveEmpleado).Select(x => new SelectListItem() { Text = x.descripcion, Value = x.abreviatura });
+                return View();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public ActionResult DepartamentosPorProyecto(string proyecto)
+        {
+            try
+            {
+                return Json(new DepartamentoDAO().ConsultarDepartamentosPorProyecto(proyecto), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReporteSolicitudesVacaciones(string proyecto, string departamento)
+        {
+            try
+            {
+                return Json(new VacacionDAO().ObtenerReporteSolicitudesVacaciones(proyecto, departamento), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         [HttpPost, SessionExpire]
         public ActionResult ActualizarFormatoVacacion(Vacacion vacacion_, FormatosPermiso formato)

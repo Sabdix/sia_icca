@@ -17,6 +17,6 @@ namespace IICA.Models.Entidades.PVI
         public string FechaInicio { get; set; }
         public string FechaFin { get; set; }
         public string DescripcionStatusSolicitud { get; set; }
-        public string nombreCompleto => $"{emNombre + " " + (string.IsNullOrEmpty(emApellidoPaterno) ? "" : emApellidoPaterno) + " " + (string.IsNullOrEmpty(emApellidoMaterno) ? "" : emApellidoMaterno)}";
+        public string nombreCompleto => $"{(string.IsNullOrEmpty(emApellidoPaterno) ? "" : emApellidoPaterno) + " " + (string.IsNullOrEmpty(emApellidoMaterno) ? "" : emApellidoMaterno) + " "+emNombre}";
     }
 }

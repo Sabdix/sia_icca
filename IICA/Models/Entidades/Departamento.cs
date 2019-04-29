@@ -9,6 +9,7 @@ namespace IICA.Models.Entidades
     {
         public int idDepartamento { get; set; }
         public string descripcion { get; set; }
+        public string DeCveDepartamentoEmpleado { get; set; }
         public DateTime fechaAlta { get; set; }
         public bool activo { get; set; }
     }

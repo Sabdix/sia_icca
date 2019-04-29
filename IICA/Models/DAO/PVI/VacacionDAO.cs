@@ -152,10 +152,10 @@ namespace IICA.Models.DAO.PVI
                         vacacion.usuario.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         vacacion.emCveEmpleado = dbManager.DataReader["Em_Cve_Empleado"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado"].ToString();
                         vacacion.fechaSolicitud = dbManager.DataReader["Fecha_Alta"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Alta"].ToString());
-                        vacacion.totalDiasSaldoVacacional = dbManager.DataReader["Total_Dias_Saldo_Vacacional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Total_Dias_Saldo_Vacacional"].ToString());
+                        vacacion.totalDiasSaldoVacacional = string.IsNullOrEmpty(dbManager.DataReader["Total_Dias_Saldo_Vacacional"].ToString()) ? 0 : Convert.ToDecimal(dbManager.DataReader["Total_Dias_Saldo_Vacacional"].ToString());
                         vacacion.fechaInicio = dbManager.DataReader["Fecha_Inicio"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Inicio"].ToString());
                         vacacion.fechaFin = dbManager.DataReader["Fecha_Fin"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Fin"].ToString());
-                        vacacion.totalDias = dbManager.DataReader["Total_Dias"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Total_Dias"].ToString());
+                        vacacion.totalDias = string.IsNullOrEmpty(dbManager.DataReader["Total_Dias"].ToString()) ? 0 : Convert.ToInt32(dbManager.DataReader["Total_Dias"].ToString());
                         vacacion.reanudarLabores = dbManager.DataReader["Reanudar_Labores"] == DBNull.Value ? "" : dbManager.DataReader["Reanudar_Labores"].ToString();
                         vacacion.motivoVacaciones = dbManager.DataReader["Motivo_Vacaciones"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Vacaciones"].ToString();
                         vacaciones.Add(vacacion);
@@ -196,7 +196,7 @@ namespace IICA.Models.DAO.PVI
             return vacacion;
         }
 
-        public List<ReporteVacacion> ObtenerReporteVacaciones(Usuario usuario)
+        public List<ReporteVacacion> ObtenerReporteVacaciones(Usuario usuario, string proyecto, string departamento)
         {
             ReporteVacacion reporteVacacion = null;
             List<ReporteVacacion> reporteVacaciones = new List<ReporteVacacion>();
@@ -205,8 +205,10 @@ namespace IICA.Models.DAO.PVI
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
-                    dbManager.CreateParameters(1);
+                    dbManager.CreateParameters(3);
                     dbManager.AddParameters(0, "Em_Cve_Empleado", usuario.emCveEmpleado);
+                    dbManager.AddParameters(1, "Abreviatura_Proyecto", proyecto);
+                    dbManager.AddParameters(2, "De_Cve_Departamento_Empleado", departamento);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_GENERAR_REPORTE_VACACIONES_GENERAL");
                     while (dbManager.DataReader.Read())
                     {
@@ -232,7 +234,7 @@ namespace IICA.Models.DAO.PVI
             return reporteVacaciones;
         }
 
-        public List<ReporteSolicitudVacacion> ObtenerReporteSolicitudesVacaciones()
+        public List<ReporteSolicitudVacacion> ObtenerReporteSolicitudesVacaciones(string proyecto, string departamento)
         {
             ReporteSolicitudVacacion reporteSolicitudVacacion = null;
             List<ReporteSolicitudVacacion> reporteSolicitudVacaciones = new List<ReporteSolicitudVacacion>();
@@ -241,6 +243,9 @@ namespace IICA.Models.DAO.PVI
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
+                    dbManager.CreateParameters(2);
+                    dbManager.AddParameters(0, "Abreviatura_Proyecto", proyecto);
+                    dbManager.AddParameters(1, "De_Cve_Departamento_Empleado", departamento);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_GENERA_REPORTE_VACACIONES_SOLICITUDES");
                     while (dbManager.DataReader.Read())
                     {
@@ -311,7 +316,7 @@ namespace IICA.Models.DAO.PVI
                             vacacion.idVacacion = dbManager.DataReader["Id_Vacaciones"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["Id_Vacaciones"].ToString());
                             vacacion.periodoAnterior = dbManager.DataReader["periodo_anterior"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["periodo_anterior"].ToString());
                             vacacion.proporcional= dbManager.DataReader["proporcional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["proporcional"].ToString());
-                            vacacion.totalDiasSaldoVacacional = dbManager.DataReader["total_dias_saldo_vacacional"] == DBNull.Value ? 0 : Convert.ToInt32(dbManager.DataReader["total_dias_saldo_vacacional"].ToString());
+                            vacacion.totalDiasSaldoVacacional = string.IsNullOrEmpty(dbManager.DataReader["total_dias_saldo_vacacional"].ToString()) ? 0 : Convert.ToDecimal(dbManager.DataReader["total_dias_saldo_vacacional"].ToString());
                             vacacion.fechaSolicitud = dbManager.DataReader["Fecha_Solicitud"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Solicitud"].ToString());
                             vacacion.fechaInicio = dbManager.DataReader["Fecha_inicio"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_inicio"].ToString());
                             vacacion.fechaFin = dbManager.DataReader["Fecha_fin"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_fin"].ToString());
