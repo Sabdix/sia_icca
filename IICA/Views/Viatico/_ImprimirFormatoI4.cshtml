@@ -308,7 +308,7 @@
                                 {
                                         <td>@itinerario.destino</td>
                                         <td>@itinerario.dias</td>
-                                        <td>@((Model.tarifaDeVuelta/@itinerario.dias).ToString("C"))</td>
+                                        <td>@Model.tarifaDeVuelta.ToString("C")</td>
                                         <td>@(Model.tipoViaje.idTipoViaje == 1 ? Model.tarifaDeVuelta.ToString("C") : "")</td>
                                         <td>@(Model.tipoViaje.idTipoViaje == 2 ? Model.tarifaDeVuelta.ToString("C") : "")</td>
                                 }
