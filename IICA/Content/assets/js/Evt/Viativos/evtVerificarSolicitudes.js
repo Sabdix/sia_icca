@@ -89,19 +89,56 @@ function ObtenerFechasJsonSolSeleccionada(solicitud) {
 
 //Autorizar solicitud
 function MostrarModalAutSol(solicitud) {
-    solSeleccionada = solicitud;
-    ObtenerFechasJsonSolSeleccionada(solicitud);
+    //solSeleccionada = solicitud;
+    $.ajax({
+        data: { id: solicitud },
+        url: rootUrl("/Viatico/DetalleSolicitudJson"),
+        dataType: "json",
+        method: "post",
+        beforeSend: function () {
+            MostrarLoading();
+        },
+        success: function (data) {
+            OcultarLoading();
+            OnsuccessMostrarModalAutSol(data);
+        },
+        error: function (xhr, status, error) {
+            $("#modal-autorizar").modal("hide");
+            ControlErrores(xhr, status, error);
+        }
+    });
 
-    $("#modal-aut-duracionViaje").val(solicitud.duracionViaje);
-    $("#modal-aut-resultadosEsperados").val(solicitud.resultadosEsperados);
-    $("#modal-aut-medioTransporte").val(solicitud.medioTransporte.descripcion);
-    $("#modal-aut-fechaInicio").val(solSeleccionada.fechaInicio);
-    $("#modal-aut-fechaFin").val(solSeleccionada.fechaFin);
-    $("#modal-aut-solicitud").val(solSeleccionada.idSolitud);
-    $("#modal-aut-viaticante").val(solSeleccionada.usuario.nombreCompleto);
-    $("#modal-aut-montoAut").val(accounting.formatMoney(solSeleccionada.montoAutorizado));
-    $("#modal-aut-montoCompr").val(accounting.formatMoney(solSeleccionada.montoComprobado));
 }
+
+function OnsuccessMostrarModalAutSol(data){
+    OcultarLoading();
+    if (data.status === true) {
+        solSeleccionada = data.objeto;
+        ObtenerFechasJsonSolSeleccionada(solSeleccionada);
+
+        $("#modal-aut-duracionViaje").val(solSeleccionada.duracionViaje);
+        $("#modal-aut-resultadosEsperados").val(solSeleccionada.resultadosEsperados);
+        $("#modal-aut-medioTransporte").val(solSeleccionada.medioTransporte.descripcion);
+        $("#modal-aut-fechaInicio").val(solSeleccionada.fechaInicio);
+        $("#modal-aut-fechaFin").val(solSeleccionada.fechaFin);
+        $("#modal-aut-solicitud").val(solSeleccionada.idSolitud);
+        $("#modal-aut-viaticante").val(solSeleccionada.usuario.nombreCompleto);
+        $("#modal-aut-montoAut").val(accounting.formatMoney(solSeleccionada.montoAutorizado));
+        $("#modal-aut-montoCompr").val(accounting.formatMoney(solSeleccionada.montoComprobado));
+
+        if (solSeleccionada.aplicaReintegro) {
+            $("#modal-aut-montoReintegro").val(accounting.formatMoney(solSeleccionada.importeReintegro));
+            $("#cont-autMonto10Comp").show();
+        }
+        if (!solSeleccionada.marginal) {
+            $("#modal-aut-monto10Comp").val(accounting.formatMoney(solSeleccionada.monto10NoComprobable));
+            $("#cont-autMontoReintegro").show();
+        }
+    } else {
+        MostrarNotificacionLoad("error", data.mensaje, 3000);
+    }
+}
+
 
 function AutorizarSolViatico() {
     if (solSeleccionada === null || solSeleccionada === undefined) {

@@ -126,7 +126,7 @@
                                             </li>
                                             <li>
                                                 <a href="#" data-toggle="modal" data-target="#modal-autorizar"
-                                                   onclick="MostrarModalAutSol(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                   onclick="MostrarModalAutSol(@solicitud.idSolitud)">
                                                     Autorizar solicitud
                                                 </a>
                                             </li>
@@ -280,6 +280,16 @@
                         <div class="col-md-6">
                             <label class="form-label">Monto comprobado:</label>
                             <input id="modal-aut-montoCompr" type="text" class="form-control" placeholder="Monto comprobado" readonly>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-6" id="cont-autMonto10Comp" style="display: none">
+                            <label class="form-label">Monto 10% no comprobable:</label>
+                            <input id="modal-aut-monto10Comp" type="text" class="form-control" placeholder="Monto autorizado" readonly>
+                        </div>
+                        <div class="col-md-6" id="cont-autMontoReintegro" style="display: none">
+                            <label class="form-label">Monto de reintegro:</label>
+                            <input id="modal-aut-montoReintegro" type="text" class="form-control" placeholder="Monto comprobado" readonly>
                         </div>
                     </div>
                     <div class="row form-row">

@@ -69,8 +69,9 @@ namespace IICA.Models.Entidades.Viaticos
         public Int64 noCuenta { get; set; }
         public string banco { get; set; }
         public double totalGastosExtras { get; set; }
+        public decimal monto10NoComprobable { get; set; }
 
-     
+
         public SolicitudViatico()
         {
             itinerario = new List<Itinerario>();
