@@ -570,7 +570,7 @@ namespace IICA.Models.Entidades
                 string cuerpo = Cabecera();
                 cuerpo += CuerpoCompDatosSolViatico(solViatico);
                 cuerpo += PiePagina();
-                EnviarCorreExternoUsuario("Sistema Integral IICA México - Solicitud de viatico autorizada", cuerpo, solViatico.usuario.email);
+                EnviarCorreExterno("Sistema Integral IICA México - Solicitud de viatico autorizada", cuerpo, solViatico.Em_Cve_Empleado, EnumRolUsuario.ADMINISTRADOR_VIATICOS);
             }
             catch (Exception ex)
             {
