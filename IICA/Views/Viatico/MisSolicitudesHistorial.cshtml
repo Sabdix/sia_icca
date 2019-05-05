@@ -74,6 +74,15 @@
                                                 Ver Solicitud
                                             </a>
                                         </li>
+                                        @if (!string.IsNullOrEmpty(solicitud.pathArchivoAutorizacion))
+                                        {
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="8"
+                                                   data-formato-text="pathArchivoAutorizacion" data-nombreArchivo="archivo de autorización" data-solicitud="@solicitud.idSolitud">
+                                                    Archivo de autorización
+                                                </a>
+                                            </li>
+                                        }
                                         @if (solicitud.realizarComprobacionGastos && solicitud.etapaSolicitud.idEtapaSolicitud >= (int)EnumEtapaSolicitudViaticos.GENERACION_CHEQUE)
                                         {
                                             <li>

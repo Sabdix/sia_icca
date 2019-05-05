@@ -105,6 +105,7 @@ namespace IICA.Models.Entidades
         public const string procesoFinComprobacionGastosSolViatico = "Finalización de comprobación de gastos";
         public const string procesoVerificacionGastos = "Autorización de comprobación de gastos";
         public const string procesoElaboracionCheque = "Elaboración de cheque";
+        public const string procesoSolicitudFinalizada = "Solicitud finalizada";
 
         public const string especificacionPermiso = "Se finaliza la solicitud de un pemiso";
         public const string especificacionVacacion = "Se finaliza la solicitud de las vacaciones";
