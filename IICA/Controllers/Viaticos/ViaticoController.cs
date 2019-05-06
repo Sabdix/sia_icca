@@ -185,11 +185,11 @@ namespace IICA.Controllers.Viaticos
                 if (result.status)
                 {
                     try {
-                        //if(solicitudViatico_.etapaSolicitud.idEtapaSolicitud==2)
-                        Email.NotificacionSolViatico((SolicitudViatico)result.objeto,EnumRolUsuario.AUTORIZADOR_VIATICOS);
+                        if (solicitudViatico_.etapaSolicitud.idEtapaSolicitud == 2)
+                            Email.NotificacionSolViatico((SolicitudViatico)result.objeto, EnumRolUsuario.AUTORIZADOR_VIATICOS);
 
-                        //else if (solicitudViatico_.etapaSolicitud.idEtapaSolicitud == 7)
-                        //    Email.NotificacionSolicitudFinalizada((SolicitudViatico)result.objeto);
+                        else if (solicitudViatico_.etapaSolicitud.idEtapaSolicitud == 7)
+                            Email.NotificacionSolicitudFinalizada((SolicitudViatico)result.objeto);
                     }
                     catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
