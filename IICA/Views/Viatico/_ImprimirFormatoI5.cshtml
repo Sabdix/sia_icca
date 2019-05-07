@@ -218,7 +218,15 @@
                         </table>
                     </td>
                     <td>Total de gasto:</td>
-                    <td>@totalComprobacion.ToString("C")</td>
+                    @if ( Model.marginal == true )
+                    {
+                        <td>@Model.montoAutorizado.ToString("C")</td>    
+                    }
+                    else
+                    {
+                        <td>@totalComprobacion.ToString("C")</td>
+                    }
+                    @*<td>@totalComprobacion.ToString("C")</td>*@
                     <td></td>
                 </tr>
                 <tr>
