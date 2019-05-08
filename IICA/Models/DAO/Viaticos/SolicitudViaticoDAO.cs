@@ -780,7 +780,6 @@ namespace IICA.Models.DAO.Viaticos
                         solicitudViatico.emCveEmpleadoAutoriza = dbManager.DataReader["Em_Cve_Empleado_autoriza"] == DBNull.Value ? "" : dbManager.DataReader["Em_Cve_Empleado_autoriza"].ToString();
                         solicitudViatico.pernocta = dbManager.DataReader["pernocta"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["pernocta"].ToString());
                         solicitudViatico.marginal = dbManager.DataReader["marginal"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["marginal"].ToString());
-                        solicitudViatico.pathArchivoAutorizacion = dbManager.DataReader["Path_Archivo_Autorizacion"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Autorizacion"].ToString());
                         solicitudViatico.montoAutorizado = dbManager.DataReader["Monto_Viatico_Autorizado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Autorizado"].ToString());
                         solicitudViatico.montoComprobado = dbManager.DataReader["Monto_Viatico_Comprobado"] == DBNull.Value ? 0 : Convert.ToDouble(dbManager.DataReader["Monto_Viatico_Comprobado"].ToString());
                         solicitudViatico.importeReintegro = dbManager.DataReader["Importe_Reintegro"] == DBNull.Value ? 0 : Convert.ToDecimal(dbManager.DataReader["Importe_Reintegro"].ToString());
@@ -788,6 +787,19 @@ namespace IICA.Models.DAO.Viaticos
                         //solicitudViatico.aplicaReintegro = dbManager.DataReader["Aplica_Reintegro"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["Aplica_Reintegro"]);
                         solicitudViatico.realizarComprobacionGastos = dbManager.DataReader["realizar_comprobacion_gastos"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["realizar_comprobacion_gastos"]);
                         solicitudViatico.comprobarItinerarioAereo = dbManager.DataReader["comprobar_itinerario_aereo"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["comprobar_itinerario_aereo"]);
+
+
+                        solicitudViatico.pathArchivoAutorizacion = dbManager.DataReader["Path_Archivo_Autorizacion"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Autorizacion"].ToString());
+                        solicitudViatico.pathArchivo10NoComprobable = dbManager.DataReader["Path_Archivo_10_No_Comprobable"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_10_No_Comprobable"].ToString());
+                        solicitudViatico.pathComprobanteEstancia = dbManager.DataReader["Path_Comprobante_Estancia"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Comprobante_Estancia"].ToString());
+                        solicitudViatico.pathInformeViaje = dbManager.DataReader["Path_Informe_Viaje"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Informe_Viaje"].ToString());
+                        solicitudViatico.pathArchivoReintegro = dbManager.DataReader["Path_Archivo_Reintegro"] == DBNull.Value ? "" : (dbManager.DataReader["Path_Archivo_Reintegro"].ToString());
+
+                        //path de archivos firmados
+                        solicitudViatico.pathI4 = dbManager.DataReader["Path_i4"] == DBNull.Value ? "" : (dbManager.DataReader["Path_i4"].ToString());
+                        solicitudViatico.pathI5 = dbManager.DataReader["Path_i5"] == DBNull.Value ? "" : (dbManager.DataReader["Path_i5"].ToString());
+
+
                         solicitudes.Add(solicitudViatico);
                     }
                 }
