@@ -157,7 +157,7 @@ DECLARE
 	INNER JOIN DT_CAT_DIAS_VACACIONES c on B.Anios=c.Anios and B.Factor_Integracion=C.Factor_Integracion
 	INNER JOIN Empleado D on A.Em_Cve_Empleado=D.Em_Cve_Empleado
 
-
+	/*
 	UPDATE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 	SET
 		Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,A.Anios,B.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365
@@ -166,6 +166,7 @@ DECLARE
 	INNER JOIN DT_CAT_DIAS_VACACIONES c on A.Anios=c.Anios
 	LEFT JOIN #TASK1 D on A.Em_Cve_Empleado=D.Em_Cve_Empleado and D.Factor_Integracion=C.Factor_Integracion
 	WHERE D.Em_Cve_Empleado IS NULL
+	*/
 GO
 
 --============================================================
@@ -278,7 +279,7 @@ BEGIN
 	INNER JOIN DT_CAT_DIAS_VACACIONES c on B.Anios=c.Anios and B.Factor_Integracion=C.Factor_Integracion
 	INNER JOIN Empleado D on A.Em_Cve_Empleado=D.Em_Cve_Empleado
 
-
+	/*
 	UPDATE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 	SET
 		Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,A.Anios,B.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365
@@ -287,7 +288,7 @@ BEGIN
 	INNER JOIN DT_CAT_DIAS_VACACIONES c on A.Anios=c.Anios
 	LEFT JOIN #TASK1 D on A.Em_Cve_Empleado=D.Em_Cve_Empleado and D.Factor_Integracion=C.Factor_Integracion
 	WHERE D.Em_Cve_Empleado IS NULL
-
+	*/
 END
 
 --============================================================
