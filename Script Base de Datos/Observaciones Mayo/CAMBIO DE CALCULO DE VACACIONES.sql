@@ -140,11 +140,23 @@ DECLARE
 	UPDATE A
 	SET
 		Anios=C.anios,
+		/*
 		Fecha_Inicio_Periodo=DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso),
 		Fecha_Fin_Periodo=DATEADD(yy,B.Anios+1,D.Em_Fecha_Ingreso),
 		Saldo_Periodo_Anterior=COALESCE(Saldo_Actual_Disponible,0),
 		a.Saldo_Periodo_Anterior_Usado=0,
-		a.Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365,
+		a.Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365,*/
+		Fecha_Inicio_Periodo=(CASE
+		WHEN dATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)>GETDATE() THEN DATEADD(yy,B.Anios-1,D.Em_Fecha_Ingreso)
+		ELSE DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso) END),
+		Fecha_Fin_Periodo=(CASE
+		WHEN dATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)>GETDATE() THEN DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)
+		ELSE DATEADD(yy,B.Anios+1,D.Em_Fecha_Ingreso) END),
+		Saldo_Periodo_Anterior=COALESCE(Saldo_Actual_Disponible,0),
+		a.Saldo_Periodo_Anterior_Usado=0,
+		a.Saldo_Proporcional_Actual=((DATEDIFF(DD,CASE
+		WHEN dATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)>GETDATE() THEN DATEADD(yy,B.Anios-1,D.Em_Fecha_Ingreso)
+		ELSE DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso) END,GETDATE()))*c.Dias_Vacaciones)/365,
 		--a.Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso),'20190301'))*c.Dias_Vacaciones)/365,
 		Saldo_Proporcional_Actual_Usado=0,
 		Saldo_Actual_Disponible=COALESCE(Saldo_Periodo_Anterior,0)+COALESCE(Saldo_Proporcional_Actual,0),
@@ -262,11 +274,24 @@ BEGIN
 	UPDATE A
 	SET
 		Anios=C.anios,
+		/*
 		Fecha_Inicio_Periodo=DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso),
 		Fecha_Fin_Periodo=DATEADD(yy,B.Anios+1,D.Em_Fecha_Ingreso),
 		Saldo_Periodo_Anterior=Saldo_Actual_Disponible,
 		a.Saldo_Periodo_Anterior_Usado=0,
 		a.Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365,
+		*/
+		Fecha_Inicio_Periodo=(CASE
+		WHEN dATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)>GETDATE() THEN DATEADD(yy,B.Anios-1,D.Em_Fecha_Ingreso)
+		ELSE DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso) END),
+		Fecha_Fin_Periodo=(CASE
+		WHEN dATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)>GETDATE() THEN DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)
+		ELSE DATEADD(yy,B.Anios+1,D.Em_Fecha_Ingreso) END),
+		Saldo_Periodo_Anterior=COALESCE(Saldo_Actual_Disponible,0),
+		a.Saldo_Periodo_Anterior_Usado=0,
+		a.Saldo_Proporcional_Actual=((DATEDIFF(DD,CASE
+		WHEN dATEADD(yy,B.Anios,D.Em_Fecha_Ingreso)>GETDATE() THEN DATEADD(yy,B.Anios-1,D.Em_Fecha_Ingreso)
+		ELSE DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso) END,GETDATE()))*c.Dias_Vacaciones)/365,
 		--a.Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,B.Anios,D.Em_Fecha_Ingreso),'20190301'))*c.Dias_Vacaciones)/365,
 		Saldo_Proporcional_Actual_Usado=0,
 		Saldo_Actual_Disponible=COALESCE(Saldo_Periodo_Anterior,0)+COALESCE(Saldo_Proporcional_Actual,0),
@@ -279,16 +304,26 @@ BEGIN
 	INNER JOIN DT_CAT_DIAS_VACACIONES c on B.Anios=c.Anios and B.Factor_Integracion=C.Factor_Integracion
 	INNER JOIN Empleado D on A.Em_Cve_Empleado=D.Em_Cve_Empleado
 
-	/*
+	
 	UPDATE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
 	SET
-		Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,A.Anios,B.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365
+		a.Saldo_Proporcional_Actual=((DATEDIFF(DD,CASE
+		WHEN dATEADD(yy,A.Anios,B.Em_Fecha_Ingreso)>GETDATE() THEN DATEADD(yy,A.Anios-1,D.Em_Fecha_Ingreso)
+		ELSE DATEADD(yy,A.Anios,B.Em_Fecha_Ingreso) END,GETDATE()))*c.Dias_Vacaciones)/365
+		--Saldo_Proporcional_Actual=((DATEDIFF(DD,DATEADD(yy,A.Anios,B.Em_Fecha_Ingreso),GETDATE()))*c.Dias_Vacaciones)/365
 	from DT_TBL_PERIODO_VACACIONAL_EMPLEADO A
 	LEFT JOIN Empleado B on A.Em_Cve_Empleado=B.Em_Cve_Empleado
-	INNER JOIN DT_CAT_DIAS_VACACIONES c on A.Anios=c.Anios
+	INNER JOIN DT_CAT_DIAS_VACACIONES c on A.Anios=c.Anios and D.Factor_Integracion=C.Factor_Integracion
 	LEFT JOIN #TASK1 D on A.Em_Cve_Empleado=D.Em_Cve_Empleado and D.Factor_Integracion=C.Factor_Integracion
-	WHERE D.Em_Cve_Empleado IS NULL
-	*/
+	WHERE D.Em_Cve_Empleado NOT IN (SELECT Em_Cve_Empleado FROM #TASK1)
+	
 END
+
+--============================================================
+--Se ponen los días proporcionales actuales disponibles para que los tome.
+
+UPDATE DT_TBL_PERIODO_VACACIONAL_EMPLEADO
+SET Saldo_Actual_Disponible=Saldo_Proporcional_Actual
+GO
 
 --============================================================
