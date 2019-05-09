@@ -176,19 +176,34 @@
                 @{
                     int i = 1;
                     double totalComprobacion = 0;
-                    }
-                @foreach (ComprobacionGasto comprobacion in Model.comprobacionesGasto)
+                }
+                @if (Model.marginal == true)
                 {
                     <tr>
-                        <td>@comprobacion.fecha.ToShortDateString()</td>
-                        <td>@comprobacion.lugar</td>
-                        <td>@(comprobacion.gastoComprobacion.descripcion +" - "+ comprobacion.emisor)</td>
-                        <td>@i</td>
-                        <td>@comprobacion.total.ToString("C")</td>
-                        <td></td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td>Comprobante de estancia</td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td>@Model.montoAutorizado.ToString("C")</td>
+                        <td>&nbsp;&nbsp;</td>
                     </tr>
-                    i++;
-                    totalComprobacion = totalComprobacion + comprobacion.total;
+                }
+                else
+                {
+                    @foreach (ComprobacionGasto comprobacion in Model.comprobacionesGasto)
+                    {
+
+                        <tr>
+                            <td>@comprobacion.fecha.ToShortDateString()</td>
+                            <td>@comprobacion.lugar</td>
+                            <td>@(comprobacion.gastoComprobacion.descripcion + " - " + comprobacion.emisor)</td>
+                            <td>@i</td>
+                            <td>@comprobacion.total.ToString("C")</td>
+                            <td></td>
+                        </tr>
+                        i++;
+                        totalComprobacion = totalComprobacion + comprobacion.total;
+                    }
                 }
                 <tr style="height: 15px;">
                     <td colspan="4" style="border-bottom:1px solid #fff !important;">Obervaciones: </td>
@@ -218,9 +233,9 @@
                         </table>
                     </td>
                     <td>Total de gasto:</td>
-                    @if ( Model.marginal == true )
+                    @if (Model.marginal == true)
                     {
-                        <td>@Model.montoAutorizado.ToString("C")</td>    
+                        <td>@Model.montoAutorizado.ToString("C")</td>
                     }
                     else
                     {
