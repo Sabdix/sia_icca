@@ -121,10 +121,13 @@
                 @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
                 {
                     <li>
-
-                        <a href="@WebConfigurationManager.AppSettings["urlPasivoLaboral"].ToString()">
+                        <a href="javascript:;" onclick="document.getElementById('form-pl').submit();">
                             <div class="status-icon red"></div>
                             IICA Pasivo Laboral
+                            <form id="form-pl" action="@WebConfigurationManager.AppSettings["urlPasivoLaboral"].ToString()" method="post">
+                                <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                                <input hidden name="password" value="@(Model.contrasena)" />
+                            </form>
                         </a>
                     </li>
                 }
