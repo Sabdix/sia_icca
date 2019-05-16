@@ -314,7 +314,7 @@ BEGIN
 	from DT_TBL_PERIODO_VACACIONAL_EMPLEADO A
 	LEFT JOIN Empleado B on A.Em_Cve_Empleado=B.Em_Cve_Empleado
 	INNER JOIN DT_CAT_DIAS_VACACIONES c on A.Anios=c.Anios and D.Factor_Integracion=C.Factor_Integracion
-	LEFT JOIN #TASK1 D on A.Em_Cve_Empleado=D.Em_Cve_Empleado and D.Factor_Integracion=C.Factor_Integracion
+	LEFT JOIN #TASK1 D on A.Em_Cve_Empleado=D.Em_Cve_Empleado
 	WHERE D.Em_Cve_Empleado NOT IN (SELECT Em_Cve_Empleado FROM #TASK1)
 	
 END
