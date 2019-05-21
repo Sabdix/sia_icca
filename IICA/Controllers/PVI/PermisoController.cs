@@ -46,8 +46,17 @@ namespace IICA.Controllers.PVI
                 Result result = permisoDAO.ActualizarPermiso(permiso_);
                 if (result.status)
                 {
-                    try { Email.NotificacionPermiso((Permiso)result.objeto); }
-                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                    //string pathFormato = ObtenerFormatoHttpPost(Request,(Permiso) result.objeto,
+                    //    FormatosPermiso.FORMATO_AUTORIZACION.ToString()
+                    //    ,permiso_.emCveEmpleado);
+                    //if (!string.IsNullOrEmpty(pathFormato))
+                    //{
+                    //    permisoDAO.ActualizarFormatoPermiso(permiso_, pathFormato);
+                    //}
+                    //else
+                    //    result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                    //try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                    //catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -135,12 +144,41 @@ namespace IICA.Controllers.PVI
             }
         }
 
+        [SessionExpire]
         public ActionResult ReporteSolicitudesPermisos()
         {
             try
             {
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                ViewBag.Proyectos = new ProyectoDAO().ConsultarProyectosUsuario(usuarioSesion.emCveEmpleado).Select(x => new SelectListItem() { Text = x.descripcion, Value = x.abreviatura });
                 permisoDAO = new PermisoDAO();
-                return View(permisoDAO.ObtenerReporteSolicitudesPermisos());
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DepartamentosPorProyecto(string proyecto)
+        {
+            try
+            {
+                return Json(new DepartamentoDAO().ConsultarDepartamentosPorProyecto(proyecto), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReporteSolicitudesPermisos(string proyecto,string departamento)
+        {
+            try
+            {
+                return Json(new PermisoDAO().ObtenerReporteSolicitudesPermisos(proyecto,departamento), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -168,6 +206,36 @@ namespace IICA.Controllers.PVI
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost, SessionExpire]
+        public ActionResult EnviarPermiso(Permiso permiso_)
+        {
+            try
+            {
+                permisoDAO = new PermisoDAO();
+                Usuario usuarioSesion = (Usuario)Session["usuarioSesion"];
+                permiso_.emCveEmpleado = usuarioSesion.emCveEmpleado;
+                permiso_.estatusPermiso.idEstatusPermiso = (int)EstatusSolicitud.SOLICITUD_ENVIADA;
+                Result result = permisoDAO.ActualizarPermiso(permiso_);
+                if (result.status)
+                {
+                    string pathFormato = ObtenerFormatoHttpPost(Request, permiso_,FormatosPermiso.FORMATO_AUTORIZACION.ToString(), permiso_.emCveEmpleado);
+                    if (!string.IsNullOrEmpty(pathFormato))
+                    {
+                        permisoDAO.ActualizarFormatoPermiso(permiso_, pathFormato);
+                    }
+                    else
+                        result.mensaje = "No se logro subir el formato, intente mas tarde.";
+                    try { Email.NotificacionPermiso((Permiso)result.objeto); }
+                    catch (Exception ex) { result.mensaje = "Ocurrio un problema al enviar la notificación de correo electronico: " + ex.Message; }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500, ex.Message);
             }
         }
 

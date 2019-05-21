@@ -53,10 +53,6 @@ $(document).ready(function () {
                 swal("Error", "No se puede subir mas de un archivo", "error");
             });
         },
-        //sending: function (file, xhr, formData) {
-        //    formData.append("idIncapacidad", idIncapacidad);
-        //    formData.append("formato", formato);
-        //},
         success: function (file, nombreArchivo) {
             file.previewElement.classList.add("dz-success");
             if (nombreArchivo.mensaje != undefined) {
@@ -127,7 +123,6 @@ $(document).ready(function () {
     $("#btn-guardar-solViatico").click(function (e) {
         if (ValidarDatosSol()) {
             if (ValidarItinerarios()) {
-                oficioAutDropzone
                 if (oficioAutDropzone.files.length == 0) {
                     swal("Notificación", "Por favor anexe el archivo del oficio de autorización", "error");
                 } else {
@@ -163,6 +158,17 @@ function ValidarItinerarios() {
         swal("Notificación", "Faltan de capturar por lo menos un viaje de regreso", "error");
         return false;
     }
+
+    ///si existen itinerarios aereos se valida q por lo menos se alla añadido un gasto extra aereo
+    var itinerarioAereo = $.grep(itinerarios, function (itinerario) { return itinerario.medioTransporte.idMedioTransporte == 2 });
+    if (itinerarioAereo.length > 0) {
+        if ($.grep(gastosExtraSol, function (gastoExtra) { return gastoExtra.idGastoExtra == 1 }).length <= 0) {
+            swal("Notificación", "Faltan especificar el monto extra del transporte aereo.", "error");
+            return false;
+        }
+    }
+
+
     return true;
 }
 
@@ -348,6 +354,7 @@ function OnAddGastoExt(tipoGasto) {
             gastoExtra.idRow = idRowGastoExtra;
             gastoExtra.descripcion = catGastoExt_.Text;
             gastoExtra.monto = parseFloat($("#monto1").val());
+            gastoExtra.idGastoExtra = catGastoExt_.Value;
             gastosExtraSol.push(gastoExtra);
             idRowGastoExtra++;
             MostrarTablaGastos(gastosExtraSol);
@@ -359,6 +366,7 @@ function OnAddGastoExt(tipoGasto) {
             gastoExtra.idRow = idRowGastoExtra;
             gastoExtra.descripcion = $("#gasto_extra2").val();
             gastoExtra.monto = parseFloat($("#monto2").val());
+            gastoExtra.idGastoExtra = -1;
             gastosExtraSol.push(gastoExtra);
             idRowGastoExtra++;
             MostrarTablaGastos(gastosExtraSol);
@@ -436,21 +444,6 @@ function MostrarResumen() {
 /*=============================================================================================
 ======================================      FUNCIONES GENERALES     =================================
 ===============================================================================================*/
-
-function castFormToJson(formArray) {
-    var obj = {};
-    $.each(formArray, function (i, pair) {
-        var cObj = obj, pObj = {}, cpName;
-        $.each(pair.name.split("."), function (i, pName) {
-            pObj = cObj;
-            cpName = pName;
-            cObj = cObj[pName] ? cObj[pName] : (cObj[pName] = {});
-        });
-        pObj[cpName] = pair.value;
-    });
-    //obj["idRow"] = 0;
-    return obj;
-}
 
 function castFormViaticoToJson(formTipoViaje,formProposito) {
     var obj = {};

@@ -32,7 +32,14 @@ BEGIN
 		,etapa.Descripcion desc_etapa
 		,es.Id_estatus_solicitud
 		,es.Descripcion desc_estatus
-		,tv.Descripcion tipo_viaje
+		,tv.Descripcion tipo_viaje,
+		em.Em_nombre,
+		em.Em_Apellido_Paterno,
+		em.Em_Apellido_Materno,
+		CONVERT (VARCHAR,em.Em_Fecha_Ingreso,103)Em_Fecha_Ingreso,
+		em.Em_Email,
+		s.Sc_Descripcion Programa,
+		COALESCE(NULL,c.De_Descripcion ,'SIN DEPARTAMENTO') Departamento
 	from 
 		DT_TBL_VIATICO_SOLICITUD  vs
 		join DT_CAT_MEDIO_TRANSPORTE mt
@@ -49,7 +56,8 @@ BEGIN
 		on vs.Id_Tipo_Viaje=tv.Id_Tipo_Viaje
 		join Empleado em on vs.Em_Cve_Empleado = em.Em_UserDef_1
 		join Sucursal s on s.Sc_Cve_Sucursal = em.Sc_Cve_Sucursal
-		join IICA_COMPRAS..Viaticos_Autorizadores autorizadores on autorizadores.aut_proyecto = s.Sc_UserDef_2
+		LEFT JOIN Departamento_Empleado c ON em.De_Cve_Departamento_Empleado=c.De_Cve_Departamento_Empleado
+		join Viaticos_Autorizadores autorizadores on autorizadores.aut_proyecto = s.Sc_UserDef_2
 	where 
 		vs.Id_etapa_solicitud = 2
 		and vs.Id_estatus_solicitud <> 3

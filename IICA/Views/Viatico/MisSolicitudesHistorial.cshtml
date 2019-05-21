@@ -1,0 +1,305 @@
+﻿
+@{
+    ViewBag.Title = "MisSolicitudesHistorial";
+    Layout = "~/Views/Shared/_LayoutViaticos.cshtml";
+
+    <script>
+        nodoMenu = "misSolicitudes";
+        submenu = "misSolHist";
+    </script>
+}
+
+@using System.Globalization;
+@using IICA.Models.Entidades.Viaticos
+@using System.Web.Script.Serialization;
+@using IICA.Models.Entidades
+
+@model List<IICA.Models.Entidades.Viaticos.SolicitudViatico>
+
+<ul class="breadcrumb">
+    <li>
+        <p>SOLICITUDES</p>
+    </li>
+    <li><a href="#" class="active">Historial de solicitudes</a> </li>
+</ul>
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="grid simple ">
+            <div class="grid-title">
+                <h4>Lista <span class="semi-bold">de solicitudes</span></h4>
+            </div>
+            <div class="grid-body ">
+                <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-mis-solicitudes">
+                    <thead>
+                        <tr>
+                            <th style="width:2%;text-align: center;">No. Solicitud</th>
+                            <th style="width:15%;text-align: center;">Deudor</th>
+                            <th style="width:15%;text-align: center;">Importe autorizado</th>
+                            <th style="width:8%;text-align: center;">Fecha inicio</th>
+                            <th style="width:8%;text-align: center;">Fecha fin</th>
+                            <th style="width:8%;text-align: center;">Proyecto</th>
+                            <th style="width:8%;text-align: center;">Estatus</th>
+                            <th style="width:10%;text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (SolicitudViatico solicitud in Model)
+                        {
+                            <tr>
+                                <td>@solicitud.idSolitud</td>
+                                <td>@solicitud.usuario.nombreCompleto</td>
+                                <td>@solicitud.montoAutorizado.ToString("C")</td>
+                                <td>
+                                    <span class="muted">
+                                        @(solicitud.fechaInicio == DateTime.MinValue ? "N/A" : solicitud.fechaInicio.ToShortDateString())
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="muted">
+                                        @(solicitud.fechaFin == DateTime.MinValue ? "N/A" : solicitud.fechaFin.ToShortDateString())
+                                    </span>
+                                </td>
+                                <td>@solicitud.usuario.proyecto.descripcion</td>
+                                <td><span class="muted">@solicitud.etapaSolicitud.descripcion</span></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="btn btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown" href="#" style="font-size: 11px;">
+                                            Ver acciones <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu" style="margin-left: -55px !important;">
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modal-solViatico"
+                                                   onclick="VerDetalleSolViatico( @(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                    Ver Solicitud
+                                                </a>
+                                            </li>
+                                            @if (!string.IsNullOrEmpty(solicitud.pathArchivoAutorizacion))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="8"
+                                                       data-formato-text="pathArchivoAutorizacion" data-nombreArchivo="archivo de autorización" data-solicitud="@solicitud.idSolitud">
+                                                        Archivo de autorización
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (solicitud.realizarComprobacionGastos && solicitud.etapaSolicitud.idEtapaSolicitud >= (int)EnumEtapaSolicitudViaticos.GENERACION_CHEQUE)
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-comprobaciones"
+                                                       onclick="MostrarModalComprobaciones(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                        Ver comprobaciones
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="3"
+                                                       data-formato-text="pathArchivo10NoComprobable" data-nombreArchivo="archivo del 10% no comprobable" data-solicitud="@solicitud.idSolitud">
+                                                        Archivo del 10% no comprobable
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(solicitud.pathInformeViaje))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="4"
+                                                       data-formato-text="pathInformeViaje" data-nombreArchivo="archivo del informe de viaje" data-solicitud="@solicitud.idSolitud">
+                                                        Informe del viaje
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (solicitud.marginal)
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="2"
+                                                       data-formato-text="pathComprobanteEstancia" data-nombreArchivo="archivo del comprobante de estancia" data-solicitud="@solicitud.idSolitud">
+                                                        Comprobante de estancia
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (solicitud.comprobarItinerarioAereo)
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-itinerariosAereos"
+                                                       onclick="MostrarModalItinerarioAereos(@(new JavaScriptSerializer().Serialize(solicitud)))">
+                                                        Pases de abordar
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(solicitud.pathArchivoReintegro))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="5"
+                                                       data-formato-text="pathArchivoReintegro" data-nombreArchivo="archivo de reintegro" data-solicitud="@solicitud.idSolitud">
+                                                        Archivo de reintegro
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (solicitud.etapaSolicitud.idEtapaSolicitud >= (int)EnumEtapaSolicitudViaticos.GENERACION_CHEQUE)
+                                            {
+                                                <li>
+                                                    <a href="#" data-solicitud="@solicitud.idSolitud" onclick="ImprimirFormatoI4(@solicitud.idSolitud)">
+                                                        Formato I4
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (solicitud.etapaSolicitud.idEtapaSolicitud >= (int)EnumEtapaSolicitudViaticos.VERIFICACION_GASTOS)
+                                            {
+                                                <li>
+                                                    <a href="#" data-solicitud="@solicitud.idSolitud" onclick="ImprimirFormatoI5(@solicitud.idSolitud)">
+                                                        Formato I5
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(solicitud.pathI4))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="6"
+                                                       data-formato-text="pathI4" data-nombreArchivo="Formato I4 (Firmado)" data-solicitud="@solicitud.idSolitud">
+                                                        Formato I4 (Firmado)
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (!string.IsNullOrEmpty(solicitud.pathI5))
+                                            {
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modal-subir-archivo" class="subirFormato" data-formato="7"
+                                                       data-formato-text="pathI5" data-nombreArchivo="Formato I5 (Firmado)" data-solicitud="@solicitud.idSolitud">
+                                                        Formato I5 (Firmado)
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section modals{
+
+    <div class="modal fade" id="modal-comprobaciones" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br />
+                </div>
+                <div class="modal-body" id="modal-content-comprobaciones">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="modal-subir-archivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br>
+                    <i class="fa fa-cloud-download fa-5x"></i>
+                    <h4 id="myModalLabel" class="semi-bold">Formulario para visualizar formatos.</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-row">
+                        <div class="col-md-12">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li id="item-verArchivo" class="active">
+                                    <a href="#tabVerArchivo" role="tab" data-toggle="tab">Visualizar archivo cargado</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tabVerArchivo">
+                                    <div class="row">
+                                        <div class="col-md-12" id="content-archivosSolicitud">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="modal-itinerariosAereos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <br />
+                </div>
+                <div class="modal-body" id="modal-content-itinerariosAereos">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+}
+
+
+
+<style>
+    #dZUploadXmlComp, #dZUploadReintegro, #dZUploadSat, #dZUploadOtros, #dZUpload {
+        min-height: 150px !important;
+    }
+
+        #dZUploadXmlComp .dz-details,
+        #dZUploadSat .dz-details,
+        #dZUploadOtros .dz-details {
+            height: 25px !important;
+        }
+
+    #tabla-mis-solicitudes {
+        border-collapse: collapse !important;
+    }
+
+        #tabla-mis-solicitudes tr td {
+            font-size: 12px;
+        }
+</style>
+
+@section scripts{
+    <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <link href="~/Content/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" />
+
+    <script src="~/Content/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/plugins/jquery-datatable/extra/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
+    <script src="~/Content/assets/js/datatables.js"></script>
+    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+    <script src="~/Content/assets/plugins/accounting/accounting.min.js"></script>
+
+    <script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
+    <script src="~/Content/assets/js/Evt/Viativos/evtMisSolHistorial.js"></script>
+}
+
+

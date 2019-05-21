@@ -172,7 +172,7 @@ namespace IICA.Models.DAO.PVI
             return permisos; ;
         }
 
-        public List<Permiso> ObtenerReporteSolicitudesPermisos()
+        public List<Permiso> ObtenerReporteSolicitudesPermisos(string proyecto, string departamento)
         {
             List<Permiso> permisos = new List<Permiso>();
             Permiso permiso;
@@ -181,6 +181,9 @@ namespace IICA.Models.DAO.PVI
                 using (dbManager = new DBManager(Utils.ObtenerConexion()))
                 {
                     dbManager.Open();
+                    dbManager.CreateParameters(2);
+                    dbManager.AddParameters(0, "Abreviatura_Proyecto", proyecto);
+                    dbManager.AddParameters(1, "De_Cve_Departamento_Empleado", departamento);
                     dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_GENERA_REPORTE_PERMISOS");
                     while (dbManager.DataReader.Read())
                     {

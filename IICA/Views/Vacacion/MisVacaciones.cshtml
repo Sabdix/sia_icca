@@ -38,7 +38,7 @@
                             <th style="width:10%;text-align: center;">Fecha de Autorización</th>
                             <th style="width:10%;text-align: center;">Estatus</th>
                             <th style="width:10%;text-align: center;">Motivo del rechazo</th>
-                            <th style="width:10%;text-align: center;">Formato de vacación</th>
+                            <th style="width:10%;text-align: center;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,31 +61,39 @@
                                     labelEstatus = "success";
                                     break;
                             }
-                        <tr>
-                            <td>@vacacion.idVacacion</td>
-                            <td>@vacacion.motivoVacaciones</td>
-                            <td>
-                                <span class="muted">
-                                    @(vacacion.fechaInicio == DateTime.MinValue ? "N/A" : vacacion.fechaInicio.ToShortDateString())
-                                </span>
-                            </td>
-                            <td>
-                                <span class="muted">
-                                    @(vacacion.fechaFin == DateTime.MinValue ? "N/A" : vacacion.fechaFin.ToShortDateString())
-                                </span>
-                            </td>
-                            <td><span class="muted">@vacacion.totalDias</span></td>
-                            <td><span class="muted">@(vacacion.fechaAutorizacion.ToShortDateString() == "01/01/1900" ? "Sin autorizar" : vacacion.fechaAutorizacion.ToShortDateString())</span></td>
-                            <td><span class="label label-@labelEstatus">@vacacion.estatusVacacion.descripcion</span></td>
-                            <td><span class="muted">@vacacion.motivoRechazo</span></td>
-                            <td>
-                                <span onclick="ImprimirFormatoVacacion(@(vacacion.idVacacion))">
-                                    <button data-toggle="tooltip" title="Imprimir formato" class="btn btn-info btn-mini">
-                                        <i class="fa fa-print"></i>
-                                    </button>
-                                </span>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>@vacacion.idVacacion</td>
+                                <td>@vacacion.motivoVacaciones</td>
+                                <td>
+                                    <span class="muted">
+                                        @(vacacion.fechaInicio == DateTime.MinValue ? "N/A" : vacacion.fechaInicio.ToShortDateString())
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="muted">
+                                        @(vacacion.fechaFin == DateTime.MinValue ? "N/A" : vacacion.fechaFin.ToShortDateString())
+                                    </span>
+                                </td>
+                                <td><span class="muted">@vacacion.totalDias</span></td>
+                                <td><span class="muted">@(vacacion.fechaAutorizacion.ToShortDateString() == "01/01/1900" ? "Sin autorizar" : vacacion.fechaAutorizacion.ToShortDateString())</span></td>
+                                <td><span class="label label-@labelEstatus">@vacacion.estatusVacacion.descripcion</span></td>
+                                <td><span class="muted">@vacacion.motivoRechazo</span></td>
+                                <td>
+                                    @if (vacacion.estatusVacacion.idEstatusVacacion == (int)EstatusSolicitud.SOLICITUD_PENDIENTE_DE_ENVIAR)
+                                    {
+                                        <span data-toggle="modal" data-target="#modal-enviar" onclick="MostrarModalEnvSol(@(vacacion.idVacacion))">
+                                            <button data-toggle="tooltip" title="Enviar solicitud" class="btn btn-info btn-mini">
+                                                <i class="fa fa-check-square-o"></i>
+                                            </button>
+                                        </span>
+                                    }
+                                    <span onclick="ImprimirFormatoVacacion(@(vacacion.idVacacion))">
+                                        <button data-toggle="tooltip" title="Imprimir formato" class="btn btn-info btn-mini">
+                                            <i class="fa fa-print"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -93,6 +101,59 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modal-enviar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <br>
+                <i class="fa fa-question-circle fa-7x"></i>
+                <h4 id="myModalLabel" class="semi-bold">Realmente desea enviar la siguiente solicitud.</h4>
+                <p class="no-margin">A continuación se muestran los detalles de la solicitud </p>
+                <br>
+            </div>
+            <div class="modal-body">
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <label class="form-label">Motivo de las vacaciones:</label>
+                        <textarea id="modal-env-motivo" type="text" class="form-control" placeholder="Motivo de las vacaciones" readonly></textarea>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-6">
+                        <label class="form-label">Fecha de inicio:</label>
+                        <input id="modal-env-fechaIni" type="text" class="form-control" placeholder="Fecha de inicio" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Inicio de labores:</label>
+                        <input id="modal-env-fechaFin" type="text" class="form-control" placeholder="Fecha de termino de vacaciones" readonly>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-md-12">
+                        <label class="form-label">Formato de autorización</label>
+                        <div id="formDropZone"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="EnviarSol()">Enviar solicitud</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    #dZUpload {
+        min-height: 150px !important;
+    }
+</style>
+
 
 @section scripts{
     <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
@@ -105,34 +166,10 @@
     <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <script src="~/Content/assets/js/datatables.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#tabla-mis-vacaciones').dataTable()
-        });
+    <link href="~/Content/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" />
+    <script src="~/Content/assets/plugins/dropzone/dropzone.min.js"></script>
 
-        function ImprimirFormatoVacacion(id) {
-            $.ajax({
-                data: { id: id },
-                url: rootUrl("/Vacacion/_ImprimirFormatoVacacion"),
-                dataType: "html",
-                method: "post",
-                beforeSend: function () {
-                    MostrarLoading();
-                },
-                success: function (data) {
-                    OcultarLoading();
-                    $("#content-impresion").html(data);
-                    $("#content-impresion").printThis({ printContainer: false });
-                    setTimeout(function () {
-                        $("#content-impresion").html("");
-                    }, 1000);
-                },
-                error: function (xhr, status, error) {
-                    ControlErrores(xhr, status, error);
-                }
-            });
-        }
+    <script src="~/Content/assets/js/Evt/evtMisVacaciones.js"></script>
 
-    </script>
 
 }

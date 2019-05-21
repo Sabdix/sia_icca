@@ -101,6 +101,25 @@ INSERT INTO DT_CAT_GASTO_EXTRA(Descripcion) VALUES('PEAJE / GASOLINA')
 INSERT INTO DT_CAT_GASTO_EXTRA(Descripcion) VALUES('AUTOBÚS')
 GO
 --==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_GASTO_COMPROBACION]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_GASTO_COMPROBACION]
+GO
+
+CREATE TABLE DT_CAT_GASTO_COMPROBACION (
+Id_Gasto_Comprobacion INT IDENTITY(1,1),
+Descripcion VARCHAR(100)
+)
+GO
+
+TRUNCATE TABLE DT_CAT_GASTO_COMPROBACION
+
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('HOTEL')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('TRANSPORTE')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('ALIMENTOS')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('GASOLINA')
+INSERT INTO DT_CAT_GASTO_COMPROBACION(Descripcion) VALUES('PEAJE')
+GO
+--==========================================================================================================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_ETAPAS_SOLICITUD_VIATICO]') AND type in (N'U'))
 DROP TABLE [dbo].[DT_CAT_ETAPAS_SOLICITUD_VIATICO]
 GO
@@ -221,7 +240,16 @@ Tarifa_de_Ida MONEY,
 Tarifa_de_Vuelta MONEY,
 Monto_Viatico_Autorizado MONEY,
 Monto_Viatico_Comprobado MONEY,
+Fecha_Cheque DATETIME,
 Path_Archivo_Autorizacion VARCHAR(300) NULL,
+Monto_Viatico_Reintegro MONEY NULL,
+Path_Comprobante_Estancia VARCHAR(300) NULL,
+Path_Archivo_10_No_Comprobable VARCHAR(300) NULL,
+Path_Informe_Viaje VARCHAR(300) NULL,
+Fecha_Reintegro DATETIME,
+Importe_Reintegro MONEY,
+Path_Archivo_Reintegro VARCHAR(300) NULL,
+Consecutivo_Anual VARCHAR(100),
 Id_Medio_Transporte INT,
 Id_Justificacion INT,
 Id_Tipo_Divisa INT,
@@ -229,7 +257,9 @@ Id_Etapa_Solicitud INT,
 Id_Estatus_Solicitud INT,
 Em_Cve_Empleado VARCHAR(20),
 Em_Cve_Empleado_Autoriza VARCHAR(20) NULL,
-Id_Tipo_Viaje INT
+Id_Tipo_Viaje INT,
+Path_i4 VARCHAR(300) NULL,
+Path_i5 VARCHAR(300) NULL,
 )
 GO
 --==========================================================================================================================
@@ -251,7 +281,8 @@ Fecha_Llegada DATETIME NULL,
 Dias DECIMAL(3,1),
 Path_Boleto VARCHAR(250) NULL,
 Id_Solicitud INT,
-Id_Tipo_Salida INT
+Id_Tipo_Salida INT,
+Path_Pasaje_Abordar VARCHAR(300)
 )
 GO
 --==========================================================================================================================
@@ -266,3 +297,81 @@ Monto MONEY,
 Id_Solicitud INT
 )
 GO
+
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_TBL_VIATICO_COMPROBACION_GASTOS]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_TBL_VIATICO_COMPROBACION_GASTOS]
+GO
+
+CREATE TABLE DT_TBL_VIATICO_COMPROBACION_GASTOS (
+Id_Comprobacion_Gasto INT IDENTITY(1,1),
+Id_Solicitud INT,
+Comentario VARCHAR(500),
+Path_Archivo_XML VARCHAR(500),
+Path_Archivo_PDF VARCHAR(500),
+Path_Archivo_SAT VARCHAR(500),
+Path_Archivo_Otros VARCHAR(500),
+Id_Gasto_Comprobacion INT,
+Emisor VARCHAR(500),
+Subtotal MONEY,
+Total MONEY,
+Lugar VARCHAR(500),
+Fecha DATETIME
+)
+GO
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_CONSECUTIVO_VIAJE_NACIONAL]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_CONSECUTIVO_VIAJE_NACIONAL]
+GO
+
+CREATE TABLE DT_CAT_CONSECUTIVO_VIAJE_NACIONAL (
+Contador INT IDENTITY(1,1),
+Ejercicio INT,
+Consecutivo INT
+)
+GO
+
+TRUNCATE TABLE DT_CAT_CONSECUTIVO_VIAJE_NACIONAL
+
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2019,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2020,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2021,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2022,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2023,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2024,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2025,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2026,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2027,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2028,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2029,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_NACIONAL(Ejercicio,Consecutivo) VALUES(2030,1)
+GO
+--==========================================================================================================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL]') AND type in (N'U'))
+DROP TABLE [dbo].[DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL]
+GO
+
+CREATE TABLE DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL (
+Contador INT IDENTITY(1,1),
+Ejercicio INT,
+Consecutivo INT
+)
+GO
+
+TRUNCATE TABLE DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL
+
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2019,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2020,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2021,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2022,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2023,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2024,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2025,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2026,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2027,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2028,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2029,1)
+INSERT INTO DT_CAT_CONSECUTIVO_VIAJE_INTERNACIONAL(Ejercicio,Consecutivo) VALUES(2030,1)
+
+GO
+--==========================================================================================================================

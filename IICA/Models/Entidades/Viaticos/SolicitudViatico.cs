@@ -37,7 +37,40 @@ namespace IICA.Models.Entidades.Viaticos
 
         public bool marginal { get; set; }
 
-        public string viaticante { get; set; }
+        public double montoAutorizado { get; set; }
+        public double montoComprobado { get; set; }
+        public decimal tarifaDeIda { get; set; }
+        public decimal tarifaDeVuelta { get; set; }
+        public NivelMando nivelMando { get; set; }
+        public DateTime  fechaCheque { get; set; }
+        public Usuario autorizador { get; set; }
+        public List<ComprobacionGasto> comprobacionesGasto { get; set; }
+		/*Nuevos campos*/
+		public string pathComprobanteEstancia { get; set; }
+		public string pathArchivo10NoComprobable { get; set; }
+        public string pathInformeViaje { get; set; }
+        public DateTime ? fechaReintegro { get; set; }
+        public bool aplicaReintegro { get; set; }
+        public decimal importeReintegro { get; set; }
+        /// <summary>
+        /// importe calculado por sistema, ya que sera un dato a mostrar y recomendar dicha cantidad al empleado
+        /// </summary>
+        public decimal importeReintegroPorSistema { get; set; }
+        public string pathArchivoReintegro { get; set; }
+        public string consecutivoAnual { get; set; }
+
+        /*Variables para validar flujo en la comprobacion de gastos*/
+        public bool realizarComprobacionGastos { get; set; }
+        public bool comprobarItinerarioAereo { get; set; }
+
+        public string pathI4 { get; set; }
+        public string pathI5 { get; set; }
+
+        public Int64 noCuenta { get; set; }
+        public string banco { get; set; }
+        public double totalGastosExtras { get; set; }
+        public decimal monto10NoComprobable { get; set; }
+
 
         public SolicitudViatico()
         {
@@ -50,6 +83,10 @@ namespace IICA.Models.Entidades.Viaticos
             estatusSolicitud = new EstatusSolicitud();
             justificacion = new Justificacion();
             etapaSolicitud = new EtapaSolicitud();
+            nivelMando = new NivelMando();
+            autorizador = new Usuario();
+            autorizador.rol.descripcion = EnumRolUsuario.AUTORIZADOR_PVI.ToString();
+            comprobacionesGasto = new List<ComprobacionGasto>();
         }
     }
 }

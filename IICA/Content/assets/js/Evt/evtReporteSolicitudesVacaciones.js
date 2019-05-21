@@ -1,9 +1,12 @@
 ﻿var solSeleccionada;
+var proyecto;
+var tabla;
 
 $(document).ready(function () {
+    $(".select-iica").select2();
 
     var img = window.location.protocol + "//" + window.location.host + rootUrl("/Content/assets/img/logo_iica.png");
-    $('#tabla-reporte-solVaca').dataTable({
+    tabla =$('#tabla-reporte-solVaca').dataTable({
         dom: 'Bfrtip',
         buttons: [
             {
@@ -36,4 +39,81 @@ $(document).ready(function () {
         ]
     });
 
+    $("#select-proyecto").change(function () {
+        proyecto = $(this).val();
+        tabla.fnClearTable();
+        tabla.fnDraw();
+        if (proyecto != "" && proyecto != undefined) {
+            $.ajax({
+                data: { proyecto: proyecto },
+                url: rootUrl("/Vacacion/DepartamentosPorProyecto"),
+                dataType: "json",
+                method: "post",
+                beforeSend: function () {
+                    MostrarLoading();
+                },
+                success: function (data) {
+                    OcultarLoading();
+                    $("#select-departamento").html("");
+                    $("#select-departamento").append('<option value="-1">SELECCIONE UN DEPARTAMENTO</option>');
+                    $.each(data, function (key, departamento) {
+                        $("#select-departamento").append('<option value=' + departamento.DeCveDepartamentoEmpleado + '>' + departamento.descripcion + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    ControlErrores(xhr, status, error);
+                }
+            });
+        } else {
+            $("#select-departamento").html("");
+            $("#select-departamento").append('<option value="-1">SELECCIONE UN DEPARTAMENTO</option>');
+        }
+
+        $("#select-departamento").val(-1).trigger('change');
+    });
+
+    $("#select-departamento").change(function () {
+        var departamento = $(this).val();
+        if (departamento != "" && departamento != undefined
+            && proyecto != "" && proyecto != undefined
+        ) {
+            $.ajax({
+                data: { proyecto: proyecto, departamento: departamento },
+                url: rootUrl("/Vacacion/ReporteSolicitudesVacaciones"),
+                dataType: "json",
+                method: "post",
+                beforeSend: function () {
+                    MostrarLoading();
+                },
+                success: function (data) {
+                    OcultarLoading();
+                    MostrarRegistrosReporte(data);
+                },
+                error: function (xhr, status, error) {
+                    ControlErrores(xhr, status, error);
+                }
+            });
+        } else {
+            //
+        }
+    });
+
 });
+
+function MostrarRegistrosReporte(data) {
+    tabla.fnClearTable();
+    tabla.fnDraw();
+    data.forEach(function (solicitud, index) {
+        tabla.fnAddData([
+            solicitud.nombreCompleto,
+            solicitud.Proyecto,
+            solicitud.Departamento,
+            solicitud.FechaSolicitud.split(" ")[0],
+            solicitud.FechaInicio.split(" ")[0],
+            "<span class='muted'><span class='label label-info'>"
+            + solicitud.FechaFin.split(" ")[0] + "</span></span>",
+            '<span class="muted">' + solicitud.DescripcionStatusSolicitud+'</span>'
+        ]);
+        tabla.fnDraw(false);
+    });
+}

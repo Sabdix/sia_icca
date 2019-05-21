@@ -1,0 +1,589 @@
+﻿<script src="~/Content/assets/plugins/printThis/printThis.js"></script>
+@model IICA.Models.Entidades.Viaticos.SolicitudViatico
+@using IICA.Models.Entidades.Viaticos
+@using System.Web.Script.Serialization;
+@using IICA.Models.Entidades;
+
+
+<style>
+    .md-100 {
+        width: 100%;
+        margin: auto;
+    }
+
+    .md-90 {
+        width: 90%;
+        margin: auto;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .border-solid {
+        border: 1px solid #000;
+    }
+
+    /*------------------------------------*/
+    #content-principal {
+        width: 100%;
+        margin: auto;
+    }
+    /*------------------------------------*/
+    #content-header {
+        height: 130px;
+    }
+
+    #content-header img {
+        width: 215px;
+        height: 85px;
+    }
+    /*------------------------------------*/
+    #content-fecha-header {
+        display: flex;
+        justify-content: flex-end;
+        text-align: center;
+    }
+
+        #content-fecha-header label {
+            float: right;
+            font-weight: 900;
+            border: 1px solid #595959;
+            padding: 5px 50px 5px 50px;
+        }
+    /*------------------------------------*/
+    #content-titulo {
+        text-align: center;
+    }
+    /*------------------------------------*/
+    #content-datos-empleado {
+        margin-bottom: 20px;
+    }
+
+        #content-datos-empleado table {
+            color: #595959;
+            font-size: 20px;
+        }
+    /*------------------------------------*/
+    #content-datos-solicitud {
+        margin-bottom: 20px;
+    }
+
+        #content-datos-solicitud table {
+            width: 100%;
+            color: #595959;
+            font-size: 18px;
+            border: 1px solid #595959;
+        }
+
+            #content-datos-solicitud table tbody {
+                width: 90%;
+                margin: auto;
+                display: block;
+            }
+
+                #content-datos-solicitud table tbody tr td {
+                    padding-bottom: 3px;
+                    padding-top: 3px;
+                }
+
+    .label-dato {
+        width: 100%;
+        display: block;
+        border: 1px solid #595959;
+    }
+
+    /*------------------------------------*/
+    #content-firmas {
+        display: table;
+        margin-top: 80px;
+    }
+</style>
+
+   <div id="encabezado"> 
+    <table>
+        <tr class="text-left">
+            <td rowspan="3"><img src="http://www.iicarhmexico.com/Sia_IICA/Content/assets/img/logo_iica.png" width="215" height="85" /></td>
+        </tr>
+        <tr class="text-right">
+            <td><label class="text-center">FORMULARIO I4 </label><br /> 
+                <label class="text-left">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS </label><br/> 
+            <label class="text-center">UNIDAD OPERATIVA:@Model.usuario.programa @Model.usuario.departamento</label> <br/>
+            <label class="text-center">FECHA:@Model.fechaAlta</label>
+         </td>
+    </table>
+</div>
+
+<div id="tipo_viaje">
+    <table class="md-90">
+        <tr>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td width="25" rowspan="2">&nbsp;</td>
+                        <td colspan="2" class="text-center">VIAJES INTERNACIONALES</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Código de empleado</td>
+                        <td class="text-center">CONSECUTIVO ANUAL</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">VI</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 2 ? @Model.usuario.emCveEmpleado : "")</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 2 ? @Model.consecutivoAnual : " ")</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td width="25" rowspan="2">&nbsp;</td>
+                        <td colspan="2" class="text-center">VIAJES NACIONALES</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Código de empleado</td>
+                        <td class="text-center">CONSECUTIVO ANUAL</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">VN</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 1 ? @Model.usuario.emCveEmpleado : "")</td>
+                        <td class="text-center">@(Model.tipoViaje.idTipoViaje == 1 ? @Model.consecutivoAnual : "")</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table><br />
+</div>
+
+<div id="datos_empleado" style="font-size: 10px;" class="md-90">
+    <table border="0">
+        <tr>
+            <td><label>Nombre: </label></td>
+            <td><label>@Model.usuario.nombreCompleto</label></td>
+            <td width="25">&nbsp;</td>
+            <td><label>Cargo:</label></td>
+            <td><label>@Model.usuario.puesto</label></td>
+        </tr>
+    </table>
+</div>
+
+<div id="datos_Viaje" style="font-size: 10px;" class="md-90">
+    <table>
+        <tr>
+            <td><label>Próposito del viaje:</label></td>
+           <td><label>@Model.proposito</label></td>
+        </tr>
+        <tr>
+            <td><label>Resultados esperados:</label></td>
+            <td><label>@Model.resultadosEsperados</label></td>
+        </tr>
+        <tr>
+            <table>
+                <tr>
+                    <td rowspan="3"><label>Justificación del viaje:</label></td>
+                    <td>
+                    <table border="1">
+                            <tr>
+                                  @if (Model.justificacion.idJustificacion == 1)
+                                  {
+                                    <td style="width:20px; text-align:center;"><label> X </label></td>}
+                                  else
+                                  {
+                                    <td style="width:20px; text-align:center;">-</td>
+                                  }
+                            </tr>
+                    </table>
+                    </td>
+                    <td><label class="text-left">Solicitud del Representante o Institución (adjuntar documentación)</label></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table border="1">
+                            <tr>
+                                @if (Model.justificacion.idJustificacion == 2)
+                                { <td style="width:20px; text-align:center;"><label> X </label></td>}
+                                else
+                                {
+                                    <td style="width:20px; text-align:center;">-</td>
+                                }
+                           </tr>
+                    </table>
+                </td>
+                    <td><label>Ofrecimiento del Director y/o Coordinados (adjuntar documentación)</label></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table border="1">
+                            <tr>
+                                @if (Model.justificacion.idJustificacion == 3)
+                                { <td style="width:20px; text-align:center;"><label> X </label></td>}
+                                else
+                                {
+                                    <td style="width:20px; text-align:center;">-</td>
+                                }
+                            </tr>
+                        </table>
+                    </td>
+                    <td><label>Mecanismo de Programación, Supervisión, Auditoría y Evaluación</label></td>
+                </tr>
+                
+            </table>
+        </tr>
+    </table>
+    <table border="0">
+        <tr>
+            <td><label>Relación de gastos pendientes:</label></td>
+            <td><label>"NO"</label></td>
+            <td width="25">&nbsp;</td>
+            <td><label>Informe de viaje pendiente:</label></td>
+            <td><label>"NO"</label></td>
+        </tr>
+        <tr>
+            <td><label>ITINERARIO:</label></td>
+            <td></td>
+            <td width="25">&nbsp;</td>
+            <td><label>Duración estimada del viaje:</label></td>
+            <td><label>@(Model.duracionViaje + " día(s)")</label></td>
+        </tr>
+    </table>
+</div>
+
+<div id="itinerario" style="font-size: 10px;"  class="md-90">
+                <table style="text-align: center;" id="tabla-itinerarios" border="1">
+                    <thead>
+                        <tr>
+                            
+                            <td style="width:10%;text-align: center;">Origen</td>
+                            <td style="width:10%;text-align: center;">Destino</td>
+                            <td style="width:10%;text-align: center;">Fecha</td>
+                            <td style="width:10%;text-align: center;">Medio</td>
+                            <td style="width:10%;text-align: center;">Linea</td>
+                            <td style="width:10%;text-align: center;">Hora de salida</td>
+                            <td style="width:10%;text-align: center;">Hora de llegada</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itinerario in Model.itinerario)
+                        {
+                            <tr>
+                                <td>@itinerario.origen</td>
+                                <td>@itinerario.destino</td>
+                                <td>@(itinerario.tipoSalida.idTipoSalida==Convert.ToInt32(EnumTipoSalida.IDA) ? Convert.ToDateTime(Model.fechaInicio).ToShortDateString(): Convert.ToDateTime(Model.fechaFin).ToShortDateString())</td>
+                                <td>@itinerario.medioTransporte.descripcion</td>
+                                <td>@(itinerario.linea + "/" + itinerario.numeroAsiento)</td>
+                                <td>@(string.IsNullOrEmpty(itinerario.horaSalida) ? "N/A" : itinerario.horaSalida )</td>
+                                <td>@(string.IsNullOrEmpty(itinerario.horaLLegada) ? "N/A" : itinerario.horaLLegada )</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+</div>
+
+<div id="condiciones especiales" style="font-size: 10px;"  class="md-90">
+    <label style="font-size:x-small">CONDICIONES ESPECIALES:  @Model.condicionesEspeciales</label>
+    <div class="md-90">
+        <table>
+            <tr>
+                <td>
+                    <table style="text-align: center;" id="tabla-condiciones" border="1">
+                            <tr>
+                                <td style="width:10%;text-align: center;">País Ciudad</td>
+                                <td style="width:10%;text-align: center;">No. de días</td>
+                                <td style="width:10%;text-align: center;">Tarifa</td>
+                                <td style="width:10%;text-align: center;">Viáticos ML $</td>
+                                <td style="width:10%;text-align: center;">Viáticos US $</td>
+                            </tr>
+                            @foreach (var itinerario in Model.itinerario.FindAll(x=> x.dias > 0))
+                        {
+                                <tr>
+                                    @if (itinerario.tipoSalida.idTipoSalida == 1)
+                                {
+                                        <td>@itinerario.origen</td>
+                                        <td>@itinerario.dias</td>
+                                        <td>@((Model.tarifaDeIda/itinerario.dias).ToString("C"))</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? Model.tarifaDeIda.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? Model.tarifaDeIda.ToString("C") : "")</td>
+                                }
+                                else
+                                {
+                                        <td>@itinerario.destino</td>
+                                        <td>@itinerario.dias</td>
+                                        <td>@Model.tarifaDeVuelta.ToString("C")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? Model.tarifaDeVuelta.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? Model.tarifaDeVuelta.ToString("C") : "")</td>
+                                }
+                                </tr>
+                        }
+                    </table>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>
+                    <table style="text-align: center;" id="tabla-resumen" border="1" align="right">
+                            <tr>
+                                <td style="width:10%;text-align: center;">Resumen</td>
+                                <td style="width:10%;text-align: center;">Monto ML $</td>
+                                <td style="width:10%;text-align: center;">Monto US $</td>
+                            </tr>
+                            <tr>
+                                <td>Viáticos</td>
+                                <td>@(Model.tipoViaje.idTipoViaje == 1 ? (Model.tarifaDeIda + Model.tarifaDeVuelta).ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje == 2 ? (Model.tarifaDeIda + Model.tarifaDeVuelta).ToString("C") : "")</td>
+                            </tr>
+                            <tr>
+                                <td>Transporte</td>
+                                @foreach (var gasto in Model.gastosExtrasSol)
+                                {
+                                    if (@gasto.descripcion == "TRANSPORTE AÉREO")
+                                    {
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
+                                    }
+                                }
+
+                            </tr>
+                            <tr>
+                                <td>Peaje / Gasolina</td>
+                                @foreach (var gasto in Model.gastosExtrasSol)
+                                {
+                                    if (@gasto.descripcion == "PEAJE / GASOLINA")
+                                    {
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
+                                    }
+                                }
+
+                            </tr>
+                            <tr>
+                                <td>Autobus</td>
+                                @foreach (var gasto in Model.gastosExtrasSol)
+                                {
+                                    if (@gasto.descripcion == "AUTOBÚS")
+                                    {
+                                        <td>@(Model.tipoViaje.idTipoViaje == 1 ? gasto.monto.ToString("C") : "")</td>
+                                        <td>@(Model.tipoViaje.idTipoViaje == 2 ? gasto.monto.ToString("C") : "")</td>
+                                    }
+                                }
+                            </tr>
+                            <tr>
+                                <td>Otros</td>
+                                <td>@(Model.tipoViaje.idTipoViaje ==1 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion != "TRANSPORTE AÉREO" && 
+                                ge.descripcion != "PEAJE / GASOLINA" && ge.descripcion != "AUTOBÚS").Sum(g => g.monto).ToString("C") : "")</td>
+                                <td>@(Model.tipoViaje.idTipoViaje ==2 ? @Model.gastosExtrasSol.FindAll(ge => ge.descripcion == "OTROS").Sum(g => g.monto).ToString("C") : "")</td>
+                            </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div id="anticipo" style="font-size: 10px;" class="md-90">
+    <label>Datos del anticipo de viatico:</label>
+    <table>
+        <tr>
+            <td><label>Monto</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td style="width:80px;text-align:center;"><label> @Model.montoAutorizado </label></td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td></td>
+            <td><label>Cheque</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td style="width:80px;text-align:center;"><label>-</label></td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td></td>
+            <td><label>Transferencia</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td style="width:80px;text-align:center;";><label>@Model.noCuenta </label></td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+            <td></td>
+            <td><label>Banco</label></td>
+            <td>
+                <table border="1">
+                    <tr>
+                        <td style="width:80px;text-align:center;";><label> @Model.banco </label></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+<div id="gastos" style="font-size: 10px;"  class="md-90">
+    <label style="font-size:x-small">
+        RELACIÓN DE GASTOS E INFORME DE VIAJE DEBEN PRESENTARSE 5 DÍAS HABILES POSTERIORES A SU RETORNO</label>
+        <table border="1" style="text-align: center;" id="tabla-gastos_reintegro">
+            <thead>
+                <tr>
+                    <td style="width:10%;text-align: center;">Tipo de Gasto</td>
+                    <td style="width:10%;text-align: center;">OGM</td>
+                    <td style="width:10%;text-align: center;">Codigo Presupuestario</td>
+                    <td style="width:10%;text-align: center;">Monto US/ML</td>
+                    <td style="width:10%;text-align: center;">Cuenta para aviso de cargo</td>
+                    <td style="width:10%;text-align: center;">Nombre de la fuente de Financiamiento</td>
+                    <td style="width:10%;text-align: center;">Nombre de la Unidad Interna o Institución Financiera</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+<br/>
+<br/>
+<table border="0">
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>___________________________________________</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>___________________________________________</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>@Model.usuario.nombreCompleto</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>@Model.autorizador.nombreCompleto</td>
+        </tr>
+    </table>
+<style>
+    .blueIICA {
+        color: #1f3853;
+    }
+
+    #content-solViatico .grid-body {
+        padding: 0px !important;
+    }
+
+    table tr th {
+        font-size: 11px !important;
+    }
+
+    table td {
+        font-size: 11px !important;
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    function mostrarBoletoItinerario(itinerario) {
+        var url = itinerario.pathBoleto;
+        if (url !== "") {
+            url = rootUrl(url);
+            $('div #content-boleto').html("");
+            $("div #bol-ida").text(itinerario.origen);
+            $("div #bol-regreso").text(itinerario.destino);
+            var iframe = $('<iframe style="width: 100%;height:600px;">');
+            iframe.attr('src', url);
+            $('div #content-boleto').append(iframe);
+            iframe[0].contentWindow.location.reload();
+        }
+        else {
+            $("div #content-boleto").html("");
+            $("div #bol-ida").text("-");
+            $("div #bol-regreso").text("-");
+        }
+    }
+</script>

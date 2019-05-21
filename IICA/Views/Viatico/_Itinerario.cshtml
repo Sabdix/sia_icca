@@ -12,7 +12,7 @@
     <div class="modal-body">
         <div class="row form-row">
             <div class="col-md-12">
-                <label class="form-label">Medio de trasnporte:</label>
+                <label class="form-label">Medio de transporte:</label>
                 @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposMediosTrasnporte, "SELECCIONE EL TIPO DE TRANSPORTE",
                      new { id = "idMedioItinerario" })
                 @Html.ValidationMessageFor(x => x.medioTransporte.idMedioTransporte, "", new { @class = "error" })

@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo de transportación</label>
-                                    @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposMediosTrasnporte, "SELECCIONE EL TIPO DE TRASNPORTE",
+                                    @Html.DropDownListFor(x => x.medioTransporte.idMedioTransporte, (IEnumerable<SelectListItem>)ViewBag.TiposMediosTrasnporte, "SELECCIONE EL TIPO DE TRANSPORTE",
                                        new { @class = "select-iica", style = "width: 100%;", data_val = "true" })
                                     @Html.ValidationMessageFor(x => x.medioTransporte.idMedioTransporte, "", new { @class = "error" })
                                 </div>

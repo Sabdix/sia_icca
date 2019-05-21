@@ -18,6 +18,6 @@ namespace IICA.Models.Entidades.PVI
         public string SaldoProporcional { get; set; }
         public string SaldoFinal { get; set; }
         public string FechaIngreso { get; set; }
-        public string nombreCompleto => $"{emNombre + " " + (string.IsNullOrEmpty(emApellidoPaterno) ? "" : emApellidoPaterno) + " " + (string.IsNullOrEmpty(emApellidoMaterno) ? "" : emApellidoMaterno)}";
+        public string nombreCompleto => $"{(string.IsNullOrEmpty(emApellidoPaterno) ? "" : emApellidoPaterno) + " " + (string.IsNullOrEmpty(emApellidoMaterno) ? "" : emApellidoMaterno) + " " + emNombre}";
     }
 }

@@ -34,12 +34,11 @@ $(document).ready(function () {
             formData.append("formato", formato);
         },
         success: function (file, data) {
-            swal("Subida Exitosa", data.mensaje, "success");
             file.previewElement.classList.add("dz-success");
             if (data.status === true) {
-                MostrarNotificacionLoad("success", data.mensaje, 3000);
+                swal("Notificación", data.mensaje, "success");
             } else {
-                MostrarNotificacionLoad("error", data.mensaje, 3000);
+                swal("Notificación", data.mensaje, "Error");
             }
             $("#modal-subir-archivo").modal("hide");
         },
@@ -60,7 +59,7 @@ $(document).ready(function () {
 
 
 /*==========================================================================================================*/
-/*=====================================     CANCELACION DE SOLICITUD    ====================================*/
+/*==========================================     ENVIAR SOLICITUD    =======================================*/
 /*==========================================================================================================*/
 
 function MostrarModalEnvSol(incapacidad) {
@@ -181,10 +180,16 @@ function MostrarFormato(idIncapacidad,formato) {
                     url = rootUrl(url);
                     $("#item-verArchivo").show();
                     $('#content-formato').html("");
-                    var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    //var iframe = $('<iframe style="width: 100%;height:600px;">');
+                    //iframe.attr('src', url);
+                    //$('#content-formato').append(iframe);
+                    //iframe[0].contentWindow.location.reload();
+                    var iframe = $('<embed src="" width="100%" height="600" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+                    iframe.innerHTML = "";
                     iframe.attr('src', url);
                     $('#content-formato').append(iframe);
-                    iframe[0].contentWindow.location.reload();
+                    var content = iframe.innerHTML;
+                    iframe.innerHTML = content;
                 }
                 else {
                     $("#item-verArchivo").hide();

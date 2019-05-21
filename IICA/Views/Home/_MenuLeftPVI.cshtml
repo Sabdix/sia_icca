@@ -28,14 +28,18 @@
             <li class="nodo-menu" id="nodo-permisos">
                 <a href="javascript:;"> <i class="material-icons">assignment_ind</i> <span class="title">Permisos</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                    @if (Model.empleado)
                     {
                         <li> <a id="submenu-nvsolPermi" href="@Url.Action("NuevaSolicitud","Permiso")">Nueva solicitud </a> </li>
                         <li> <a id="submenu-misPermisos" href="@Url.Action("MisPermisos","Permiso")">Mis Permisos</a> </li>
                     }
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
+                    @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_PVI)
+                    || r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
                     {
-                        <li> <a id="submenu-permisosPorAut" href="@Url.Action("PermisosPorAutorizar", "Permiso")">Permisos por autorizar</a> </li>
+                        if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_PVI)))
+                        {
+                            <li> <a id="submenu-permisosPorAut" href="@Url.Action("PermisosPorAutorizar", "Permiso")">Permisos por autorizar</a> </li>
+                        }
                         <li class="nodo-submenu">
                             <a href="javascript:;" id="submenu-reportesPermi"> <span class="title">Reportes</span> <span class="arrow"></span> </a>
                             <ul class="sub-menu" style="display: block;">
@@ -49,14 +53,18 @@
             <li class="nodo-menu" id="nodo-vacaciones">
                 <a href="javascript:;"> <i class="material-icons">flight_takeoff</i> <span class="title">Vacaciones</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                    @if (Model.empleado)
                     {
                         <li> <a id="submenu-nvsolVaca" href="@Url.Action("NuevaSolicitud", "Vacacion")">Nueva solicitud </a> </li>
                         <li> <a id="submenu-misVacaciones" href="@Url.Action("MisVacaciones", "Vacacion")">Mis Vacaciones</a> </li>
                     }
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
+                    @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_PVI)
+                    || r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
                     {
-                        <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
+                        if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_PVI)))
+                        {
+                            <li> <a id="submenu-vacaPorAut" href="@Url.Action("VacacionesPorAutorizar", "Vacacion")">Vacaciones por autorizar</a> </li>
+                        }
                         <li class="nodo-submenu">
                             <a href="javascript:;" id="submenu-reportesVaca"> <span class="title">Reportes</span> <span class="arrow"></span> </a>
                             <ul class="sub-menu" style="display: block;">
@@ -71,12 +79,12 @@
             <li class="nodo-menu" id="nodo-incapacidades">
                 <a href="javascript:;"> <i class="material-icons">local_hospital</i> <span class="title">Incapacidades</span> <span class=" arrow"></span> </a>
                 <ul class="sub-menu">
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                    @if (Model.empleado)
                     {
                         <li> <a id="submenu-nvsolInca" href="@Url.Action("NuevaSolicitud","Incapacidad")">Nueva solicitud </a> </li>
                         <li> <a id="submenu-misIncapacidades" href="@Url.Action("MisIncapacidades","Incapacidad")">Mis Incapacidades</a> </li>
                     }
-                    @if (Model.tipoUsuario != IICA.Models.Entidades.EnumTipoUsuario.EMPLEADO)
+                    @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.AUTORIZADOR_PVI)))
                     {
                         <li> <a id="submenu-incaPorAut" href="@Url.Action("IncapacidadesPorAutorizar", "Incapacidad")">Incapacidades por autorizar</a> </li>
                     }
@@ -84,33 +92,42 @@
             </li>
         </ul>
 
-        <br /><br /><br />
+        <br /><br />
         <div class="side-bar-widgets">
             <p class="menu-title sm">SIA IICA</p>
             <ul class="folders">
-                <li>
-                    <a href="javascript:;" onclick="document.getElementById('form-doc').submit();">
-                        <div class="status-icon green"></div>
-                        IICA - ACT. DE EXPEDIENTE
-                        <form id="form-doc" action="@WebConfigurationManager.AppSettings["urlDocumentos"].ToString()" method="post">
-                            <input hidden name="email" value="@(Model.emCveEmpleado)" />
-                            <input hidden name="password" value="@(Model.contrasena)" />
-                        </form>
-                    </a>
-                </li>
-                <li>
-                    <a href="@Url.Action("Viaticos","Home")">
-                        <div class="status-icon red"></div>
-                        IICA - Viativos
-                    </a>
-                </li>
-                @if (Model.tipoUsuario == IICA.Models.Entidades.EnumTipoUsuario.ADMINISTRADOR)
+                @if (Model.empleado)
                 {
                     <li>
-
-                        <a href="@WebConfigurationManager.AppSettings["urlPasivoLaboral"].ToString()">
+                        <a href="javascript:;" onclick="document.getElementById('form-doc').submit();">
+                            <div class="status-icon green"></div>
+                            IICA - ACT. DE EXPEDIENTE
+                            <form id="form-doc" action="@WebConfigurationManager.AppSettings["urlDocumentos"].ToString()" method="post">
+                                <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                                <input hidden name="password" value="@(Model.contrasena)" />
+                            </form>
+                        </a>
+                    </li>
+                }
+                @if (Model.empleado || Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_VIATICOS)))
+                {
+                    <li>
+                        <a href="@Url.Action("Viaticos", "Home")">
+                            <div class="status-icon red"></div>
+                            IICA - Viaticos
+                        </a>
+                    </li>
+                }
+                @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.ADMINISTRADOR_RH)))
+                {
+                    <li>
+                        <a href="javascript:;" onclick="document.getElementById('form-pl').submit();">
                             <div class="status-icon red"></div>
                             IICA Pasivo Laboral
+                            <form id="form-pl" action="@WebConfigurationManager.AppSettings["urlPasivoLaboral"].ToString()" method="post">
+                                <input hidden name="email" value="@(Model.emCveEmpleado)" />
+                                <input hidden name="password" value="@(Model.contrasena)" />
+                            </form>
                         </a>
                     </li>
                 }
