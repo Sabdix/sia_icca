@@ -112,8 +112,21 @@ function MostrarRegistrosReporte(data) {
             solicitud.FechaInicio.split(" ")[0],
             "<span class='muted'><span class='label label-info'>"
             + solicitud.FechaFin.split(" ")[0] + "</span></span>",
-            '<span class="muted">' + solicitud.DescripcionStatusSolicitud+'</span>'
+            '<span class="muted">' + solicitud.DescripcionStatusSolicitud + '</span>',
+            '<button class="btn btn-icon btn-sm waves-effect waves-light btn-info"' +
+            'onclick="mostrarFormato(\'' + solicitud.PathFormatoAutorizacion + '\')"> <i class="fas fa-edit"></i> </button>'
         ]);
         tabla.fnDraw(false);
     });
+}
+
+function mostrarFormato(url) {
+    url = rootUrl(url);
+    $('#content-formato').html("");
+    var iframe = $('<embed src="" width="100%" height="600" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+    iframe.innerHTML = "";
+    iframe.attr('src', url);
+    $('#content-formato').append(iframe);
+    var content = iframe.innerHTML;
+    iframe.innerHTML = content;
 }

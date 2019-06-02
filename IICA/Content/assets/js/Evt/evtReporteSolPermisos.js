@@ -98,6 +98,10 @@ $(document).ready(function () {
         }
     });
 
+    $(".mostrarFormato").click(function () {
+
+
+    });
 });
 
 function MostrarRegistrosReporte(data) {
@@ -105,16 +109,30 @@ function MostrarRegistrosReporte(data) {
     tabla.fnDraw();
     data.forEach(function (solicitud, index) {
         tabla.fnAddData([
+            
             solicitud.usuario.nombreCompleto,
             solicitud.usuario.programa,
             solicitud.usuario.departamento,
             ObtenerFechaJson(solicitud.fechaPermiso),
             solicitud.motivoPermiso,
             "<span class='muted'><span class='label label-info'>"
-            + solicitud.estatusPermiso.descripcion + "</span></span>"
+            + solicitud.estatusPermiso.descripcion + "</span></span>",
+             '<button class="btn btn-icon btn-sm waves-effect waves-light btn-info"' +
+            'onclick="mostrarFormato(\'' + solicitud.PathFormatoAutorizacion + '\')"> <i class="fas fa-edit"></i> </button>'
         ]);
         tabla.fnDraw(false);
     });
+}
+
+function mostrarFormato(url) {
+    url = rootUrl(url);
+    $('#content-formato').html("");
+    var iframe = $('<embed src="" width="100%" height="600" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+    iframe.innerHTML = "";
+    iframe.attr('src', url);
+    $('#content-formato').append(iframe);
+    var content = iframe.innerHTML;
+    iframe.innerHTML = content;
 }
 
 

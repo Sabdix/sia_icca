@@ -223,6 +223,7 @@ namespace IICA.Models.DAO.PVI
                         reporteVacacion.VacacionesTomandas = dbManager.DataReader["Vacaciones_Tomandas"] == DBNull.Value ? "" : dbManager.DataReader["Vacaciones_Tomandas"].ToString();
                         reporteVacacion.SaldoProporcional = dbManager.DataReader["Saldo_Proporcional"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Proporcional"].ToString();
                         reporteVacacion.SaldoFinal = dbManager.DataReader["Saldo_Final"] == DBNull.Value ? "" : dbManager.DataReader["Saldo_Final"].ToString();
+                        reporteVacacion.PathFormatoAutorizacion = dbManager.DataReader["path_formato_autorizacion"] == DBNull.Value ? "" : dbManager.DataReader["path_formato_autorizacion"].ToString();
                         reporteVacaciones.Add(reporteVacacion);
                     }
                 }
@@ -259,6 +260,7 @@ namespace IICA.Models.DAO.PVI
                         reporteSolicitudVacacion.FechaInicio = dbManager.DataReader["Fecha_Inicio"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Inicio"].ToString();
                         reporteSolicitudVacacion.FechaFin = dbManager.DataReader["Fecha_Fin"] == DBNull.Value ? "" : dbManager.DataReader["Fecha_Fin"].ToString();
                         reporteSolicitudVacacion.DescripcionStatusSolicitud = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
+                        reporteSolicitudVacacion.PathFormatoAutorizacion = dbManager.DataReader["path_formato_autorizacion"] == DBNull.Value ? "" : dbManager.DataReader["path_formato_autorizacion"].ToString();
                         reporteSolicitudVacaciones.Add(reporteSolicitudVacacion);
                     }
                 }
