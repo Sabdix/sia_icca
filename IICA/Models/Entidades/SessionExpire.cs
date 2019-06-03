@@ -13,8 +13,9 @@ namespace IICA.Models.Entidades
         {
             try
             {
+                Result result = Utils.ValidaLicencia();
                 HttpContext ctx = HttpContext.Current;
-                if (HttpContext.Current.Session["usuarioSesion"] == null)
+                if (HttpContext.Current.Session["usuarioSesion"] == null || !result.status)
                 {
                     if (filterContext.RequestContext.HttpContext.Request.IsAjaxRequest())
                     {

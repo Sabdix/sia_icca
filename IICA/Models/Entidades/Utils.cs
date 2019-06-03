@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Configuration;
 using System.Xml;
@@ -54,6 +55,28 @@ namespace IICA.Models.Entidades
             {
                 throw ex;
             }
+        }
+
+        public static Result ValidaLicencia()
+        {
+            Result result_ = new Result();
+            try
+            {
+                var url = "http://licenciamientos.dsimorelia.com/api/Licencia/ValidarLicencia_SIA_IICA";
+                var webrequest = (HttpWebRequest)System.Net.WebRequest.Create(url);
+
+                using (var response = webrequest.GetResponse())
+                using (var reader = new StreamReader(response.GetResponseStream()))
+                {
+                    string result = reader.ReadToEnd();
+                    result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<Result>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result_;
         }
     }
 }

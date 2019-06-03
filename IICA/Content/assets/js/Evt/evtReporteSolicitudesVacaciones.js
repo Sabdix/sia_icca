@@ -113,8 +113,8 @@ function MostrarRegistrosReporte(data) {
             "<span class='muted'><span class='label label-info'>"
             + solicitud.FechaFin.split(" ")[0] + "</span></span>",
             '<span class="muted">' + solicitud.DescripcionStatusSolicitud + '</span>',
-            '<button class="btn btn-icon btn-sm waves-effect waves-light btn-info"' +
-            'onclick="mostrarFormato(\'' + solicitud.PathFormatoAutorizacion + '\')"> <i class="fas fa-edit"></i> </button>'
+            solicitud.PathFormatoAutorizacion == "" ? "No se ha capturado" :("<button class='btn btn-info btn-mini' data-toggle='modal' data-target='#modal-formato'" +
+            "onclick='mostrarFormato(\"" + solicitud.PathFormatoAutorizacion + "\")'> <i class='fa fa-search'></i> </button>")
         ]);
         tabla.fnDraw(false);
     });

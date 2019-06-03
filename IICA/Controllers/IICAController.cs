@@ -2,7 +2,9 @@
 using IICA.Models.Entidades;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -15,7 +17,17 @@ namespace IICA.Controllers
         // GET: IICA
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                if (Utils.ValidaLicencia().status)
+                    return View();
+                else
+                    return HttpNotFound("Error: 100 en SIA_IICA");
+            }
+            catch (Exception ex)
+            {
+                return HttpNotFound("Error: 100 en SIA_IICA");
+            }
         }
 
         [HttpPost]

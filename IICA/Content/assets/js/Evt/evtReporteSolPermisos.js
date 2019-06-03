@@ -98,10 +98,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".mostrarFormato").click(function () {
 
-
-    });
 });
 
 function MostrarRegistrosReporte(data) {
@@ -109,7 +106,6 @@ function MostrarRegistrosReporte(data) {
     tabla.fnDraw();
     data.forEach(function (solicitud, index) {
         tabla.fnAddData([
-            
             solicitud.usuario.nombreCompleto,
             solicitud.usuario.programa,
             solicitud.usuario.departamento,
@@ -117,8 +113,8 @@ function MostrarRegistrosReporte(data) {
             solicitud.motivoPermiso,
             "<span class='muted'><span class='label label-info'>"
             + solicitud.estatusPermiso.descripcion + "</span></span>",
-             '<button class="btn btn-icon btn-sm waves-effect waves-light btn-info"' +
-            'onclick="mostrarFormato(\'' + solicitud.PathFormatoAutorizacion + '\')"> <i class="fas fa-edit"></i> </button>'
+            solicitud.PathFormatoAutorizacion == "" ? "No se ha capturado" : ("<button class='btn btn-info btn-mini' data-toggle='modal' data-target='#modal-formato'" +
+            "onclick='mostrarFormato(\"" + solicitud.PathFormatoAutorizacion + "\")'> <i class='fa fa-search'></i> </button>")
         ]);
         tabla.fnDraw(false);
     });
