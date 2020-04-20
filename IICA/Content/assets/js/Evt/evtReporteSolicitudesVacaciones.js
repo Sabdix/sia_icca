@@ -112,8 +112,21 @@ function MostrarRegistrosReporte(data) {
             solicitud.FechaInicio.split(" ")[0],
             "<span class='muted'><span class='label label-info'>"
             + solicitud.FechaFin.split(" ")[0] + "</span></span>",
-            '<span class="muted">' + solicitud.DescripcionStatusSolicitud+'</span>'
+            '<span class="muted">' + solicitud.DescripcionStatusSolicitud + '</span>',
+            solicitud.PathFormatoAutorizacion == "" ? "No se ha capturado" :("<button class='btn btn-info btn-mini' data-toggle='modal' data-target='#modal-formato'" +
+            "onclick='mostrarFormato(\"" + solicitud.PathFormatoAutorizacion + "\")'> <i class='fa fa-search'></i> </button>")
         ]);
         tabla.fnDraw(false);
     });
+}
+
+function mostrarFormato(url) {
+    url = rootUrl(url);
+    $('#content-formato').html("");
+    var iframe = $('<embed src="" width="100%" height="600" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+    iframe.innerHTML = "";
+    iframe.attr('src', url);
+    $('#content-formato').append(iframe);
+    var content = iframe.innerHTML;
+    iframe.innerHTML = content;
 }

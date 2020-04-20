@@ -201,6 +201,7 @@ namespace IICA.Models.DAO.PVI
                         permiso.estatusPermiso.descripcion = dbManager.DataReader["Descripcion_Status_Solicitud"] == DBNull.Value ? "" : dbManager.DataReader["Descripcion_Status_Solicitud"].ToString();
                         //permiso.motivoRechazo = dbManager.DataReader["Motivo_Rechazo"] == DBNull.Value ? "" : dbManager.DataReader["Motivo_Rechazo"].ToString();
                         //permiso.fechaAutorizacion = dbManager.DataReader["Fecha_Revision"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dbManager.DataReader["Fecha_Revision"].ToString());
+                        permiso.PathFormatoAutorizacion = dbManager.DataReader["path_formato_autorizacion"] == DBNull.Value ? "" : dbManager.DataReader["path_formato_autorizacion"].ToString();
                         permisos.Add(permiso);
                     }
                 }
