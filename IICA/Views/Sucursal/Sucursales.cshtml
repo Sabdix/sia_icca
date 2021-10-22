@@ -1,0 +1,101 @@
+﻿
+@{
+  ViewBag.Title = "Sucursales";
+  Layout = "~/Views/Shared/_LayoutRolesUsuario.cshtml";
+
+  <script>
+    nodoMenu = "administradores";
+    submenu = "SuperAdministradores";
+  </script>
+}
+@using System.Globalization;
+@using IICA.Models.Entidades.Sucursales;
+@using System.Web.Script.Serialization;
+@using IICA.Models.Entidades
+
+@model IICA.Models.Entidades.Usuario
+
+<ul class="breadcrumb">
+  <li>
+    <p>Sucursales</p>
+  </li>
+  <li><a href="#" class="active">Sucursales</a> </li>
+</ul>
+
+<div class="row-fluid">
+  <div class="span12">
+    <div class="grid simple ">
+      <div class="grid-title">
+        <h4>Lista <span class="semi-bold">de sucursales</span></h4>
+        <button type="button" data-toggle="modal" data-target="#modal-registrar-usuario"
+                onclick="MostrarModalAddSucursal()" style="float: right" class="btn btn-info btn-xs btn-mini">
+          <i class="fa fa-plus-circle"></i>&nbsp;Agregar
+        </button>
+      </div>
+      <div class="grid-body ">
+        <table class="table table-hover no-more-tables" style="text-align: center;" id="tabla-sucursales">
+          <thead>
+            <tr>
+              <th style="width:5%;text-align: left;">Clave</th>
+              <th style="width: 20%; text-align: left;">Nombre</th>
+              <th style="width: 20%; text-align: left;">Estado</th>
+              <th style="width:12%;text-align: center;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (Sucursal sucursal in ViewBag.Sucursales) {
+              <tr>
+                <td style="text-align: left;">@sucursal.clave</td>
+                <td style="text-align: left;">@sucursal.nombre</td>
+                <td style="text-align: left;">@(sucursal.estatus ? "Habilitado" : "Inhabilitado")</td>
+                <td>
+                  <span data-toggle="modal" data-target="#modal-registrar-usuario">
+                    <button data-toggle="tooltip" title="Editar usuario" class="btn btn-success btn-mini" onclick="MostrarModalEditarSucursal(@(sucursal.clave))">
+                      <i class="fa fa-check-square-o"></i>
+                    </button>
+                  </span>
+                  <span data-toggle="modal" data-target="#modal-estatus-usuario">
+                    <button data-toggle="tooltip" title="@(sucursal.estatus ? "Deshabilitar":"Habilitar") sucursal" class="btn @(sucursal.estatus? "btn-warning": " btn-info") btn-mini"
+                            onclick="OnAsignarUsuarioActualizarEstadoUsuario(@sucursal.clave,@(sucursal.estatus? 0: 1))">
+                      <i class="fa @(sucursal.estatus ? "fa-lock" :  "fa-unlock-alt")"></i>
+                    </button>
+                  </span>
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts{
+  <link href="~/Content/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+  <link href="~/Content/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+
+
+  @* Son para el estilo de los select ya que estan en el layout pero no funcionan si no estan en cada vista *@
+  <link href="~/Content/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="~/Content/webarch/css/webarch.css" rel="stylesheet" type="text/css" />
+  <script src="~/Content/assets/plugins/bootstrap-select2/select2.min.js"></script>
+
+  <script src="~/Content/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+  <script src="~/Content/assets/plugins/jquery-datatable/extra/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+  <script type="text/javascript" src="~/Content/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
+  <script src="~/Content/assets/js/datatables.js"></script>
+
+  <script src="~/Scripts/jquery.validate.min.js"></script>
+  <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+  <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+  <script>
+        var rolUsuario = @Html.Raw(new JavaScriptSerializer().Serialize(Model.rol));
+
+  </script>
+  <script src="~/Content/assets/js/Evt/Sucursal/evtSucursales.js"></script>
+
+}
