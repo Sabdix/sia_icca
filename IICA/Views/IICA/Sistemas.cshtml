@@ -163,7 +163,7 @@
                                     <input hidden name="password" value="@(Model.contrasena)" />
                                     <button type="submit" class="btn btn-default">Ingresar</button>
                                 </form>
-                            @*<a class="btn btn-default" href="@WebConfigurationManager.AppSettings["urlPasivoLaboral"].ToString()">Ingresar</a>*@
+                                @*<a class="btn btn-default" href="@WebConfigurationManager.AppSettings["urlPasivoLaboral"].ToString()">Ingresar</a>*@
                             </p>
                         </div>
                         <div class="col-md-4">
@@ -178,7 +178,12 @@
                                 @*<a class="btn btn-default" href="@WebConfigurationManager.AppSettings["urlControlAsistencias"].ToString()">Ingresar</a>*@
                             </p>
                         </div>
-                    }
+                        <div class="col-md-4">
+                            <h3>IICA - ADMINISTRADOR DE PERSONAL</h3>
+                            <p>Sistema que le permitirá llevar el control y registro del personal de la empresa.</p>
+                            <p><a class="btn btn-default" href="@Url.Action("Index", "Personal")">Ingresar</a></p>
+                        </div>
+                            }
                     @if (Model.rolesUsuario.Exists(r => r.idRol == Convert.ToInt32(IICA.Models.Entidades.EnumRolUsuario.SUPERADMINISTRADOR)))
                     {
                         <div class="col-md-4">

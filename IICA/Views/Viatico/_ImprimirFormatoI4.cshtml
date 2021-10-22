@@ -38,6 +38,10 @@
         width: 215px;
         height: 85px;
     }
+
+    .text-header{
+        font-size: 14px;
+    }
     /*------------------------------------*/
     #content-fecha-header {
         display: flex;
@@ -106,10 +110,10 @@
             <td rowspan="3"><img src="http://www.iicarhmexico.com/Sia_IICA/Content/assets/img/logo_iica.png" width="215" height="85" /></td>
         </tr>
         <tr class="text-right">
-            <td><label class="text-center">FORMULARIO I4 </label><br /> 
-                <label class="text-left">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS </label><br/> 
-            <label class="text-center">UNIDAD OPERATIVA:@Model.usuario.programa @Model.usuario.departamento</label> <br/>
-            <label class="text-center">FECHA:@Model.fechaAlta</label>
+            <td><label class="text-header text-center">FORMULARIO I4 </label><br /> 
+                <label class="text-header text-left">AUTORIZACIÓN PARA VIAJE OFICIAL Y ORDEN DE COMPRA DE PASAJES AÉREOS </label><br/> 
+            <label class="text-header text-center">UNIDAD OPERATIVA:@Model.usuario.programa @Model.usuario.departamento</label> <br/>
+            <label class="text-header text-center">FECHA:@Model.fechaAlta</label>
          </td>
     </table>
 </div>

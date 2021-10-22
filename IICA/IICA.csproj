@@ -56,6 +56,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -147,6 +148,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IICAController.cs" />
+    <Compile Include="Controllers\Personal\PersonalController.cs" />
     <Compile Include="Controllers\PVI\IncapacidadController.cs" />
     <Compile Include="Controllers\PVI\PermisoController.cs" />
     <Compile Include="Controllers\PVI\VacacionController.cs" />
@@ -156,6 +158,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DAO\EmailDAO.cs" />
+    <Compile Include="Models\DAO\Personal\PersonalDAO.cs" />
     <Compile Include="Models\DAO\PVI\DepartamentoDAO.cs" />
     <Compile Include="Models\DAO\PVI\IncapacidadDAO.cs" />
     <Compile Include="Models\DAO\PVI\PermisoDAO.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Models\DAO\Viaticos\MedioTransporteDAO.cs" />
     <Compile Include="Models\DAO\Viaticos\NivelMandoDAO.cs" />
     <Compile Include="Models\Entidades\Departamento.cs" />
+    <Compile Include="Models\Entidades\Personal\Empleado.cs" />
     <Compile Include="Models\Entidades\Proyecto.cs" />
     <Compile Include="Models\Entidades\RolUsuario.cs" />
     <Compile Include="Models\Entidades\Viaticos\ComprobacionGasto.cs" />
@@ -266,6 +270,8 @@
     <Content Include="Content\assets\js\Evt\evtReporteSolPermisos.js" />
     <Content Include="Content\assets\js\Evt\evtSesion.js" />
     <Content Include="Content\assets\js\Evt\HttpStatusCode.js" />
+    <Content Include="Content\assets\js\Evt\Personal\evtRegistrarPersonal.js" />
+    <Content Include="Content\assets\js\Evt\Personal\evtPersonals.js" />
     <Content Include="Content\assets\js\Evt\RolesUsuario\evtAdministradores.js" />
     <Content Include="Content\assets\js\Evt\RolesUsuario\evtAutorizadores.js" />
     <Content Include="Content\assets\js\Evt\Utils.js" />
@@ -584,6 +590,11 @@
     <Content Include="Views\Rol\UsuariosAutorizadoresPVI.cshtml" />
     <Content Include="Views\Rol\UsuariosAutorizadoresViaticos.cshtml" />
     <Content Include="Views\Viatico\_ObtenerTarifasViaticos.cshtml" />
+    <Content Include="Views\Personal\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutPersonal.cshtml" />
+    <Content Include="Views\Home\_MenuLeftPersonal.cshtml" />
+    <Content Include="Views\Home\Personal.cshtml" />
+    <Content Include="Views\Personal\Personal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -619,7 +630,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59791</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:59791/</IISUrl>
+          <IISUrl>http://localhost:59792/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

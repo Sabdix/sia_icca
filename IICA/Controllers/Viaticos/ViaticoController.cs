@@ -829,7 +829,7 @@ namespace IICA.Controllers.Viaticos
                         if (string.Compare(xn.LocalName, "LugarExpedicion", true) == 0)
                             comprobacionGasto.lugar = xn.Value.ToString(); //se lee tambien aqui el lugar porque en ocasiones no viene en el atributo de "localidad" del nodo del emisor
                         if (string.Compare(xn.LocalName, "fecha", true) == 0)
-                            comprobacionGasto.fecha = string.IsNullOrEmpty(xn.Value.ToString()) ? DateTime.MinValue : Convert.ToDateTime(xn.Value.ToString());
+                            comprobacionGasto.fecha = string.IsNullOrEmpty(xn.Value.ToString()) ? DateTime.Now : Convert.ToDateTime(xn.Value.ToString());
                     }
 
                     foreach (XmlNode node in xmlElement.ChildNodes)

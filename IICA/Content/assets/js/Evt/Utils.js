@@ -29,6 +29,7 @@ function MostrarNotificacionLoad(tipoNotificacion, mensaje, tiempo) {
         message: mensaje,
         type: tipoNotificacion,
         showCloseButton: true,
+        hideAfter: tiempo || 2
     });
 }
 
