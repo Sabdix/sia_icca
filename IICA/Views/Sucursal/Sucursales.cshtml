@@ -49,14 +49,14 @@
                 <td style="text-align: left;">@sucursal.nombre</td>
                 <td style="text-align: left;">@(sucursal.estatus ? "Habilitado" : "Inhabilitado")</td>
                 <td>
-                  <span data-toggle="modal" data-target="#modal-registrar-usuario">
-                    <button data-toggle="tooltip" title="Editar usuario" class="btn btn-success btn-mini" onclick="MostrarModalEditarSucursal(@(sucursal.clave))">
+                  <span data-toggle="modal" data-target="#modal-registrar-sucursal">
+                    <button data-toggle="tooltip" title="Editar sucursal" class="btn btn-success btn-mini" onclick="MostrarModalEditarSucursal('@(sucursal.clave)', '@(sucursal.nombre)')">
                       <i class="fa fa-check-square-o"></i>
                     </button>
                   </span>
-                  <span data-toggle="modal" data-target="#modal-estatus-usuario">
+                  <span data-toggle="modal" data-target="#modal-estatus-sucursal">
                     <button data-toggle="tooltip" title="@(sucursal.estatus ? "Deshabilitar":"Habilitar") sucursal" class="btn @(sucursal.estatus? "btn-warning": " btn-info") btn-mini"
-                            onclick="OnAsignarUsuarioActualizarEstadoUsuario(@sucursal.clave,@(sucursal.estatus? 0: 1))">
+                            onclick="OnActualizarEstadoSucursal('@sucursal.clave',@(sucursal.estatus? 0: 1), '@(sucursal.nombre)')">
                       <i class="fa @(sucursal.estatus ? "fa-lock" :  "fa-unlock-alt")"></i>
                     </button>
                   </span>
@@ -96,6 +96,36 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="modal-estatus-sucursal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <br>
+        <i class="fa fa-question-circle fa-7x"></i>
+        <h4 id="myModalLabel" class="semi-bold">¿Realmente desea <span id="m-estatus-actividad"></span> la siguiente sucursal?.</h4>
+        <p class="no-margin">A continuación se muestran los detalles de la sucursal </p>
+        <br>
+      </div>
+      <div class="modal-body">
+        <form id="form-estatus-usuario">
+          <div class="row form-row">
+            <div class="col-md-4">
+              <label class="form-label">Nombre:</label>
+              @Html.TextBoxFor(x => x.nombre, new { @class = "form-control", placeholder = "Nombre", @readonly = "readonly " })
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="m-btnAceptar" onclick="ActualizarEstadoSucursal()">Activar</button>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 @section scripts{

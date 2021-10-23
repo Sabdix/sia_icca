@@ -49,5 +49,45 @@ namespace IICA.Models.DAO.Sucursales {
       }
       return result;
     }
+
+    public Result EditaSucursal(Sucursal sucursal) {
+      Result result = new Result();
+      try {
+        using (dbManager = new DBManager(Utils.ObtenerConexion())) {
+          dbManager.Open();
+          dbManager.CreateParameters(2);
+          dbManager.AddParameters(0, "Clave", sucursal.clave);
+          dbManager.AddParameters(1, "Nombre", sucursal.nombre);
+          dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZA_SUCURSAL");
+          if (dbManager.DataReader.Read()) {
+            result.mensaje = dbManager.DataReader["mensaje"].ToString();
+            result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+          }
+        }
+      } catch (Exception ex) {
+        throw ex;
+      }
+      return result;
+    }
+
+    public Result ActualizaEstadoSucursal(string clave) {
+      Result result = new Result();
+      try {
+        using (dbManager = new DBManager(Utils.ObtenerConexion())) {
+          dbManager.Open();
+          dbManager.CreateParameters(1);
+          dbManager.AddParameters(0, "Clave", clave);
+          dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_ACTUALIZA_ESTADO_SUCURSAL");
+          if (dbManager.DataReader.Read()) {
+            result.mensaje = dbManager.DataReader["mensaje"].ToString();
+            result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+          }
+        }
+      } catch (Exception ex) {
+        throw ex;
+      }
+      return result;
+    }
+
   }
 }
