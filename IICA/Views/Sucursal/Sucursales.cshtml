@@ -13,7 +13,7 @@
 @using System.Web.Script.Serialization;
 @using IICA.Models.Entidades
 
-@model IICA.Models.Entidades.Usuario
+@model IICA.Models.Entidades.Sucursales.Sucursal
 
 <ul class="breadcrumb">
   <li>
@@ -27,7 +27,7 @@
     <div class="grid simple ">
       <div class="grid-title">
         <h4>Lista <span class="semi-bold">de sucursales</span></h4>
-        <button type="button" data-toggle="modal" data-target="#modal-registrar-usuario"
+        <button type="button" data-toggle="modal" data-target="#modal-registrar-sucursal"
                 onclick="MostrarModalAddSucursal()" style="float: right" class="btn btn-info btn-xs btn-mini">
           <i class="fa fa-plus-circle"></i>&nbsp;Agregar
         </button>
@@ -61,11 +61,38 @@
                     </button>
                   </span>
                 </td>
-
               </tr>
             }
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-registrar-sucursal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <br>
+        <i class="fa fa-building fa-5x"></i>
+        <h4 id="myModalLabel" class="semi-bold">Registro de @ViewBag.Title.</h4>
+      </div>
+      <div class="modal-body">
+        <form id="form-registrar-sucursal">
+          <div class="row form-row">
+            <div class="col-md-4">
+              <label class="form-label">Nombre:</label>
+              @Html.TextBoxFor(x => x.nombre, new { @class = "form-control", placeholder = "Nombre" })
+              @Html.ValidationMessageFor(x => x.nombre, "", new { @class = "error" })
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-success" onclick="OnGuardarSucursal()">Guardar</button>
       </div>
     </div>
   </div>
@@ -91,11 +118,6 @@
   <script src="~/Scripts/jquery.validate.min.js"></script>
   <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
   <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
-  <script>
-        var rolUsuario = @Html.Raw(new JavaScriptSerializer().Serialize(Model.rol));
-
-  </script>
   <script src="~/Content/assets/js/Evt/Sucursal/evtSucursales.js"></script>
 
 }

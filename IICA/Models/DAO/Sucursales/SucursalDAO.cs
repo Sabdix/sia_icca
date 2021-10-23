@@ -30,5 +30,24 @@ namespace IICA.Models.DAO.Sucursales {
       }
       return sucursales;
     }
+
+    public Result InsertaSucursal(Sucursal sucursal) {
+      Result result = new Result();
+      try {
+        using (dbManager = new DBManager(Utils.ObtenerConexion())) {
+          dbManager.Open();
+          dbManager.CreateParameters(1);
+          dbManager.AddParameters(0, "Nombre", sucursal.nombre);
+          dbManager.ExecuteReader(System.Data.CommandType.StoredProcedure, "DT_SP_INSERTA_SUCURSAL");
+          if (dbManager.DataReader.Read()) {
+            result.mensaje = dbManager.DataReader["mensaje"].ToString();
+            result.status = dbManager.DataReader["status"] == DBNull.Value ? false : Convert.ToBoolean(dbManager.DataReader["status"]);
+          }
+        }
+      } catch (Exception ex) {
+        throw ex;
+      }
+      return result;
+    }
   }
 }
